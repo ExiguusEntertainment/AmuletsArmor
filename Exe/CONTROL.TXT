@@ -1,0 +1,62 @@
+
+^036   Amulets and Armor
+^003   Keyboard Commands
+^007
+Forward		^009:W^007
+Backward		^009:S^007
+Turn left		^009:A^007
+Turn right	^009:D^007
+Sidestep		^009:ALT^007
+Run			^009:SHIFT^007
+Jump		^009:SPACE^007
+Open/activate	^009:E^007
+Attack/use	^009:CTRL^007
+Look up		^009:DEL^007
+Look down	^009:INS^007
+Center view	^009:<--^007
+Cast spell	^009:K_ENT^007
+Abort spell	^009:KPAD.^007
+Spell rune 1	^009:KPAD1^007
+Spell rune 2	^009:KPAD2^007
+Spell rune 3	^009:KPAD3^007
+Spell rune 4	^009:KPAD4^007
+Spell rune 5	^009:KPAD5^007
+Spell rune 6	^009:KPAD6^007
+Spell rune 7	^009:KPAD7^007
+Spell rune 8	^009:KPAD8^007
+Spell rune 9	^009:KPAD9^007
+INV menu ^003ALT	^009:KPAD7^007
+EQP menu ^003ALT	^009:KPAD8^007
+STA menu ^003ALT	^009:KPAD9^007
+OPT menu ^003ALT	^009:KPAD4^007
+COM menu ^003ALT	^009:KPAD5^007
+FIN menu ^003ALT	^009:KPAD6^007
+AMO menu ^003ALT	^009:KPAD1^007
+NTS menu ^003ALT	^009:KPAD2^007
+JNL menu ^003ALT	^009:KPAD3^007
+Talk			^009:/^007
+Abort Level	^009:NONE^007
+Pause game	^009:P^007
+Canned msg 1	^009:F2^007
+Canned msg 2	^009:F3^007
+Canned msg 3	^009:F4^007
+Canned msg 4	^009:F5^007
+Canned msg 5	^009:F6^007
+Canned msg 6	^009:F7^007
+Canned msg 7	^009:F8^007
+Canned msg 8	^009:F9^007
+Canned msg 9	^009:F10^007
+Canned msg 10	^009:F11^007
+Canned msg 11	^009:F12^007
+Canned msg 12	^009:`^007
+Map display	^009:1^007
+Map rotate	^009:2^007
+Map trnslucnt	^009:3^007
+Map see thru	^009:4^007
+Map smaller	^009:5^007
+Map bigger	^009:6^007
+Map position	^009:7^007
+Msgs up		^009:PGUP^007
+Msgs down	^009:PGDN^007
+Time of day	^009:T^007
+Gamma ^003ALT	^009:G^007
