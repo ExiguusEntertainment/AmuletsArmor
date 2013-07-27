@@ -1,0 +1,355 @@
+# *********************************************************************
+# Date          : 08/17/96
+# *******************************************************************
+# NOTE: This make file only works with Open Watcom v1.9 for Windows
+VERSION = PRODSYM
+PRODSYM_C_FLAGS    = /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include
+PRODSYM_ASM_FLAGS  = 
+PROD_C_FLAGS    = /3r /7 /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include
+PROD_ASM_FLAGS  = 
+DEBUGLOW_C_FLAGS   = /3r /7 /zp1 /we /d3 /i=include -s
+DEBUGLOW_ASM_FLAGS = -oi /m3
+
+DEBUG_C_FLAGS   = /3r /7 /zp1 /we /d2 /oc /oi /ol /or /ot /i=include -s
+DEBUG_ASM_FLAGS = -oi /m3 /zi
+TEST_C_FLAGS   =  /3r /7 /zp1 /we /oc /oi /ol /or /ot /s /d2 /zw /i=include
+TEST_ASM_FLAGS = -oi /m3
+
+CFLAGS    = $($(VERSION)_C_FLAGS) /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=$(INCPATH)
+ASMFLAGS  = $($(VERSION)_ASM_FLAGS)
+#LFLAGS    = option map=map.map system dos4g option stub=wstub.exe option stack=40000 debug watcom all
+LFLAGS    = option map=map.map system dos4g option stack=40000 debug watcom all
+CC        = wcl386 /c
+ML	= wasm /3r
+NAME      = testme
+
+OBJPATH = OBJS
+LIBPATH = LIB
+SRCPATH = C:\lshields\AA\AA\Source
+INCPATH = C:\lshields\AA\AA\Include
+
+.obj : $(OBJPATH)
+
+.lib : $(LIBPATH)
+
+.c   : $(SRCPATH)
+
+.h   : $(INCPATH)
+
+.asm : $(SRCPATH)
+
+LNK =   $(OBJPATH)\$(NAME).lnk
+OBJS1 = $(OBJPATH)\keymap.obj      &
+        $(OBJPATH)\peophere.obj    &
+        $(OBJPATH)\random.obj      &
+        $(OBJPATH)\ditalk.obj      &
+        $(OBJPATH)\compress.obj    &
+        $(OBJPATH)\csyncpck.obj    &
+        $(OBJPATH)\synctime.obj    &
+        $(OBJPATH)\storedb.obj     &
+        $(OBJPATH)\hardform.obj    &
+        $(OBJPATH)\light.obj       &
+        $(OBJPATH)\sound.obj       &
+        $(OBJPATH)\bankui.obj      &
+        $(OBJPATH)\notes.obj       &
+        $(OBJPATH)\store.obj       &
+        $(OBJPATH)\innui.obj       &
+        $(OBJPATH)\houseui.obj     &
+        $(OBJPATH)\townui.obj      &
+        $(OBJPATH)\guildui.obj     &
+        $(OBJPATH)\look.obj        &
+        $(OBJPATH)\$(NAME).obj     &
+        $(OBJPATH)\keyboard.obj    &
+        $(OBJPATH)\inventor.obj    &
+        $(OBJPATH)\files.obj       &
+        $(OBJPATH)\filetran.obj    &
+        $(OBJPATH)\mailui.obj      &
+        $(OBJPATH)\mainui.obj      &
+        $(OBJPATH)\txtbox.obj      &
+        $(OBJPATH)\prompt.obj      &
+        $(OBJPATH)\smconnec.obj    &
+        $(OBJPATH)\smmain.obj      &
+        $(OBJPATH)\smcchoos.obj    &
+        $(OBJPATH)\smcplay.obj     &
+        $(OBJPATH)\smclogof.obj    &
+        $(OBJPATH)\smcdis.obj      &
+        $(OBJPATH)\smcleave.obj    &
+        $(OBJPATH)\inifile.obj     &
+        $(OBJPATH)\lookup32.obj    &
+        $(OBJPATH)\account.obj     &
+        $(OBJPATH)\chardb.obj      &
+        $(OBJPATH)\efx.obj 
+
+OBJS2 = $(OBJPATH)\ticker.obj      &
+        $(OBJPATH)\memory.obj      &
+        $(OBJPATH)\file.obj        &
+        $(OBJPATH)\resource.obj    &
+        $(OBJPATH)\graphics.obj    &
+        $(OBJPATH)\objtype.obj     &
+        $(OBJPATH)\scrform.obj     &
+        $(OBJPATH)\colorize.obj    &
+        $(OBJPATH)\update.obj      &
+        $(OBJPATH)\smachine.obj    &
+        $(OBJPATH)\flatfile.obj    &
+        $(OBJPATH)\serversh.obj    &
+        $(OBJPATH)\cli_send.obj    &
+        $(OBJPATH)\cli_recv.obj    &
+        $(OBJPATH)\SOSEZ.OBJ       &
+        $(OBJPATH)\PROFILE.OBJ     &
+        $(OBJPATH)\mapanim.obj
+OBJS3 = $(OBJPATH)\packetdt.obj      &
+        $(OBJPATH)\config.obj      &
+        $(OBJPATH)\sqrtdat.obj     &
+        $(OBJPATH)\player.obj      &
+        $(OBJPATH)\object.obj      &
+        $(OBJPATH)\script.obj      &
+        $(OBJPATH)\memtrans.obj		&
+        $(OBJPATH)\escmenu.obj  &
+        $(OBJPATH)\syncmem.obj
+
+OBJS4 = $(OBJPATH)\pics.obj $(OBJPATH)\server.obj $(OBJPATH)\stats.obj $(OBJPATH)\color.obj $(OBJPATH)\spells.obj $(OBJPATH)\button.obj $(OBJPATH)\objgen.obj
+OBJS5 = $(OBJPATH)\message.obj $(OBJPATH)\schedule.obj $(OBJPATH)\activity.obj $(OBJPATH)\client.obj $(OBJPATH)\overhead.obj $(OBJPATH)\dbllink.obj $(OBJPATH)\connUI.obj
+OBJS6 = $(OBJPATH)\mousemod.obj $(OBJPATH)\map.obj $(OBJPATH)\slidr.obj $(OBJPATH)\control.obj
+OBJS7 = $(OBJPATH)\form.obj $(OBJPATH)\txtfld.obj $(OBJPATH)\graphic.obj $(OBJPATH)\text.obj
+OBJS8 = $(OBJPATH)\view.obj $(OBJPATH)\cmdqueue.obj $(OBJPATH)\3d_view.obj $(OBJPATH)\3d_asm.obj $(OBJPATH)\3d_colli.obj $(OBJPATH)\3d_io.obj $(OBJPATH)\3d_trig.obj $(OBJPATH)\effect.obj
+OBJS9 = $(OBJPATH)\crelogic.obj $(OBJPATH)\slider.obj $(OBJPATH)\door.obj $(OBJPATH)\areasnd.obj $(OBJPATH)\banner.obj $(OBJPATH)\objmove.obj $(OBJPATH)\comwin.obj $(OBJPATH)\overlay.obj
+
+OBJS  = $(OBJS1) $(OBJS2) $(OBJS3) $(OBJS4) $(OBJS5) $(OBJS6) $(OBJS7) $(OBJS8) $(OBJS9)
+OBJSOTHER = mtower.obj uibutton.obj townsqr.obj ui.obj store.obj uitext.obj state.obj pub.obj mousemod.obj dispatch.obj vm.obj
+DEBUG_OBJS = $(OBJPATH)\debug.obj
+PROD_OBJS =
+OBJS_MORE = $($(VERSION)_OBJS)
+
+LIBS = $(LIBPATH)\SOSW1CR.LIB
+
+$(NAME).exe     : $(OBJS) $(OBJS_MORE) $(LNK) $(LIBS) makefile
+		wlink $(LFLAGS) @$(LNK)
+
+$(OBJPATH)\$(NAME).obj   : $(SRCPATH)\$(NAME).C
+
+keymap.obj     : keymap.c keymap.h
+
+peophere.obj   : peophere.c peophere.h
+
+random.obj     : random.c random.h
+
+ditalk.obj     : ditalk.c ditalk.h
+
+compress.obj   : compress.c compress.h
+
+csyncpck.obj   : csyncpck.c  csyncpck.h
+
+synctime.obj   : synctime.c synctime.h
+
+storedb.obj    : storedb.c storedb.h
+
+hardform.obj   : hardform.c hardform.h
+
+efx.obj        : efx.c efx.h
+
+chardb.obj     : chardb.c chardb.h
+
+account.obj    : account.c account.h
+
+lookup32.obj   : lookup32.c lookup32.h
+
+inifile.obj    : inifile.c inifile.h
+
+smcplay.obj    : smcplay.c smcplay.h
+
+smclogof.obj   : smclogof.c smclogof.h
+
+smcdis.obj     : smcdis.c smcdis.h
+
+smcleave.obj   : smcleave.c smcleave.h
+
+smcchoos.obj   : smcchoos.c smcchoos.h
+
+cmdqueue.obj   : cmdqueue.c cmdqueue.h
+
+smmain.obj     : smmain.c smmain.h
+
+smconnec.obj   : smconnec.c smconnec.h
+
+cli_send.obj   : cli_send.c cli_send.h
+
+cli_recv.obj   : cli_recv.c cli_recv.h
+
+serversh.obj   : serversh.c serversh.h
+
+flatfile.obj   : flatfile.c flatfile.h
+
+smachine.obj   : smachine.c smachine.h
+
+#serplog.obj    : serplog.c serplog.h
+
+hash32.obj     : hash32.c hash32.h
+
+sosez.obj      : sosez.c
+
+profile.obj    : profile.c
+
+mapanim.obj    : mapanim.c mapanim.h
+
+light.obj      : light.c light.h
+
+update.obj     : update.c update.h
+
+packlog.obj    : packlog.c packlog.h
+
+sound.obj      : sound.c sound.h
+
+overlay.obj    : overlay.c overlay.h
+
+equip.obj      : equip.c equip.h
+
+control.obj    : control.c control.h
+
+dbllink.obj    : dbllink.c dbllink.h
+
+objgen.obj     : objgen.c objgen.h
+
+slidr.obj      : slidr.c slidr.h
+
+comwin.obj     : comwin.c comwin.h
+
+colorize.obj   : colorize.c colorize.h
+
+memtrans.obj   : memtrans.c memtrans.h
+
+script.obj     : script.c script.h
+
+prompt.obj     : prompt.c prompt.h
+
+overhead.obj   : overhead.c overhead.h
+
+objtype.obj    : objtype.c objtype.h
+
+inventor.obj   : inventor.c inventor.h
+
+object.obj     : object.c object.h
+
+map.obj        : map.c map.h
+
+player.obj     : player.c player.h
+
+objmove.obj    : objmove.c objmove.h
+
+banner.obj     : banner.c banner.h
+
+notes.obj      : notes.c notes.h
+
+ll_comm.obj    : ll_comm.c ll_comm.h
+
+sqrtdat.obj    : sqrtdat.c
+
+config.obj     : config.c config.h
+
+areasnd.obj    : areasnd.c areasnd.h
+
+door.obj       : door.c door.h
+
+3d_view.obj    : 3d_view.c 3d_view.h
+
+3d_io.obj      : 3d_io.c 3d_io.h
+
+3d_asm.obj     : 3d_asm.asm
+
+3d_colli.obj   : 3d_colli.c 3d_colli.h
+
+3d_trig.obj    : 3d_trig.c 3d_trig.h
+
+look.obj       : look.c look.h
+
+#creature.obj   : creature.c creature.h
+crelogic.obj   : crelogic.c crelogic.h
+
+slider.obj     : slider.c slider.h
+
+support.obj    : support.c
+
+packetdt.obj     : packetdt.c packet.h
+
+dispatch.obj   : dispatch.c dispatch.h travloc.h
+
+townsqr.obj    : townsqr.c townsqr.h
+
+uitext.obj     : uitext.c uitext.h
+
+keyboard.obj   : keyboard.c keyboard.h
+
+ticker.obj     : ticker.c ticker.h
+
+ui.obj         : ui.c ui.h
+
+uibutton.obj   : uibutton.c uibutton.h
+
+graphics.obj   : graphics.c graphics.h
+
+DEBUG.OBJ      : DEBUG.C DEBUG.H
+
+comio.obj      : comio.c
+
+memory.obj     : memory.c memory.h
+
+file.obj       : file.c file.h
+
+resource.obj   : resource.c resource.h iresourc.h
+
+mousemod.obj   : mousemod.c mousemod.h
+
+files.obj      : files.c files.h
+
+stats.obj      : stats.c stats.h
+
+color.obj      : color.c color.h
+
+button.obj     : button.c button.h
+
+spells.obj     : spells.c spells.h
+
+graphic.obj    : graphic.c graphic.h
+
+text.obj       : text.c text.h
+
+form.obj       : form.c form.h
+
+txtfld.obj     : txtfld.c txtfld.h
+
+txtbox.obj     : txtbox.c txtbox.h
+
+mainui.obj     : mainui.c mainui.h
+
+mailui.obj     : mailui.c mailui.h
+
+connUI.obj     : connUI.c connUI.h
+
+effect.obj     : effect.c effect.h
+
+bankui.obj     : bankui.c bankui.h
+
+store.obj      : store.c store.h
+
+inn.obj        : inn.c inn.h
+
+house.obj      : house.c house.h
+
+townui.obj     : townui.c townui.h
+
+guildui.obj    : guildui.c guildui.h
+
+escmenu.obj    : escmenu.c escmenu.h
+
+$(LNK)               : makefile.
+		%create $(LNK)
+		@%append $(LNK) debug watcom locals, all
+		@%append $(LNK) name $(NAME)
+                @for %i in ($(OBJS)) do @%append $(LNK) file %i
+                @for %i in ($(OBJS_MORE)) do @%append $(LNK) file %i
+                @for %i in ($(LIBS)) do @%append $(LNK) library %i
+	@%append $(LNK) option eliminate option oneautodata option protmode segment _BSS shared
+.c.obj     :
+        $(CC) $(CFLAGS) $[*.c -fo$^*.obj 
+
+.asm.obj     :
+                $(ML) $(ASMFLAGS) $[*.asm -fo=$^*.obj

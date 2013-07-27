@@ -1,0 +1,52 @@
+Open Watcom Make Version 1.9
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	wcl386 /c /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include C:\lshields\AA\AA\Source\banner.c -foOBJS\banner.obj
+Open Watcom C/C++32 Compile and Link Utility Version 1.9
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	wcc386 C:\lshields\AA\AA\Source\BANNER.C  /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include -foOBJS\banner.obj
+Open Watcom C32 Optimizing Compiler Version 1.9
+Portions Copyright (c) 1984-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+C:\lshields\AA\AA\Source\BANNER.C: 2567 lines, included 14045, 0 warnings, 0 errors
+Code size: 11018
+	wcl386 /c /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include C:\lshields\AA\AA\Source\objmove.c -foOBJS\objmove.obj
+Open Watcom C/C++32 Compile and Link Utility Version 1.9
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	wcc386 C:\lshields\AA\AA\Source\OBJMOVE.C  /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include -foOBJS\objmove.obj
+Open Watcom C32 Optimizing Compiler Version 1.9
+Portions Copyright (c) 1984-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+C:\lshields\AA\AA\Source\OBJMOVE.C: 2167 lines, included 14045, 0 warnings, 0 errors
+Code size: 3440
+	wcl386 /c /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include C:\lshields\AA\AA\Source\comwin.c -foOBJS\comwin.obj
+Open Watcom C/C++32 Compile and Link Utility Version 1.9
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	wcc386 C:\lshields\AA\AA\Source\COMWIN.C  /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include -foOBJS\comwin.obj
+Open Watcom C32 Optimizing Compiler Version 1.9
+Portions Copyright (c) 1984-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+C:\lshields\AA\AA\Source\COMWIN.C: 257 lines, included 14045, 0 warnings, 0 errors
+Code size: 513
+	wcl386 /c /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include C:\lshields\AA\AA\Source\overlay.c -foOBJS\overlay.obj
+Open Watcom C/C++32 Compile and Link Utility Version 1.9
+Portions Copyright (c) 1988-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+	wcc386 C:\lshields\AA\AA\Source\OVERLAY.C  /d2 /3r /zp1 /we /oc /oi /ol /or /ot -s /DNDEBUG /i=include /DUSE_SOS_LIBRARY /DDOS32 /DWATCOM /i=C:\lshields\AA\AA\Include -foOBJS\overlay.obj
+Open Watcom C32 Optimizing Compiler Version 1.9
+Portions Copyright (c) 1984-2002 Sybase, Inc. All Rights Reserved.
+Source code is available under the Sybase Open Watcom Public License.
+See http://www.openwatcom.org/ for details.
+C:\lshields\AA\AA\Source\OVERLAY.C: 760 lines, included 14045, 0 warnings, 0 errors
+Code size: 1270

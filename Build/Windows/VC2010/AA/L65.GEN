@@ -1,0 +1,4 @@
+; G=Generator ObjType X Y Angle EverySeconds
+;             PlusRandomSeconds MaxObjects
+;             MaxLikeObjects Active MaxGenerate
+;G 3001   900   1720  32768 1  0  16  16 1  1
