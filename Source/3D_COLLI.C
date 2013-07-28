@@ -4860,7 +4860,7 @@ E_Boolean Collide3dObjectToObjectCheckLineOfSight(
 {
     T_word32 index ;
     E_Boolean isBlocked ;
-    static powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
+    static int powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
 
     DebugRoutine("Collide3dObjectToObjectCheckLineOfSight") ;
 
@@ -4905,7 +4905,7 @@ E_Boolean Collide3dObjectToXYCheckLineOfSight(
 {
     T_word32 index ;
     E_Boolean isBlocked ;
-    static powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
+    static int powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
 
     DebugRoutine("Collide3dObjectToObjectCheckLineOfSight") ;
 
@@ -4997,7 +4997,7 @@ E_Boolean Collide3dObjectToXYCheckLineOfSightWithZ(
 {
     T_word32 index ;
     E_Boolean isBlocked ;
-    static powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
+    static int powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
     T_word16 sector ;
 
     DebugRoutine("Collide3dObjectToObjectCheckLineOfSight") ;

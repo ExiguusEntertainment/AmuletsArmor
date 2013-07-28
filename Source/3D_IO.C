@@ -2999,7 +2999,7 @@ static T_void IOutputReject(T_void)
     T_word16 width ;
     T_word32 index ;
 //    static powers[8] = { 0x80, 0x40, 0x20, 0x10, 8, 4, 2, 1 } ;
-    static powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
+    static int powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
 
     fp = fopen("reject.dat", "w") ;
     width = (G_Num3dSectors+7)>>3 ;

@@ -2048,7 +2048,7 @@ T_void IDrawSSector(T_word16 ssectorIndex)
     T_word16 firstSeg ;
     T_3dSegment *p_segment ;
     T_3dSector *p_sector ;
-    static powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
+    static int powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
     T_word32 index ;
 
     DebugRoutine("IDrawSSector") ;
@@ -4567,7 +4567,7 @@ E_Boolean IFindObject(T_3dObject *p_obj)
     E_Boolean canSee = TRUE ;
     T_word32 index ;
     T_word16 i ;
-    static powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
+    static int powers[8] = { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80 } ;
 
     DebugRoutine("IFindObject") ;
 

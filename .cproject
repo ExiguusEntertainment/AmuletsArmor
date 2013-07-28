@@ -34,6 +34,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="Source/TOSDATA.C|Source/PACKET.C|Source/LL_COMM.C|Source/DEBUGBOR.C|Source/COMMTEST.C|Source/COMM.C|Source/COMIO.C" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>

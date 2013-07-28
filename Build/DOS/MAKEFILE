@@ -239,7 +239,7 @@ banner.obj     : banner.c banner.h
 
 notes.obj      : notes.c notes.h
 
-ll_comm.obj    : ll_comm.c ll_comm.h
+#ll_comm.obj    : ll_comm.c ll_comm.h
 
 sqrtdat.obj    : sqrtdat.c
 

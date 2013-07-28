@@ -23,6 +23,7 @@ typedef time_t T_time;
 #  include <string.h>
 #  include <mem.h>
 #  include <i86.h>
+#  include <io.h>
 #  include <dos.h>
 #  include <conio.h>
 #  include <math.h>

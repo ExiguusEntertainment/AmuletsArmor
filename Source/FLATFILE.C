@@ -248,7 +248,7 @@ T_void FlatFileClose(T_flatFile flatFile)
 
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Write out the header (if there has been any change). */
         FlatFileRefresh(flatFile) ;
@@ -316,7 +316,7 @@ T_flatFileIndex FlatFileCreateRecord(T_flatFile flatFile)
 
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Ok, header is good.  Now, do we have any free records? */
         if (p_header->firstFreeEntry == FLATFILE_NO_FREE_ENTRIES)  {
@@ -427,7 +427,7 @@ T_void *FlatFileGetRecord(
 
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
 #ifndef NDEBUG
         if (index >= p_header->lastEntry)  {
@@ -518,7 +518,7 @@ T_void FlatFilePutRecord(
 
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Make sure the index is correct. */
         DebugCheck(index < p_header->lastEntry) ;
@@ -588,7 +588,7 @@ T_void FlatFileDeleteRecord(
 
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Make sure the index is correct. */
         DebugCheck(index < p_header->lastEntry) ;
@@ -662,7 +662,7 @@ T_void FlatFileRefresh(T_flatFile flatFile)
 
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Check if there has been a change to the header. */
         if (p_header->isDirty)  {
@@ -784,7 +784,7 @@ T_void *FlatFileGetOptionalHeader(T_flatFile flatFile)
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
 
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Just return a pointer to the work area. */
         p_optionalHeader = p_header->optionalHeader ;
@@ -843,7 +843,7 @@ T_void FlatFileMarkDirty(T_flatFile flatFile)
     /* Get a pointer to the flat file header. */
     p_header = (T_flatFileHeader *)flatFile ;
 
-    DebugCheck(p_header->tag = FLATFILE_TAG) ;
+    DebugCheck(p_header->tag == FLATFILE_TAG) ;
     if (p_header->tag == FLATFILE_TAG)   {
         /* Mark the header as dirty. */
         p_header->isDirty = TRUE ;

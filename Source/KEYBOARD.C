@@ -367,9 +367,9 @@ static E_Boolean IGetAdjustedKey(T_word16 scanCode)
            break;
 
         default:
-           return G_keyTable[scanCode] ;
            break;
     }
+    return G_keyTable[scanCode] ;
 }
 
 E_Boolean KeyboardGetScanCode(T_word16 scanCodes)
