@@ -82,6 +82,10 @@ typedef union {
     } w8888 ;
 } T_word32as8888 ;
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 #include "DEBUG.H"
 
 #endif

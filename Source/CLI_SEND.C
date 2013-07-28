@@ -918,6 +918,7 @@ T_void ClientSendPlayerIDSelf(T_void)
 
     DebugRoutine("ClientSendPlayerIDSelf") ;
 
+	memset(&packet, 0, sizeof(packet));
     p_self = (T_playerIDSelfPacket *)(packet.data) ;
     PeopleHereGetPlayerIDSelfStruct(&p_self->id) ;
     p_self->command = PACKET_COMMAND_PLAYER_ID_SELF ;
@@ -950,6 +951,7 @@ T_void ClientSendPlayerIDSelf(T_void)
 T_void ClientSendRequestPlayerID(T_void)
 {
     T_packetShort packet ;
+	memset(&packet, 0, sizeof(packet));
 
     DebugRoutine("ClientSendRequestPlayerID") ;
 
@@ -957,6 +959,7 @@ T_void ClientSendRequestPlayerID(T_void)
     packet.data[0] = PACKET_COMMAND_REQUEST_PLAYER_ID ;
     CmdQSendShortPacket(&packet, 140, 0, NULL) ;
 
+	// Send out our ID too.
     ClientReceiveRequestPlayerIDPacket((T_packetEitherShortOrLong *)&packet) ;
 
     DebugEnd() ;

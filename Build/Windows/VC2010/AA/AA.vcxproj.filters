@@ -377,6 +377,12 @@
     <ClCompile Include="..\..\..\..\Source\ESCMENU.C">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\Win32\ipx_client.cpp">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\PACKETPR.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Include\3D_COLLI.H">
@@ -927,6 +933,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\ESCMENU.H">
       <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Source\Win32\ipx_client.h">
+      <Filter>Source Files\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

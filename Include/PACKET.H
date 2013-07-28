@@ -778,6 +778,12 @@ typedef struct {
 
 /* ------------------------------------------------------------------------ */
 
+typedef struct {
+	T_byte8 command;
+	T_byte8 commandBeingAcked;
+	T_word32 packetIDBeingAcked; 
+} T_ackPacket;
+
 #endif
 
 

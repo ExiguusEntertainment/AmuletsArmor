@@ -912,6 +912,7 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
                         if (G_CmdQTypeCommand[command] ==
                                 PACKET_COMMAND_TYPE_LOSSLESS)  {
                             INDICATOR_LIGHT(268, INDICATOR_GREEN) ;
+                            memset(&ackPacket, 0xFF, sizeof(ackPacket));
                             /* Yes, it is.  We need to send an ACK that */
                             /* we got it. */
                             /* Make an ack packet with the packet's */
@@ -1057,7 +1058,7 @@ T_void ICmdQUpdateSendForPort(T_void)
                              break ;
 
                          /* Let's send that packet. */
-                         DirectTalkSetDestinationAll() ;
+                         DirectTalkSetDestinationAll() ;  //TODO: ?? All??
                          status = PacketSend((T_packetEitherShortOrLong *)
                                                 (&p_packet->packet)) ;
                          sentAny = TRUE ;

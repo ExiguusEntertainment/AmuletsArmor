@@ -586,7 +586,7 @@ T_void TownUIAddMessage(T_byte8 *playerName, T_byte8 *message)
     }
 
     /* construct message block */
-    for (i = 0; i <= G_messageLine + 1; i++) {
+    for (i = 0; i <= G_messageLine; i++) {
         size += strlen(G_messages[i]) + 2;
     }
 

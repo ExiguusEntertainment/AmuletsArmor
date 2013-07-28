@@ -9,7 +9,9 @@
 #endif
 #endif
 
+#include <string.h>
 #include <malloc.h>
+#include <stdio.h>
 #include "GRAPHICS.H"
 #include "MEMORY.H"
 
@@ -184,7 +186,7 @@ printf("!A %d %s:%s ", size, DebugGetCallerFile(), DebugGetCallerName()) ;
 #endif
         p_header->size = size ;
         /* Make sure the block has been tagged. */
-        strcpy(p_header->blockTag, "TaG") ;
+        strcpy((char *)p_header->blockTag, "TaG") ;
 
         /* Make sure that the block has an id (for debugging). */
         p_header->blockId = G_allocCount++ ;

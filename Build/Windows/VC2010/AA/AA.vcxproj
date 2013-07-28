@@ -40,18 +40,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\lshields\AA\AA\Lib\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\lshields\AA\AA\Lib\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\lshields\AA\AA\Include;C:\lshields\AA\AA\Lib\SDL-1.2.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <SmallerTypeCheck>false</SmallerTypeCheck>
@@ -80,7 +81,7 @@
       <ShowProgress>NotSet</ShowProgress>
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <NoEntryPoint>false</NoEntryPoint>
@@ -95,7 +96,7 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\lshields\AA\AA\Include;C:\lshields\AA\AA\Lib\SDL-1.2.15\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -125,7 +126,7 @@
       <ShowProgress>NotSet</ShowProgress>
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;sdl_net.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
@@ -202,6 +203,7 @@
     <ClCompile Include="..\..\..\..\Source\OVERHEAD.C" />
     <ClCompile Include="..\..\..\..\Source\OVERLAY.C" />
     <ClCompile Include="..\..\..\..\Source\PACKETDT.C" />
+    <ClCompile Include="..\..\..\..\Source\PACKETPR.C" />
     <ClCompile Include="..\..\..\..\Source\PACKLOG.C" />
     <ClCompile Include="..\..\..\..\Source\PEOPHERE.C" />
     <ClCompile Include="..\..\..\..\Source\PICS.C" />
@@ -247,6 +249,7 @@
     <ClCompile Include="..\..\..\..\Source\UPDATE.C" />
     <ClCompile Include="..\..\..\..\Source\VIEW.C" />
     <ClCompile Include="..\..\..\..\Source\VM.C" />
+    <ClCompile Include="..\..\..\..\Source\Win32\ipx_client.cpp" />
     <ClCompile Include="direct.cpp" />
     <ClCompile Include="main.c">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
@@ -435,6 +438,7 @@
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_types.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_version.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_video.h" />
+    <ClInclude Include="..\..\..\..\Source\Win32\ipx_client.h" />
     <ClInclude Include="DIRECT.H" />
     <ClInclude Include="options.hpp" />
   </ItemGroup>

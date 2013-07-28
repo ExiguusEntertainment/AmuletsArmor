@@ -25,8 +25,8 @@ NAME      = testme
 
 OBJPATH = OBJS
 LIBPATH = LIB
-SRCPATH = C:\lshields\AA\AA\Source
-INCPATH = C:\lshields\AA\AA\Include
+SRCPATH = E:\lshields\AA\AA\Source
+INCPATH = E:\lshields\AA\AA\Include
 
 .obj : $(OBJPATH)
 

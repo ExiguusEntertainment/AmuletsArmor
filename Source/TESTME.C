@@ -4,6 +4,7 @@
 #include <ctype.h>
 #if WIN32
 #include <conio.h>
+#include <SDL_net.h>
 #endif
 #include "CLIENT.H"
 #include "CMDQUEUE.H"
@@ -24,6 +25,9 @@
 #include "TICKER.H"
 #include "UPDATE.H"
 #include "VIEW.H"
+#ifdef WIN32
+#include "Win32\ipx_client.h"
+#endif
 
 //#undef TRUE
 //#undef FALSE
@@ -324,7 +328,28 @@ extern void SleepMS(T_word32 sleepMS);
     sscanf(argv[1], "%lX", &handle) ;
 //    printf("DirectTalk Handle: 0x%08lX\n", handle) ;
 #else
-    handle = 0;
+    if (argc == 1) {
+        handle = 0;
+    } else if (argc == 2)  {
+#if WIN_IPX
+        // An IP address is given.  Set it to connect there
+        if(SDLNet_Init()==-1) {
+            printf("SDLNet_Init: %s\n", SDLNet_GetError());
+            exit(2);
+        }
+        if (!IPXConnectToServer(argv[1])) {
+            printf("IPX Connection failed!\n");
+            exit(3);
+        }
+        handle = 1; // TODO:
+#else
+        handle = 0;
+#endif
+    } else {
+        puts("USAGE: GAME [<IP Address for network server>]") ;
+        DebugEnd() ;
+        exit(1) ;
+    }
 #endif
 
     DirectTalkInit(

@@ -180,6 +180,7 @@
 	#define __far
 	#define __near
 	#define COMPILE_OPTION_DIRECT_TALK_IS_DOS32
+	#define WIN_IPX		 1 // off
 #else
 	#define COMPILE_OPTION_DIRECT_TALK_IS_DOS32
 #endif
