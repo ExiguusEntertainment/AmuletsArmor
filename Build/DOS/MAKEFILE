@@ -76,7 +76,6 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\smcleave.obj    &
         $(OBJPATH)\inifile.obj     &
         $(OBJPATH)\lookup32.obj    &
-        $(OBJPATH)\account.obj     &
         $(OBJPATH)\chardb.obj      &
         $(OBJPATH)\efx.obj 
 
@@ -148,8 +147,6 @@ hardform.obj   : hardform.c hardform.h
 efx.obj        : efx.c efx.h
 
 chardb.obj     : chardb.c chardb.h
-
-account.obj    : account.c account.h
 
 lookup32.obj   : lookup32.c lookup32.h
 
