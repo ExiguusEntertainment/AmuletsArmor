@@ -179,7 +179,6 @@
     <ClCompile Include="..\..\..\..\Source\LIGHT.C" />
     <ClCompile Include="..\..\..\..\Source\LL_COMM.C" />
     <ClCompile Include="..\..\..\..\Source\LOOK.C" />
-    <ClCompile Include="..\..\..\..\Source\MAILUI.C" />
     <ClCompile Include="..\..\..\..\Source\MAINUI.C" />
     <ClCompile Include="..\..\..\..\Source\MAP.C" />
     <ClCompile Include="..\..\..\..\Source\MAPANIM.C" />
@@ -265,7 +264,6 @@
     <ClInclude Include="..\..\..\..\Include\COMPRESS.H" />
     <ClInclude Include="..\..\..\..\Include\COMWIN.H" />
     <ClInclude Include="..\..\..\..\Include\CONFIG.H" />
-    <ClInclude Include="..\..\..\..\Include\CONNUI.H" />
     <ClInclude Include="..\..\..\..\Include\CONTROL.H" />
     <ClInclude Include="..\..\..\..\Include\CREDATA.H" />
     <ClInclude Include="..\..\..\..\Include\CREDATAO.H" />
@@ -303,7 +301,6 @@
     <ClInclude Include="..\..\..\..\Include\LIGHT.H" />
     <ClInclude Include="..\..\..\..\Include\LL_COMM.H" />
     <ClInclude Include="..\..\..\..\Include\LOOK.H" />
-    <ClInclude Include="..\..\..\..\Include\MAILUI.H" />
     <ClInclude Include="..\..\..\..\Include\MAINUI.H" />
     <ClInclude Include="..\..\..\..\Include\MAP.H" />
     <ClInclude Include="..\..\..\..\Include\MAPANIM.H" />

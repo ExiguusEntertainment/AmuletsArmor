@@ -60,7 +60,6 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\$(NAME).obj     &
         $(OBJPATH)\keyboard.obj    &
         $(OBJPATH)\inventor.obj    &
-        $(OBJPATH)\mailui.obj      &
         $(OBJPATH)\mainui.obj      &
         $(OBJPATH)\txtbox.obj      &
         $(OBJPATH)\prompt.obj      &
@@ -291,8 +290,6 @@ txtfld.obj     : txtfld.c txtfld.h
 txtbox.obj     : txtbox.c txtbox.h
 
 mainui.obj     : mainui.c mainui.h
-
-mailui.obj     : mailui.c mailui.h
 
 connUI.obj     : connUI.c connUI.h
 
