@@ -150,7 +150,6 @@
     <ClCompile Include="..\..\..\..\Source\CMDQUEUE.C" />
     <ClCompile Include="..\..\..\..\Source\COLOR.C" />
     <ClCompile Include="..\..\..\..\Source\COLORIZE.C" />
-    <ClCompile Include="..\..\..\..\Source\COMPRESS.C" />
     <ClCompile Include="..\..\..\..\Source\COMWIN.C" />
     <ClCompile Include="..\..\..\..\Source\CONFIG.C" />
     <ClCompile Include="..\..\..\..\Source\CONNUI.C" />
@@ -261,7 +260,6 @@
     <ClInclude Include="..\..\..\..\Include\COLORIZE.H" />
     <ClInclude Include="..\..\..\..\Include\COMIO.H" />
     <ClInclude Include="..\..\..\..\Include\COMM.H" />
-    <ClInclude Include="..\..\..\..\Include\COMPRESS.H" />
     <ClInclude Include="..\..\..\..\Include\COMWIN.H" />
     <ClInclude Include="..\..\..\..\Include\CONFIG.H" />
     <ClInclude Include="..\..\..\..\Include\CONTROL.H" />

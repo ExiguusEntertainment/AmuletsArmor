@@ -74,9 +74,6 @@
     <ClCompile Include="..\..\..\..\Source\COLORIZE.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\COMPRESS.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\COMWIN.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -395,9 +392,6 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\COMM.H">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\COMPRESS.H">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\COMWIN.H">

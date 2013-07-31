@@ -15,11 +15,6 @@ T_void ClientReceiveMessagePacket(T_packetEitherShortOrLong *p_packet) ;
 
 T_void ClientReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket) ;
 
-T_void ClientReceivedMemoryBlock
-                   (T_void *p_data,
-                    T_word32 size,
-                    T_word32 extraData) ;
-
 T_void ClientReceiveServerIDPacket(T_packetEitherShortOrLong *p_packet);
 
 T_void ClientReceiveRequestEnterStatusPacket(

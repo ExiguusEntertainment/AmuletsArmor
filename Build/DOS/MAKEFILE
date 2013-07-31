@@ -43,7 +43,6 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\peophere.obj    &
         $(OBJPATH)\random.obj      &
         $(OBJPATH)\ditalk.obj      &
-        $(OBJPATH)\compress.obj    &
         $(OBJPATH)\csyncpck.obj    &
         $(OBJPATH)\synctime.obj    &
         $(OBJPATH)\hardform.obj    &
@@ -125,8 +124,6 @@ peophere.obj   : peophere.c peophere.h
 random.obj     : random.c random.h
 
 ditalk.obj     : ditalk.c ditalk.h
-
-compress.obj   : compress.c compress.h
 
 csyncpck.obj   : csyncpck.c  csyncpck.h
 
