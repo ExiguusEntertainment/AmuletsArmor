@@ -20,14 +20,12 @@
 #include "DOOR.H"
 #include "ESCMENU.H"
 #include "EFX.H"
-#include "FILETRAN.H"
 #include "GENERAL.H"
 #include "HARDFORM.H"
 #include "MAP.H"
 #include "KEYMAP.H"
 #include "KEYSCAN.H"
 #include "MEMORY.H"
-#include "MEMTRANS.H"
 #include "MESSAGE.H"
 #include "OBJECT.H"
 #include "OVERHEAD.H"
@@ -348,18 +346,18 @@ T_void ClientInit(T_void)
       NULL,                                       /* CS_GOTO_SUCCEEDED */
       NULL,                                       /* CSC_PROJECTILE_CREATE */
 
-      DataPacketReceiveFileRequest,               /* RT_REQUEST_FILE */
-      DataPacketStartIncoming,                    /* TR_START_TRANSFER */
-      DataPacketReceived,                         /* TR_DATA_PACKET */
-      DataPacketReceived,                         /* TR_FINAL_PACKET */
+      NULL,                                       /* RT_REQUEST_FILE */
+      NULL,                                       /* TR_START_TRANSFER */
+      NULL,                                       /* TR_DATA_PACKET */
+      NULL,                                       /* TR_FINAL_PACKET */
       NULL,                                       /* RT_RESEND_PLEASE */
-      DataPacketTransferComplete,                 /* TR_TRANSFER_COMPLETE */
-      DataPacketTransferComplete,                 /* RT_TRANSFER_CANCEL */
-      DataPacketFileNotHere,                      /* TR_FILE_NOT_HERE */
+      NULL,                                       /* TR_TRANSFER_COMPLETE */
+      NULL,                                       /* RT_TRANSFER_CANCEL */
+      NULL,                                       /* TR_FILE_NOT_HERE */
 
-      MemoryTransferReceiveRequestTransfer,       /* CSC_REQUEST_MEMORY_TRANSFER */
-      MemoryTransferReceiveTransferReadyPacket,   /* CSC_MEMORY_TRANSFER_READY */
-      MemoryTransferReceiveData,                  /* CSC_MEMORY_TRANSFER_DATA */
+      NULL,                                       /* CSC_REQUEST_MEMORY_TRANSFER */
+      NULL,                                       /* CSC_MEMORY_TRANSFER_READY */
+      NULL,                                       /* CSC_MEMORY_TRANSFER_DATA */
 
       NULL,                                       /* CSC_CHANGE_BODY_PART */
       NULL,                                       /* CSC_PING */
@@ -383,7 +381,7 @@ T_void ClientInit(T_void)
       ClientReceiveCheckPasswordStatusPacket,     /* 63 SC_CHECK_PASSWORD_STATUS */
       NULL,                                       /* 64 CS_CHANGE_PASSWORD */
       ClientReceiveChangePasswordStatusPacket,    /* 65 SC_CHANGE_PASSWORD_STATUS */
-      ClientReceiveRequestDataBlockPacket,        /* 66 CSC_REQEUST_DATA_BLOCK */
+      NULL,        								  /* 66 CSC_REQEUST_DATA_BLOCK */
       NULL,                                       /* 67 CSC_DAMAGE_OBJECT */
       ClientReceiveRequestPiecewiseListPacket,    /* 68 SC_REQUEST_PIECEWISE_LIST */
       NULL,                                       /* 69 CS_PIECEWISE_LIST */
@@ -412,8 +410,6 @@ T_void ClientInit(T_void)
 
     // No target yet
     G_lastDrawTargetItem = NULL;
-
-    MemoryTransferSetCallback(ClientReceivedMemoryBlock) ;
 
     /* Prepare the people parts for the bitmaps. */
 
@@ -1504,7 +1500,7 @@ T_void ClientLogin(T_void)
 
     /** Request a login as the character of my choice. **/
     p_login->command = PACKET_COMMAND_LOGIN ;
-    p_login->accountNum = ConfigGetAccountNumber() ;
+    p_login->accountNum = 0; // not used
 
     CmdQSendShortPacket(&packet, 140, 0, IClientLoginAck) ;
 
@@ -4222,82 +4218,6 @@ T_void ClientSetSaveCharStatus(E_clientSaveCharStatus status)
     G_clientSaveCharStatus = status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientFetchDataBlock                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*      ClientFetchDataBlock retrieves one of the basic types of data       */
-/*    blocks from where it needs to be fetched.                             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_word16 dataBlockType      -- Type of block to fetch                 */
-/*    T_word32 extraData          -- Extra info to process                  */
-/*    T_word32 *p_size            -- Size of data block                     */
-/*    E_Boolean *doMemFree        -- Flag to note if block needs to be freed*/
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void *ClientFetchDataBlock(
-            T_word16 dataBlockType,
-            T_word32 extraData,
-            T_word32 *p_size,
-            E_Boolean *doMemFree)
-{
-    T_void *p_data ;
-
-    DebugRoutine("ClientFetchDataBlock") ;
-
-    /* The default is a zero size null block that does */
-    /* not need to be freed. */
-    *doMemFree = FALSE ;
-    *p_size = 0 ;
-    p_data = NULL ;
-
-    switch(dataBlockType)  {
-        case CLIENT_MEMORY_BLOCK_UPDATE_BLOCK:
-        case CLIENT_MEMORY_BLOCK_CHARACTER_LISTING:
-            /* Do nothing, this is sent to the client. */
-            break ;
-
-        case MEMORY_BLOCK_CHARACTER_DATA:
-            /* Get character stats and inventory block */
-            /* and tell to free the block afterwards. */
-            p_data = StatsGetAsDataBlock(p_size) ;
-            *doMemFree = TRUE ;
-            break ;
-        case MEMORY_BLOCK_ACCOUNT_INFO:
-            /* Get the account info block and note its size and */
-            /* that it needs to be freed after being sent. */
-            p_data = (T_void *)ConfigCreateAccountInfoBlock() ;
-            *p_size = sizeof(T_dataBlockAccountInfo) ;
-            *doMemFree = TRUE ;
-            break ;
-        default:
-#ifndef NDEBUG
-            printf("Unknown data block type: %d\n", dataBlockType) ;
-            fflush(stdout) ;
-#endif
-            DebugCheck(FALSE) ;
-            break ;
-    }
-
-    DebugEnd() ;
-
-    return p_data ;
-}
-
 /* LES: 03/06/96 */
 E_loadCharStatus ClientGetLoadCharacterStatus(T_void)
 {
@@ -4432,18 +4352,6 @@ static T_void IClientAttemptOpeningForwardWall(T_void)
     }
 
     DebugEnd() ;
-}
-
-/* LES: 07/23/96 */
-E_Boolean ClientIsServerBased(T_void)
-{
-    /* Asks "Is the client connected or going to be connected to a */
-    /* server to handle all our requests?" */
-    /* FALSE = Single player or direct connect (modem or IPX) */
-    /* TRUE = Multiple player to server */
-    if (G_clientConnectionType == CLIENT_CONNECTION_TYPE_MODEM_TO_SERVER)
-         return TRUE ;
-    return FALSE ;
 }
 
 /* LES: 07/23/96 */

@@ -9,7 +9,6 @@
 #include "KEYBOARD.H"
 #include "PACKET.H"
 #include "STORE.H"
-#include "STOREDB.H"
 
 #define SERVER_ID_NONE        0
 #define PLACE_NOWHERE         0xFFFFFFFF
@@ -170,20 +169,6 @@ T_void ClientSetCheckPasswordStatus(E_checkPasswordStatus status);
 E_changePasswordStatus ClientGetChangePasswordStatus(T_void);
 
 T_void ClientSetChangePasswordStatus(E_changePasswordStatus status);
-
-T_void *ClientFetchDataBlock(
-        T_word16 dataBlockType,
-        T_word32 extraData,
-        T_word32 *p_size,
-        E_Boolean *doMemFree);
-
-T_storeRemoveResult ClientGetStoreRemoveResult(T_void);
-
-T_void ClientSetStoreRemoveResult(T_storeRemoveResult removeResult);
-
-T_storeAddResult ClientGetStoreAddResult(T_void);
-
-T_void ClientSetStoreAddResult(T_storeAddResult addResult);
 
 E_Boolean ClientIsServerBased(T_void);
 

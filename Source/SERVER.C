@@ -9,7 +9,6 @@
 #include "DOOR.H"
 #include "MAP.H"
 #include "MEMORY.H"
-#include "MEMTRANS.H"
 #include "MESSAGE.H"
 #include "OBJECT.H"
 #include "PLAYER.H"
@@ -47,6 +46,9 @@ static T_void IServerDataBlockSentNowFree(
                   T_void *p_data,
                   T_word32 size,
                   T_word32 extraData) ;
+
+static T_void IServerCheckSectorSounds(T_void) ;
+
 
 /****************************************************************************/
 /*  Routine:  ServerInit                                                    */
@@ -486,7 +488,7 @@ T_void ServerUpdate(T_void)
         }
 
         /* See if any objects have caused sector sounds and send them. */
-        ServerCheckSectorSounds() ;
+        IServerCheckSectorSounds() ;
 
         /** Then, send out all necessary movement packets. **/
 //        CreaturesUpdate() ;
@@ -610,135 +612,6 @@ if (nextPlayer == 0)  {
 }
 
 /****************************************************************************/
-/*  Routine:  ServerSendSyncPacket                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Every so often a sync packet is used to make sure all the players are */
-/*  together in the same time.  This "syncing" is executed by this command. */
-/*  Players are then synced when G_syncCount equals zero.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ServerSendToAllFromWithCallback                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void ServerSendSyncPacket(T_void)
-{
-    T_packetShort packet ;
-    T_syncPacket *p_sync ;
-
-    DebugRoutine("ServerSendSyncPacket") ;
-
-    /* Get at the packet's data. */
-    p_sync = (T_syncPacket *)&packet.data ;
-
-    /* Put the command and length of the packet in the packet. */
-    p_sync->command = PACKET_COMMAND_SYNC ;
-    packet.header.packetLength = SHORT_PACKET_LENGTH ;
-
-    /* Send this sync packet to all the players. */
-    CmdQSendPacket(
-        (T_packetEitherShortOrLong *)&packet,
-        140, /* No real player being excluded, send to all */
-        0,  /* No additional data. */
-        NULL) ;
-
-    DebugEnd() ;
-}
-
-/****************************************************************************/
-/*  Routine:  ServerRecieveMessagePacket                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveMessagePacket is a called when a packet containing a     */
-/*  message needs to be passed to all the other players.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- message packet                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ServerSendToAllFrom                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void ServerReceiveMessagePacket(T_packetEitherShortOrLong *p_packet)
-{
-    T_messagePacket *p_msg ;
-    T_word16 range ;
-
-    DebugRoutine("ServerReceiveMessagePacket") ;
-
-    p_msg = (T_messagePacket *)p_packet->data ;
-
-    switch(p_msg->message[0])  {
-        case '<':
-            range = MESSAGE_RANGE_WHISPER ;
-            break ;
-        case '>':
-            range = MESSAGE_RANGE_SHOUT ;
-            break ;
-        default:
-            range = MESSAGE_RANGE_TALK ;
-            break ;
-    }
-
-    /* Send out a notice to all the other players. */
-//    ServerSendToAllFromInRange(p_packet, p_msg->player, range) ;
-    CmdQSendPacket(p_packet, 140, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
-/****************************************************************************/
 /*  Routine:  ServerGetPlayerObject                                         */
 /****************************************************************************/
 /*                                                                          */
@@ -792,12 +665,12 @@ T_3dObject *ServerGetPlayerObject(T_word16 playerId)
 }
 
 /****************************************************************************/
-/*  Routine:  ServerCheckSectorSounds                                       */
+/*  Routine:  IServerCheckSectorSounds                                      */
 /****************************************************************************/
 /*                                                                          */
 /*  Description:                                                            */
 /*                                                                          */
-/*    ServerCheckSectorSounds sees if all the objects have caused any       */
+/*    IServerCheckSectorSounds sees if all the objects have caused any      */
 /*  sounds to occur.                                                        */
 /*                                                                          */
 /*                                                                          */
@@ -832,9 +705,9 @@ T_3dObject *ServerGetPlayerObject(T_word16 playerId)
 /*                                                                          */
 /****************************************************************************/
 
-T_void ServerCheckSectorSounds(T_void)
+static T_void IServerCheckSectorSounds(T_void)
 {
-    DebugRoutine("ServerCheckSectorSounds") ;
+    DebugRoutine("IServerCheckSectorSounds") ;
 
     /* Check all the objects.  Pass 0 since we don't have any */
     /* other data to pass. */
@@ -1215,60 +1088,6 @@ T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet)
 }
 
 /****************************************************************************/
-/*  Routine:  ServerReceiveRequestServerIDPacket                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveRequestServerIDPacket is called when a client process    */
-/*  wants to know what the unique id of this server is.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- request server id packet       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void ServerReceiveRequestServerIDPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_packetShort packet ;
-    T_serverIDPacket *p_serverID ;
-
-    DebugRoutine("ServerReceiveRequestServerIDPacket") ;
-
-    p_serverID = (T_serverIDPacket *)(packet.data) ;
-    p_serverID->command = PACKET_COMMANDSC_SERVER_ID ;
-    p_serverID->serverID = ServerGetServerID() ;
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
-/****************************************************************************/
 /*  Routine:  ServerGetServerID                                             */
 /****************************************************************************/
 /*                                                                          */
@@ -1435,7 +1254,6 @@ T_void ServerReceiveRequestEnterPacket(
 /*  Calls:                                                                  */
 /*                                                                          */
 /*    StatsGetSavedCharacterList                                            */
-/*    MemoryTransfer                                                        */
 /*                                                                          */
 /*                                                                          */
 /*  Revision History:                                                       */
@@ -1454,13 +1272,7 @@ T_void ServerReceiveRequestCharacterListPacket(
     DebugRoutine("ServerReceiveRequestCharacterListPacket") ;
 
     p_charArray = StatsGetSavedCharacterList() ;
-/*
-    MemoryTransfer(
-        p_charArray,
-        sizeof(T_statsSavedCharArray),
-        NULL,
-        CLIENT_MEMORY_BLOCK_CHARACTER_LISTING) ;
-*/
+
     StatsSetSavedCharacterList(p_charArray) ;
 
     SMCChooseSetFlag(
@@ -1521,22 +1333,7 @@ T_void ServerReceiveLoadCharacterPacket(
     p_status = (T_loadCharacterStatusPacket *)packet.data ;
     p_status->command = PACKET_COMMANDSC_LOAD_CHARACTER_STATUS ;
 
-/* Code needed here to actually compare checksums. */
-/*
-    serverChecksum = ServerGetCharacterChecksum(p_status->slot) ;
-*/
-
-//    if (serverChecksum != checksum)  {
-//        p_status->status = LOAD_CHARACTER_STATUS_INCORRECT ;
-        /* Immediately start sending the character. */
-/* Code needed on full server. */
-/*
-        ServerSendCharacter(p_status->slot) ; <-- basically a MemoryTransfer
-*/
-
-//    } else {
-        p_status->status = LOAD_CHARACTER_STATUS_CORRECT ;
-//    }
+    p_status->status = LOAD_CHARACTER_STATUS_CORRECT ;
 
     CmdQSendShortPacket(&packet, 140, 0, NULL) ;
 
@@ -1809,66 +1606,6 @@ T_void ServerReceiveChangePasswordPacket(
 }
 
 /****************************************************************************/
-/*  Routine:  ServerReceiveRequestDataBlockPacket                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*      ServerReceiveRequestDataBlockPacket is called when the client wants */
-/*    a particular data block to be sent.                                   */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_packeEitherShortOrLong *p_packet -- packet for data block           */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void ServerReceiveRequestDataBlockPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_word32 size ;
-    E_Boolean doMemFree ;
-    T_requestDataBlockPacket *p_request ;
-    T_void *p_data ;
-
-    DebugRoutine("ServerReceiveRequestDataBlockPacket") ;
-
-    p_request = (T_requestDataBlockPacket *)(p_packet->data) ;
-    p_data = ServerFetchDataBlock(
-                 p_request->dataBlockType,
-                 p_request->extraData,
-                 &size,
-                 &doMemFree) ;
-
-    /* Check that the data is now available. */
-    if (p_data != NULL)
-        /* Note if we need to free the memory. */
-        if (doMemFree)
-            MemoryTransfer(
-                p_data,
-                size,
-                IServerDataBlockSentNowFree,
-                p_request->dataBlockType) ;
-        else
-            MemoryTransfer(
-                p_data,
-                size,
-                NULL,
-                p_request->dataBlockType) ;
-
-    DebugEnd() ;
-}
-
-/****************************************************************************/
 /*  Routine:  IServerDataBlockSentNowFree                                   */
 /****************************************************************************/
 /*                                                                          */
@@ -1904,89 +1641,6 @@ static T_void IServerDataBlockSentNowFree(
     MemFree(p_data) ;
 
     DebugEnd() ;
-}
-
-/****************************************************************************/
-/*  Routine:  ServerFetchDataBlock                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*      ServerFetchDataBlock retrieves one of the basic types of data       */
-/*    blocks from where it needs to be fetched.                             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_word16 dataBlockType      -- Type of block to fetch                 */
-/*    T_word32 extraData          -- Extra info to process                  */
-/*    T_word32 *p_size            -- Size of data block                     */
-/*    E_Boolean *doMemFree        -- Flag to note if block needs to be freed*/
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void *ServerFetchDataBlock(
-            T_word16 dataBlockType,
-            T_word32 extraData,
-            T_word32 *p_size,
-            E_Boolean *doMemFree)
-{
-    T_void *p_data ;
-
-    DebugRoutine("ServerFetchDataBlock") ;
-
-    /* The default is a zero size null block that does */
-    /* not need to be freed. */
-    *doMemFree = FALSE ;
-    *p_size = 0 ;
-    p_data = NULL ;
-
-/* !!! Warning! This is Self Server only (currently) */
-    switch(dataBlockType)  {
-        case CLIENT_MEMORY_BLOCK_UPDATE_BLOCK:
-            /* This block is created under special conditions */
-            /* (aka jumping from level to level -- its not */
-            /* fetched. */
-            break ;
-
-        case CLIENT_MEMORY_BLOCK_CHARACTER_LISTING:
-            p_data = MemAlloc(sizeof(T_statsSavedCharArray)) ;
-            StatsSetSavedCharacterList(p_data) ;
-            *doMemFree = TRUE ;
-            break ;
-
-        case MEMORY_BLOCK_CHARACTER_DATA:
-            /* Get character stats and inventory block */
-            /* and tell to free the block afterwards. */
-            StatsLoadCharacter(extraData) ;
-            p_data = StatsGetAsDataBlock(p_size) ;
-            *doMemFree = TRUE ;
-            break ;
-
-        case MEMORY_BLOCK_ACCOUNT_INFO:
-            /* Do nothing, this is sent to the server. */
-            break ;
-
-        default:
-#ifndef NDEBUG
-            printf("Unknown data block type: %d\n", dataBlockType) ;
-            fflush(stdout) ;
-#endif
-            DebugCheck(FALSE) ;
-            break ;
-    }
-
-    DebugEnd() ;
-
-    return p_data ;
 }
 
 T_void ServerReceiveSyncPacket(T_packetEitherShortOrLong *p_packet)

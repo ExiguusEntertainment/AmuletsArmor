@@ -4,7 +4,6 @@
 #include "CLIENT.H"
 #include "MAP.H"
 #include "MEMORY.H"
-#include "MEMTRANS.H"
 #include "PACKET.H"
 #include "SMCLOGOF.H"
 #include "SMMAIN.H"
@@ -41,10 +40,7 @@ T_void SMCLogoffExitEnter(
            T_stateMachineHandle handle,
            T_word32 extraData) ;
 
-static T_void ISaveUploadComplete(
-                  T_void *p_data,
-                  T_word32 size,
-                  T_word32 extraData) ;
+static T_void ISaveUploadComplete(void) ;
 
 /* Internal global variables: */
 static T_stateMachineHandle G_smHandle ;
@@ -569,10 +565,6 @@ T_void SMCLogoffSaveCharacterEnter(
            T_word32 extraData)
 {
     T_SMCLogoffData *p_data ;
-    T_characterBlock *p_charBlock ;
-    T_void *p_stats ;
-    T_word32 size ;
-    T_word16 slot ;
 
     DebugRoutine("SMCLogoffSaveCharacterEnter") ;
 
@@ -591,26 +583,6 @@ T_void SMCLogoffSaveCharacterEnter(
 
     /* No matter what type of server we are on, save this one. */
     StatsSaveCharacter(StatsGetActive()) ;
-
-    if (ClientIsServerBased())  {
-//    if (CommCheckClientAndServerExist() == FALSE)  {
-        /* Send the character up to the server. */
-        p_stats = StatsGetAsDataBlock(&size) ;
-        p_charBlock = MemAlloc(sizeof(T_characterBlock) + size) ;
-        slot = p_charBlock->slot = StatsGetActive() ;
-        StatsGetPassword((T_byte8)slot, p_charBlock->password) ;
-        p_charBlock->size = size ;
-        memcpy(p_charBlock->charData, p_stats, size) ;
-        MemFree(p_stats) ;
-
-        MemoryTransfer(
-            p_charBlock,
-            size + sizeof(T_characterBlock),
-            ISaveUploadComplete,
-            MEMORY_BLOCK_CHARACTER_DATA) ;
-    }
-
-//ClientLogoff() ;
 
     DebugEnd() ;
 }
@@ -666,13 +638,7 @@ T_void SMCLogoffSaveCharacterIdle(
     p_data = (T_SMCLogoffData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    if (!ClientIsServerBased())  {
-//    if (CommCheckClientAndServerExist() == TRUE)  {
-        ISaveUploadComplete(
-            NULL,
-            0,
-            MEMORY_BLOCK_CHARACTER_DATA) ;
-    }
+    ISaveUploadComplete();
 
     DebugEnd() ;
 }
@@ -680,17 +646,9 @@ T_void SMCLogoffSaveCharacterIdle(
 /****************************************************************************/
 /* Note that a create character upload is complete. */
 /* LES 06/24/96 Created */
-static T_void ISaveUploadComplete(
-                  T_void *p_data,
-                  T_word32 size,
-                  T_word32 extraData)
+static T_void ISaveUploadComplete(void)
 {
     DebugRoutine("ISaveUploadComplete") ;
-
-//puts("ISaveUploadComplete") ; fflush(stdout) ;
-    /* Let go of the uploaded character. */
-    if (p_data)
-        MemFree(p_data) ;
 
     /* Note that the upload is complete. */
     SMCLogoffSetFlag(

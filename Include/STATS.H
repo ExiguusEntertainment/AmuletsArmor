@@ -356,13 +356,10 @@ T_void StatsLoadCharacterUIEnd(T_void) ;
 
 T_word32 StatsComputeCharacterChecksum(T_void) ;
 
-T_void StatsReceiveCharacterData(T_byte8 *p_data, T_word32 size) ;
-
 T_void StatsCreateCharacterUIStart(T_void) ;
 T_void StatsCreateCharacterUIEnd(T_void) ;
 T_void StatsCreateCharacterUIUpdate(T_void) ;
 
-T_void  *StatsGetAsDataBlock(T_word32 *p_size) ;
 T_word32 StatsGetPlayerTotalSavedWealth(T_void);
 T_word32 StatsGetPlayerTotalCarriedWealth(T_void);
 

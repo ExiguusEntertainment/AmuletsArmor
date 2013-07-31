@@ -40,9 +40,6 @@ T_void ClientReceiveCheckPasswordStatusPacket(
 T_void ClientReceiveChangePasswordStatusPacket(
            T_packetEitherShortOrLong *p_packet) ;
 
-T_void ClientReceiveRequestDataBlockPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
 T_void ClientReceiveRequestPiecewiseListPacket(
            T_packetEitherShortOrLong *p_packet) ;
 

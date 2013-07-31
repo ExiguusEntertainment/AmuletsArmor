@@ -3282,69 +3282,6 @@ T_void StatsMakeActive(T_byte8 selected)
     G_activeCharacter = selected ;
 }
 
-/* LES: 03/06/96 */
-T_word32 StatsComputeCharacterChecksum(T_void)
-{
-    T_word32 checksum = 0 ;
-    T_word32 size ;
-    T_byte8 *p_char ;
-    T_word32 i ;
-#if 0
-T_file file ;
-#endif
-
-    DebugRoutine("StatsComputeCharacterChecksum") ;
-
-    /* Grab the character. */
-    p_char = StatsGetAsDataBlock(&size) ;
-
-#if 0
-file = FileOpen("checksum.dat", FILE_MODE_WRITE) ;
-FileWrite(file, p_char, size) ;
-FileClose(file) ;
-#endif
-    /* Make sure we got it. */
-    DebugCheck(p_char != NULL) ;
-    if (p_char)  {
-        /* Create a progressive checksum. */
-        for (i=0; i<size; i++)  {
-            if (i & 1)  {
-                checksum += p_char[i] ;
-            } else {
-                checksum ^= p_char[i] ;
-            }
-        }
-
-        /* Let go of the character. */
-        MemFree(p_char) ;
-    }
-
-    DebugEnd() ;
-
-//printf("Calculate checksum %08lX\n", checksum) ;
-    return checksum ;
-}
-
-/* LES: 03/06/96 */
-T_void StatsReceiveCharacterData(T_byte8 *p_data, T_word32 size)
-{
-    T_byte8 filename[30];
-    T_file file ;
-
-    DebugRoutine("StatsReceiveCharacterData") ;
-
-    sprintf (filename,"S%07d//CHDATA%02d",G_serverID,StatsGetActive());
-    file = FileOpen(filename, FILE_MODE_WRITE) ;
-    if (file != FILE_BAD)  {
-        FileWrite(file, p_data, size) ;
-        FileClose(file) ;
-    } else {
-        PromptDisplayMessage ("File I/O error saving downloaded character.");
-    }
-
-    DebugEnd() ;
-}
-
 /* LES: 03/07/96 */
 T_void StatsCreateCharacterUIStart(T_void)
 {
@@ -3466,44 +3403,6 @@ T_void StatsCreateCharacterControl (E_formObjectType objtype,
     }
 
 	DebugEnd();
-}
-
-/* LES: 03/12/96 Created */
-T_void *StatsGetAsDataBlock(T_word32 *p_size)
-{
-    FILE *fout;
-    T_void *p_data ;
-
-    DebugRoutine("StatsGetAsDataBlock") ;
-    DebugCheck(p_size != NULL) ;
-
-    /* go ahead and write the stats structure + equip to disk for now */
-    fout = fopen ("tempchar.$$$","wb");
-    if (fout != NULL)
-    {
-        /* write player statistics */
-        fwrite (G_activeStats,sizeof(T_playerStats),1,fout);
-
-        /* write player inventory list */
-        /* get up to 200 inventory items for player */
-        /* and append each to file. */
-        InventoryWriteItemsList(fout);
-
-        fclose (fout);
-
-        /* Load the file into memory. */
-        p_data = FileLoad("tempchar.$$$", p_size) ;
-        remove("tempchar.$$$") ;
-    }
-    else
-    {
-        /* inform user of error */
-        PromptDisplayMessage ("File I/O error getting data block.");
-    }
-
-    DebugEnd() ;
-
-    return p_data ;
 }
 
 /* routine returns the player's total saved in bank wealth in copper coins */

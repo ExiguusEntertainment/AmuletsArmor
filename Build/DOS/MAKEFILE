@@ -46,7 +46,6 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\compress.obj    &
         $(OBJPATH)\csyncpck.obj    &
         $(OBJPATH)\synctime.obj    &
-        $(OBJPATH)\storedb.obj     &
         $(OBJPATH)\hardform.obj    &
         $(OBJPATH)\light.obj       &
         $(OBJPATH)\sound.obj       &
@@ -61,8 +60,6 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\$(NAME).obj     &
         $(OBJPATH)\keyboard.obj    &
         $(OBJPATH)\inventor.obj    &
-        $(OBJPATH)\files.obj       &
-        $(OBJPATH)\filetran.obj    &
         $(OBJPATH)\mailui.obj      &
         $(OBJPATH)\mainui.obj      &
         $(OBJPATH)\txtbox.obj      &
@@ -75,8 +72,6 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\smcdis.obj      &
         $(OBJPATH)\smcleave.obj    &
         $(OBJPATH)\inifile.obj     &
-        $(OBJPATH)\lookup32.obj    &
-        $(OBJPATH)\chardb.obj      &
         $(OBJPATH)\efx.obj 
 
 OBJS2 = $(OBJPATH)\ticker.obj      &
@@ -89,7 +84,6 @@ OBJS2 = $(OBJPATH)\ticker.obj      &
         $(OBJPATH)\colorize.obj    &
         $(OBJPATH)\update.obj      &
         $(OBJPATH)\smachine.obj    &
-        $(OBJPATH)\flatfile.obj    &
         $(OBJPATH)\serversh.obj    &
         $(OBJPATH)\cli_send.obj    &
         $(OBJPATH)\cli_recv.obj    &
@@ -102,7 +96,6 @@ OBJS3 = $(OBJPATH)\packetdt.obj      &
         $(OBJPATH)\player.obj      &
         $(OBJPATH)\object.obj      &
         $(OBJPATH)\script.obj      &
-        $(OBJPATH)\memtrans.obj		&
         $(OBJPATH)\escmenu.obj  &
         $(OBJPATH)\syncmem.obj
 
@@ -140,15 +133,9 @@ csyncpck.obj   : csyncpck.c  csyncpck.h
 
 synctime.obj   : synctime.c synctime.h
 
-storedb.obj    : storedb.c storedb.h
-
 hardform.obj   : hardform.c hardform.h
 
 efx.obj        : efx.c efx.h
-
-chardb.obj     : chardb.c chardb.h
-
-lookup32.obj   : lookup32.c lookup32.h
 
 inifile.obj    : inifile.c inifile.h
 
@@ -173,8 +160,6 @@ cli_send.obj   : cli_send.c cli_send.h
 cli_recv.obj   : cli_recv.c cli_recv.h
 
 serversh.obj   : serversh.c serversh.h
-
-flatfile.obj   : flatfile.c flatfile.h
 
 smachine.obj   : smachine.c smachine.h
 
@@ -211,8 +196,6 @@ slidr.obj      : slidr.c slidr.h
 comwin.obj     : comwin.c comwin.h
 
 colorize.obj   : colorize.c colorize.h
-
-memtrans.obj   : memtrans.c memtrans.h
 
 script.obj     : script.c script.h
 
@@ -294,8 +277,6 @@ file.obj       : file.c file.h
 resource.obj   : resource.c resource.h iresourc.h
 
 mousemod.obj   : mousemod.c mousemod.h
-
-files.obj      : files.c files.h
 
 stats.obj      : stats.c stats.h
 

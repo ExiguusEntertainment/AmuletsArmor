@@ -18,8 +18,6 @@ typedef T_byte8 E_musicType ;
 T_void ConfigLoad(T_void) ;
 T_iniFile ConfigOpen(T_void) ;
 T_void ConfigClose(T_void) ;
-T_dataBlockAccountInfo *ConfigCreateAccountInfoBlock(T_void) ;
-T_word32 ConfigGetAccountNumber(T_void) ;
 T_iniFile ConfigGetINIFile(T_void) ;
 E_musicType ConfigGetMusicType(T_void) ;
 T_byte8 ConfigGetCDROMDrive(T_void) ;

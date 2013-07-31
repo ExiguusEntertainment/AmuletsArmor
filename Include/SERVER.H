@@ -12,8 +12,6 @@ typedef T_word16 T_player ;
 #define PLAYER_BAD 0xFFFF
 #endif
 
-T_void ServerMain(T_void) ;
-
 T_void ServerUpdate(T_void) ;
 
 T_void ServerInit(T_void) ;
@@ -22,15 +20,7 @@ T_void ServerFinish(T_void) ;
 
 T_sword16 ServerGetNextPlayer(T_player lastPlayer) ;
 
-T_void ServerReceiveCreatureMovePacket(T_packetEitherShortOrLong *p_packet) ;
-
-T_void ServerSendSyncPacket(T_void) ;
-
-T_void ServerReceiveMessagePacket(T_packetEitherShortOrLong *p_packet) ;
-
 T_3dObject *ServerGetPlayerObject(T_word16 playerId) ;
-
-T_void ServerCheckSectorSounds(T_void) ;
 
 T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet) ;
 
@@ -46,9 +36,6 @@ T_3dObject *ServerShootProjectile(
           T_3dObject *p_target) ;
 
 T_void ServerGotoPlace (T_word32 placeNumber, T_word16 startLocation);
-
-T_void ServerReceiveRequestServerIDPacket(
-           T_packetEitherShortOrLong *p_packet) ;
 
 T_void ServerSetServerID(T_word32 newID) ;
 

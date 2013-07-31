@@ -906,9 +906,6 @@ T_void SMCPlayGameDoGameIdle(
         CreaturesCheck() ;
         ClientSyncEnsureSend() ;
     }
-//	if (CommGetNumberPorts() != 1)  {
-//	    ServerUpdate() ;
-//	}
 
     /* Make sure the sync signal is being sent. */
 //printf("Player xy: %d %d\n", PlayerGetX16(), PlayerGetY16()) ;

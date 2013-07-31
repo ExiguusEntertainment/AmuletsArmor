@@ -249,26 +249,16 @@ T_void ClientSendRequestCharacterListing(T_void)
     /* Get a quick pointer to the true action data. */
     p_request = (T_requestCharacterListPacket *)packet.data ;
 
-    if (ClientIsServerBased())  {
-        p_request->command = PACKET_COMMANDCS_REQUEST_CHAR_LIST ;
+    /* Get the saved character listing. */
+    p_charArray = StatsGetSavedCharacterList() ;
 
-        packet.header.packetLength = sizeof(T_requestCharacterListPacket) ;
+    /* Make this listing active. */
+    StatsSetSavedCharacterList(p_charArray) ;
 
-        /* Send the packet. */
-        CmdQSetActivePortNum(0) ;
-        CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-    } else {
-        /* Get the saved character listing. */
-        p_charArray = StatsGetSavedCharacterList() ;
-
-        /* Make this listing active. */
-        StatsSetSavedCharacterList(p_charArray) ;
-
-        /* Note that we are done "entering" the character list. */
-        SMCChooseSetFlag(
-            SMCCHOOSE_FLAG_ENTER_COMPLETE,
-            TRUE) ;
-    }
+    /* Note that we are done "entering" the character list. */
+    SMCChooseSetFlag(
+        SMCCHOOSE_FLAG_ENTER_COMPLETE,
+        TRUE) ;
 
     DebugEnd() ;
 }
@@ -310,28 +300,10 @@ T_void ClientSendRequestCharacterListing(T_void)
 
 T_void ClientSendLoadCharacter(T_byte8 slot, T_word32 checksum)
 {
-    T_packetLong packet ;
-    T_loadCharacterPacket *p_load ;
-
     DebugRoutine("ClientSendLoadCharacter") ;
 
-    if (ClientIsServerBased())  {
-        /* Get a quick pointer to the true action data. */
-        p_load = (T_loadCharacterPacket *)packet.data ;
-
-        p_load->command = PACKET_COMMANDCS_LOAD_CHARACTER ;
-        p_load->slot = slot ;
-        p_load->checksum = checksum ;
-        packet.header.packetLength = sizeof(T_loadCharacterPacket) ;
-
-        /* Send the packet. */
-        CmdQSetActivePortNum(0) ;
-
-        CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-    } else {
-        /* Always make it OK to load the character. */
-        ClientSetLoadCharacterStatus(LOAD_CHARACTER_STATUS_CORRECT) ;
-    }
+    /* Always make it OK to load the character. */
+    ClientSetLoadCharacterStatus(LOAD_CHARACTER_STATUS_CORRECT) ;
 
     DebugEnd() ;
 }
@@ -377,28 +349,10 @@ T_void ClientSendCreateCharacter(
            T_word32 checksum,
            T_byte8 *p_password)
 {
-    T_packetLong packet ;
-    T_createCharacterPacket *p_create ;
-
     DebugRoutine("ClientSendCreateCharacter") ;
 
-    if (ClientIsServerBased())  {
-        /* Get a quick pointer to the true action data. */
-        p_create = (T_createCharacterPacket *)packet.data ;
-
-        p_create->command = PACKET_COMMANDCS_CREATE_CHARACTER ;
-        p_create->slot = slot ;
-        p_create->checksum = checksum ;
-        strncpy(p_create->password, p_password, MAX_SIZE_PASSWORD) ;
-        packet.header.packetLength = sizeof(T_createCharacterPacket) ;
-
-        /* Send the packet. */
-        CmdQSetActivePortNum(0) ;
-        CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-    } else {
-        /* Always make it ok to create a character. */
-        ClientSetCreateCharacterStatus(CREATE_CHARACTER_STATUS_OK) ;
-    }
+    /* Always make it ok to create a character. */
+    ClientSetCreateCharacterStatus(CREATE_CHARACTER_STATUS_OK) ;
 
     DebugEnd() ;
 }
@@ -438,26 +392,11 @@ T_void ClientSendCreateCharacter(
 
 T_void ClientSendDeleteCharacter(T_byte8 slot)
 {
-    T_packetLong packet ;
-    T_deleteCharacterPacket *p_delete ;
-
     DebugRoutine("ClientSendDeleteCharacter") ;
 
-    if (ClientIsServerBased())  {
-        /* Get a quick pointer to the true action data. */
-        p_delete = (T_deleteCharacterPacket *)packet.data ;
+    /* It is always OK to delete a character. */
+    ClientSetDeleteCharacterStatus(DELETE_CHARACTER_STATUS_OK) ;
 
-        p_delete->command = PACKET_COMMANDCS_DELETE_CHARACTER ;
-        p_delete->slot = slot ;
-        packet.header.packetLength = sizeof(T_deleteCharacterPacket) ;
-
-        /* Send the packet. */
-        CmdQSetActivePortNum(0) ;
-        CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-    } else {
-        /* It is always OK to delete a character. */
-        ClientSetDeleteCharacterStatus(DELETE_CHARACTER_STATUS_OK) ;
-    }
     DebugEnd() ;
 }
 
@@ -500,30 +439,10 @@ T_void ClientSendCheckPassword(
            T_byte8 slot,
            T_byte8 password[MAX_SIZE_PASSWORD])
 {
-    T_packetLong packet ;
-    T_checkPasswordPacket *p_check ;
-
     DebugRoutine("ClientSendCheckPassword") ;
 
-    if (ClientIsServerBased())  {
-        /* Get a quick pointer to the true action data. */
-        p_check = (T_checkPasswordPacket *)packet.data ;
-
-        /* Fill the packet. */
-        p_check->command = PACKET_COMMANDCS_CHECK_PASSWORD ;
-        p_check->slot = slot ;
-        memcpy(p_check->password, password, MAX_SIZE_PASSWORD) ;
-
-        /* Squeeze down the size of the packet to only what we need. */
-        packet.header.packetLength = sizeof(T_checkPasswordPacket) ;
-
-        /* Send the packet. */
-        CmdQSetActivePortNum(0) ;
-        CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-    } else {
-        /* Password is always ok for now. */
-        ClientSetCheckPasswordStatus(CHECK_PASSWORD_STATUS_OK) ;
-    }
+    /* Password is always ok for now. */
+    ClientSetCheckPasswordStatus(CHECK_PASSWORD_STATUS_OK) ;
 
     DebugEnd() ;
 }
@@ -570,93 +489,9 @@ T_void ClientSendChangePassword(
            T_byte8 password[MAX_SIZE_PASSWORD],
            T_byte8 newPassword[MAX_SIZE_PASSWORD])
 {
-    T_packetLong packet ;
-    T_changePasswordPacket *p_change ;
-
     DebugRoutine("ClientSendChangePassword") ;
 
-    if (ClientIsServerBased())  {
-        /* Get a quick pointer to the true action data. */
-        p_change = (T_changePasswordPacket *)packet.data ;
-
-        /* Fill the packet. */
-        p_change->command = PACKET_COMMANDCS_CHANGE_PASSWORD ;
-        p_change->slot = slot ;
-        memcpy(p_change->password, password, MAX_SIZE_PASSWORD) ;
-        memcpy(p_change->newPassword, newPassword, MAX_SIZE_PASSWORD) ;
-
-        /* Squeeze down the size of the packet to only what we need. */
-        packet.header.packetLength = sizeof(T_changePasswordPacket) ;
-
-        /* Send the packet. */
-        CmdQSetActivePortNum(0) ;
-        CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-    } else {
-        ClientSetChangePasswordStatus(CHANGE_PASSWORD_STATUS_OK) ;
-    }
-
-    DebugEnd() ;
-}
-
-/****************************************************************************/
-/*  Routine:  ClientRequestDataBlock                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientRequestDataBlock sends out a packet to ask the server to send   */
-/*  it a data block.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 dataBlockType      -- Type of block to retrieve              */
-/*                                                                          */
-/*    T_word32 extraData          -- Extra data info                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_void ClientRequestDataBlock(
-           T_word16 dataBlockType,
-           T_word32 extraData)
-{
-    T_packetLong packet ;
-    T_requestDataBlockPacket *p_request ;
-
-    DebugRoutine("ClientRequestDataBlock") ;
-    DebugCheck(dataBlockType < MEMORY_BLOCK_TYPE_UNKNOWN) ;
-
-    /* Get a quick pointer to the true action data. */
-    p_request = (T_requestDataBlockPacket *)packet.data ;
-
-    /* Fill the packet. */
-    p_request->command = PACKET_COMMANDCSC_REQUEST_DATA_BLOCK ;
-    p_request->dataBlockType = dataBlockType ;
-    p_request->extraData = extraData ;
-
-    /* Squeeze down the size of the packet to only what we need. */
-    packet.header.packetLength = sizeof(T_requestDataBlockPacket) ;
-
-    /* Send the packet. */
-    CmdQSetActivePortNum(0) ;
-    CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
+    ClientSetChangePasswordStatus(CHANGE_PASSWORD_STATUS_OK) ;
 
     DebugEnd() ;
 }

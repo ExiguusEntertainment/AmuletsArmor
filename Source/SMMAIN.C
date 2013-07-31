@@ -532,8 +532,6 @@ T_void SMMainUpdate(T_void)
     DebugRoutine("SMMainUpdate") ;
 
     StateMachineUpdate(G_smMainHandle) ;
-//    if (CommCheckClientAndServerExist())
-//        ServerUpdate() ;
 
     DebugEnd() ;
 }

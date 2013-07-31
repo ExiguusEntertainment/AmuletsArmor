@@ -139,15 +139,12 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MaxSpeed</Optimization>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Speed</FavorSizeOrSpeed>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\ACCOUNT.C" />
     <ClCompile Include="..\..\..\..\Source\ACTIVITY.C" />
     <ClCompile Include="..\..\..\..\Source\AREASND.C" />
     <ClCompile Include="..\..\..\..\Source\BANKUI.C" />
     <ClCompile Include="..\..\..\..\Source\BANNER.C" />
     <ClCompile Include="..\..\..\..\Source\BUTTON.C" />
-    <ClCompile Include="..\..\..\..\Source\CHARDB.C" />
     <ClCompile Include="..\..\..\..\Source\CLIENT.C" />
-    <ClCompile Include="..\..\..\..\Source\CLIENTSR.C" />
     <ClCompile Include="..\..\..\..\Source\CLI_RECV.C" />
     <ClCompile Include="..\..\..\..\Source\CLI_SEND.C" />
     <ClCompile Include="..\..\..\..\Source\CMDQUEUE.C" />
@@ -168,9 +165,6 @@
     <ClCompile Include="..\..\..\..\Source\EFX.C" />
     <ClCompile Include="..\..\..\..\Source\ESCMENU.C" />
     <ClCompile Include="..\..\..\..\Source\FILE.C" />
-    <ClCompile Include="..\..\..\..\Source\FILES.C" />
-    <ClCompile Include="..\..\..\..\Source\FILETRAN.C" />
-    <ClCompile Include="..\..\..\..\Source\FLATFILE.C" />
     <ClCompile Include="..\..\..\..\Source\FORM.C" />
     <ClCompile Include="..\..\..\..\Source\GRAPHIC.C" />
     <ClCompile Include="..\..\..\..\Source\GRAPHICS.C" />
@@ -186,13 +180,11 @@
     <ClCompile Include="..\..\..\..\Source\LIGHT.C" />
     <ClCompile Include="..\..\..\..\Source\LL_COMM.C" />
     <ClCompile Include="..\..\..\..\Source\LOOK.C" />
-    <ClCompile Include="..\..\..\..\Source\LOOKUP32.C" />
     <ClCompile Include="..\..\..\..\Source\MAILUI.C" />
     <ClCompile Include="..\..\..\..\Source\MAINUI.C" />
     <ClCompile Include="..\..\..\..\Source\MAP.C" />
     <ClCompile Include="..\..\..\..\Source\MAPANIM.C" />
     <ClCompile Include="..\..\..\..\Source\MEMORY.C" />
-    <ClCompile Include="..\..\..\..\Source\MEMTRANS.C" />
     <ClCompile Include="..\..\..\..\Source\MESSAGE.C" />
     <ClCompile Include="..\..\..\..\Source\MOUSEMOD.C" />
     <ClCompile Include="..\..\..\..\Source\NOTES.C" />
@@ -234,7 +226,6 @@
     <ClCompile Include="..\..\..\..\Source\SQRTDAT.C" />
     <ClCompile Include="..\..\..\..\Source\STATS.C" />
     <ClCompile Include="..\..\..\..\Source\STORE.C" />
-    <ClCompile Include="..\..\..\..\Source\STOREDB.C" />
     <ClCompile Include="..\..\..\..\Source\SYNCMEM.C" />
     <ClCompile Include="..\..\..\..\Source\SYNCTIME.C" />
     <ClCompile Include="..\..\..\..\Source\TESTME.C" />
@@ -261,13 +252,11 @@
     <ClInclude Include="..\..\..\..\Include\3D_IO.H" />
     <ClInclude Include="..\..\..\..\Include\3D_TRIG.H" />
     <ClInclude Include="..\..\..\..\Include\3D_VIEW.H" />
-    <ClInclude Include="..\..\..\..\Include\ACCOUNT.H" />
     <ClInclude Include="..\..\..\..\Include\ACTIVITY.H" />
     <ClInclude Include="..\..\..\..\Include\AREASND.H" />
     <ClInclude Include="..\..\..\..\Include\BANKUI.H" />
     <ClInclude Include="..\..\..\..\Include\BANNER.H" />
     <ClInclude Include="..\..\..\..\Include\BUTTON.H" />
-    <ClInclude Include="..\..\..\..\Include\CHARDB.H" />
     <ClInclude Include="..\..\..\..\Include\CLIENT.H" />
     <ClInclude Include="..\..\..\..\Include\CLI_RECV.H" />
     <ClInclude Include="..\..\..\..\Include\CLI_SEND.H" />
@@ -296,7 +285,6 @@
     <ClInclude Include="..\..\..\..\Include\FILE.H" />
     <ClInclude Include="..\..\..\..\Include\FILES.H" />
     <ClInclude Include="..\..\..\..\Include\FILETRAN.H" />
-    <ClInclude Include="..\..\..\..\Include\FLATFILE.H" />
     <ClInclude Include="..\..\..\..\Include\FORM.H" />
     <ClInclude Include="..\..\..\..\Include\GENBOR.H" />
     <ClInclude Include="..\..\..\..\Include\GENERAL.H" />
@@ -319,7 +307,6 @@
     <ClInclude Include="..\..\..\..\Include\LIGHT.H" />
     <ClInclude Include="..\..\..\..\Include\LL_COMM.H" />
     <ClInclude Include="..\..\..\..\Include\LOOK.H" />
-    <ClInclude Include="..\..\..\..\Include\LOOKUP32.H" />
     <ClInclude Include="..\..\..\..\Include\MAILUI.H" />
     <ClInclude Include="..\..\..\..\Include\MAINUI.H" />
     <ClInclude Include="..\..\..\..\Include\MAP.H" />

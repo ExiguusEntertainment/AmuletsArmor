@@ -8,7 +8,6 @@
 #include "MAP.H"
 #include "MAINUI.H"
 #include "MEMORY.H"
-#include "MEMTRANS.H"
 #include "PACKET.H"
 #include "PROMPT.H"
 #include "SMCCHOOS.H"
@@ -1443,50 +1442,6 @@ T_void SMCChooseRequestCreateEnter(
 
     /* No password on created characters */
     StatsSetPassword(StatsGetActive(), "") ;
-#if 0
-    /* get this character's new password */
-    while (1)
-    {
-        strcpy (tempstr,"^001Enter a password for this character");
-        strcpy (password,"");
-        if (PromptForString  (tempstr,12,password)==TRUE)
-        {
-            /* validate password */
-            strcpy (tempstr,"^001Re-enter the password for validation");
-            if (PromptForString(tempstr,12,passwordval)==TRUE)
-            {
-                /* make sure passwords match */
-                if (stricmp(password,passwordval)==0)
-                {
-                    /* save this character's password */
-                    StatsSetPassword (StatsGetActive(),password);
-                    /* set exit flag */
-                    //G_exit=TRUE;
-                    /* break from loop */
-                    break;
-                }
-                else
-                {
-                    /* notify bad password */
-                    strcpy (tempstr, "Passwords do not match.  Please try again.");
-                    PromptDisplayMessage (tempstr);
-                }
-            }
-            else
-            {
-                /* user canceled, exit to mainui*/
-                doAbort = TRUE ;
-                break;
-            }
-        }
-        else
-        {
-            /* user canceled, exit to mainui */
-            doAbort = TRUE ;
-            break;
-        }
-    }
-#endif
 
     if (doAbort)  {
         SMCChooseSetFlag(SMCCHOOSE_FLAG_CREATE_ABORT, TRUE) ;
@@ -1495,7 +1450,7 @@ T_void SMCChooseRequestCreateEnter(
         ClientSetCreateCharacterStatus(CREATE_CHARACTER_STATUS_UNKNOWN) ;
         ClientSendCreateCharacter(
             StatsGetActive(),
-            StatsComputeCharacterChecksum(),
+            0,
             password) ;
     }
 
@@ -1635,7 +1590,7 @@ T_void SMCChooseLoadEnter(
     /* Send out a request to load the character. */
     ClientSendLoadCharacter(
         StatsGetActive(),
-        StatsComputeCharacterChecksum()) ;
+        0) ;
 
     /* Reset the time of day to 6:00 am. */
     MapSetDayOffset(0) ;
@@ -2751,10 +2706,6 @@ T_void SMCChooseCreateUploadEnter(
            T_word32 extraData)
 {
     T_SMCChooseData *p_data ;
-    T_characterBlock *p_charBlock ;
-    T_void *p_stats ;
-    T_word32 size ;
-    T_word16 slot ;
 
     DebugRoutine("SMCChooseCreateUploadEnter") ;
 
@@ -2766,26 +2717,10 @@ T_void SMCChooseCreateUploadEnter(
     p_data = (T_SMCChooseData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-//    if (CommCheckClientAndServerExist() == FALSE)  {
-    if (ClientIsServerBased())  {
-        p_stats = StatsGetAsDataBlock(&size) ;
-        p_charBlock = MemAlloc(sizeof(T_characterBlock) + size) ;
-        slot = p_charBlock->slot = StatsGetActive() ;
-        StatsGetPassword((T_byte8)slot, p_charBlock->password) ;
-        p_charBlock->size = size ;
-        memcpy(p_charBlock->charData, p_stats, size) ;
-        MemFree(p_stats) ;
+    SMCChooseSetFlag(
+        SMCCHOOSE_FLAG_CREATE_UPLOAD_OK,
+        TRUE) ;
 
-        MemoryTransfer(
-            p_charBlock,
-            size + sizeof(T_characterBlock),
-            ICreateUploadComplete,
-            MEMORY_BLOCK_CHARACTER_DATA) ;
-    } else {
-        SMCChooseSetFlag(
-            SMCCHOOSE_FLAG_CREATE_UPLOAD_OK,
-            TRUE) ;
-    }
     DebugEnd() ;
 }
 
