@@ -42,16 +42,6 @@ T_void ActivitiesRun(T_word16 numberOfActivity)
     DebugEnd() ;
 }
 
-/* LES 06/05/96 */
-T_void ActivitiesSetActive(T_activitiesHandle handle)
-{
-    DebugRoutine("ActivitiesSetActive") ;
-
-    G_activityScript = (T_script)handle ;
-
-    DebugEnd() ;
-}
-
 /****************************************************************************/
 /*    END OF FILE:  ACTIVITY.C                                              */
 /****************************************************************************/

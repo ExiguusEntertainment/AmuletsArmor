@@ -16,8 +16,6 @@ T_void ActivitiesUnload(void) ;
 
 T_void ActivitiesRun(T_word16 numberOfActivity) ;
 
-T_void ActivitiesSetActive(T_activitiesHandle handle) ;
-
 #endif
 
 /****************************************************************************/
