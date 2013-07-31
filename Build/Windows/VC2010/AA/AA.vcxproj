@@ -170,7 +170,6 @@
     <ClCompile Include="..\..\..\..\Source\GRAPHICS.C" />
     <ClCompile Include="..\..\..\..\Source\GUILDUI.C" />
     <ClCompile Include="..\..\..\..\Source\HARDFORM.C" />
-    <ClCompile Include="..\..\..\..\Source\HASH32.C" />
     <ClCompile Include="..\..\..\..\Source\HOUSEUI.C" />
     <ClCompile Include="..\..\..\..\Source\INIFILE.C" />
     <ClCompile Include="..\..\..\..\Source\INNUI.C" />
@@ -196,7 +195,6 @@
     <ClCompile Include="..\..\..\..\Source\OVERLAY.C" />
     <ClCompile Include="..\..\..\..\Source\PACKETDT.C" />
     <ClCompile Include="..\..\..\..\Source\PACKETPR.C" />
-    <ClCompile Include="..\..\..\..\Source\PACKLOG.C" />
     <ClCompile Include="..\..\..\..\Source\PEOPHERE.C" />
     <ClCompile Include="..\..\..\..\Source\PICS.C" />
     <ClCompile Include="..\..\..\..\Source\PLAYER.C" />
@@ -207,7 +205,6 @@
     <ClCompile Include="..\..\..\..\Source\SCHEDULE.C" />
     <ClCompile Include="..\..\..\..\Source\SCRFORM.C" />
     <ClCompile Include="..\..\..\..\Source\SCRIPT.C" />
-    <ClCompile Include="..\..\..\..\Source\SERPLOG.C" />
     <ClCompile Include="..\..\..\..\Source\SERVER.C" />
     <ClCompile Include="..\..\..\..\Source\SERVERSH.C" />
     <ClCompile Include="..\..\..\..\Source\SLIDER.C" />
@@ -293,7 +290,6 @@
     <ClInclude Include="..\..\..\..\Include\GROUP.H" />
     <ClInclude Include="..\..\..\..\Include\GUILDUI.H" />
     <ClInclude Include="..\..\..\..\Include\HARDFORM.H" />
-    <ClInclude Include="..\..\..\..\Include\HASH32.H" />
     <ClInclude Include="..\..\..\..\Include\HOUSEUI.H" />
     <ClInclude Include="..\..\..\..\Include\ICREDATA.H" />
     <ClInclude Include="..\..\..\..\Include\INIFILE.H" />

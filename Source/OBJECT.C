@@ -24,7 +24,6 @@
 #include "3D_TRIG.H"
 #include "3D_VIEW.H"
 #include "CRELOGIC.H"
-#include "HASH32.H"
 #include "MAP.H"
 #include "MEMORY.H"
 #include "OBJECT.H"

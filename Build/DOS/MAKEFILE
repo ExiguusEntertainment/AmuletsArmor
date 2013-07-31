@@ -163,10 +163,6 @@ serversh.obj   : serversh.c serversh.h
 
 smachine.obj   : smachine.c smachine.h
 
-#serplog.obj    : serplog.c serplog.h
-
-hash32.obj     : hash32.c hash32.h
-
 sosez.obj      : sosez.c
 
 profile.obj    : profile.c
@@ -176,8 +172,6 @@ mapanim.obj    : mapanim.c mapanim.h
 light.obj      : light.c light.h
 
 update.obj     : update.c update.h
-
-packlog.obj    : packlog.c packlog.h
 
 sound.obj      : sound.c sound.h
 

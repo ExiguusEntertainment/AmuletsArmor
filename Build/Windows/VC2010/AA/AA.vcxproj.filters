@@ -131,9 +131,6 @@
     <ClCompile Include="..\..\..\..\Source\HARDFORM.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\HASH32.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\HOUSEUI.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -206,9 +203,6 @@
     <ClCompile Include="..\..\..\..\Source\PACKETDT.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\PACKLOG.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\PEOPHERE.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -237,9 +231,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SCRIPT.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SERPLOG.C">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SERVERSH.C">
@@ -485,9 +476,6 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\HARDFORM.H">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\HASH32.H">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\HOUSEUI.H">
