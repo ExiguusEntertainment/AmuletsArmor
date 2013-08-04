@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  SCRIPT.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  UPDATE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * This is various update code for controlling timing updates. It is
+ * primarily to update animations.
+ *
+ * @addtogroup UPDATE
+ * @brief Various Updates
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_TRIG.H"
 #include "3D_VIEW.H"
 #include "BANNER.H"
@@ -43,44 +53,14 @@ static    T_sword16 G_musicChannel=0;
 
 T_void TestPort(T_void) ;
 
-/****************************************************************************/
-/*  Routine:  UpdateGameBegin                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateGameBegin is one of the first routines called in the game.      */
-/*  All game initialization goes here.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateGameBegin
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateGameBegin is one of the first routines called in the game.
+ *  All game initialization goes here.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateGameBegin(T_void)
 {
     DebugRoutine("UpdateGameBegin") ;
@@ -203,44 +183,14 @@ SyncTimeSet(1) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UpdateGameEnd                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateGameEnd is the last routine called before the game is shut      */
-/*  down.  Do your deinitialization here.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateGameEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateGameEnd is the last routine called before the game is shut
+ *  down.  Do your deinitialization here.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateGameEnd(T_void)
 {
     DebugRoutine("UpdateGameEnd") ;
@@ -304,45 +254,15 @@ T_void UpdateGameEnd(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UpdateMapBegin                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateMapBegin is called immediately after a map has been loaded.     */
-/*  Anything that must be initialized just before game play starts is       */
-/*  done here.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateMapBegin
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateMapBegin is called immediately after a map has been loaded.
+ *  Anything that must be initialized just before game play starts is
+ *  done here.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateMapBegin(T_void)
 {
     DebugRoutine("UpdateMapBegin") ;
@@ -379,44 +299,14 @@ T_void UpdateMapBegin(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UpdateMapEnd                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateMapEnd is called immediately before the map is unloaded.        */
-/*  Call anything that needs to be destroyed before the map is destroyed.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateMapEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateMapEnd is called immediately before the map is unloaded.
+ *  Call anything that needs to be destroyed before the map is destroyed.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateMapEnd(T_void)
 {
     DebugRoutine("UpdateMapEnd") ;
@@ -434,44 +324,14 @@ T_void UpdateMapEnd(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UpdateFrame                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateFrame is called once per frame animation of the 3D view.        */
-/*  Anything that is remotedly related to the frame rate ought be called.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateFrame
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateFrame is called once per frame animation of the 3D view.
+ *  Anything that is remotedly related to the frame rate ought be called.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateFrame(T_void)
 {
     T_word32 delta ;
@@ -513,45 +373,18 @@ T_void UpdateFrame(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UpdateEveryFive                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateEveryFive is called every five seconds while the 3D view is     */
-/*  active.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If you need something called every five seconds while a form is       */
-/*  on the screen, it does NOT go here.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateEveryFive
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateEveryFive is called every five seconds while the 3D view is
+ *  active.
+ *
+ *  NOTE: 
+ *  If you need something called every five seconds while a form is
+ *  on the screen, it does NOT go here.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateEveryFive(T_void)
 {
     DebugRoutine("UpdateEveryFive") ;
@@ -560,49 +393,19 @@ T_void UpdateEveryFive(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UpdateOften                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UpdateOften executes any code that needs to be called in a regular    */
-/*  basis (typically as fast as possible).                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Probably everything under the sun.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UpdateOften
+ *-------------------------------------------------------------------------*/
+/**
+ *  UpdateOften executes any code that needs to be called in a regular
+ *  basis (typically as fast as possible).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UpdateOften(T_void)
 {
     T_word32 delta, time ;
     TICKER_TIME_ROUTINE_PREPARE() ;
-    TICKER_TIME_ROUTINE_START() ;     
+    TICKER_TIME_ROUTINE_START() ;
     DebugRoutine("UpdateOften") ;
 
     INDICATOR_LIGHT(921, INDICATOR_GREEN) ;
@@ -714,7 +517,7 @@ T_void TestPort(T_void)
 #endif
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  SCRIPT.C                                                */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  UPDATE.C
+ *-------------------------------------------------------------------------*/

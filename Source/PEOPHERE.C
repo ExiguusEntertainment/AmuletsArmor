@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  PEOPHERE.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  PEOPHERE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * List of people here over the network.
+ *
+ * @addtogroup PEOPHERE
+ * @brief People Here
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLI_SEND.H"
 #include "CLIENT.H"
 #include "CSYNCPCK.H"
@@ -33,23 +42,13 @@ static T_word16 G_numPeopleInGame = 0 ;
 static T_directTalkUniqueAddress G_peopleInGame[MAX_PLAYERS_PER_GAME] ;
 static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][60] ;
 
-/****************************************************************************/
-/*  Routine:  PeopleHereInitialize                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine starts up the people here module.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine starts up the people here module.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereInitialize(T_void)
 {
     DebugRoutine("PeopleHereInitialize") ;
@@ -64,24 +63,14 @@ T_void PeopleHereInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  People Here finish                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    People here finish cleans up the people here module by removing       */
-/*  the list of playerIDSelf structures.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  People Here finish
+ *-------------------------------------------------------------------------*/
+/**
+ *  People here finish cleans up the people here module by removing
+ *  the list of playerIDSelf structures.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereFinish(T_void)
 {
     DebugRoutine("PeopleHereFinish") ;
@@ -99,29 +88,13 @@ T_void PeopleHereFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientSyncPacketEvaluate                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSyncPacketProcess processes a full sync packet that was received*/
-/*  from the server.  This may or may not be refering to the player.        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_syncronizePacket *p_sync  -- Syncronize packet to process           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereReset
+ *-------------------------------------------------------------------------*/
+/**
+ *  Reset the list of people here.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereReset(T_void)
 {
     DebugRoutine("PeopleHereReset") ;
@@ -137,33 +110,17 @@ T_void PeopleHereReset(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  PeopleHereGetNumInGame                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PeopleHereGetNumInGame counts the number of people in a game group.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_gameGroupID game          -- Game group id                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16                    -- Number of players found                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetNumInGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  PeopleHereGetNumInGame counts the number of people in a game group.
+ *
+ *  @param groupID -- Game group id
+ *
+ *  @return Number of players found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PeopleHereGetNumInGame(T_gameGroupID groupID)
 {
     T_doubleLinkListElement element ;
@@ -188,29 +145,18 @@ T_word16 PeopleHereGetNumInGame(T_gameGroupID groupID)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientSyncPacketEvaluate                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSyncPacketProcess processes a full sync packet that was received*/
-/*  from the server.  This may or may not be refering to the player.        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_syncronizePacket *p_sync  -- Syncronize packet to process           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereFindPlayerGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  Search to find a player in a game.
+ *
+ *  @param p_name -- Name to find
+ *  @param p_groupID -- ID of player
+ *
+ *  @return TRUE if found, else FALSE.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean PeopleHereFindPlayerGame(
               T_byte8 *p_name,
               T_gameGroupID *p_groupID)
@@ -235,24 +181,14 @@ E_Boolean PeopleHereFindPlayerGame(
 }
 
 
-/****************************************************************************/
-/*  Routine:  IClearList                              * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IClearList frees and removes all nodes in the double link list of     */
-/*  T_playerIDSelf structures.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IClearList
+ *-------------------------------------------------------------------------*/
+/**
+ *  IClearList frees and removes all nodes in the double link list of
+ *  T_playerIDSelf structures.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IClearList(T_void)
 {
     T_doubleLinkListElement element ;
@@ -274,34 +210,18 @@ static T_void IClearList(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindByName                             * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindByName searches the people list for a person with the given      */
-/*  name (case does matter).                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_name             -- Name to search by                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_playerIDSelf *            -- Found player ID pointer or NULL        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindByName
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindByName searches the people list for a person with the given
+ *  name (case does matter).
+ *
+ *  @param p_name -- Name to search by
+ *
+ *  @return Found player ID pointer or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_playerIDSelf *IFindByName(T_byte8 *p_name)
 {
     T_doubleLinkListElement element ;
@@ -328,33 +248,17 @@ static T_playerIDSelf *IFindByName(T_byte8 *p_name)
     return p_found ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICreatePlayerID                         * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICreatePlayerID creates a new blank form for a given person           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_name             -- Name to search by                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_playerIDSelf *            -- Found player ID pointer or NULL        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICreatePlayerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICreatePlayerID creates a new blank form for a given person
+ *
+ *  @param p_name -- Name to search by
+ *
+ *  @return Found player ID pointer or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID)
 {
     T_playerIDSelf *p_new = NULL ;
@@ -382,28 +286,15 @@ static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID)
     return p_new ;
 }
 
-/****************************************************************************/
-/*  Routine:  IGetOurLocation                         * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IGetOurLocation determines this players general location              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_playerIDLocation          -- General player location                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IGetOurLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  IGetOurLocation determines this players general location
+ *
+ *  @return General player location
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_playerIDLocation IGetOurLocation(T_void)
 {
     T_playerIDLocation location = PLAYER_ID_LOCATION_NOWHERE ;
@@ -430,28 +321,15 @@ static T_playerIDLocation IGetOurLocation(T_void)
     return location ;
 }
 
-/****************************************************************************/
-/*  Routine:  PeopleHereGetPlayerIDSelfStruct                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Used to fill out this player's own player ID structure                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_playerIDSelf *p_self      -- Pointer to player id self to fill      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetPlayerIDSelfStruct
+ *-------------------------------------------------------------------------*/
+/**
+ *  Used to fill out this player's own player ID structure
+ *
+ *  @param p_self -- Pointer to player id self to fill
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
 {
     DebugRoutine("PeopleHereGetPlayerIDSelfStruct") ;
@@ -467,8 +345,6 @@ T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_gameGroupID PeopleHereGetUniqueGroupID(T_void)
 {
 #if 0
@@ -510,36 +386,26 @@ T_gameGroupID PeopleHereGetUniqueGroupID(T_void)
     return groupID ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_void PeopleHereSetOurState(T_playerIDState state)
 {
     G_ourState = state ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_playerIDState PeopleHereGetOurState(T_void)
 {
     return G_ourState ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_void PeopleHereSetOurAdventure(T_word16 adventure)
 {
     G_ourAdventure = adventure ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_word16 PeopleHereGetOurAdventure(T_void)
 {
     return G_ourAdventure ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_void PeopleHereRequestJoin(
         T_directTalkUniqueAddress uniqueAddress,
         T_gameGroupID groupID,
@@ -606,8 +472,6 @@ printf("ourloc=%d\n", IGetOurLocation()) ;  fflush(stdout) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_void PeopleHereRespondToJoin(
            T_directTalkUniqueAddress uniqueAddress,
            T_gameGroupID groupID,
@@ -655,29 +519,16 @@ T_void PeopleHereRespondToJoin(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PeopleHereUpdatePlayer                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PeopleHereUpdatePlayer is called per player self ID received.         */
-/*  This routine updates the list and takes appropriate actions.            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_playerIDSelf *p_playerID  -- New player action                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereUpdatePlayer
+ *-------------------------------------------------------------------------*/
+/**
+ *  PeopleHereUpdatePlayer is called per player self ID received.
+ *  This routine updates the list and takes appropriate actions.
+ *
+ *  @param p_playerID -- New player action
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
 {
     T_playerIDSelf *p_find ;
@@ -878,33 +729,17 @@ T_void PeopleHereStartGame(T_word16 firstLevel)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISetupGame                              * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PeopleHereGetNumInGame counts the number of people in a game group.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_gameGroupID game          -- Game group id                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16                    -- Number of players found                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISetupGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  PeopleHereGetNumInGame counts the number of people in a game group.
+ *
+ *  @param game -- Game group id
+ *
+ *  @param T_word16 -- Number of players found
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ISetupGame(T_gameGroupID groupID)
 {
     T_doubleLinkListElement element ;
@@ -985,6 +820,7 @@ T_void PeopleHereSetUniqueAddr(
     memcpy(&G_peopleInGame[playerNum], uaddr, 6) ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  PEOPHERE.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  PEOPHERE.C
+ *-------------------------------------------------------------------------*/

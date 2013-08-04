@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  SCRFORM.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SCRFORM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Script based forms.  DEPRECATED?  I don't think we are really using
+ * this any more.  But the idea was that a level could have a form that
+ * pops up to provide an option.
+ *
+ * @addtogroup SCRFORM
+ * @brief Script-based Forms.
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "COLOR.H"
 #include "SCRFORM.H"
 #include "SCRIPT.H"
@@ -21,49 +32,21 @@ static T_void IScriptFormEventTwoNumbers(
                   T_sword32 num1,
                   T_sword32 num2) ;
 
-/****************************************************************************/
-/*  Routine:  ScriptFormStart                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptForm is called to present a form to the player and allow         */
-/*  choices to be made and sent to the server.  The server can then make    */
-/*  decisions and send them to this form.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine is not be recursive, so any call to this routine while   */
-/*  it already being executed will cause an error.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 uiFormNumber       -- Number of form to load                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FormLoadFromFile                                                      */
-/*    FormSetCallbackRoutine                                                */
-/*    GraphicUpdateAllGraphicsBuffered                                      */
-/*    FormGenericControl                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptFormStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptForm is called to present a form to the player and allow
+ *  choices to be made and sent to the server.  The server can then make
+ *  decisions and send them to this form.
+ *
+ *  NOTE: 
+ *  This routine is not be recursive, so any call to this routine while
+ *  it already being executed will cause an error.
+ *
+ *  @param uiFormNumber -- Number of form to load
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptFormStart(T_word32 uiFormNumber)
 {
     T_byte8 formName[80] ;
@@ -127,44 +110,14 @@ ColorUpdate(0) ;
 }
 
 
-/****************************************************************************/
-/*  Routine:  ScriptFormEnd                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptFormEnd ends a session between UI and comm and closes out the    */
-/*  form and all related functionality.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptFormEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptFormEnd ends a session between UI and comm and closes out the
+ *  form and all related functionality.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptFormEnd(T_void)
 {
     DebugRoutine("ScriptFormEnd") ;
@@ -187,50 +140,23 @@ T_void ScriptFormEnd(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ScriptFormCallback                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptFormCallback is called each time an action occurs with the       */
-/*  current form.  This routine filters the data and passes it on up to the */
-/*  the server for evaluation.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.   NOTE:  Not all ui messages are sent to the server.            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_formObjectType objtype    -- Type of object causing event           */
-/*                                                                          */
-/*    T_word16 objstatus          -- State of the object (state depends on  */
-/*                                   objtype).                              */
-/*                                                                          */
-/*    T_word32 objID              -- ID of particular object                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptFormCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptFormCallback is called each time an action occurs with the
+ *  current form.  This routine filters the data and passes it on up to the
+ *  the server for evaluation.
+ *
+ *  NOTE:
+ *  Not all ui messages are sent to the server.
+ *
+ *  @param objtype -- Type of object causing event
+ *  @param objstatus -- State of the object (state depends on
+ *      objtype).
+ *  @param objID -- ID of particular object
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptFormCallback(
            E_formObjectType objtype,
 		   T_word16 objstatus,
@@ -298,44 +224,14 @@ T_void ScriptFormCallback(
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptFormUpdate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptFormUpdate is called as much as possible to update all the       */
-/*  events necessary for doing UI via the comm port.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptFormUpdate                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptFormUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptFormUpdate is called as much as possible to update all the
+ *  events necessary for doing UI via the comm port.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptFormUpdate(T_void)
 {
     DebugRoutine("ScriptFormUpdate") ;
@@ -347,46 +243,17 @@ T_void ScriptFormUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IScriptFormEventOneNumber          * INTERNAL *                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptFormEventOneNumber is a "macro" routine to send the currnt     */
-/*  script form an event with one number being passed.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 eventNumber        -- Event to send                          */
-/*                                                                          */
-/*    T_sword32 num               -- Number to send with event              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptEvent                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptFormEventOneNumber
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptFormEventOneNumber is a "macro" routine to send the currnt
+ *  script form an event with one number being passed.
+ *
+ *  @param eventNumber -- Event to send
+ *  @param num -- Number to send with event
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IScriptFormEventOneNumber(T_word16 eventNumber, T_sword32 num)
 {
      DebugRoutine("ScriptFormEventOneNumberParm") ;
@@ -405,46 +272,17 @@ static T_void IScriptFormEventOneNumber(T_word16 eventNumber, T_sword32 num)
      DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScriptFormEventTwoNumbers         * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptFormEventTwoNumbers is a "macro" routine to send the current   */
-/*  script form an event with two numbers being passed.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 eventNumber        -- Event to send                          */
-/*                                                                          */
-/*    T_sword32 num               -- Number to send with event              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptEvent                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptFormEventTwoNumbers
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptFormEventTwoNumbers is a "macro" routine to send the current
+ *  script form an event with two numbers being passed.
+ *
+ *  @param eventNumber -- Event to send
+ *  @param num -- Number to send with event
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IScriptFormEventTwoNumbers(
                   T_word16 eventNumber,
                   T_sword32 num1,
@@ -466,48 +304,18 @@ static T_void IScriptFormEventTwoNumbers(
      DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptFormTextBoxSetSelection      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptFormTextBoxSetSelection moves the cursor on a ui text box       */
-/*  to the given row -- for selection boxes, this causes the nth item to    */
-/*  be selected.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 id                 -- text box id number                     */
-/*                                                                          */
-/*    T_word16 selection          -- Selection number/row                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FormGetObjID                                                          */
-/*    TxtboxCursSetRow                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptFormTextBoxSetSelection
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptFormTextBoxSetSelection moves the cursor on a ui text box
+ *  to the given row -- for selection boxes, this causes the nth item to
+ *  be selected.
+ *
+ *  @param id -- text box id number
+ *  @param selection -- Selection number/row
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptFormTextBoxSetSelection(
            T_word16 id,
            T_word16 selection)
@@ -523,6 +331,7 @@ T_void ScriptFormTextBoxSetSelection(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE: SCRFORM.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SCRFORM.C
+ *-------------------------------------------------------------------------*/

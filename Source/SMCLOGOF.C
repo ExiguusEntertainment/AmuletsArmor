@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SMCLOGOF.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMCLOGOF.C
+ *-------------------------------------------------------------------------*/
+/**
+ * State machine for logging off from the server.  Deprecated?
+ *
+ * @addtogroup SMCLOGOF
+ * @brief Logoff server state machine
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLIENT.H"
 #include "MAP.H"
 #include "MEMORY.H"
@@ -47,9 +56,6 @@ static T_stateMachineHandle G_smHandle ;
 static E_Boolean G_init = FALSE ;
 
 
-/****************************************************************************/
-/*                             CONDITIONALS                                 */
-/****************************************************************************/
 static T_stateMachineConditional SMCLogoffSaveCharacterCond[] = {
     {
         SMCLogoffCheckFlag,                           /* conditional callback */
@@ -78,9 +84,6 @@ static T_stateMachineConditional SMCLogoffReportErrorCond[] = {
 /*-------------------------------------------------------------------------*/
 
 
-/****************************************************************************/
-/*                              STATES                                      */
-/****************************************************************************/
 static T_stateMachineState SMCLogoffStates[] = {
     /* SMCLOGOFF_SAVE_CHARACTER_STATE */
     {
@@ -136,43 +139,15 @@ static T_stateMachine SMCLogoffStateMachine = {
 
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffInitialize                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffInitialize                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineHandle           -- Handle to state machine created     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffInitialize
+ *
+ *  @return Handle to state machine created
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMCLogoffInitialize(T_void)
 {
     DebugRoutine("SMCLogoffInitialize") ;
@@ -190,43 +165,13 @@ T_stateMachineHandle SMCLogoffInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffFinish                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffFinish                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffFinish
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffFinish(T_void)
 {
     DebugRoutine("SMCLogoffFinish") ;
@@ -243,43 +188,13 @@ T_void SMCLogoffFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffUpdate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffUpdate
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffUpdate(T_void)
 {
     DebugRoutine("SMCLogoffUpdate") ;
@@ -290,43 +205,15 @@ T_void SMCLogoffUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffDataInit                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffDataInit                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffDataInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffDataInit
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffDataInit(T_stateMachineHandle handle)
 {
     T_SMCLogoffData *p_data ;
@@ -344,43 +231,15 @@ T_void SMCLogoffDataInit(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffDataFinish                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffDataFinish                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffDataFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffDataFinish
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffDataFinish(T_stateMachineHandle handle)
 {
     T_SMCLogoffData *p_data ;
@@ -398,45 +257,16 @@ T_void SMCLogoffDataFinish(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffCheckFlag                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffCheckFlag                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffCheckFlag
+ *
+ *  @param handle -- Handle to state machine
+ *  @param flag -- Flag to change
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMCLogoffCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -461,45 +291,16 @@ E_Boolean SMCLogoffCheckFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffSetFlag                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffSetFlag                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*    E_Boolean state              -- New state of flag                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffSetFlag
+ *
+ *  @param flag -- Flag to change
+ *  @param state -- New state of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffSetFlag(
            T_word16 flag,
            E_Boolean state)
@@ -521,45 +322,16 @@ T_void SMCLogoffSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffSaveCharacterEnter                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffSaveCharacterEnter                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffSaveCharacterEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffSaveCharacterEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffSaveCharacterEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -588,45 +360,16 @@ T_void SMCLogoffSaveCharacterEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffSaveCharacterIdle                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffSaveCharacterIdle                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffSaveCharacterIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffSaveCharacterIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffSaveCharacterIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -643,9 +386,6 @@ T_void SMCLogoffSaveCharacterIdle(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Note that a create character upload is complete. */
-/* LES 06/24/96 Created */
 static T_void ISaveUploadComplete(void)
 {
     DebugRoutine("ISaveUploadComplete") ;
@@ -667,45 +407,16 @@ static T_void ISaveUploadComplete(void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffTimeoutEnter                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffTimeoutEnter                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffTimeoutEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffTimeoutEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffTimeoutEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -721,45 +432,16 @@ T_void SMCLogoffTimeoutEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffReportErrorEnter                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLogoffReportErrorEnter                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLogoffGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffReportErrorEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffReportErrorEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffReportErrorEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -778,30 +460,16 @@ T_void SMCLogoffReportErrorEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMCLogoffExitEnter                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    SMCLogoffExitEnter                                                    */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLogoffExitEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLogoffExitEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLogoffExitEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -817,6 +485,7 @@ T_void SMCLogoffExitEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SM.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMCLOGOF.C
+ *-------------------------------------------------------------------------*/

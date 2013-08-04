@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  EFFECT.C                                                    */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  EFFECT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The effect subsystem is where all the items get their properties
+ * and affect the player and world around the player.  Effects have
+ * a type of action, a trigger for that action, and up to 3 values
+ * to customize the action.
+ *
+ * @addtogroup EFFECT
+ * @brief Item and Spell Effects
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "CLIENT.H"
 #include "COLOR.H"
@@ -45,42 +57,13 @@ static T_void EffectStopPlayerEffect (T_playerEffectStruct *p_effect);
 static E_Boolean G_init = FALSE ;
 static E_Boolean G_effectSoundOn=TRUE;
 
-/****************************************************************************/
-/*  Routine:  EffectInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Initializes variables for player effects                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  EffectInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  Initializes variables for player effects
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void EffectInit (T_void)
 {
     T_word16 i;
@@ -105,44 +88,13 @@ T_void EffectInit (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  EffectFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Cleans out the global double link list for player effects             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*    LES  03/25/96  Added condition to allow this routine to be called     */
-/*                   twice                                                  */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  EffectFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  Cleans out the global double link list for player effects
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void EffectFinish (T_void)
 {
     T_doubleLinkListElement node ;
@@ -169,44 +121,13 @@ T_void EffectFinish (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  Effect                                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Creates a specified effect                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_effectType - type of effect to create                               */
-/*    E_effectTriggerType - how effect was triggered                        */
-/*    T_word16 data1,data2,data3 - data passed for specific effects         */
-/*    T_void* p_owner - used as an ID for this effect                       */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean success - true if effect created                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  Effect
+ *-------------------------------------------------------------------------*/
+/**
+ *  Creates a specified effect
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean Effect(E_effectType effecttype,
                  E_effectTriggerType triggertype,
                  T_word16 data1,
@@ -766,42 +687,13 @@ E_Boolean Effect(E_effectType effecttype,
 
 
 
-/****************************************************************************/
-/*  Routine:  EffectPlayerEffectIsActive                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Returns true if the player effect specified is currently on           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_playerEffectType effect type - type of player effect                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  EffectPlayerEffectIsActive
+ *-------------------------------------------------------------------------*/
+/**
+ *  Returns true if the player effect specified is currently on
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean EffectPlayerEffectIsActive (E_playerEffectType type)
 {
     E_Boolean retvalue=FALSE;
@@ -815,43 +707,15 @@ E_Boolean EffectPlayerEffectIsActive (E_playerEffectType type)
 }
 
 
-/****************************************************************************/
-/*  Routine:  EffectGetPlayerEffectPower                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Returns a T_word16 'power level' for an effect in progress.           */
-/*    Returns > 0 if effect is active (retvalue= combined power levels)     */
-/*    Returns 0 if effect not found                                         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_playerEffectType - type of player effect                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 power - power level of effect specified                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  EffectGetPlayerEffectPower
+ *-------------------------------------------------------------------------*/
+/**
+ *  Returns a T_word16 'power level' for an effect in progress.
+ *  Returns > 0 if effect is active (retvalue= combined power levels)
+ *  Returns 0 if effect not found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 EffectGetPlayerEffectPower (E_playerEffectType type)
 {
     T_word16 retvalue;
@@ -865,46 +729,15 @@ T_word16 EffectGetPlayerEffectPower (E_playerEffectType type)
 }
 
 
-/****************************************************************************/
-/*  Routine:  EffectUpdateAllPlayerEffects                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/* this routine will search through the current linked list of player       */
-/* effects and update the duration. Also will call EffectRemovePlayerEffect */
-/* if the current duration falls below zero.                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    Left,Right,Top,Bottom - overlay coords for drawing spell in effect    */
-/*    icons                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-/* variables passed in represent 'overlay' coordinates for effect icons */
+/*-------------------------------------------------------------------------*
+ * Routine:  EffectUpdateAllPlayerEffects
+ *-------------------------------------------------------------------------*/
+/**
+ *  this routine will search through the current linked list of player
+ *  effects and update the duration. Also will call EffectRemovePlayerEffect
+ *  if the current duration falls below zero.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void EffectUpdateAllPlayerEffects (T_void)
 {
     T_doubleLinkListElement element,nextelement;
@@ -1762,43 +1595,15 @@ static E_Boolean EffectDestroyElement (T_doubleLinkListElement killme)
 }
 
 
-/****************************************************************************/
-/*  Routine:  EffectRemoveAllPlayerEffects                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Removes ALL player effects in progress.  Note that you will need to     */
-/*  restart equipment effects if you continue to play after a call to this  */
-/*  function.                                                               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  EffectRemoveAllPlayerEffects
+ *-------------------------------------------------------------------------*/
+/**
+ *  Removes ALL player effects in progress.  Note that you will need to
+ *  restart equipment effects if you continue to play after a call to this
+ *  function.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void EffectRemoveAllPlayerEffects (T_void)
 {
     T_doubleLinkListElement element,nextElement;
@@ -1900,5 +1705,7 @@ T_void EffectRemoveRandomPlayerEffect (T_void)
     DebugEnd();
 }
 
-
-
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  EFFECT.C
+ *-------------------------------------------------------------------------*/

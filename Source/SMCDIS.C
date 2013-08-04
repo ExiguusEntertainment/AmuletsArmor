@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SM.C                                                           */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMCDIS.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Handle disconnect as a state machine.
+ *
+ * @addtogroup SMCDIS
+ * @brief Disconnect State Machine
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "MEMORY.H"
 #include "SMCDIS.H"
 
@@ -34,9 +43,6 @@ static T_stateMachineHandle G_smHandle ;
 static E_Boolean G_init = FALSE ;
 
 
-/****************************************************************************/
-/*                             CONDITIONALS                                 */
-/****************************************************************************/
 static T_stateMachineConditional SMCDisconnectHangUpCond[] = {
     {
         SMCDisconnectCheckFlag,                       /* conditional callback */
@@ -63,9 +69,6 @@ static T_stateMachineConditional SMCDisconnectSaveCharacterCond[] = {
 /*-------------------------------------------------------------------------*/
 
 
-/****************************************************************************/
-/*                              STATES                                      */
-/****************************************************************************/
 static T_stateMachineState SMCDisconnectStates[] = {
     /* SMCDISCONNECT_HANG_UP_STATE */
     {
@@ -121,43 +124,15 @@ static T_stateMachine SMCDisconnectStateMachine = {
 
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectInitialize                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectInitialize                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineHandle           -- Handle to state machine created     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectInitialize
+ *
+ *  @return Handle to state machine created
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMCDisconnectInitialize(T_void)
 {
     DebugRoutine("SMCDisconnectInitialize") ;
@@ -175,43 +150,13 @@ T_stateMachineHandle SMCDisconnectInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectFinish                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectFinish                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectFinish
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectFinish(T_void)
 {
     DebugRoutine("SMCDisconnectFinish") ;
@@ -228,43 +173,13 @@ T_void SMCDisconnectFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectUpdate                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectUpdate                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectUpdate
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectUpdate(T_void)
 {
     DebugRoutine("SMCDisconnectUpdate") ;
@@ -275,43 +190,15 @@ T_void SMCDisconnectUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectDataInit                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectDataInit                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectDataInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectDataInit
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectDataInit(T_stateMachineHandle handle)
 {
     T_SMCDisconnectData *p_data ;
@@ -329,43 +216,15 @@ T_void SMCDisconnectDataInit(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectDataFinish                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectDataFinish                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectDataFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectDataFinish
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectDataFinish(T_stateMachineHandle handle)
 {
     T_SMCDisconnectData *p_data ;
@@ -383,45 +242,16 @@ T_void SMCDisconnectDataFinish(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectCheckFlag                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectCheckFlag                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectCheckFlag
+ *
+ *  @param handle -- Handle to state machine
+ *  @param flag -- Flag to change
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMCDisconnectCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -446,45 +276,16 @@ E_Boolean SMCDisconnectCheckFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectSetFlag                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectSetFlag                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*    E_Boolean state              -- New state of flag                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectSetFlag
+ *
+ *  @param flag -- Flag to change
+ *  @param state -- New state of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectSetFlag(
            T_word16 flag,
            E_Boolean state)
@@ -506,45 +307,16 @@ T_void SMCDisconnectSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectHangUpEnter                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectHangUpEnter                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectHangUpEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectHangUpEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectHangUpEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -564,45 +336,16 @@ T_void SMCDisconnectHangUpEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectErrorMsgEnter                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectErrorMsgEnter                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectErrorMsgEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectErrorMsgEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectErrorMsgEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -622,45 +365,16 @@ T_void SMCDisconnectErrorMsgEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectSaveCharacterEnter                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectSaveCharacterEnter                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectSaveCharacterEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectSaveCharacterEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectSaveCharacterEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -680,45 +394,16 @@ T_void SMCDisconnectSaveCharacterEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCDisconnectExitToConnectEnter                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCDisconnectExitToConnectEnter                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCDisconnectGetExtraData                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCDisconnectExitToConnectEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCDisconnectExitToConnectEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCDisconnectExitToConnectEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -733,6 +418,7 @@ T_void SMCDisconnectExitToConnectEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SM.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMCDIS.C
+ *-------------------------------------------------------------------------*/

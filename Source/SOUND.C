@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SOUND.C                                                        */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SOUND.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Routines for playing sounds and looping them.
+ *
+ * @addtogroup SOUND
+ * @brief Sound System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CONFIG.H"
 #include "FILE.H"
 #include "MEMORY.H"
@@ -105,7 +114,7 @@ typedef struct {
 
         // Is this Music (TRUE) or normal sound (FALSE)
         E_Boolean isMusic;
-        
+
         T_word16 sampleRate;
 } T_SDLSoundBuffer;
 static T_SDLSoundBuffer G_soundBuffers[MAX_SOUND_CHANNELS];
@@ -180,41 +189,15 @@ static T_void ICheckLists(T_void) ;
 
 
 #ifdef USE_SOS_LIBRARY
-/****************************************************************************/
-/*  Routine:  SoundInitialize                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundInitialize is called to start up the sound system and prepare    */
-/*  all interrupts and timers necessary for sound effects and background    */
-/*  music.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*    LES  07/17/96  Changed to handle new T_soundBuffer structures.        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundInitialize is called to start up the sound system and prepare
+ *  all interrupts and timers necessary for sound effects and background
+ *  music.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundInitialize(T_void)
 {
     T_word16 i ;
@@ -277,42 +260,14 @@ T_void SoundInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundFinish                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundFinish is called before exiting the program.  It turns off all   */
-/*  the interrupts and timers that the sound system uses.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*    LES  01/14/95  Modified to be used by new sound system                */
-/*    LES  01/17/96  Modified to turn off all sounds before exiting.        */
-/*    LES  07/17/96  Cleaned up and added vector table checks.              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundFinish is called before exiting the program.  It turns off all
+ *  the interrupts and timers that the sound system uses.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundFinish(T_void)
 {
     DebugRoutine("SoundFinish") ;
@@ -353,42 +308,19 @@ T_void SoundFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundSetBackgroundMusic                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundSetBackgroundMusic loads and plays a background song.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    At this point, I don't know what happens when you call this routine   */
-/*  while a song is already in progress.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *filename           -- Name of background song to play.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*    LES  05/08/95  Modified to load and play music only if sound init.    */
-/*    LES  07/26/95  Modified to check if song is already being played.     */
-/*    LES  07/17/96  Use G_songIsPlaying instead of G_modplaying var.       */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundSetBackgroundMusic
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundSetBackgroundMusic loads and plays a background song.
+ *
+ *  NOTE: 
+ *  At this point, I don't know what happens when you call this routine
+ *  while a song is already in progress.
+ *
+ *  @param filename -- Name of background song to play.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundSetBackgroundMusic(T_byte8 *filename)
 {
     W32 newSong;
@@ -438,50 +370,19 @@ T_void SoundSetBackgroundMusic(T_byte8 *filename)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundPlayByName                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundPlayByName looks up a sound in the sound file, if not loaded--   */
-/*  loads it in, and plays that sound.  Finally, the sound is unlocked      */
-/*  for possible removal.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *filename           -- Name of sound to play                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Channel number of sound, or -1 if none.*/
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceFind                                                          */
-/*    ResourceLock                                                          */
-/*    ResourceGetSize                                                       */
-/*    TriggerSound                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*    LES  04/26/95  Modified to return channel number                      */
-/*    LES  07/17/96  Changed to use G_soundBufferArray                      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundPlayByName
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundPlayByName looks up a sound in the sound file, if not loaded--
+ *  loads it in, and plays that sound.  Finally, the sound is unlocked
+ *  for possible removal.
+ *
+ *  @param filename -- Name of sound to play
+ *
+ *  @return Channel number of sound, or -1 if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 SoundPlayByName(const char *filename, T_word16 volume)
 {
     T_resource sound ;
@@ -565,51 +466,19 @@ T_sword16 SoundPlayByName(const char *filename, T_word16 volume)
     return bufferId ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundPlayLoopByNumber                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundPlayLoopByNumber works just like SoundPlayByNumber except that   */
-/*  it loops the sound being played until it is stopped.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 soundNum           -- Number of sound to play                */
-/*                                                                          */
-/*    T_word16 volume             -- Volume level to play sound             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Channel number of sound, or -1 if none.*/
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceFind                                                          */
-/*    ResourceLock                                                          */
-/*    ResourceGetSize                                                       */
-/*    TriggerSound                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/28/95  Created                                                */
-/*    LES  05/08/95  Modified to keep sounds in memory until fully played.  */
-/*    LES  07/17/96  Changed to use G_soundBufferArray                      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundPlayLoopByNumber
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundPlayLoopByNumber works just like SoundPlayByNumber except that
+ *  it loops the sound being played until it is stopped.
+ *
+ *  @param soundNum -- Number of sound to play
+ *  @param volume -- Volume level to play sound
+ *
+ *  @return Channel number of sound, or -1 if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 SoundPlayLoopByNumber(T_word16 soundNum, T_word16 volume)
 {
     T_resource sound ;
@@ -699,48 +568,20 @@ T_sword16 SoundPlayLoopByNumber(T_word16 soundNum, T_word16 volume)
     return bufferId ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundPlayByNumber                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundPlayByNumber looks up the sound to be played by its number.      */
-/*  In actuallity, it looks for the name snd#??? where ??? is the number    */
-/*  to be played.  Once found, the digital sound is played.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 num                -- #0-65535 of the sound to play          */
-/*                                                                          */
-/*    T_word16 volume             -- Volume level to play sound             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Channel number of sound, or -1 if none.*/
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SoundPlayByName                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*    LES  04/26/95  Modified to return channel number                      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundPlayByNumber
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundPlayByNumber looks up the sound to be played by its number.
+ *  In actuallity, it looks for the name snd#??? where ??? is the number
+ *  to be played.  Once found, the digital sound is played.
+ *
+ *  @param num -- #0-65535 of the sound to play
+ *  @param volume -- Volume level to play sound
+ *
+ *  @return Channel number of sound, or -1 if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 SoundPlayByNumber(T_word16 num, T_word16 volume)
 {
     char buffer[20] ;
@@ -760,44 +601,16 @@ T_sword16 SoundPlayByNumber(T_word16 num, T_word16 volume)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SoundSetBackgroundVolume                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundSetBackgroundVolume changes the volume that the current or       */
-/*  soon to be played background music is at.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 volume              -- Volume level (0-255)                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MODSetMusicVolume                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundSetBackgroundVolume
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundSetBackgroundVolume changes the volume that the current or
+ *  soon to be played background music is at.
+ *
+ *  @param volume -- Volume level (0-255)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundSetBackgroundVolume(T_byte8 volume)
 {
     T_word32 vol ;
@@ -846,44 +659,15 @@ T_byte8 SoundGetBackgroundVolume(T_void)
     return G_musicVolume ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundSetEffectsVolume                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundSetEffectsVolume sets the volume of the sound effects.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 volume             -- Level of sound                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/25/95  Created                                                */
-/*    LES  07/17/96  Modified to handle G_soundBufferArray                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundSetEffectsVolume
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundSetEffectsVolume sets the volume of the sound effects.
+ *
+ *  @param volume -- Level of sound
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundSetEffectsVolume(T_word16 volume)
 {
     T_word16 i ;
@@ -917,39 +701,14 @@ T_void SoundSetEffectsVolume(T_word16 volume)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISoundStopAtExit                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISoundStopAtExit is a callback routine for the atexit command that    */
-/*  turns off the sound system.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISoundStopAtExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISoundStopAtExit is a callback routine for the atexit command that
+ *  turns off the sound system.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ISoundStopAtExit(T_void)
 {
 #ifndef NDEBUG
@@ -958,41 +717,15 @@ T_void ISoundStopAtExit(T_void)
     SoundFinish() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundUpdate                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundUpdate should be called as often as possible to ensure the       */
-/*  resource manager locks and unlocks all the data tied to the             */
-/*  sound effects.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/95  Created                                                */
-/*    LES  04/29/96  Added code to unlock sound resources in queue          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundUpdate should be called as often as possible to ensure the
+ *  resource manager locks and unlocks all the data tied to the
+ *  sound effects.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundUpdate(T_void)
 {
     T_word16 bufferId ;
@@ -1038,43 +771,15 @@ T_void SoundUpdate(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundIsDone                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundIsDone checks to see if the given sound is turned off.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 bufferId           -- Channel/handle of previous sound.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundIsDone
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundIsDone checks to see if the given sound is turned off.
+ *
+ *  @param bufferId -- Channel/handle of previous sound.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SoundIsDone(T_word16 bufferId)
 {
     E_Boolean isDone ;
@@ -1100,45 +805,16 @@ E_Boolean SoundIsDone(T_word16 bufferId)
     return isDone ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundSetVolume                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundSetVolume changes the volume of a current sound effect.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 bufferId           -- Channel/handle of previous sound.      */
-/*                                                                          */
-/*    T_word16 volume             -- Volume of 0-255 to change to.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundSetVolume
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundSetVolume changes the volume of a current sound effect.
+ *
+ *  @param bufferId -- Channel/handle of previous sound.
+ *  @param volume -- Volume of 0-255 to change to.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundSetVolume(T_word16 bufferId, T_word16 volume)
 {
     T_soundBuffer *p_buffer ;
@@ -1163,47 +839,18 @@ T_void SoundSetVolume(T_word16 bufferId, T_word16 volume)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundSetStereoPanLocation                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundSetStereoPanLocation changes the stereo panning on a given       */
-/*  sound effect.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 bufferId           -- Channel/handle of previous sound.      */
-/*                                                                          */
-/*    T_word16 panLocation        -- Pan is 0 if all on left, 0x8000 if     */
-/*                                   centered, and 0xFFFF if all on right.  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    sosDIGISetPanLocation                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundSetStereoPanLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundSetStereoPanLocation changes the stereo panning on a given
+ *  sound effect.
+ *
+ *  @param bufferId -- Channel/handle of previous sound.
+ *  @param panLocation -- Pan is 0 if all on left, 0x8000 if
+ *      centered, and 0xFFFF if all on right.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundSetStereoPanLocation(T_word16 bufferId, T_word16 panLocation)
 {
     T_soundBuffer *p_buffer ;
@@ -1228,36 +875,16 @@ T_void SoundSetStereoPanLocation(T_word16 bufferId, T_word16 panLocation)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundStop                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundStop is called to force a sound to stop (particularly a looping  */
-/*  sound)>                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 channel            -- Channel no longer being played.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/08/95  Created                                                */
-/*    LES  04/29/96  Added code to put sound resource in list to unlock     */
-/*    LES  07/17/96  Converted SoundDone to SoundStop and restructured      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundStop
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundStop is called to force a sound to stop (particularly a looping
+ *  sound)>
+ *
+ *  @param channel -- Channel no longer being played.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundStop(T_word16 bufferId)
 {
     T_soundBuffer *p_buffer ;
@@ -1436,10 +1063,12 @@ T_void SoundStopBackgroundMusic(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundPlayByNameWithDetails                                    */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundPlayByNameWithDetails
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 SoundPlayByNameWithDetails(
               T_byte8 *filename,
               T_word16 volume,
@@ -2058,7 +1687,7 @@ T_void SoundSetEffectsVolume(T_word16 volume)
     DebugEnd() ;
 }
 
-T_void SoundUpdate(T_void) 
+T_void SoundUpdate(T_void)
 {
     T_word16 bufferId ;
     T_soundBuffer *p_buffer ;
@@ -2074,7 +1703,7 @@ T_void SoundUpdate(T_void)
             DebugCheck(bufferId < MAX_SOUND_CHANNELS) ;
             p_buffer = G_soundBufferArray + bufferId ;
             nextId = p_buffer->next ;
-            
+
             /* See if any sounds are done. */
             if (!p_buffer->sample->isPlaying)  {
                 /* Do the callback first, then free. */
@@ -2181,12 +1810,12 @@ T_void SoundStop(T_word16 bufferId)
     DebugEnd() ;
 }
 
-T_void SoundUpdateOften(T_void) 
+T_void SoundUpdateOften(T_void)
 {
     // TODO: Music feed
 }
 
-T_void SoundStopBackgroundMusic(T_void) 
+T_void SoundStopBackgroundMusic(T_void)
 {
     DebugRoutine("SoundStopBackgroundMusic");
     if (G_backgroundMusicID != BUFFER_ID_BAD) {
@@ -2202,7 +1831,7 @@ T_sword16 SoundPlayByNameWithDetails(
               T_word16 volume,
               T_word16 frequency,
               T_word16 bits,
-              E_Boolean isStereo) 
+              E_Boolean isStereo)
 {
     T_resource sound ;
     T_SDLSoundBuffer *p_sample;
@@ -2263,33 +1892,15 @@ T_sword16 SoundPlayByNameWithDetails(
 
 #endif
 
-/****************************************************************************/
-/*  Routine:  IAllocateBuffer                         * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAllocateBuffer quickly finds a free sound buffer and returns it.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- index to buffer, or -1 for none.       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/17/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAllocateBuffer
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAllocateBuffer quickly finds a free sound buffer and returns it.
+ *
+ *  @return index to buffer, or -1 for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sword16 IAllocateBuffer(T_resource res)
 {
     T_word16 bufferId ;
@@ -2375,33 +1986,15 @@ static T_sword16 IAllocateBufferDirect(void *aRawSound, T_word32 aSize)
     return bufferId ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFreeBuffer                             * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFreeBuffer quickly frees a previously allocated buffer.              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- index to buffer, or -1 for none.       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/17/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFreeBuffer
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFreeBuffer quickly frees a previously allocated buffer.
+ *
+ *  @return index to buffer, or -1 for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IFreeBuffer(T_word16 bufferId)
 {
     T_soundBuffer *p_buffer ;
@@ -2552,38 +2145,15 @@ T_sword16 SoundPlayLoopByNumberWithCallback(
     return bufferId ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundGetEffectsVolume                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundGetEffectsVolume gets the volume of the sound effects.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 volume             -- Level of sound                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundGetEffectsVolume
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundGetEffectsVolume gets the volume of the sound effects.
+ *
+ *  @return Level of sound
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 SoundGetEffectsVolume(T_void)
 {
     T_word16 volume ;
@@ -2598,45 +2168,14 @@ T_word16 SoundGetEffectsVolume(T_void)
     return volume ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundStopAllSounds                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundStopAllSounds turns off all the sounds being played in digital   */
-/*  form.  The music is not affected.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    sosDIGIStopSample                                                     */
-/*    SoundUpdate                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundStopAllSounds
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundStopAllSounds turns off all the sounds being played in digital
+ *  form.  The music is not affected.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SoundStopAllSounds(T_void)
 {
     T_word16 bufferId ;
@@ -2681,10 +2220,12 @@ T_void SoundSetAllowFreqShift(E_Boolean newAllow)
     G_allowFreqShift = newAllow ;
 }
 
-/****************************************************************************/
-/*  Routine:  SoundPlayByNumberWithDetails                                  */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundPlayByNumberWithDetails
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 SoundPlayByNumberWithDetails(
              T_word16 num,
              T_word16 volume,
@@ -2713,44 +2254,16 @@ T_sword16 SoundPlayByNumberWithDetails(
     return bufferId ;
 }
 
-/****************************************************************************/
-/*  Routine:                                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SoundIsOn checks to see if the sound system is enabled and returns    */
-/*  this fact.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if sound is enabled, FALSE if not */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SoundIsOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  SoundIsOn checks to see if the sound system is enabled and returns
+ *  this fact.
+ *
+ *  @return TRUE if sound is enabled, FALSE if not
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SoundIsOn(T_void)
 {
     E_Boolean ret ;
@@ -2765,6 +2278,7 @@ E_Boolean SoundIsOn(T_void)
 }
 
 
-/****************************************************************************/
-/*    END OF FILE:  SOUND.C                                                 */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SOUND.C
+ *-------------------------------------------------------------------------*/

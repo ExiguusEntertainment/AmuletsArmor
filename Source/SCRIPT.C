@@ -1,6 +1,19 @@
-/****************************************************************************/
-/*    FILE:  SCRIPT.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SCRIPT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All scripts on maps go through here.  The script system is fairly
+ * simple and close to something like assembly language.
+ * Each subroutine in a script is given a number and you only have
+ * comments in the code to keep track of which is which.  Triggers numbers
+ * on maps are used to call each script.
+ *
+ * @addtogroup SCRIPT
+ * @brief Script System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_TRIG.H"
 #include "AREASND.H"
 #include "CLIENT.H"
@@ -372,44 +385,14 @@ static T_scriptCommand G_commands[NUM_SCRIPT_COMMANDS] = {
     ICommandJournalEntry             /* 65 */
 } ;
 
-/****************************************************************************/
-/*  Routine:  ScriptInitialize                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptInitialize sets up the structures necessary to do all future    */
-/*  script accesses.  Call this once at the beginning of the program.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptInitialize sets up the structures necessary to do all future
+ *  script accesses.  Call this once at the beginning of the program.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptInitialize(T_void)
 {
     T_word16 i ;
@@ -430,45 +413,17 @@ T_void ScriptInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptFinish closes out the scripting system.  All memory and         */
-/*  variables must be returned to their normal state.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You MUST unlock all scripts before calling this command.              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDestroyScriptList                                                    */
-/*    ScriptMakeNotInitialized                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptFinish closes out the scripting system.  All memory and
+ *  variables must be returned to their normal state.
+ *
+ *  NOTE: 
+ *  You MUST unlock all scripts before calling this command.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptFinish(T_void)
 {
     DebugRoutine("ScriptFinish") ;
@@ -482,51 +437,21 @@ T_void ScriptFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptLock                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptLock loads a script file from disk and creates a handle to the  */
-/*  script.  If the script is already in memory, a instance is made and     */
-/*  the handle to that instance is returned.  All script commands require   */
-/*  a script instance handle.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You MUST make a call to ScriptInitialize before using this routine.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 number             -- Number of script to lock.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindScriptByNumber                                                   */
-/*    ScriptGetLockCount                                                    */
-/*    IReclaimScript                                                        */
-/*    ScriptSetLockCount                                                    */
-/*    IScriptInstantiate                                                    */
-/*    IScriptLoad                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptLock loads a script file from disk and creates a handle to the
+ *  script.  If the script is already in memory, a instance is made and
+ *  the handle to that instance is returned.  All script commands require
+ *  a script instance handle.
+ *
+ *  NOTE: 
+ *  You MUST make a call to ScriptInitialize before using this routine.
+ *
+ *  @param number -- Number of script to lock.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_script ScriptLock(T_word32 number)
 {
     T_scriptHeader *p_script ;
@@ -567,50 +492,21 @@ T_script ScriptLock(T_word32 number)
     return script ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptUnlock                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptUnlock releases a script that was previously locked.  If        */
-/*  possible, the script code will try to stay around as long as possible   */
-/*  to keep from do excess disk accesses.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    For each ScriptUnlock you do, you must have already done just as many */
-/*  ScriptLocks.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_script script             -- Previously locked script.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptHandleToInstance                                                */
-/*    ScriptGetLockCount                                                    */
-/*    ScriptSetLockCount                                                    */
-/*    IScriptMakeDiscardable                                                */
-/*    IDestoryScriptInstance                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptUnlock releases a script that was previously locked.  If
+ *  possible, the script code will try to stay around as long as possible
+ *  to keep from do excess disk accesses.
+ *
+ *  NOTE: 
+ *  For each ScriptUnlock you do, you must have already done just as many
+ *  ScriptLocks.
+ *
+ *  @param script -- Previously locked script.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptUnlock(T_script script)
 {
     T_scriptInstance *p_instance ;
@@ -648,44 +544,14 @@ T_void ScriptUnlock(T_script script)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDestroyScriptList                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDestroyScriptList goes through the list of scripts and destroys each */
-/*  of them.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDestroyScript                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDestroyScriptList
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDestroyScriptList goes through the list of scripts and destroys each
+ *  of them.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDestroyScriptList(T_void)
 {
     DebugRoutine("IDestroyScriptList") ;
@@ -696,47 +562,16 @@ static T_void IDestroyScriptList(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDestroyScript                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDestroyScript removes a script from the script list and removes it   */
-/*  from memory.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *p_script    -- script to destroy                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IRemoveScriptFromList                                                 */
-/*    ScriptSetTag                                                          */
-/*    MemreclaimDiscardable                                                 */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDestroyScript
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDestroyScript removes a script from the script list and removes it
+ *  from memory.
+ *
+ *  @param p_script -- script to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDestroyScript(T_scriptHeader *p_script)
 {
     DebugRoutine("IDestroyScript") ;
@@ -760,44 +595,16 @@ static T_void IDestroyScript(T_scriptHeader *p_script)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IRemoveScriptFromList              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IRemoveScriptFromList unlinks the script from the list of currently   */
-/*  available scripts.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *p_script    -- script to remove from script list      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IRemoveScriptFromList
+ *-------------------------------------------------------------------------*/
+/**
+ *  IRemoveScriptFromList unlinks the script from the list of currently
+ *  available scripts.
+ *
+ *  @param p_script -- script to remove from script list
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IRemoveScriptFromList(T_scriptHeader *p_script)
 {
     T_scriptHeader *p_prev ;
@@ -837,46 +644,18 @@ static T_void IRemoveScriptFromList(T_scriptHeader *p_script)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindScriptByNumber                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindScriptByNumber searches the list of scripts to find a matching   */
-/*  number.  If found, a pointer to the script is returned, else NULL.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 number             -- Number of script to find               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_scriptHeader *            -- Found script, else NULL                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptGetFirst                                                        */
-/*    ScriptGetNumber                                                       */
-/*    ScriptGetNext                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindScriptByNumber
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindScriptByNumber searches the list of scripts to find a matching
+ *  number.  If found, a pointer to the script is returned, else NULL.
+ *
+ *  @param number -- Number of script to find
+ *
+ *  @return Found script, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_scriptHeader *IFindScriptByNumber(T_word32 number)
 {
     T_scriptHeader *p_foundScript ;
@@ -895,45 +674,16 @@ static T_scriptHeader *IFindScriptByNumber(T_word32 number)
     return p_foundScript ;
 }
 
-/****************************************************************************/
-/*  Routine:  IReclaimScript                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IReclaimScript takes a previous script declared to be discardable     */
-/*  and makes it non-discardable.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *p_script    -- Script to reclaim                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemReclaimDiscardable                                                 */
-/*    ScriptSetTag                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IReclaimScript
+ *-------------------------------------------------------------------------*/
+/**
+ *  IReclaimScript takes a previous script declared to be discardable
+ *  and makes it non-discardable.
+ *
+ *  @param p_script -- Script to reclaim
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IReclaimScript(T_scriptHeader *p_script)
 {
     DebugRoutine("IReclaimScript") ;
@@ -949,48 +699,18 @@ static T_void IReclaimScript(T_scriptHeader *p_script)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScriptInstantiate                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptInstantiate makes a new script instance out of the given       */
-/*  script item.  All data is initialized, too.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *p_script    -- Script to make instance of             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_script                    -- Handle to new script instance          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memset                                                                */
-/*    ScriptInstanceSetHeader                                               */
-/*    ScriptInstanceSetTag                                                  */
-/*    ScriptInstanceToHandle                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptInstantiate
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptInstantiate makes a new script instance out of the given
+ *  script item.  All data is initialized, too.
+ *
+ *  @param p_script -- Script to make instance of
+ *
+ *  @return Handle to new script instance
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_script IScriptInstantiate(T_scriptHeader *p_script)
 {
     T_scriptInstance *p_instance ;
@@ -1017,55 +737,21 @@ static T_script IScriptInstantiate(T_scriptHeader *p_script)
     return (ScriptInstanceToHandle(p_instance)) ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScriptLoad                        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptLoad brings in a new script from disk and initializes the      */
-/*  script data (as needed).                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Debugging version will bomb if the script is not found.               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 number             -- Number of script to load               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_scriptHeader *            -- Loaded script, or NULL                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    sprintf                                                               */
-/*    FileLoad                                                              */
-/*    ScriptSetNumber                                                       */
-/*    ScriptSetTag                                                          */
-/*    ScriptSetNext                                                         */
-/*    ScriptSetPrevious                                                     */
-/*    ScriptSetLockCount                                                    */
-/*    ScriptSetCode                                                         */
-/*    ScriptGetSizeCode                                                     */
-/*    ScriptSetEvents                                                       */
-/*    ScriptGetHighestEvent                                                 */
-/*    ScriptSetPlaces                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptLoad brings in a new script from disk and initializes the
+ *  script data (as needed).
+ *
+ *  NOTE: 
+ *  Debugging version will bomb if the script is not found.
+ *
+ *  @param number -- Number of script to load
+ *
+ *  @return Loaded script, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_scriptHeader *IScriptLoad(T_word32 number)
 {
     T_byte8 filename[40] ;
@@ -1117,44 +803,15 @@ static T_scriptHeader *IScriptLoad(T_word32 number)
     return p_script ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScriptMakeDiscardable             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptMakeDiscardable puts a script on the discardable list.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *            -- Script to make discardable             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptSetTag                                                          */
-/*    MemMarkDiscardable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptMakeDiscardable
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptMakeDiscardable puts a script on the discardable list.
+ *
+ *  @param  -- Script to make discardable
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IScriptMakeDiscardable(T_scriptHeader *p_script)
 {
     DebugRoutine("IScriptMakeDiscardable") ;
@@ -1171,45 +828,16 @@ static T_void IScriptMakeDiscardable(T_scriptHeader *p_script)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDestroyScriptInstance             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDestroyScriptInstance gets rid of the instance data that goes with   */
-/*  a script.  All links have been severed before this routine.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptInstance *          -- Pointer to script instance             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptInstanceSetTag                                                  */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDestroyScriptInstance
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDestroyScriptInstance gets rid of the instance data that goes with
+ *  a script.  All links have been severed before this routine.
+ *
+ *  @param  -- Pointer to script instance
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDestroyScriptInstance(T_scriptInstance *p_instance)
 {
     T_word16 i ;
@@ -1232,45 +860,17 @@ static T_void IDestroyScriptInstance(T_scriptInstance *p_instance)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IMemoryRequestDiscardScript        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMemoryRequestDiscardScript is called when the memory manager needs   */
-/*  to free a script to make room for other things.  Basically this routine */
-/*  just unlinks the script from the list to allow it to leave.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_block             -- Pointer to data that is script to free */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IRemoveScriptFromList                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMemoryRequestDiscardScript
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMemoryRequestDiscardScript is called when the memory manager needs
+ *  to free a script to make room for other things.  Basically this routine
+ *  just unlinks the script from the list to allow it to leave.
+ *
+ *  @param p_block -- Pointer to data that is script to free
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IMemoryRequestDiscardScript(T_void *p_block)
 {
     T_scriptHeader *p_script ;
@@ -1291,46 +891,16 @@ static T_void IMemoryRequestDiscardScript(T_void *p_block)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ScriptSetOwner                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptSetOwner declares the owner of this script.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_script script             -- Script to set owner of.                */
-/*                                                                          */
-/*    T_void *                    -- General pointer to owner               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptHandleToInstance                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*    LES  10/09/95  Changed owner pointer to owner 32 bit                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptSetOwner
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptSetOwner declares the owner of this script.
+ *
+ *  @param script -- Script to set owner of.
+ *  @param owner -- General pointer to owner
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScriptSetOwner(T_script script, T_word32 owner)
 {
     T_scriptInstance *p_instance ;
@@ -1347,45 +917,18 @@ T_void ScriptSetOwner(T_script script, T_word32 owner)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptGetOwner                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptGetOwner returns the previously stored pointer to the owner of  */
-/*  this script.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_script script             -- Script to get owner of.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- General pointer to owner               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptHandleToInstance                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*    LES  10/09/95  Changed owner pointer to owner 32 bit                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptGetOwner
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptGetOwner returns the previously stored pointer to the owner of
+ *  this script.
+ *
+ *  @param script -- Script to get owner of.
+ *
+ *  @return General pointer to owner
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ScriptGetOwner(T_script script)
 {
     T_scriptInstance *p_instance ;
@@ -1405,59 +948,27 @@ T_word32 ScriptGetOwner(T_script script)
     return owner ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptEvent                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptEvent runs an event in a script file.  If the script has no     */
-/*  event for the script, a FALSE code is returned.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    For each ScriptUnlock you do, you must have already done just as many */
-/*  ScriptLocks.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_script script             -- Script Instance to execute event       */
-/*                                                                          */
-/*    T_word16 eventNumber        -- Number of event to execute             */
-/*                                                                          */
-/*    E_ScriptDataType type1      -- Type of parameter 1                    */
-/*                                                                          */
-/*    T_void *p_data1             -- Pointer to data parameter 1            */
-/*                                                                          */
-/*    E_ScriptDataType type2      -- Type of parameter 2                    */
-/*                                                                          */
-/*    T_void *p_data2             -- Pointer to data parameter 2            */
-/*                                                                          */
-/*    E_ScriptDataType type3      -- Type of parameter 3                    */
-/*                                                                          */
-/*    T_void *p_data3             -- Pointer to data parameter 3            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptEvent
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptEvent runs an event in a script file.  If the script has no
+ *  event for the script, a FALSE code is returned.
+ *
+ *  NOTE: 
+ *  For each ScriptUnlock you do, you must have already done just as many
+ *  ScriptLocks.
+ *
+ *  @param script -- Script Instance to execute event
+ *  @param eventNumber -- Number of event to execute
+ *  @param type1 -- Type of parameter 1
+ *  @param p_data1 -- Pointer to data parameter 1
+ *  @param type2 -- Type of parameter 2
+ *  @param p_data2 -- Pointer to data parameter 2
+ *  @param type3 -- Type of parameter 3
+ *  @param p_data3 -- Pointer to data parameter 3
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ScriptEvent(
               T_script script,
               T_word16 eventNumber,
@@ -1521,46 +1032,19 @@ E_Boolean ScriptEvent(
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScriptRunPlace                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScriptRunPlace starts execution of a script file at the given         */
-/*  place marker.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_script script             -- Script Instance to execute place       */
-/*                                                                          */
-/*    T_word16 placeNumber        -- Number of place to execute             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- FALSE if not executed                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScriptRunPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScriptRunPlace starts execution of a script file at the given
+ *  place marker.
+ *
+ *  @param script -- Script Instance to execute place
+ *  @param placeNumber -- Number of place to execute
+ *
+ *  @return FALSE if not executed
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ScriptRunPlace(
               T_script script,
               T_word16 placeNumber)
@@ -1635,47 +1119,21 @@ E_Boolean ScriptRunPlace(
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  IExecuteCode                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IExecuteCode will process code at the given location until a return   */
-/*  is reached.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    For each ScriptUnlock you do, you must have already done just as many */
-/*  ScriptLocks.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script to execute code in              */
-/*                                                                          */
-/*    T_word16 exePosition        -- execute position                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IExecuteCode
+ *-------------------------------------------------------------------------*/
+/**
+ *  IExecuteCode will process code at the given location until a return
+ *  is reached.
+ *
+ *  NOTE: 
+ *  For each ScriptUnlock you do, you must have already done just as many
+ *  ScriptLocks.
+ *
+ *  @param script -- Script to execute code in
+ *  @param exePosition -- execute position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IExecuteCode(T_scriptHeader *script, T_word16 position)
 {
     T_byte8 command ;
@@ -1706,47 +1164,21 @@ static T_word16 IExecuteCode(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILookupVariable                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ILookupVariable finds a pointer to the correct variable based on      */
-/*  the given script and variable number.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If you attempt to access a variable number that is not allowed, this  */
-/*  routine bombs.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script to find variable in             */
-/*                                                                          */
-/*    T_word16 varNumber          -- Number of variable                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILookupVariable
+ *-------------------------------------------------------------------------*/
+/**
+ *  ILookupVariable finds a pointer to the correct variable based on
+ *  the given script and variable number.
+ *
+ *  NOTE: 
+ *  If you attempt to access a variable number that is not allowed, this
+ *  routine bombs.
+ *
+ *  @param script -- Script to find variable in
+ *  @param varNumber -- Number of variable
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_scriptDataItem *ILookupVariable(
                             T_scriptHeader *p_script,
                             T_word16 varNumber)
@@ -1779,47 +1211,23 @@ static T_scriptDataItem *ILookupVariable(
     return p_var ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScriptGetVariable                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptGetVariable reads in the variable reference in the given code  */
-/*  position and returns a pointer to the variable.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If you attempt to access a variable number that is not allowed, this  */
-/*  routine bombs.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script to find variable in             */
-/*                                                                          */
-/*    T_word16 *position          -- Position to look for variable in code. */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_scriptDataItem *          -- Pointer to found variable, or NULL     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptGetVariable
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptGetVariable reads in the variable reference in the given code
+ *  position and returns a pointer to the variable.
+ *
+ *  NOTE: 
+ *  If you attempt to access a variable number that is not allowed, this
+ *  routine bombs.
+ *
+ *  @param script -- Script to find variable in
+ *  @param position -- Position to look for variable in code.
+ *
+ *  @return Pointer to found variable, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_scriptDataItem *IScriptGetVariable(
                             T_scriptHeader *p_script,
                             T_word16 *position)
@@ -1845,47 +1253,23 @@ static T_scriptDataItem *IScriptGetVariable(
     return p_var ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScriptGetAny                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScriptGetAny reads in any type of value reference in the given code  */
-/*  position and returns a pointer to the data type.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If you attempt to access a variable number that is not allowed, this  */
-/*  routine bombs.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script to find any in                  */
-/*                                                                          */
-/*    T_word16 *position          -- Position to look for any in code.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_scriptDataItem            -- Returned value                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScriptGetAny
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScriptGetAny reads in any type of value reference in the given code
+ *  position and returns a pointer to the data type.
+ *
+ *  NOTE: 
+ *  If you attempt to access a variable number that is not allowed, this
+ *  routine bombs.
+ *
+ *  @param script -- Script to find any in
+ *  @param position -- Position to look for any in code.
+ *
+ *  @return Returned value
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_scriptDataItem IScriptGetAny(
                             T_scriptHeader *p_script,
                             T_word16 *position)
@@ -1972,48 +1356,20 @@ static T_scriptDataItem IScriptGetAny(
     return var ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICopyData                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICopyData copies one data item to another data item.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If the destination data item has a string, that destination must be   */
-/*  allowed to do a MemFree on that string.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptDataItem *dest      -- Destination to put copy                */
-/*                                                                          */
-/*    T_scriptDataItem *source    -- Source to copy from.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    memcpy                                                                */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICopyData
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICopyData copies one data item to another data item.
+ *
+ *  NOTE: 
+ *  If the destination data item has a string, that destination must be
+ *  allowed to do a MemFree on that string.
+ *
+ *  @param dest -- Destination to put copy
+ *  @param source -- Source to copy from.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ICopyData(
                   T_scriptDataItem *dest,
                   T_scriptDataItem *source)
@@ -2048,45 +1404,19 @@ static T_void ICopyData(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IValueToCondition                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IValueToCondition converts a value into a boolean value.              */
-/*  Non-zero values are TRUE, else FALSE.  For strings, an empty string     */
-/*  is false, else TRUE.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptDataItem *p_value   -- Value to be converted to Boolean       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE or FALSE                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IValueToCondition
+ *-------------------------------------------------------------------------*/
+/**
+ *  IValueToCondition converts a value into a boolean value.
+ *  Non-zero values are TRUE, else FALSE.  For strings, an empty string
+ *  is false, else TRUE.
+ *
+ *  @param p_value -- Value to be converted to Boolean
+ *
+ *  @return TRUE or FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IValueToCondition(T_scriptDataItem *p_value)
 {
     E_Boolean status ;
@@ -2111,47 +1441,23 @@ static E_Boolean IValueToCondition(T_scriptDataItem *p_value)
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  IPascalToCString                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IPascalToCString converts a script string (with length and then data) */
-/*  into a normal C sytle (null terminated) string.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    There needs to be SCRIPT_MAX_STRING+1 characters where you are        */
-/*  storing the string.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_cstring          -- Place to store string                  */
-/*                                                                          */
-/*    T_scriptString *p_pstring   -- Pointer to script string to convert.   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IPascalToCString
+ *-------------------------------------------------------------------------*/
+/**
+ *  IPascalToCString converts a script string (with length and then data)
+ *  into a normal C sytle (null terminated) string.
+ *
+ *  NOTE: 
+ *  There needs to be SCRIPT_MAX_STRING+1 characters where you are
+ *  storing the string.
+ *
+ *  @param p_cstring -- Place to store string
+ *  @param p_pstring -- Pointer to script string to convert.
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IPascalToCString(T_byte8 *p_cstring, T_scriptString *p_pstring)
 {
     T_word16 len ;
@@ -2165,46 +1471,22 @@ static T_void IPascalToCString(T_byte8 *p_cstring, T_scriptString *p_pstring)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  IGetPlace                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IGetPlace takes in a script and value and finds the position in the   */
-/*  code for the gien value.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If the position given is out of bounds, this routine bombs.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *p_script    -- Pointer to the script                  */
-/*                                                                          */
-/*    T_scriptDataItem *p_value   -- Pointer to value.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- position found.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptGetPlaces                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IGetPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  IGetPlace takes in a script and value and finds the position in the
+ *  code for the gien value.
+ *
+ *  NOTE: 
+ *  If the position given is out of bounds, this routine bombs.
+ *
+ *  @param p_script -- Pointer to the script
+ *  @param p_value -- Pointer to value.
+ *
+ *  @return position found.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IGetPlace(
                     T_scriptHeader *p_script,
                     T_scriptDataItem *p_value)
@@ -2228,45 +1510,18 @@ static T_word16 IGetPlace(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  IPascalStringCompare               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IPascalStringCompare compares two script strings.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptString *p_string1   -- First string                           */
-/*                                                                          */
-/*    T_scriptString *p_string2   -- Second string                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Positive = >, Negative = <, 0 = Equal  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IPascalStringCompare
+ *-------------------------------------------------------------------------*/
+/**
+ *  IPascalStringCompare compares two script strings.
+ *
+ *  @param p_string1 -- First string
+ *  @param p_string2 -- Second string
+ *
+ *  @return Positive = >, Negative = <, 0 = Equal
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sword16 IPascalStringCompare(
                      T_scriptString *p_string1,
                      T_scriptString *p_string2)
@@ -2310,50 +1565,24 @@ static T_sword16 IPascalStringCompare(
     return diff ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSet                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSet is called to evaluate "Set(var1, var2)"  or               */
-/*  "var1 = var2".  The left side must be a variable, the right side must   */
-/*  be a value or variabe.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If you attempt to access a variable number that is not allowed, this  */
-/*  routine bombs.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script to find variable in             */
-/*                                                                          */
-/*    T_word16 position           -- Position to look for variable in code. */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_scriptDataItem *          -- Pointer to found variable, or NULL     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*    ICopyData                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSet
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSet is called to evaluate "Set(var1, var2)"  or
+ *  "var1 = var2".  The left side must be a variable, the right side must
+ *  be a value or variabe.
+ *
+ *  NOTE: 
+ *  If you attempt to access a variable number that is not allowed, this
+ *  routine bombs.
+ *
+ *  @param script -- Script to find variable in
+ *  @param position -- Position to look for variable in code.
+ *
+ *  @return Pointer to found variable, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSet(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2372,47 +1601,19 @@ static T_word16 ICommandSet(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandPrint                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandPrint displays a strring (currently, only a string) up in     */
-/*  the message area.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with print command              */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    IPascalToCString                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandPrint
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandPrint displays a strring (currently, only a string) up in
+ *  the message area.
+ *
+ *  @param script -- Script with print command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandPrint(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem value ;
@@ -2444,48 +1645,19 @@ static T_word16 ICommandPrint(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandIf                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandIf processes the command "If(condition, place)" where if      */
-/*  condition is true (non-zero), place is the next place executed.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    IValueToCondition                                                     */
-/*    IGetPlace                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandIf
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandIf processes the command "If(condition, place)" where if
+ *  condition is true (non-zero), place is the next place executed.
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandIf(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem value ;
@@ -2507,46 +1679,18 @@ static T_word16 ICommandIf(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandGoto                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandGoto process the command "Goto(place)"                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    IGetPlace                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandGoto
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandGoto process the command "Goto(place)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandGoto(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem place ;
@@ -2561,48 +1705,19 @@ static T_word16 ICommandGoto(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandAdd                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandAdd processes the command "Add(variable, value)" by adding    */
-/*  value to variable.  Variable must be a number (currently).              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*    IGetPlace                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandAdd
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandAdd processes the command "Add(variable, value)" by adding
+ *  value to variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandAdd(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2626,47 +1741,19 @@ static T_word16 ICommandAdd(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSubtract                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSubtract processes the command "Subtract(variable, value)" by */
-/*  subtracting value to variable.  Variable must be a number (currently).  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSubtract
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSubtract processes the command "Subtract(variable, value)" by
+ *  subtracting value to variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSubtract(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2690,47 +1777,19 @@ static T_word16 ICommandSubtract(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandMultiply                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandMultiply processes the command "Multiply(variable, value)" by */
-/*  subtracting value to variable.  Variable must be a number (currently).  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandMultiply
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandMultiply processes the command "Multiply(variable, value)" by
+ *  subtracting value to variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandMuliply(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2754,47 +1813,19 @@ static T_word16 ICommandMuliply(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandDivide                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandDivide   processes the command "Divide(variable, value)" by   */
-/*  dividing value to variable.  Variable must be a number (currently).     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandDivide
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandDivide   processes the command "Divide(variable, value)" by
+ *  dividing value to variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandDivide(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2819,46 +1850,19 @@ static T_word16 ICommandDivide(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandIncrement                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandIncrement processes the command "Increment(variable)" by      */
-/*  incrementing the variable.  Variable must be a number (currently).      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandIncrement
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandIncrement processes the command "Increment(variable)" by
+ *  incrementing the variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandIncrement(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2876,46 +1880,19 @@ static T_word16 ICommandIncrement(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandDecrement                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandDecrement processes the command "Decrement(variable)" by      */
-/*  decrementing the variable.  Variable must be a number (currently).      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandDecrement
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandDecrement processes the command "Decrement(variable)" by
+ *  decrementing the variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandDecrement(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -2933,46 +1910,19 @@ static T_word16 ICommandDecrement(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandCompare                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandCompare processes the command "Compare(val1, val2)".          */
-/*  The two sides are compared and the system flags are set appropriately.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandCompare
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandCompare processes the command "Compare(val1, val2)".
+ *  The two sides are compared and the system flags are set appropriately.
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandCompare(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem value1, value2 ;
@@ -3008,46 +1958,19 @@ static T_word16 ICommandCompare(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSound                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSound   processes the command "Sound(soundNumber)".           */
-/*  The sound is played on the client side.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSound
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSound   processes the command "Sound(soundNumber)".
+ *  The sound is played on the client side.
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSound(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem value ;
@@ -3066,47 +1989,18 @@ static T_word16 ICommandSound(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandChangeSideTexture          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandChangeSideTexture : "ChangeSideTexture(wallNumber, texture)"  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    iPascalToCString                                                      */
-/*    MapSetMainTextureForSide                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandChangeSideTexture
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandChangeSideTexture -> "ChangeSideTexture(wallNumber, texture)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandChangeSideTexture(T_scriptHeader *script, T_word16 position)
 {
     T_byte8 name[SCRIPT_MAX_STRING+1] ;
@@ -3129,45 +2023,18 @@ static T_word16 ICommandChangeSideTexture(T_scriptHeader *script, T_word16 posit
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectSetType              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectSetType     : "ObjectSetType(objectNum, typeNum)"       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectSetType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectSetType    -> "ObjectSetType(objectNum, typeNum)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectSetType(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem object, number;
@@ -3191,45 +2058,18 @@ static T_word16 ICommandObjectSetType(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandTeleport                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandTeleport          : "Teleport(x16, y16, z16)"                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandTeleport
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandTeleport         -> "Teleport(x16, y16, z16)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandTeleport(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem x, y, z;
@@ -3259,45 +2099,18 @@ static T_word16 ICommandTeleport(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandDoorCycle                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandDoorCycle         : "DoorCycle(doorNum)"                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandDoorCycle
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandDoorCycle        -> "DoorCycle(doorNum)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandDoorCycle(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem doorNum ;
@@ -3314,45 +2127,18 @@ static T_word16 ICommandDoorCycle(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandDoorLock                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandDoorLock          : "DoorLock (doorNum)"                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandDoorLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandDoorLock         -> "DoorLock (doorNum)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandDoorLock(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem doorNum ;
@@ -3369,45 +2155,18 @@ static T_word16 ICommandDoorLock(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandDoorUnlock                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandDoorUnlock        : "DoorUnlock(doorNum)"                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandDoorUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandDoorUnlock       -> "DoorUnlock(doorNum)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandDoorUnlock(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem doorNum ;
@@ -3424,45 +2183,19 @@ static T_word16 ICommandDoorUnlock(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandAreaSound                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandAreaSound         : "AreaSound(soundNum, x16, y16, radius,    */
-/*                                              volume)"                    */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandAreaSound
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandAreaSound        -> "AreaSound(soundNum, x16, y16, radius,
+ *  volume)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandAreaSound(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem soundNum, x, y, radius, volume ;
@@ -3498,45 +2231,18 @@ static T_word16 ICommandAreaSound(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandGotoPlace                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandGotoPlace         : "GotoPlace(placeNum)"                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandGotoPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandGotoPlace        -> "GotoPlace(placeNum)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandGotoPlace(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem placeNum ;
@@ -3557,47 +2263,18 @@ static T_word16 ICommandGotoPlace(T_scriptHeader *script, T_word16 position)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandDelay                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandDelay             : "Delay(time70)"                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    MemFree                                                               */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandDelay
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandDelay            -> "Delay(time70)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandDelay(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem delayTime ;
@@ -3625,47 +2302,19 @@ static T_word16 ICommandDelay(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDelayComplete                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDelayComplete is called by the scheduler when the delay command is   */
-/*  done delaying.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IExecuteCode                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDelayComplete
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDelayComplete is called by the scheduler when the delay command is
+ *  done delaying.
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IContinueExecution(T_word32 data)
 {
     T_continueData *p_continueData ;
@@ -3682,47 +2331,18 @@ static T_void IContinueExecution(T_word32 data)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSlideFloor                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSlideFloor        : "SlideFloor(0)"                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    MemFree                                                               */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSlideFloor
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSlideFloor       -> "SlideFloor(0)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSlideFloor(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem sector, start, end, over, next ;
@@ -3754,47 +2374,18 @@ static T_word16 ICommandSlideFloor(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSlideCeiling               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSlideCeiling      : "SlideCeiling(...)"                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    MemFree                                                               */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSlideCeiling
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSlideCeiling     -> "SlideCeiling(...)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSlideCeiling(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem sector, start, end, over, next ;
@@ -3826,48 +2417,18 @@ static T_word16 ICommandSlideCeiling(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleSlidingFloor                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleSlidingFloor           is called as a floor   slides up/down   */
-/*  (as started by a slide floor   activity).                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Which sliding item.                    */
-/*                                                                          */
-/*    T_sword32 value             -- New floor   height                     */
-/*                                                                          */
-/*    E_Boolean isDone            -- Flag telling if this is the last update*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetFloorHeight                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleSlidingFloor
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleSlidingFloor           is called as a floor   slides up/down
+ *  (as started by a slide floor   activity).
+ *
+ *  @param sliderId -- Which sliding item.
+ *  @param value -- New floor   height
+ *  @param isDone -- Flag telling if this is the last update
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sliderResponse IHandleSlidingFloor(
            T_word32 sliderId,
            T_sword32 value,
@@ -3888,48 +2449,18 @@ static T_sliderResponse IHandleSlidingFloor(
     return SLIDER_RESPONSE_CONTINUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleSlidingCeiling              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleSlidingCeiling         is called as a ceiling slides up/down   */
-/*  (as started by a slide ceiling activity).                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Which sliding item.                    */
-/*                                                                          */
-/*    T_sword32 value             -- New ceiling height                     */
-/*                                                                          */
-/*    E_Boolean isDone            -- Flag telling if this is the last update*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetFloorHeight                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleSlidingCeiling
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleSlidingCeiling         is called as a ceiling slides up/down
+ *  (as started by a slide ceiling activity).
+ *
+ *  @param sliderId -- Which sliding item.
+ *  @param value -- New ceiling height
+ *  @param isDone -- Flag telling if this is the last update
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sliderResponse IHandleSlidingCeiling(
            T_word32 sliderId,
            T_sword32 value,
@@ -3950,48 +2481,20 @@ static T_sliderResponse IHandleSlidingCeiling(
     return SLIDER_RESPONSE_CONTINUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandGosub                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandGosub processes the command "Gosub(place)".  It will start    */
-/*  another execution routine that goes until it hits return and then       */
-/*  continues with the code at where it is.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script                                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IExecuteCode                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandGosub
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandGosub processes the command "Gosub(place)".  It will start
+ *  another execution routine that goes until it hits return and then
+ *  continues with the code at where it is.
+ *
+ *  @param script -- Script
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandGosub(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem place ;
@@ -4011,48 +2514,19 @@ static T_word16 ICommandGosub(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandRandom                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandRandom processes the command "Random(var, maxValue)"          */
-/*  by places a number from 0 to maxValue-1 into the given variable.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with Random command             */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*    rand                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandRandom
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandRandom processes the command "Random(var, maxValue)"
+ *  by places a number from 0 to maxValue-1 into the given variable.
+ *
+ *  @param script -- Script with Random command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandRandom(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -4075,48 +2549,23 @@ static T_word16 ICommandRandom(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectSound                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectSound processes the command                             */
-/*  "ObjectSound(objNum, soundNum, radius, volume)" by creating a sound     */
-/*  that can be heard across the whole area.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine should only be called from a server script.              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    rand                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectSound
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectSound processes the command
+ *  "ObjectSound(objNum, soundNum, radius, volume)" by creating a sound
+ *  that can be heard across the whole area.
+ *
+ *  NOTE: 
+ *  This routine should only be called from a server script.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectSound(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem objectNum ;
@@ -4159,46 +2608,19 @@ static T_word16 ICommandObjectSound(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectSet                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectSet processes the command "ObjectSet(objectId,          */
-/*  objAttr, value32).                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Object...                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectSet
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectSet processes the command "ObjectSet(objectId,
+ *  objAttr, value32).
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectSet(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem objectNum, objAttr, valueData ;
@@ -4266,46 +2688,19 @@ static T_word16 ICommandObjectSet(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectGet                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectGet processes the command "ObjectGet(objectId,          */
-/*  objAttr, var).                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Object...                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectGet
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectGet processes the command "ObjectGet(objectId,
+ *  objAttr, var).
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectGet(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem objectNum, objAttr ;
@@ -4373,46 +2768,19 @@ static T_word16 ICommandObjectGet(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandError                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandError processes the command "Error(string)" by printing out   */
-/*  the message and crashing.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    printf, fprintf                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandError
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandError processes the command "Error(string)" by printing out
+ *  the message and crashing.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandError(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem string ;
@@ -4433,45 +2801,18 @@ static T_word16 ICommandError(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandLookForPlayer              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandLookForPlayer processes "LookForPlayer(lookingObj, targetVar)"*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandLookForPlayer
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandLookForPlayer processes "LookForPlayer(lookingObj, targetVar)"
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandLookForPlayer(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -4534,46 +2875,19 @@ static T_word16 ICommandLookForPlayer(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandIfNot                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandIfNot processes the command "IfNot(condition, place)" where if*/
-/*  condition is true (non-zero), place is the next place executed.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandIfNot
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandIfNot processes the command "IfNot(condition, place)" where if
+ *  condition is true (non-zero), place is the next place executed.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandIfNot(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem value ;
@@ -4596,47 +2910,21 @@ static T_word16 ICommandIfNot(T_scriptHeader *script, T_word16 position)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectGetAngleToObject     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectGetAngleToObject processes the command                  */
-/*  "ObjectGetAngleToObject(targetAngle, sourceObject, targetObject)"       */
-/*  and determines the angle between the target and source object and       */
-/*  places the answer in targetAngle.                                       */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectGetAngleToObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectGetAngleToObject processes the command
+ *  "ObjectGetAngleToObject(targetAngle, sourceObject, targetObject)"
+ *  and determines the angle between the target and source object and
+ *  places the answer in targetAngle.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectGetAngleToObject(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -4677,46 +2965,20 @@ static T_word16 ICommandObjectGetAngleToObject(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandAbsolute                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandAbsolute               processes the command                  */
-/*  "Absolute(var)"                                                         */
-/*  and takes the absolute of the var and puts it back in the var.          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandAbsolute
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandAbsolute               processes the command
+ *  "Absolute(var)"
+ *  and takes the absolute of the var and puts it back in the var.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandAbsolute(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var = NULL ;
@@ -4736,46 +2998,20 @@ static T_word16 ICommandAbsolute(T_scriptHeader *script, T_word16 position)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandClear                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandClear                  processes the command                  */
-/*  "Clear(var)"                                                            */
-/*  and puts a zero number in the given variable.                           */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandClear
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandClear                  processes the command
+ *  "Clear(var)"
+ *  and puts a zero number in the given variable.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandClear(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var = NULL ;
@@ -4794,46 +3030,20 @@ static T_word16 ICommandClear(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandNegate                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandNegate                 processes the command                  */
-/*  "Negate(var)"                                                           */
-/*  and flips the sign        the var and puts it back in the var.          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandNegate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandNegate                 processes the command
+ *  "Negate(var)"
+ *  and flips the sign        the var and puts it back in the var.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandNegate(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var = NULL ;
@@ -4852,46 +3062,20 @@ static T_word16 ICommandNegate(T_scriptHeader *script, T_word16 position)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectDistanceToObject     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectDistanceToObject processes the command                  */
-/*  "ObjectDistanceToObject(distVar, obj1, obj2)"                           */
-/*  and determines the distance from one object to another.                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectDistanceToObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectDistanceToObject processes the command
+ *  "ObjectDistanceToObject(distVar, obj1, obj2)"
+ *  and determines the distance from one object to another.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectDistanceToObject(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -4934,46 +3118,20 @@ static T_word16 ICommandObjectDistanceToObject(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectAccelForward         * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectAccelForward     processes the command                  */
-/*  "ObjectAccelForward(object, accelAmount)"                               */
-/*  and determines the distance from one object to another.                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectAccelForward
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectAccelForward     processes the command
+ *  "ObjectAccelForward(object, accelAmount)"
+ *  and determines the distance from one object to another.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectAccelForward(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -5002,47 +3160,20 @@ static T_word16 ICommandObjectAccelForward(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICommandObjectDamageForward        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandObjectDamageForward    processes the command                  */
-/*  "ObjectDamageForward(object,distance,radius,typeDamage,damageAmount)"   */
-/*  and does the amount of damage forward.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with command                    */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandObjectDamageForward
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandObjectDamageForward    processes the command
+ *  "ObjectDamageForward(object,distance,radius,typeDamage,damageAmount)"
+ *  and does the amount of damage forward.
+ *
+ *  @param script -- Script with command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandObjectDamageForward(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -5093,47 +3224,19 @@ static T_word16 ICommandObjectDamageForward(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSubtract16                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSubtract processes the command "Subtract(variable, value)" by */
-/*  subtracting value to variable.  Variable must be a number (currently).  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetVariable                                                    */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSubtract16
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSubtract processes the command "Subtract(variable, value)" by
+ *  subtracting value to variable.  Variable must be a number (currently).
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSubtract16(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -5162,46 +3265,20 @@ static T_word16 ICommandSubtract16(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandTextBoxSetSelection        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandTextBoxSetSelection changes the selected line in a selection  */
-/*  text box.                                                               */
-/*  CommandProcessed:    "TextBoxSetSelection(textBoxID, row)"              */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandTextBoxSetSelection
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandTextBoxSetSelection changes the selected line in a selection
+ *  text box.
+ *  CommandProcessed ->  "TextBoxSetSelection(textBoxID, row)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandTextBoxSetSelection(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem textBoxID, row;
@@ -5293,46 +3370,19 @@ static T_word16 ICommandPlayerObjectGet(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandGetFloorHeight             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandGetFloorHeight gets the height of a floor in a 16 bit value.  */
-/*  CommandProcessed:    "GetFloorHeight(sector, var)"                      */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    IScriptGetVariable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandGetFloorHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandGetFloorHeight gets the height of a floor in a 16 bit value.
+ *  CommandProcessed ->  "GetFloorHeight(sector, var)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandGetFloorHeight(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -5358,46 +3408,19 @@ static T_word16 ICommandGetFloorHeight(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandGetCeilingHeight           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandGetCeilingHeight gets the height of a ceil. in a 16 bit value.*/
-/*  CommandProcessed:    "GetCeilingHeight(sector, var)"                    */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    IScriptGetVariable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandGetCeilingHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandGetCeilingHeight gets the height of a ceil. in a 16 bit value.
+ *  CommandProcessed ->  "GetCeilingHeight(sector, var)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandGetCeilingHeight(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -5765,41 +3788,19 @@ static T_word16 ICommandGroupState(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandBlock                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandBlock stops if the given variable is not zero, else goes      */
-/*  on after setting the variable to 1.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with Block command              */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandBlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandBlock stops if the given variable is not zero, else goes
+ *  on after setting the variable to 1.
+ *
+ *  @param script -- Script with Block command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandBlock(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -5824,36 +3825,19 @@ static T_word16 ICommandBlock(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandUnblock                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandUnblock makes a variable previously set by a block command    */
-/*  be zero to allow the block command to continue.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with Block command              */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandUnblock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandUnblock makes a variable previously set by a block command
+ *  be zero to allow the block command to continue.
+ *
+ *  @param script -- Script with Block command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandUnblock(T_scriptHeader *script, T_word16 position)
 {
     T_scriptDataItem *p_var ;
@@ -5873,40 +3857,22 @@ static T_word16 ICommandUnblock(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandToggleSwitch                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandToggleSwitch toggles a wall switch to go between up and down  */
-/*  based on a given variable.  It toggles between the two given texture    */
-/*  names.  If a script number other than -1 is given, then it goes to      */
-/*  that script based on the state of the wall.                             */
-/*                                                                          */
-/*    ToggleSwitch(var, sidedef, "UP", "DOWN", scriptUp, scriptDown) ;      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with Block command              */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandToggleSwitch
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandToggleSwitch toggles a wall switch to go between up and down
+ *  based on a given variable.  It toggles between the two given texture
+ *  names.  If a script number other than -1 is given, then it goes to
+ *  that script based on the state of the wall.
+ *  ToggleSwitch(var, sidedef, "UP", "DOWN", scriptUp, scriptDown) ;
+ *
+ *  @param script -- Script with Block command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandToggleSwitch(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -5966,47 +3932,18 @@ static T_word16 ICommandToggleSwitch(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSlideFloorNice             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSlideFloor        : "SlideFloorNice(0)"                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    MemFree                                                               */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSlideFloorNice
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSlideFloor       -> "SlideFloorNice(0)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSlideFloorNice(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -6039,47 +3976,18 @@ static T_word16 ICommandSlideFloorNice(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICommandSlideCeilingNice           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICommandSlideCeiling      : "SlideCeilingNice(...)"                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scriptHeader *script      -- Script with If command                 */
-/*                                                                          */
-/*    T_word16 position           -- Position in code                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 position           -- New position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IScriptGetAny                                                         */
-/*    MemFree                                                               */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICommandSlideCeilingNice
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICommandSlideCeiling     -> "SlideCeilingNice(...)"
+ *
+ *  @param script -- Script with If command
+ *  @param position -- Position in code
+ *
+ *  @return New position
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ICommandSlideCeilingNice(
                     T_scriptHeader *script,
                     T_word16 position)
@@ -6112,48 +4020,18 @@ static T_word16 ICommandSlideCeilingNice(
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleSlidingFloorNice            * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleSlidingFloorNice       is called as a floor   slides up/down   */
-/*  (as started by a slide floor   activity).                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Which sliding item.                    */
-/*                                                                          */
-/*    T_sword32 value             -- New floor   height                     */
-/*                                                                          */
-/*    E_Boolean isDone            -- Flag telling if this is the last update*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetFloorHeight                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/10/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleSlidingFloorNice
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleSlidingFloorNice       is called as a floor   slides up/down
+ *  (as started by a slide floor   activity).
+ *
+ *  @param sliderId -- Which sliding item.
+ *  @param value -- New floor   height
+ *  @param isDone -- Flag telling if this is the last update
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sliderResponse IHandleSlidingFloorNice(
            T_word32 sliderId,
            T_sword32 value,
@@ -6183,48 +4061,18 @@ static T_sliderResponse IHandleSlidingFloorNice(
     return response ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleSlidingCeilingNice          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleSlidingCeiling         is called as a ceiling slides up/down   */
-/*  (as started by a slide ceiling activity).                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Which sliding item.                    */
-/*                                                                          */
-/*    T_sword32 value             -- New ceiling height                     */
-/*                                                                          */
-/*    E_Boolean isDone            -- Flag telling if this is the last update*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetFloorHeight                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/10/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleSlidingCeilingNice
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleSlidingCeiling         is called as a ceiling slides up/down
+ *  (as started by a slide ceiling activity).
+ *
+ *  @param sliderId -- Which sliding item.
+ *  @param value -- New ceiling height
+ *  @param isDone -- Flag telling if this is the last update
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sliderResponse IHandleSlidingCeilingNice(
            T_word32 sliderId,
            T_sword32 value,
@@ -6269,7 +4117,7 @@ static T_word16 ICommandJournalEntry(T_scriptHeader *script, T_word16 position)
     return position ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SCRIPT.C                                                */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SCRIPT.C
+ *-------------------------------------------------------------------------*/

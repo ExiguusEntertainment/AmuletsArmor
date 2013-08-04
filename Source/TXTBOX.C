@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  Txtbox.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  TXTBOX.C
+ *-------------------------------------------------------------------------*/
+/**
+ * User interface componet for handling large text components.  This
+ * handles multi-line, read-only and modify fields, and
+ * scrollbars.  And also handles colors.
+ *
+ * @addtogroup Txtbox
+ * @brief Text Box User Interface Component
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "FORM.H"
 #include "MEMORY.H"
 #include "MESSAGE.H"
@@ -13,47 +24,12 @@ static E_TxtboxAction G_currentAction = Txtbox_ACTION_NO_ACTION;
 static T_void TxtboxAppendKeyNoRepag (T_TxtboxID TxtboxID, T_byte8 scankey);
 extern T_byte8 G_extendedColors[MAX_EXTENDED_COLORS];
 
-/****************************************************************************/
-/*  Routine:  TxtboxCreate/TxtboxInit (internal routine)                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxCreate/TxtboxInit (internal routine)
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 
 T_TxtboxID TxtboxCreate (T_word16 x1,
                          T_word16 y1,
@@ -252,47 +228,14 @@ T_TxtboxID TxtboxCreate (T_word16 x1,
 
 
 
-/****************************************************************************/
-/*  Routine:  TxtboxDelete/TxtboxCleanUp                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  TxtboxDelete removes all data associated with TxtboxID (passed in).     */
-/*  TxtboxCleanup removes all data associated with all textboxes.           */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*  TxtboxID to delete with TxtboxDelete                                    */
-/*  void for TxtboxCleanup                                                  */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*  None.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*   Memfree                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxDelete/TxtboxCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  TxtboxDelete removes all data associated with TxtboxID (passed in).
+ *  TxtboxCleanup removes all data associated with all textboxes.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtboxDelete (T_TxtboxID TxtboxID)
 {
     T_word16 i;
@@ -361,47 +304,12 @@ T_void TxtboxCleanUp (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  TxtboxCursUp/TxtboxCursDn/TxtboxCursPgUp/TxtboxCursPgDn       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxCursUp/TxtboxCursDn/TxtboxCursPgUp/TxtboxCursPgDn
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtboxCursTop  (T_TxtboxID TxtboxID)
 {
     T_TxtboxStruct *p_Txtbox;
@@ -931,47 +839,12 @@ T_word32 TxtboxScanRow (T_TxtboxID TxtboxID, T_word16 rowinc, T_word16 ox)
 
 
 
-/****************************************************************************/
-/*  Routine:  TxtboxAppendKey/TxtboxBackSpace                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxAppendKey/TxtboxBackSpace
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 
 T_void TxtboxAppendKey (T_TxtboxID TxtboxID, T_word16 scankey)
 {
@@ -1340,47 +1213,14 @@ T_void TxtboxSetColor (T_TxtboxID TxtboxID,
 
 
 
-/****************************************************************************/
-/*  Routine:  TxtboxIsAt                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Returns TRUE if a text box is at the given coordinates                  */
-/*  Otherwise returns FALSE                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*  lx and ly of test                                                       */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*  E_boolean                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxIsAt
+ *-------------------------------------------------------------------------*/
+/**
+ *  Returns TRUE if a text box is at the given coordinates
+ *  Otherwise returns FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 
 E_Boolean TxtboxIsAt (T_TxtboxID TxtboxID, T_word16 x, T_word16 y)
 {
@@ -1402,47 +1242,12 @@ E_Boolean TxtboxIsAt (T_TxtboxID TxtboxID, T_word16 x, T_word16 y)
     return (retvalue);
 }
 
-/****************************************************************************/
-/*  Routine:  TxtboxHandleKey/TxtboxHandleMouse                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxHandleKey/TxtboxHandleMouse
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtboxKeyControl (E_keyboardEvent event, T_word16 scankey)
 {
 
@@ -1852,47 +1657,13 @@ T_void TxtboxMouseControl (E_mouseEvent event, T_word16 x, T_word16 y, T_buttonC
 }
 
 
-/****************************************************************************/
-/*  Routine:  TxtboxNextBox/TxtboxLastBox                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Increments or decrements G_currentTextBox                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxNextBox/TxtboxLastBox
+ *-------------------------------------------------------------------------*/
+/**
+ *  Increments or decrements G_currentTextBox
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtboxNextBox (T_void)
 {
 	T_word16 oldTxtbox;
@@ -2020,47 +1791,12 @@ T_void TxtboxFirstBox (T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  TxtboxUpdate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtboxUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtboxUpdate (T_TxtboxID TxtboxID)
 {
     T_TxtboxStruct *p_Txtbox;
@@ -2902,6 +2638,7 @@ T_void TxtboxSetStateBlock(T_void *p_state)
     memcpy(G_TxtboxArray, p_state, sizeof(G_TxtboxArray)) ;
 }
 
-/****************************************************************************/
-/* END OF FILE: Txtbox.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  TXTBOX.C
+ *-------------------------------------------------------------------------*/

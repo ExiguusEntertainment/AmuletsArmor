@@ -1,7 +1,16 @@
-/****************************************************************************/
-/*    FILE:  MainUI.C                                                       */
-/****************************************************************************/
-/* 179,78 */
+/*-------------------------------------------------------------------------*
+ * File:  MAINUI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The first main user interface for selecting/creating/delete characters
+ * is here.
+ *
+ * @addtogroup MainUI
+ * @brief Main UI for Character Creation
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BUTTON.H"
 #include "COLOR.H"
 #include "MAINUI.H"
@@ -232,38 +241,16 @@ T_void MainUIControl (E_formObjectType objtype,
 	DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  MainUISetUpBulletins                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This function requests a list of bulletins from the server              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*  Doesn't do anything (yet)                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*  None                                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  09/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  MainUISetUpBulletins
+ *-------------------------------------------------------------------------*/
+/**
+ *  This function requests a list of bulletins from the server
+ *
+ *  NOTE: 
+ *  Doesn't do anything (yet)
+ *
+ *<!-----------------------------------------------------------------------*/
 #if 0
 T_void MainUISetUpBulletins (T_TxtboxID bulletinID)
 {
@@ -492,3 +479,8 @@ static T_void MainUClearPortraitArea()
 
     DebugEnd();
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  MAINUI.C
+ *-------------------------------------------------------------------------*/

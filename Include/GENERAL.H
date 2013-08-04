@@ -37,7 +37,7 @@ typedef time_t T_time;
 #  define PACK
 #endif
 
-/** Because many other #includes define these in bad ways. **/
+/* Because many other #includes define these in bad ways. */
 #undef TRUE
 #undef FALSE
 

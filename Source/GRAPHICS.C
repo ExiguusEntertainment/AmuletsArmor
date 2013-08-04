@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  GRAPHICS.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  GRAPHICS.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Routines for drawing 2D graphics.
+ *
+ * @addtogroup GRAPHICS
+ * @brief Graphics Drawing System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include <stdio.h>
 #include "3D_TRIG.H"
 #include "DEBUG.H"
@@ -82,47 +91,19 @@ static T_void IResetLeftsAndRights(T_void) ;
 
 static T_byte8 G_lastPalette[256][3] ;
 
-/****************************************************************************/
-/*  Routine:  GrScreenAlloc                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is needed to allocate enough space for a screen.         */
-/*  Although this current implementation only allocates a 320x200 region,   */
-/*  future versions may wish to provide different size screens.             */
-/*    To actually use this screen, you need to use GrScreenSet().  It       */
-/*  will then make that screen the active screen.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_screen                    -- Handle to a screen.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrScreenAlloc
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is needed to allocate enough space for a screen.
+ *  Although this current implementation only allocates a 320x200 region,
+ *  future versions may wish to provide different size screens.
+ *  To actually use this screen, you need to use GrScreenSet().  It
+ *  will then make that screen the active screen.
+ *
+ *  @return Handle to a screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_screen GrScreenAlloc(T_void)
 {
     T_screen screen ;
@@ -139,45 +120,20 @@ T_screen GrScreenAlloc(T_void)
     return screen ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrScreenFree                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    When you are done with a screen, you can free it from memory.         */
-/*  This routine removes the screen from memory.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    A screen cannot be freed if it is the active screen.  You must either */
-/*  declare another screen as the active (or GRAPHICS_ACTUAL_SCREEN).       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_screen screen             -- Screen to free.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    me   dd/mm/yy  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrScreenFree
+ *-------------------------------------------------------------------------*/
+/**
+ *  When you are done with a screen, you can free it from memory.
+ *  This routine removes the screen from memory.
+ *
+ *  NOTE: 
+ *  A screen cannot be freed if it is the active screen.  You must either
+ *  declare another screen as the active (or GRAPHICS_ACTUAL_SCREEN).
+ *
+ *  @param screen -- Screen to free.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrScreenFree(T_screen screen)
 {
     DebugRoutine("GrScreenFree") ;
@@ -186,46 +142,21 @@ T_void GrScreenFree(T_screen screen)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrScreenSet                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Once you have a screen in allocated, in order to use it, you must     */
-/*  declare it as the active screen.  To do so, use GrScreenSet and pass    */
-/*  the screen handle.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.  Just need to make sure the screen is legal.  Of course, */
-/*  I can't tell if what is passed is actually a screen or just junk.       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_screen screen             -- Screen to make the active screen       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrScreenSet
+ *-------------------------------------------------------------------------*/
+/**
+ *  Once you have a screen in allocated, in order to use it, you must
+ *  declare it as the active screen.  To do so, use GrScreenSet and pass
+ *  the screen handle.
+ *
+ *  NOTE: 
+ *  None really.  Just need to make sure the screen is legal.  Of course,
+ *  I can't tell if what is passed is actually a screen or just junk.
+ *
+ *  @param screen -- Screen to make the active screen
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrScreenSet(T_screen screen)
 {
     DebugRoutine("GrScreenSet") ;
@@ -236,43 +167,15 @@ T_void GrScreenSet(T_screen screen)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrScreenGet                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Use GrScreenGet to get the handle to the active screen.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_screen                    -- Active screen                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrScreenGet
+ *-------------------------------------------------------------------------*/
+/**
+ *  Use GrScreenGet to get the handle to the active screen.
+ *
+ *  @return Active screen
+ *
+ *<!-----------------------------------------------------------------------*/
 T_screen GrScreenGet(T_void)
 {
     T_screen screen ;
@@ -287,48 +190,18 @@ T_screen GrScreenGet(T_void)
     return screen ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawPixel                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Perhaps the lowest level graphics command, this draws one dot on      */
-/*  the screen of a specified color.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- position from left to right            */
-/*                                                                          */
-/*    T_word16 y                  -- position from top to bottom (top = 0)  */
-/*                                                                          */
-/*    T_color color               -- color index into palette               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawPixel
+ *-------------------------------------------------------------------------*/
+/**
+ *  Perhaps the lowest level graphics command, this draws one dot on
+ *  the screen of a specified color.
+ *
+ *  @param x -- position from left to right
+ *  @param y -- position from top to bottom (top = 0)
+ *  @param color -- color index into palette
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawPixel(T_word16 x, T_word16 y, T_color color)
 {
     DebugRoutine("GrDrawPixel") ;
@@ -369,50 +242,22 @@ T_void GrDrawTranslucentPixel(T_word16 x, T_word16 y, T_color color)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawVerticalLine                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Draw a vertical line from a given (x, y) to a second y in, of         */
-/*  course, your choice color.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The value of y_top MUST be a smaller value than y_bottom.             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- column to draw line down               */
-/*                                                                          */
-/*    T_word16 y_top              -- Top line to start drawing (inclusive)  */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom line to end drawing (inclusive) */
-/*                                                                          */
-/*    T_color color               -- Color index to draw with               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawVerticalLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Draw a vertical line from a given (x, y) to a second y in, of
+ *  course, your choice color.
+ *
+ *  NOTE: 
+ *  The value of y_top MUST be a smaller value than y_bottom.
+ *
+ *  @param x -- column to draw line down
+ *  @param y_top -- Top line to start drawing (inclusive)
+ *  @param y_bottom -- Bottom line to end drawing (inclusive)
+ *  @param color -- Color index to draw with
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawVerticalLine(
            T_word16 x,
            T_word16 y_top,
@@ -443,52 +288,26 @@ T_void GrDrawVerticalLine(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawHorizontalLine                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Drawing a horizontal line is useful in making boxes or underlines.    */
-/*  In fact, some graphics are all done just by using this command.  But    */
-/*  anyways, just pass the left and right position along with the line      */
-/*  to which to draw it on.  Oh yeah, tell what color too.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.  Just keep the left on the left and the right on the     */
-/*  right.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left position of line                  */
-/*                                                                          */
-/*    T_word16 y                  -- Line position from the top             */
-/*                                                                          */
-/*    T_word16 x_right            -- Right position of line (can equal      */
-/*                                   the left position)                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawHorizontalLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Drawing a horizontal line is useful in making boxes or underlines.
+ *  In fact, some graphics are all done just by using this command.  But
+ *  anyways, just pass the left and right position along with the line
+ *  to which to draw it on.  Oh yeah, tell what color too.
+ *
+ *  NOTE: 
+ *  None really.  Just keep the left on the left and the right on the
+ *  right.
+ *
+ *  @param x_left -- Left position of line
+ *  @param y -- Line position from the top
+ *  @param x_right -- Right position of line (can equal
+ *      the left position)
+ *  @param color -- Index of color to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawHorizontalLine(
            T_word16 x_left,
            T_word16 y,
@@ -514,50 +333,23 @@ T_void GrDrawHorizontalLine(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawBitmap                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    When you need to draw a bitmap, call this routine.  It uses the       */
-/*  standard (raw) format of bitmaps.  It will blip it on the active        */
-/*  screen with NO masking.  (Sorry, black is black)                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a bitmap picture            */
-/*                                                                          */
-/*    T_word16 x_left             -- Position of the left                   */
-/*                                                                          */
-/*    T_word16 y_top              -- Position of the top                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  When you need to draw a bitmap, call this routine.  It uses the
+ *  standard (raw) format of bitmaps.  It will blip it on the active
+ *  screen with NO masking.  (Sorry, black is black)
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawBitmap(
            T_bitmap *p_bitmap,
            T_word16 x_left,
@@ -600,53 +392,25 @@ T_void GrDrawBitmap(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawShadedBitmap                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    When you need to draw a shaded bitmap, call this routine.  It uses    */
-/*  the standard (raw) format of bitmaps.  It will blip it on the active    */
-/*  screen with NO masking.  (Sorry, black is black)                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a bitmap picture            */
-/*                                                                          */
-/*    T_word16 x_left             -- Position of the left                   */
-/*                                                                          */
-/*    T_word16 y_top              -- Position of the top                    */
-/*                                                                          */
-/*    T_byte8 shade               -- Shading value                          */
-/*                                   (0-255, 0=black, 255=normal)           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawShadedBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  When you need to draw a shaded bitmap, call this routine.  It uses
+ *  the standard (raw) format of bitmaps.  It will blip it on the active
+ *  screen with NO masking.  (Sorry, black is black)
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *  @param shade -- Shading value
+ *      (0-255, 0=black, 255=normal)
+ *
+ *<!-----------------------------------------------------------------------*/
 extern T_byte8 P_shadeIndex[16384] ;
 
 T_void GrDrawShadedBitmap(
@@ -749,49 +513,22 @@ T_void GrDrawShadedAndMaskedBitmap(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawBitmapMasked                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Other bitmaps may wish the background to show through.  To accompany  */
-/*  this, pictures should use the color 0   (0x00) to denote a clear        */
-/*  pixel color (usually black).  All other pixels are drawn.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None, other than no clipping like GrDrawBitmap                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a bitmap picture            */
-/*                                                                          */
-/*    T_word16 x_left             -- Position of the left                   */
-/*                                                                          */
-/*    T_word16 y_top              -- Position of the top                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawBitmapMasked
+ *-------------------------------------------------------------------------*/
+/**
+ *  Other bitmaps may wish the background to show through.  To accompany
+ *  this, pictures should use the color 0   (0x00) to denote a clear
+ *  pixel color (usually black).  All other pixels are drawn.
+ *
+ *  NOTE: 
+ *  None, other than no clipping like GrDrawBitmap
+ *
+ *  @param p_bitmap -- Pointer to a bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawBitmapMasked(
            T_bitmap *p_bitmap,
            T_word16 x_left,
@@ -849,63 +586,31 @@ T_void GrDrawBitmapMasked(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrTransferRectangle                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrTransferRectangle is used to transfer only a section of the active  */
-/*  screen to some other destination screen.  This routine requires the     */
-/*  upper-left and lower-right corners of the region you wish copied and    */
-/*  what coordinates you wish to copy too.                                  */
-/*    Note that no masking is performed in this transfer.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No clipping is done.  Therefore, the region being copied must fit     */
-/*  entirely on the destination screen.  If it doesn't you get a debug      */
-/*  error.                                                                  */
-/*    Also, the destination cannot equal the active source.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_screen destination        -- Screen to transfer to                  */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of transfer rectangle             */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of transfer rectangle              */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of transfer rectangle            */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of tranfer rectangle            */
-/*                                                                          */
-/*    T_word16 dest_x             -- Left of destination rectangle          */
-/*                                                                          */
-/*    T_word16 dest_y             -- Top of destination rectangle           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*    LES  11/25/94  Fixed small bug that was transferring one extra line.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrTransferRectangle
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrTransferRectangle is used to transfer only a section of the active
+ *  screen to some other destination screen.  This routine requires the
+ *  upper-left and lower-right corners of the region you wish copied and
+ *  what coordinates you wish to copy too.
+ *  Note that no masking is performed in this transfer.
+ *
+ *  NOTE: 
+ *  No clipping is done.  Therefore, the region being copied must fit
+ *  entirely on the destination screen.  If it doesn't you get a debug
+ *  error.
+ *  Also, the destination cannot equal the active source.
+ *
+ *  @param destination -- Screen to transfer to
+ *  @param x_left -- Left of transfer rectangle
+ *  @param y_top -- Top of transfer rectangle
+ *  @param x_right -- Right of transfer rectangle
+ *  @param y_bottom -- Bottom of tranfer rectangle
+ *  @param dest_x -- Left of destination rectangle
+ *  @param dest_y -- Top of destination rectangle
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrTransferRectangle(
            T_screen destination,
            T_word16 x_left,
@@ -964,45 +669,18 @@ T_void GrTransferRectangle(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrGraphicsOn                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Turn on the graphics screen and turn off the text screen.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.  Just the usually -- hey, no more text!                  */
-/*    Actually I just thought of one, this routine doesn't check to see     */
-/*  if the computer can handle mode 0x13 graphics.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    me   dd/mm/yy  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrGraphicsOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  Turn on the graphics screen and turn off the text screen.
+ *
+ *  NOTE: 
+ *  None really.  Just the usually -- hey, no more text!
+ *  Actually I just thought of one, this routine doesn't check to see
+ *  if the computer can handle mode 0x13 graphics.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrGraphicsOn(T_void)
 {
 #if defined(DOS32)
@@ -1048,44 +726,14 @@ T_void GrGraphicsOn(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  GrGraphicsOff                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Turn off graphics mode, and turn on text mode.  We will drop back     */
-/*  to standard 80x25 color text.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrGraphicsOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  Turn off graphics mode, and turn on text mode.  We will drop back
+ *  to standard 80x25 color text.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrGraphicsOff(T_void)
 {
 #if defined(DOS32)
@@ -1121,46 +769,19 @@ GrScreenFree(GRAPHICS_ACTUAL_SCREEN) ;
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  GrDisplayScreen                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    None of the graphics commands take effect until this command is       */
-/*  called.  When that happens, the active screen is copied over the        */
-/*  actual screen.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure the active screen is not the actual screen, or else         */
-/*  this routine is made to bomb.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDisplayScreen
+ *-------------------------------------------------------------------------*/
+/**
+ *  None of the graphics commands take effect until this command is
+ *  called.  When that happens, the active screen is copied over the
+ *  actual screen.
+ *
+ *  NOTE: 
+ *  Make sure the active screen is not the actual screen, or else
+ *  this routine is made to bomb.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDisplayScreen(T_void)
 {
     DebugRoutine("GrDisplayScreen") ;
@@ -1172,54 +793,25 @@ T_void GrDisplayScreen(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:                                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    To draw a solid rectangle of one color, use the GrDrawRectangle       */
-/*  routine.  Pass to it the upper-left coordinate and the lower-right      */
-/*  coordinate and the color.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All coordinates must be on the screen and the upper-left coordinate   */
-/*  must be located to the left and above the lower-right corner.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of rectangle                      */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of rectangle                       */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of rectangle                     */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of rectangle                    */
-/*                                                                          */
-/*    T_color color               -- Color of the rectangle                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawRectangle
+ *-------------------------------------------------------------------------*/
+/**
+ *  To draw a solid rectangle of one color, use the GrDrawRectangle
+ *  routine.  Pass to it the upper-left coordinate and the lower-right
+ *  coordinate and the color.
+ *
+ *  NOTE: 
+ *  All coordinates must be on the screen and the upper-left coordinate
+ *  must be located to the left and above the lower-right corner.
+ *
+ *  @param x_left -- Left of rectangle
+ *  @param y_top -- Top of rectangle
+ *  @param x_right -- Right of rectangle
+ *  @param y_bottom -- Bottom of rectangle
+ *  @param color -- Color of the rectangle
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawRectangle(
            T_word16 x_left,
            T_word16 y_top,
@@ -1255,54 +847,24 @@ T_void GrDrawRectangle(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawFrame                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawFrame will draw an empty frame in a choice color.  Just give    */
-/*  the upper-left and lower-right corner of the frame.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All coordinates must be on the screen and the upper-left coordinate   */
-/*  must be located to the left and above the lower-right corner.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of frame                          */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of frame                           */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of frame                         */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of frame                        */
-/*                                                                          */
-/*    T_color color               -- Color of the frame                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawHorizontalLine                                                  */
-/*    GrDrawVerticalLine                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawFrame
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawFrame will draw an empty frame in a choice color.  Just give
+ *  the upper-left and lower-right corner of the frame.
+ *
+ *  NOTE: 
+ *  All coordinates must be on the screen and the upper-left coordinate
+ *  must be located to the left and above the lower-right corner.
+ *
+ *  @param x_left -- Left of frame
+ *  @param y_top -- Top of frame
+ *  @param x_right -- Right of frame
+ *  @param y_bottom -- Bottom of frame
+ *  @param color -- Color of the frame
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawFrame(
            T_word16 x_left,
            T_word16 y_top,
@@ -1332,57 +894,26 @@ T_void GrDrawFrame(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawShadedFrame                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawShadedFrame will draw a frame that looks shaded.  The upper     */
-/*  left corner is one color and the lower right corner is a different      */
-/*  color.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All coordinates must be on the screen and the upper-left coordinate   */
-/*  must be located to the left and above the lower-right corner.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of frame                          */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of frame                           */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of frame                         */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of frame                        */
-/*                                                                          */
-/*    T_color color1              -- Color of the upper left corner         */
-/*                                                                          */
-/*    T_color color2              -- Color of the lower right corner        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawHorizontalLine                                                  */
-/*    GrDrawVerticalLine                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawShadedFrame
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawShadedFrame will draw a frame that looks shaded.  The upper
+ *  left corner is one color and the lower right corner is a different
+ *  color.
+ *
+ *  NOTE: 
+ *  All coordinates must be on the screen and the upper-left coordinate
+ *  must be located to the left and above the lower-right corner.
+ *
+ *  @param x_left -- Left of frame
+ *  @param y_top -- Top of frame
+ *  @param x_right -- Right of frame
+ *  @param y_bottom -- Bottom of frame
+ *  @param color1 -- Color of the upper left corner
+ *  @param color2 -- Color of the lower right corner
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawShadedFrame(
            T_word16 x_left,
            T_word16 y_top,
@@ -1413,51 +944,24 @@ T_void GrDrawShadedFrame(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrSetPalette                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrSetPalette is used to change colors in the palette list.  Pass to   */
-/*  this routine the starting color index and then the number of colors     */
-/*  you wish changed.  Also pass a pointer to the new palette you want      */
-/*  (where the 0'd item is the start color).                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If the index of the start color plus the number of colors is >255     */
-/*  The program will bomb.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_color start_color         -- Index to start of colors to change     */
-/*                                                                          */
-/*    T_word16 number_colors      -- Number of colors to change             */
-/*                                                                          */
-/*    T_palette *p_palette        -- Pointer to palette list                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrSetPalette
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrSetPalette is used to change colors in the palette list.  Pass to
+ *  this routine the starting color index and then the number of colors
+ *  you wish changed.  Also pass a pointer to the new palette you want
+ *  (where the 0'd item is the start color).
+ *
+ *  NOTE: 
+ *  If the index of the start color plus the number of colors is >255
+ *  The program will bomb.
+ *
+ *  @param start_color -- Index to start of colors to change
+ *  @param number_colors -- Number of colors to change
+ *  @param p_palette -- Pointer to palette list
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ITransferScreen(T_void)
 {
     T_word16 i ;
@@ -1607,49 +1111,22 @@ T_void GrSetPalette(
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  GrGetPalette                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrGetPalette is used to retrieve the color pallette list or a sub-    */
-/*  part of it.  Works just like GrSetPalette.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If the index of the start color plus the number of colors is >255     */
-/*  The program will bomb.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_color start_color         -- Index to start of colors to change     */
-/*                                                                          */
-/*    T_word16 number_colors      -- Number of colors to change             */
-/*                                                                          */
-/*    T_palette *p_palette        -- Pointer to palette list                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrGetPalette
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrGetPalette is used to retrieve the color pallette list or a sub-
+ *  part of it.  Works just like GrSetPalette.
+ *
+ *  NOTE: 
+ *  If the index of the start color plus the number of colors is >255
+ *  The program will bomb.
+ *
+ *  @param start_color -- Index to start of colors to change
+ *  @param number_colors -- Number of colors to change
+ *  @param p_palette -- Pointer to palette list
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrGetPalette(
            T_color start_color,
            T_word16 number_colors,
@@ -1687,47 +1164,22 @@ T_void GrGetPalette(
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  GrSetBitFont                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrSetBitFont declares the bit font that the graphics module will      */
-/*  use for all consecutive drawing of text.  Just pass a pointer to a      */
-/*  bit font that has already been loaded into memory.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Note that if the font is removed from memory while in use, these      */
-/*  routines have no way of knowing that the font is gone and will output   */
-/*  garbage.  Hopefully this will not cause an error.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitfont *p_bitfont        -- Pointer to loaded bit font             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrSetBitFont
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrSetBitFont declares the bit font that the graphics module will
+ *  use for all consecutive drawing of text.  Just pass a pointer to a
+ *  bit font that has already been loaded into memory.
+ *
+ *  NOTE: 
+ *  Note that if the font is removed from memory while in use, these
+ *  routines have no way of knowing that the font is gone and will output
+ *  garbage.  Hopefully this will not cause an error.
+ *
+ *  @param p_bitfont -- Pointer to loaded bit font
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrSetBitFont(T_bitfont *p_bitfont)
 {
     DebugRoutine("GrSetBitFont") ;
@@ -1753,47 +1205,21 @@ T_void GrSetBitFont(T_bitfont *p_bitfont)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrSetCursorPosition                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrSetCursorPosition moves the cursor to a new location on the screen. */
-/*  All subsequent character drawing will occur at that new location.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    x_position and y_position must be inside the screen area for this     */
-/*  command to work correctly.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_position         -- left side of where character is drawn  */
-/*                                                                          */
-/*    T_word16 y_position         -- top side of where character is drawn   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrSetCursorPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrSetCursorPosition moves the cursor to a new location on the screen.
+ *  All subsequent character drawing will occur at that new location.
+ *
+ *  NOTE: 
+ *  x_position and y_position must be inside the screen area for this
+ *  command to work correctly.
+ *
+ *  @param x_position -- left side of where character is drawn
+ *  @param y_position -- top side of where character is drawn
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrSetCursorPosition(T_word16 x_position, T_word16 y_position)
 {
     DebugRoutine("GrSetCursorPosition") ;
@@ -1806,48 +1232,22 @@ T_void GrSetCursorPosition(T_word16 x_position, T_word16 y_position)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawCharacter                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawCharacter is the low level routine to draw a single character   */
-/*  on the screen in the active font.  Just pass to it a character and it   */
-/*  will be drawn at the current cursor position.  The cursor position will */
-/*  then be updated.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.  Just make sure you used GrSetBitFont earlier.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 character           -- character to draw                      */
-/*                                                                          */
-/*    T_color color               -- color to draw character in             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawCharacter
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawCharacter is the low level routine to draw a single character
+ *  on the screen in the active font.  Just pass to it a character and it
+ *  will be drawn at the current cursor position.  The cursor position will
+ *  then be updated.
+ *
+ *  NOTE: 
+ *  None.  Just make sure you used GrSetBitFont earlier.
+ *
+ *  @param character -- character to draw
+ *  @param color -- color to draw character in
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawCharacter(T_byte8 character, T_color color)
 {
     T_word16 height ;
@@ -1926,46 +1326,17 @@ T_void GrDrawCharacter(T_byte8 character, T_color color)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawText                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawText draws a whole group of characters on the screen at once.   */
-/*  It does NOT do any character filtering (such as newline characters).    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *text               -- Pointer to string to draw              */
-/*                                                                          */
-/*    T_color color               -- Color to draw text in                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawCharacter                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawText
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawText draws a whole group of characters on the screen at once.
+ *  It does NOT do any character filtering (such as newline characters).
+ *
+ *  @param text -- Pointer to string to draw
+ *  @param color -- Color to draw text in
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawText(T_byte8 *text, T_color color)
 {
     DebugRoutine("GrDrawText") ;
@@ -1977,49 +1348,19 @@ T_void GrDrawText(T_byte8 *text, T_color color)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawShadowedText                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawShadowed text is just like GrDrawText except that it draws      */
-/*  a shadowed color of the text first and then places the normal characters*/
-/*  on top.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *text               -- Pointer to string to draw              */
-/*                                                                          */
-/*    T_color color               -- Color to draw text in                  */
-/*                                                                          */
-/*    T_color shadow              -- Color to draw shadow in                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawCharacter                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawShadowedText
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawShadowed text is just like GrDrawText except that it draws
+ *  a shadowed color of the text first and then places the normal characters
+ *  on top.
+ *
+ *  @param text -- Pointer to string to draw
+ *  @param color -- Color to draw text in
+ *  @param shadow -- Color to draw shadow in
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawShadowedText(T_byte8 *text, T_color color, T_color shadow)
 {
     T_word16 xPos ;
@@ -2050,45 +1391,22 @@ T_void GrDrawShadowedText(T_byte8 *text, T_color color, T_color shadow)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrGetCharacterWidth                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sometimes it is useful to know how wide a character is before you     */
-/*  draw it (say for centering text).  To get this information, pass        */
-/*  GrGetCharacterWidth the character you need info on.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.  Just make sure a valid font is in memory.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 character           -- Character to get width of              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Width of character                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrGetCharacterWidth
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sometimes it is useful to know how wide a character is before you
+ *  draw it (say for centering text).  To get this information, pass
+ *  GrGetCharacterWidth the character you need info on.
+ *
+ *  NOTE: 
+ *  None.  Just make sure a valid font is in memory.
+ *
+ *  @param character -- Character to get width of
+ *
+ *  @return Width of character
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 GrGetCharacterWidth(T_byte8 character)
 {
     T_word16 width ;
@@ -2105,54 +1423,23 @@ T_word16 GrGetCharacterWidth(T_byte8 character)
     return width ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrTransferRasterFrom                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    To help with high speed parts of the game, a transfer from memory     */
-/*  to video routine has been provided.  Technically, this routine is       */
-/*  only for one raster, but one raster can extend onto multiple lines.     */
-/*  Just pass a pointer to where in memory you want to get an array of      */
-/*  bytes, and x & y coordinate of where to put it, and the number of       */
-/*  bytes (length) of the raster.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *whereFrom          -- Pointer to memory to transfer          */
-/*                                                                          */
-/*    T_byte16 x                  -- Screen x coordinate                    */
-/*                                                                          */
-/*    T_byte16 y                  -- Screen y coordinate                    */
-/*                                                                          */
-/*    T_byte16 length             -- Number of bytes to transfer            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/27/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrTransferRasterFrom
+ *-------------------------------------------------------------------------*/
+/**
+ *  To help with high speed parts of the game, a transfer from memory
+ *  to video routine has been provided.  Technically, this routine is
+ *  only for one raster, but one raster can extend onto multiple lines.
+ *  Just pass a pointer to where in memory you want to get an array of
+ *  bytes, and x & y coordinate of where to put it, and the number of
+ *  bytes (length) of the raster.
+ *
+ *  @param whereFrom -- Pointer to memory to transfer
+ *  @param x -- Screen x coordinate
+ *  @param y -- Screen y coordinate
+ *  @param length -- Number of bytes to transfer
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrTransferRasterFrom(
            T_byte8 *whereFrom,
            T_word16 x,
@@ -2170,54 +1457,23 @@ T_void GrTransferRasterFrom(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrTransferRasterTo                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    To help with high speed parts of the game, a transfer from video to   */
-/*  memory routine has been provided.  Technically, this routine is         */
-/*  only for one raster, but one raster can extend onto multiple lines.     */
-/*  Just pass a pointer to where in memory you want to put an array of      */
-/*  bytes, and x & y coordinate of where to get it, and the number of       */
-/*  bytes (length) of the raster.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *whereTo            -- Pointer to memory                      */
-/*                                                                          */
-/*    T_byte16 x                  -- Screen x coordinate                    */
-/*                                                                          */
-/*    T_byte16 y                  -- Screen y coordinate                    */
-/*                                                                          */
-/*    T_byte16 length             -- Number of bytes to transfer            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/27/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrTransferRasterTo
+ *-------------------------------------------------------------------------*/
+/**
+ *  To help with high speed parts of the game, a transfer from video to
+ *  memory routine has been provided.  Technically, this routine is
+ *  only for one raster, but one raster can extend onto multiple lines.
+ *  Just pass a pointer to where in memory you want to put an array of
+ *  bytes, and x & y coordinate of where to get it, and the number of
+ *  bytes (length) of the raster.
+ *
+ *  @param whereTo -- Pointer to memory
+ *  @param x -- Screen x coordinate
+ *  @param y -- Screen y coordinate
+ *  @param length -- Number of bytes to transfer
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrTransferRasterTo(
            T_byte8 *whereTo,
            T_word16 x,
@@ -2257,47 +1513,20 @@ T_void GrInvertFrame(
            T_word16 x2,
            T_word16 y2) ;
 
-/****************************************************************************/
-/*  Routine:  GrInvertVerticalLine                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Invert a vertical line from a given (x, y) to a second y.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The value of y_top MUST be a smaller value than y_bottom.             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- column to draw line down               */
-/*                                                                          */
-/*    T_word16 y_top              -- Top line to start drawing (inclusive)  */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom line to end drawing (inclusive) */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrInvertVerticalLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Invert a vertical line from a given (x, y) to a second y.
+ *
+ *  NOTE: 
+ *  The value of y_top MUST be a smaller value than y_bottom.
+ *
+ *  @param x -- column to draw line down
+ *  @param y_top -- Top line to start drawing (inclusive)
+ *  @param y_bottom -- Bottom line to end drawing (inclusive)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrInvertVerticalLine(
            T_word16 x,
            T_word16 y_top,
@@ -2327,49 +1556,22 @@ T_void GrInvertVerticalLine(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrInvertHorizontalLine                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Invert a horizontal line from a given (x, y) to a second x.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.  Just keep the left on the left and the right on the     */
-/*  right.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left position of line                  */
-/*                                                                          */
-/*    T_word16 y                  -- Line position from the top             */
-/*                                                                          */
-/*    T_word16 x_right            -- Right position of line (can equal      */
-/*                                   the left position)                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrInvertHorizontalLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Invert a horizontal line from a given (x, y) to a second x.
+ *
+ *  NOTE: 
+ *  None really.  Just keep the left on the left and the right on the
+ *  right.
+ *
+ *  @param x_left -- Left position of line
+ *  @param y -- Line position from the top
+ *  @param x_right -- Right position of line (can equal
+ *      the left position)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrInvertHorizontalLine(
            T_word16 x_left,
            T_word16 y,
@@ -2398,52 +1600,23 @@ T_void GrInvertHorizontalLine(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrInvertFrame                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrInvertFrame will invert an empty frame on the screen.  Just give    */
-/*  the upper-left and lower-right corner of the frame.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All coordinates must be on the screen and the upper-left coordinate   */
-/*  must be located to the left and above the lower-right corner.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of frame                          */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of frame                           */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of frame                         */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of frame                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawHorizontalLine                                                  */
-/*    GrDrawVerticalLine                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrInvertFrame
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrInvertFrame will invert an empty frame on the screen.  Just give
+ *  the upper-left and lower-right corner of the frame.
+ *
+ *  NOTE: 
+ *  All coordinates must be on the screen and the upper-left coordinate
+ *  must be located to the left and above the lower-right corner.
+ *
+ *  @param x_left -- Left of frame
+ *  @param y_top -- Top of frame
+ *  @param x_right -- Right of frame
+ *  @param y_bottom -- Bottom of frame
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrInvertFrame(
            T_word16 x_left,
            T_word16 y_top,
@@ -2515,48 +1688,20 @@ T_void GrActivateColumn(T_word16 x)
     GrSelectPlanes(1 << (x & 3)) ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawLine                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Draw a vertical line from a given (x, y) to a second (x, y) in        */
-/*  your choice color.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x1, y1             -- first point                            */
-/*                                                                          */
-/*    T_word16 x2, y2             -- secong point.                          */
-/*                                                                          */
-/*    T_color color               -- Color index to draw with               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Draw a vertical line from a given (x, y) to a second (x, y) in
+ *  your choice color.
+ *
+ *  @param x1 -- X first point
+ *  @param y1 -- Y first point
+ *  @param x2 -- X second point.
+ *  @param y2 -- Y second point.
+ *  @param color -- Color index to draw with
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawLine(
            T_sword16 x1,
            T_sword16 y1,
@@ -2635,58 +1780,27 @@ T_void GrDrawLine(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDoubleSizeTransfer                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDoubleSizeTransfer draws a to the screen at double size.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No clipping is done.  Therefore, the region being copied must fit     */
-/*  entirely on the destination screen.  If it doesn't you get a debug      */
-/*  error.                                                                  */
-/*    Also, the destination cannot equal the active source.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_screen destination        -- Screen to transfer to                  */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of transfer rectangle             */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of transfer rectangle              */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of transfer rectangle            */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of tranfer rectangle            */
-/*                                                                          */
-/*    T_word16 dest_x             -- Left of destination rectangle          */
-/*                                                                          */
-/*    T_word16 dest_y             -- Top of destination rectangle           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDoubleSizeTransfer
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDoubleSizeTransfer draws a to the screen at double size.
+ *
+ *  NOTE: 
+ *  No clipping is done.  Therefore, the region being copied must fit
+ *  entirely on the destination screen.  If it doesn't you get a debug
+ *  error.
+ *  Also, the destination cannot equal the active source.
+ *
+ *  @param destination -- Screen to transfer to
+ *  @param x_left -- Left of transfer rectangle
+ *  @param y_top -- Top of transfer rectangle
+ *  @param x_right -- Right of transfer rectangle
+ *  @param y_bottom -- Bottom of tranfer rectangle
+ *  @param dest_x -- Left of destination rectangle
+ *  @param dest_y -- Top of destination rectangle
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDoubleSizeTransfer(
            T_screen destination,
            T_word16 x_left,
@@ -2744,49 +1858,22 @@ T_void GrDoubleSizeTransfer(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawCompressedBitmap                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawCompressedBitmap is just like GrDrawBitmap, but takes in a      */
-/*  compressed and rotated bitmap (.CPC file).                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a compressed bitmap picture */
-/*                                                                          */
-/*    T_word16 x_left             -- Position of the left                   */
-/*                                                                          */
-/*    T_word16 y_top              -- Position of the top                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawCompressedBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawCompressedBitmap is just like GrDrawBitmap, but takes in a
+ *  compressed and rotated bitmap (.CPC file).
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a compressed bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_word16 offset ;
     T_byte8 start, end ;
@@ -2860,53 +1947,24 @@ T_void GrDrawCompressedBitmap(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawCompressedBitmapAndColor                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawCompressedBitmapAndColor is just like GrDrawCompressedBitmap    */
-/*  except that you can also colorize the compressed bitmap with the        */
-/*  given colorization table.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a compressed bitmap picture */
-/*                                                                          */
-/*    T_word16 x_left             -- Position of the left                   */
-/*                                                                          */
-/*    T_word16 y_top              -- Position of the top                    */
-/*                                                                          */
-/*    E_colorizeTable colorTable  -- colorization table to use.             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*    ColorizeGetTable                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/27/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawCompressedBitmapAndColor
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawCompressedBitmapAndColor is just like GrDrawCompressedBitmap
+ *  except that you can also colorize the compressed bitmap with the
+ *  given colorization table.
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a compressed bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *  @param colorTable -- colorization table to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawCompressedBitmapAndColor(
            T_bitmap *p_bitmap,
            T_word16 x_left,
@@ -2983,49 +2041,22 @@ T_void GrDrawCompressedBitmapAndColor(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawCompressedBitmapAndClip                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawCompressedBitmapAndClip is just like GrDrawCompressedBitmap,    */
-/*  but it clips to any coordinates on the screen.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a compressed bitmap picture */
-/*                                                                          */
-/*    T_sword16 x_left             -- Position of the left                  */
-/*                                                                          */
-/*    T_sword16 y_top              -- Position of the top                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/17/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawCompressedBitmapAndClip
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawCompressedBitmapAndClip is just like GrDrawCompressedBitmap,
+ *  but it clips to any coordinates on the screen.
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a compressed bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawCompressedBitmapAndClip(
            T_bitmap *p_bitmap,
            T_sword16 x_left,
@@ -3105,52 +2136,23 @@ T_void GrDrawCompressedBitmapAndClip(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawCompressedBitmapAndClipAndColor                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawCompressedBitmapAndClipAndColor is just like                    */
-/*  GrDrawCompressedBitmapAndClip, but it also includes a colorization.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a compressed bitmap picture */
-/*                                                                          */
-/*    T_sword16 x_left             -- Position of the left                  */
-/*                                                                          */
-/*    T_sword16 y_top              -- Position of the top                   */
-/*                                                                          */
-/*    E_colorizeTable colorTable   -- Color to transform into               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*    ColorizeGetTable                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/17/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawCompressedBitmapAndClipAndColor
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawCompressedBitmapAndClipAndColor is just like
+ *  GrDrawCompressedBitmapAndClip, but it also includes a colorization.
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a compressed bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *  @param colorTable -- Color to transform into
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawCompressedBitmapAndClipAndColor(
            T_bitmap *p_bitmap,
            T_sword16 x_left,
@@ -3382,46 +2384,21 @@ static T_void IConfirmPaletteChange(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  GrScreenAllocPartial                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is needed to allocate enough space for a partial screen. */
-/*    To actually use this screen, you need to use GrScreenSet().  It       */
-/*  will then make that screen the active screen.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Warning!  Since this routine returns a handle to a partial screen,    */
-/*  you have to check that you do not draw out of bounds.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_screen                    -- Handle to a partial screen.            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrScreenAllocPartial
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is needed to allocate enough space for a partial screen.
+ *  To actually use this screen, you need to use GrScreenSet().  It
+ *  will then make that screen the active screen.
+ *
+ *  NOTE: 
+ *  Warning!  Since this routine returns a handle to a partial screen,
+ *  you have to check that you do not draw out of bounds.
+ *
+ *  @return Handle to a partial screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_screen GrScreenAllocPartial(T_word16 ySize)
 {
     T_screen screen ;
@@ -3438,52 +2415,24 @@ T_screen GrScreenAllocPartial(T_word16 ySize)
     return screen ;
 }
 
-/****************************************************************************/
-/*  Routine:  DrawAndShadeRaster                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DrawAndShadeRaster copies a section of memory from one place to       */
-/*  another and shades it in the process.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Warning!  Since this routine returns a handle to a partial screen,    */
-/*  you have to check that you do not draw out of bounds.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_source           -- Where to copy from                     */
-/*                                                                          */
-/*    T_byte8 *p_destination      -- Where to copy to                       */
-/*                                                                          */
-/*    T_word32 count              -- How many bytes to copy and shade       */
-/*                                                                          */
-/*    T_byte8 shade               -- Shading value                          */
-/*                                   (0-255, 0=black, 255=normal)           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ShadeMemAsm                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DrawAndShadeRaster
+ *-------------------------------------------------------------------------*/
+/**
+ *  DrawAndShadeRaster copies a section of memory from one place to
+ *  another and shades it in the process.
+ *
+ *  NOTE: 
+ *  Warning!  Since this routine returns a handle to a partial screen,
+ *  you have to check that you do not draw out of bounds.
+ *
+ *  @param p_source -- Where to copy from
+ *  @param p_destination -- Where to copy to
+ *  @param count -- How many bytes to copy and shade
+ *  @param shade -- Shading value
+ *      (0-255, 0=black, 255=normal)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DrawAndShadeRaster(
            T_byte8 *p_source,
            T_byte8 *p_destination,
@@ -3509,52 +2458,23 @@ T_void DrawAndShadeRaster(
 }
 
 
-/****************************************************************************/
-/*  Routine:  GrShadeRectangle                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrShadeRectangle darkens a given rectangular area.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All coordinates must be on the screen and the upper-left coordinate   */
-/*  must be located to the left and above the lower-right corner.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x_left             -- Left of rectangle                      */
-/*                                                                          */
-/*    T_word16 y_top              -- Top of rectangle                       */
-/*                                                                          */
-/*    T_word16 x_right            -- Right of rectangle                     */
-/*                                                                          */
-/*    T_word16 y_bottom           -- Bottom of rectangle                    */
-/*                                                                          */
-/*    T_byte8 shade               -- Amount to shade                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DrawAndShadeRaster                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrShadeRectangle
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrShadeRectangle darkens a given rectangular area.
+ *
+ *  NOTE: 
+ *  All coordinates must be on the screen and the upper-left coordinate
+ *  must be located to the left and above the lower-right corner.
+ *
+ *  @param x_left -- Left of rectangle
+ *  @param y_top -- Top of rectangle
+ *  @param x_right -- Right of rectangle
+ *  @param y_bottom -- Bottom of rectangle
+ *  @param shade -- Amount to shade
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrShadeRectangle(
            T_word16 x_left,
            T_word16 y_top,
@@ -3588,45 +2508,13 @@ T_void GrShadeRectangle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  GrActualScreenPush                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrActualScreenPush saves the current screen onto the screen stack.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memcpy                                                                */
-/*    DoubleLinkListAddElementAtFront                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrActualScreenPush
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrActualScreenPush saves the current screen onto the screen stack.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrActualScreenPush(T_void)
 {
     T_byte8 *p_screen ;
@@ -3643,47 +2531,13 @@ T_void GrActualScreenPush(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrActualScreenPop                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrActualScreenPop restores the last screen on the screen stack.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListGetFirst                                                */
-/*    DoubleLinkListElementGetData                                          */
-/*    memcpy                                                                */
-/*    MemFree                                                               */
-/*    DoubleLinkListRemoveElement                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrActualScreenPop
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrActualScreenPop restores the last screen on the screen stack.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrActualScreenPop(T_void)
 {
     T_byte8 *p_screen ;
@@ -3709,47 +2563,27 @@ T_void GrActualScreenPop(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  GrDrawCompressedBitmapAndClipAndColor                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GrDrawCompressedBitmapAndClipAndColor is just like                    */
-/*  GrDrawCompressedBitmapAndClip, but it also includes a colorization.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No matter how much you want it to, this routine does NOT clip the     */
-/*  bitmap at the edge on the screen and trying to will cause it to bomb.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- Pointer to a compressed bitmap picture */
-/*                                                                          */
-/*    T_sword16 x_left             -- Position of the left                  */
-/*                                                                          */
-/*    T_sword16 y_top              -- Position of the top                   */
-/*                                                                          */
-/*    E_colorizeTable colorTable   -- Color to transform into               */
-/*                                                                          */
-/*    T_word16 width               -- Width of area to fill if too big,     */
-/*                                    or center if too small.               */
-/*                                                                          */
-/*    T_word16 width               -- Height of area to fill if too big,    */
-/*                                    or center if too small.               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GrDrawCompressedBitmapAndClipAndColor
+ *-------------------------------------------------------------------------*/
+/**
+ *  GrDrawCompressedBitmapAndClipAndColor is just like
+ *  GrDrawCompressedBitmapAndClip, but it also includes a colorization.
+ *
+ *  NOTE: 
+ *  No matter how much you want it to, this routine does NOT clip the
+ *  bitmap at the edge on the screen and trying to will cause it to bomb.
+ *
+ *  @param p_bitmap -- Pointer to a compressed bitmap picture
+ *  @param x_left -- Position of the left
+ *  @param y_top -- Position of the top
+ *  @param colorTable -- Color to transform into
+ *  @param width -- Width of area to fill if too big,
+ *      or center if too small.
+ *  @param height -- Height of area to fill if too big,
+ *      or center if too small.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GrDrawCompressedBitmapAndClipAndColorAndCenterAndResize(
            T_bitmap *p_bitmap,
            T_sword16 x_left,
@@ -3984,7 +2818,7 @@ T_void DrawTranslucentAsm(
 T_void DrawTranslucentSeeThroughAsm(
            T_byte8 *p_source,
            T_byte8 *p_destination,
-           T_word32 count) 
+           T_word32 count)
 {
     T_byte8 c;
 
@@ -4022,6 +2856,7 @@ T_void ShadeMemAsm(
 }
 
 #endif
-/****************************************************************************/
-/*    END OF FILE:  GRAPHICS.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  GRAPHICS.C
+ *-------------------------------------------------------------------------*/

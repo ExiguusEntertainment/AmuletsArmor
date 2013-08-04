@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  DOOR.C                                                         */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  DOOR.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Door system controls the opening and closing of doors.  It also
+ * handles locked doors (either opened through knock or by item).
+ *
+ * @addtogroup DOOR
+ * @brief Door Control System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "AREASND.H"
 #include "DOOR.H"
 #include "MAP.H"
@@ -63,44 +73,14 @@ static T_void IStartDoorClosing(T_word32 data) ;
 static T_void IHandleSoundCallback(T_areaSound sound, T_word32 data) ;
 
 
-/****************************************************************************/
-/*  Routine:  DoorInitialize                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorInitialize starts up all the information needed for handling      */
-/*  doors.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorInitialize starts up all the information needed for handling
+ *  doors.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorInitialize(T_void)
 {
     DebugRoutine("DoorInitialize") ;
@@ -114,43 +94,13 @@ T_void DoorInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorFinish                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorFinish cleans up the door module and unloads all memory.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDoorUnload                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorFinish cleans up the door module and unloads all memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorFinish(T_void)
 {
     DebugRoutine("DoorFinish") ;
@@ -164,45 +114,13 @@ T_void DoorFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorLoad                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorLoad loads the appropriate map door file.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*    LES  04/27/95  Loads in equicenter sound data.                        */
-/*    LES  05/08/95  Added memory tag for better checking.                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorLoad loads the appropriate map door file.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorLoad(T_word32 mapNumber)
 {
     DebugRoutine("DoorLoad") ;
@@ -261,44 +179,17 @@ T_void DoorLoad(T_word32 mapNumber)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorLock                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorLock locks a door.  If it is already locked, it stays locked.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    A door is only locked when it is fully closed.  A locked open door    */
-/*  reacts normally until fully closed -- then it is truly locked.          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorLock locks a door.  If it is already locked, it stays locked.
+ *
+ *  NOTE: 
+ *  A door is only locked when it is fully closed.  A locked open door
+ *  reacts normally until fully closed -- then it is truly locked.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorLock(T_word16 sector)
 {
     T_door *p_door ;
@@ -319,44 +210,14 @@ T_void DoorLock(T_word16 sector)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorUnlock                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorUnlock unlocks a door.  If it is already unlocked, nothing        */
-/*  happens.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorUnlock unlocks a door.  If it is already unlocked, nothing
+ *  happens.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorUnlock(T_word16 sector)
 {
     T_door *p_door ;
@@ -377,44 +238,19 @@ T_void DoorUnlock(T_word16 sector)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorIsLock                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorIsLock return TRUE if the door is locked, or return FALSE.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    DoorIsLock pretty much assumes the given sector is a door, else       */
-/*  will always return FALSE.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if locked, else FALSE             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorIsLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorIsLock return TRUE if the door is locked, or return FALSE.
+ *
+ *  NOTE: 
+ *  DoorIsLock pretty much assumes the given sector is a door, else
+ *  will always return FALSE.
+ *
+ *  @return TRUE if locked, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean DoorIsLock(T_word16 sector)
 {
     T_door *p_door ;
@@ -442,46 +278,16 @@ E_Boolean DoorIsLock(T_word16 sector)
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorOpen                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorOpen opens a door and starts the appropriate slider unless the    */
-/*  the door is locked.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector with door to open.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*    LES  04/27/95  Added door sound effect                                */
-/*    LES  12/22/95  Changed to return a boolean on if the door was opened  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorOpen opens a door and starts the appropriate slider unless the
+ *  the door is locked.
+ *
+ *  @param sector -- Sector with door to open.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean DoorOpen(T_word16 sector)
 {
     T_door *p_door ;
@@ -536,44 +342,15 @@ E_Boolean DoorOpen(T_word16 sector)
     return didOpen ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorClose                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorClose closes a door and starts the appropriate slider.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector with door to close              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*    SliderStart                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorClose
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorClose closes a door and starts the appropriate slider.
+ *
+ *  @param sector -- Sector with door to close
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorClose(T_word16 sector)
 {
     T_door *p_door ;
@@ -604,45 +381,15 @@ T_void DoorClose(T_word16 sector)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorForceOpen                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorForceOpen opens a door whether or not it is locked.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector with door to open.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoorIsLock                                                            */
-/*    DoorOpen                                                              */
-/*    DoorLock                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorForceOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorForceOpen opens a door whether or not it is locked.
+ *
+ *  @param sector -- Sector with door to open.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorForceOpen(T_word16 sector)
 {
     E_Boolean lock ;
@@ -669,44 +416,13 @@ T_void DoorForceOpen(T_word16 sector)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDoorUnload                        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDoorUnload returns all memory to the system used by the door module. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*    LES  05/08/95  Make use of deleted tags.                              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDoorUnload
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDoorUnload returns all memory to the system used by the door module.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDoorUnload(T_void)
 {
     T_door *p_door ;
@@ -742,44 +458,18 @@ static T_void IDoorUnload(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindDoor                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindDoor is a utility routine that returns a pointer to a door given */
-/*  the sector number.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector door is at.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_door *                    -- Pointer to door or NULL if not found.  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindDoor
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindDoor is a utility routine that returns a pointer to a door given
+ *  the sector number.
+ *
+ *  @param sector -- Sector door is at.
+ *
+ *  @return Pointer to door or NULL if not found.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_door *IFindDoor(T_word16 sector)
 {
     T_door *p_door ;
@@ -803,50 +493,17 @@ static T_door *IFindDoor(T_word16 sector)
     return p_door ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleDoorOpening                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleDoorOpening is called as a door opens up.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Which sliding item.                    */
-/*                                                                          */
-/*    T_sword32 value             -- New ceiling height                     */
-/*                                                                          */
-/*    E_Boolean isDone            -- Flag telling if this is the last update*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetCeilingHeight                                                   */
-/*    ScheduleAddEvent                                                      */
-/*    IStartDoorClosing (indirectly)                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*    LES  04/27/95  Modified to stop door sound.                           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleDoorOpening
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleDoorOpening is called as a door opens up.
+ *
+ *  @param sliderId -- Which sliding item.
+ *  @param value -- New ceiling height
+ *  @param isDone -- Flag telling if this is the last update
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sliderResponse IHandleDoorOpening(
            T_word32 sliderId,
            T_sword32 value,
@@ -888,45 +545,17 @@ static T_sliderResponse IHandleDoorOpening(
     return SLIDER_RESPONSE_CONTINUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  IStartDoorClosing                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IStartDoorClosing is called after a door has been opened.  This       */
-/*  routine starts closing the door by creating another slider.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sector             -- Sector that is done opening and now    */
-/*                                   needs to close the door.               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoorClose                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IStartDoorClosing
+ *-------------------------------------------------------------------------*/
+/**
+ *  IStartDoorClosing is called after a door has been opened.  This
+ *  routine starts closing the door by creating another slider.
+ *
+ *  @param sector -- Sector that is done opening and now
+ *      needs to close the door.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IStartDoorClosing(T_word32 sector)
 {
     DebugRoutine("IStartDoorClosing") ;
@@ -936,49 +565,17 @@ static T_void IStartDoorClosing(T_word32 sector)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleDoorClosing                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleDoorClosing is called as a door closes.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Which sliding item.                    */
-/*                                                                          */
-/*    T_sword32 value             -- New ceiling height                     */
-/*                                                                          */
-/*    E_Boolean isDone            -- Flag telling if this is the last update*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapCheckCrush                                                         */
-/*    MapSetCeilingHeight                                                   */
-/*    DoorOpen                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleDoorClosing
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleDoorClosing is called as a door closes.
+ *
+ *  @param sliderId -- Which sliding item.
+ *  @param value -- New ceiling height
+ *  @param isDone -- Flag telling if this is the last update
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sliderResponse IHandleDoorClosing(
            T_word32 sliderId,
            T_sword32 value,
@@ -1009,49 +606,20 @@ static T_sliderResponse IHandleDoorClosing(
     return response ;
 }
 
-/****************************************************************************/
-/*  Routine:  IHandleSoundCallback               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IHandleSoundCallback tells the door module that one of the doors that */
-/*  created a sound is now done.  This routine nulls out the reference      */
-/*  to the sound so it is not used later.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSound sound           -- Sound that was created.                */
-/*                                                                          */
-/*    T_word32 data               -- Data passed when sound created.        */
-/*                                   In this case, a cast pointer to the    */
-/*                                   door with the sound.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IHandleSoundCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  IHandleSoundCallback tells the door module that one of the doors that
+ *  created a sound is now done.  This routine nulls out the reference
+ *  to the sound so it is not used later.
+ *
+ *  @param sound -- Sound that was created.
+ *  @param data -- Data passed when sound created.
+ *      In this case, a cast pointer to the
+ *      door with the sound.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IHandleSoundCallback(T_areaSound sound, T_word32 data)
 {
     T_door *p_door ;
@@ -1069,44 +637,18 @@ static T_void IHandleSoundCallback(T_areaSound sound, T_word32 data)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorIsAtSector                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorIsAtSector checks to see if the given sector is a door.  If it    */
-/*  is, TRUE is returned, else FALSE.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector to check if door                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=is door, else FALSE               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorIsAtSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorIsAtSector checks to see if the given sector is a door.  If it
+ *  is, TRUE is returned, else FALSE.
+ *
+ *  @param sector -- Sector to check if door
+ *
+ *  @return TRUE=is door, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean DoorIsAtSector(T_word16 sector)
 {
     T_door *p_door ;
@@ -1125,45 +667,18 @@ E_Boolean DoorIsAtSector(T_word16 sector)
     return isDoor ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorGetPercentOpen                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorGetPercentOpen returns the percentage that the door is open in    */
-/*  a range of 0 to 256 (0% to 100%).                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector containing door                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- 0=0%, 256=100% open                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*    MapGetCeilingHeight                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorGetPercentOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorGetPercentOpen returns the percentage that the door is open in
+ *  a range of 0 to 256 (0% to 100%).
+ *
+ *  @param sector -- Sector containing door
+ *
+ *  @return 0=0%, 256=100% open
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 DoorGetPercentOpen(T_word16 sector)
 {
     T_door *p_door ;
@@ -1202,45 +717,17 @@ if (p_door == NULL)  {
     return percent ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorDecreaseLock                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorDecreaseLock makes the door have an easier chance to be opened.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector containing door                 */
-/*                                                                          */
-/*    T_word16 amount             -- Amount to lock the door.  A value of   */
-/*                                   0-255 is expected, or 0xFFFF.          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorDecreaseLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorDecreaseLock makes the door have an easier chance to be opened.
+ *
+ *  @param sector -- Sector containing door
+ *  @param amount -- Amount to lock the door.  A value of
+ *      0-255 is expected, or 0xFFFF.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorDecreaseLock(T_word16 sector, T_word16 amount)
 {
     T_door *p_door ;
@@ -1268,45 +755,17 @@ T_void DoorDecreaseLock(T_word16 sector, T_word16 amount)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorIncreaseLock                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorDecreaseLock makes the door have an easier chance to be opened.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector containing door                 */
-/*                                                                          */
-/*    T_word16 amount             -- Amount to open the door.  A value of   */
-/*                                   0-255 is expected, or 0xFFFF.          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorIncreaseLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorDecreaseLock makes the door have an easier chance to be opened.
+ *
+ *  @param sector -- Sector containing door
+ *  @param amount -- Amount to open the door.  A value of
+ *      0-255 is expected, or 0xFFFF.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorIncreaseLock(T_word16 sector, T_word16 amount)
 {
     T_door *p_door ;
@@ -1340,44 +799,19 @@ T_void DoorIncreaseLock(T_word16 sector, T_word16 amount)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorGetLockValue                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorGetLockValue returns the lockedness of the door.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector containing door                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 amount             -- Amount to door is locked. A value of   */
-/*                                   0-255 is normal, else                  */
-/*                                   DOOR_ABSOLUTE_LOCK                     */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFindDoor                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorGetLockValue
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorGetLockValue returns the lockedness of the door.
+ *
+ *  @param sector -- Sector containing door
+ *
+ *  @return Amount to door is locked. A value of
+ *      0-255 is normal, else
+ *      DOOR_ABSOLUTE_LOCK
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 DoorGetLockValue(T_word16 sector)
 {
     T_door *p_door ;
@@ -1402,53 +836,22 @@ T_word16 DoorGetLockValue(T_word16 sector)
 }
 
 
-/****************************************************************************/
-/*  Routine:  DoorCreate                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorCreate makes another door out of a sector.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector containing door                 */
-/*                                                                          */
-/*    T_sword16 floor, ceiling    -- Heights to go between                  */
-/*                                                                          */
-/*    T_word16 timeOpen           -- Time taken to open and close door      */
-/*                                                                          */
-/*    T_word16 timePause          -- Time to pause with door open           */
-/*                                                                          */
-/*    T_byte8 lockLevel           -- Level of lock, 0=unlock, 255=permanent */
-/*                                                                          */
-/*    T_sword16 soundX, soundY    -- Position of door sound                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorCreate makes another door out of a sector.
+ *
+ *  @param sector -- Sector containing door
+ *  @param floor -- Floor height to go between
+ *  @param ceiling -- Ceiling height to go between
+ *  @param timeOpen -- Time taken to open and close door
+ *  @param timePause -- Time to pause with door open
+ *  @param lockLevel -- Level of lock, 0=unlock, 255=permanent
+ *  @param soundX -- X Position of door sound
+ *  @param soundY -- Y Position of door sound
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorCreate(
            T_word16 sector,
            T_sword16 floor,
@@ -1493,31 +896,17 @@ T_void DoorCreate(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorSetRequiredItem                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorSetRequiredItem makes a door that is locked become a door that    */
-/*  requires a particular item.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 doorSector         -- Sector containing door                 */
-/*                                                                          */
-/*    T_word16 itemType           -- Required item                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/10/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorSetRequiredItem
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorSetRequiredItem makes a door that is locked become a door that
+ *  requires a particular item.
+ *
+ *  @param doorSector -- Sector containing door
+ *  @param itemType -- Required item
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoorSetRequiredItem(T_word16 doorSector, T_word16 itemType)
 {
     T_door *p_door ;
@@ -1535,34 +924,18 @@ T_void DoorSetRequiredItem(T_word16 doorSector, T_word16 itemType)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoorGetRequiredItem                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoorGetRequiredItem returns the object type that the door requires    */
-/*  or 0 if no object is required.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 doorSector         -- Sector containing door                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Object type required, or 0 for none    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/10/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoorGetRequiredItem
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoorGetRequiredItem returns the object type that the door requires
+ *  or 0 if no object is required.
+ *
+ *  @param doorSector -- Sector containing door
+ *
+ *  @return Object type required, or 0 for none
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 DoorGetRequiredItem(T_word16 doorSector)
 {
     T_word16 itemType = 0 ;
@@ -1583,6 +956,7 @@ T_word16 DoorGetRequiredItem(T_word16 doorSector)
     return itemType ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  DOOR.C                                                  */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  DOOR.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,14 @@
-/****************************************************************************/
-/*    FILE:  SM.C                                                           */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMCPLAY.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Playing a game in a simple state machine.
+ * @addtogroup SMCPLAY
+ * @brief Playing Game State Machine
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLIENT.H"
 #include "CMDQUEUE.H"
 #include "CONTROL.H"
@@ -58,9 +66,6 @@ static T_stateMachineHandle G_smHandle ;
 static E_Boolean G_init = FALSE ;
 
 
-/****************************************************************************/
-/*                             CONDITIONALS                                 */
-/****************************************************************************/
 static T_stateMachineConditional SMCPlayGameWaitForGoToCond[] = {
     {
         SMCPlayGameCheckFlag,                         /* conditional callback */
@@ -107,9 +112,6 @@ static T_stateMachineConditional SMCPlayGameDoGameCond[] = {
 /*-------------------------------------------------------------------------*/
 
 
-/****************************************************************************/
-/*                              STATES                                      */
-/****************************************************************************/
 static T_stateMachineState SMCPlayGameStates[] = {
     /* SMCPLAY_GAME_WAIT_FOR_GO_TO_STATE */
     {
@@ -175,43 +177,15 @@ static T_stateMachine SMCPlayGameStateMachine = {
 
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameInitialize                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameInitialize                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineHandle           -- Handle to state machine created     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameInitialize
+ *
+ *  @return Handle to state machine created
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMCPlayGameInitialize(T_void)
 {
     DebugRoutine("SMCPlayGameInitialize") ;
@@ -234,43 +208,13 @@ T_stateMachineHandle SMCPlayGameInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameFinish                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameFinish                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameFinish
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameFinish(T_void)
 {
     DebugRoutine("SMCPlayGameFinish") ;
@@ -290,43 +234,13 @@ T_void SMCPlayGameFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameUpdate                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameUpdate                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameUpdate
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameUpdate(T_void)
 {
     DebugRoutine("SMCPlayGameUpdate") ;
@@ -337,43 +251,15 @@ T_void SMCPlayGameUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameDataInit                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameDataInit                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameDataInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameDataInit
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameDataInit(T_stateMachineHandle handle)
 {
     T_SMCPlayGameData *p_data ;
@@ -391,43 +277,15 @@ T_void SMCPlayGameDataInit(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameDataFinish                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameDataFinish                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameDataFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameDataFinish
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameDataFinish(T_stateMachineHandle handle)
 {
     T_SMCPlayGameData *p_data ;
@@ -445,45 +303,16 @@ T_void SMCPlayGameDataFinish(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameCheckFlag                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameCheckFlag                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameCheckFlag
+ *
+ *  @param handle -- Handle to state machine
+ *  @param flag -- Flag to change
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMCPlayGameCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -508,45 +337,16 @@ E_Boolean SMCPlayGameCheckFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameSetFlag                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameSetFlag                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*    E_Boolean state              -- New state of flag                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameSetFlag
+ *
+ *  @param flag -- Flag to change
+ *  @param state -- New state of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameSetFlag(
            T_word16 flag,
            E_Boolean state)
@@ -569,45 +369,16 @@ T_void SMCPlayGameSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameWaitForGoToEnter                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameWaitForGoToEnter                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameWaitForGoToEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameWaitForGoToEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameWaitForGoToEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -638,45 +409,16 @@ SMCPlayGameSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameGoToPlaceEnter                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameGoToPlaceEnter                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameGoToPlaceEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameGoToPlaceEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameGoToPlaceEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -704,45 +446,16 @@ SMCPlayGameSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameTimedOutEnter                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameTimedOutEnter                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameTimedOutEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameTimedOutEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameTimedOutEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -758,45 +471,16 @@ T_void SMCPlayGameTimedOutEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameEndGameEnter                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCPlayGameEndGameEnter                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCPlayGameGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameEndGameEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameEndGameEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameEndGameEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -811,30 +495,16 @@ T_void SMCPlayGameEndGameEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameDoGameEnter                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    SMCPlayGameDoGameEnter                                                */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameDoGameEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameDoGameEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameDoGameEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -860,30 +530,16 @@ T_void SMCPlayGameDoGameEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameDoGameIdle                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    SMCPlayGameDoGameIdle                                                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameDoGameIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameDoGameIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameDoGameIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -915,31 +571,17 @@ T_void SMCPlayGameDoGameIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCPlayGameDoGameExit                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    SMCPlayGameDoGameExit                                                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*    T_word32 extraData           -- Not used                              */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCPlayGameDoGameExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCPlayGameDoGameExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCPlayGameDoGameExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -961,6 +603,7 @@ T_void SMCPlayGameDoGameExit(
 }
 
 
-/****************************************************************************/
-/*    END OF FILE:  SM.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMCPLAY.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  HARDFORM.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  HARDFORM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Hard Forms are predefined forms in the game system that the player
+ * can jump between.  Town UI, Bank UI, and Guild UI are all examples.
+ * Going to a Hard Form causes the game to drop all previous forms
+ * (except the banner UI) for this form.
+ *
+ * @addtogroup HARDFORM
+ * @brief Hard Form UI Game System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "BANKUI.H"
 #include "BUTTON.H"
@@ -385,6 +397,7 @@ T_void HardFormHandleMouseTest2(
 
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  HARDFORM.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  HARDFORM.C
+ *-------------------------------------------------------------------------*/

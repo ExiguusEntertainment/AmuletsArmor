@@ -1,7 +1,13 @@
-/****************************************************************************/
-/*    FILE:  3D_COLLI.C                                                     */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * File:  3D_COLLI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * @addtogroup _3D_COLLI
+ * @brief 3D Collision Routines
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_TRIG.H"
@@ -213,25 +219,25 @@ static E_Boolean ICanSqueezeThroughWithClimb(
 
 T_sword32 Mult32x32AndCompare(T_sword32 _esi, T_sword32 _edi,
                               T_sword32 _eax, T_sword32 _ebx)
-{ 
-   __asm { 
-      mov esi, _esi 
-      mov edi, _edi 
-      mov eax, _eax 
-      mov ebx, _ebx 
-      imul ebx  
-      xchg eax, esi  
-      xchg edx, edi  
-      mov ebx, edx  
-      imul ebx  
-      sub eax, esi  
-      sbb edx, edi  
-      test edx, edx  
-      je done  
-      mov eax, edx  
-     done:    
-      mov _eax, eax	 
-   }  
+{
+   __asm {
+      mov esi, _esi
+      mov edi, _edi
+      mov eax, _eax
+      mov ebx, _ebx
+      imul ebx
+      xchg eax, esi
+      xchg edx, edi
+      mov ebx, edx
+      imul ebx
+      sub eax, esi
+      sbb edx, edi
+      test edx, edx
+      je done
+      mov eax, edx
+     done:
+      mov _eax, eax
+   }
 
    return _eax;
 }
@@ -311,44 +317,16 @@ T_sword32 Mult32By32AndDiv32 (T_sword32 _eax, T_sword32 _ebx,
 
 #endif /** TARGET_UNIX **/
 
-/****************************************************************************/
-/*  Routine:  IAddSurroundingSector              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine adds a sector to the surrounding sector list if it       */
-/*  is not already in the sector list.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector to add                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddSurroundingSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine adds a sector to the surrounding sector list if it
+ *  is not already in the sector list.
+ *
+ *  @param sector -- Sector to add
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IAddSurroundingSector(T_word16 sector)
 {
     T_word16 i ;
@@ -372,49 +350,22 @@ DebugCheck((sector < G_Num3dSectors)) ;
     G_numSurroundingSectors++ ;
 }
 
-/****************************************************************************/
-/*  Routine:  IIsFloorAndCeilingOk               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Given a line/wall on the map, determine if the floor and ceiling      */
-/*  of both sides of the line are in agreement with what is allowed         */
-/*  for going over edges.  In addition, note if we wish to add the          */
-/*  sectors to the surrounding sector list.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 lineNum            -- Wall to check floors and ceilings.     */
-/*                                                                          */
-/*    E_Boolean f_add             -- Flag where TRUE=add to sector list     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- FALSE = colliding with an edge.        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IAddSurroundSector                                                    */
-/*    IUpdateSectorHeights                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IIsFloorAndCeilingOk
+ *-------------------------------------------------------------------------*/
+/**
+ *  Given a line/wall on the map, determine if the floor and ceiling
+ *  of both sides of the line are in agreement with what is allowed
+ *  for going over edges.  In addition, note if we wish to add the
+ *  sectors to the surrounding sector list.
+ *
+ *  @param lineNum -- Wall to check floors and ceilings.
+ *  @param f_add -- Flag where TRUE=add to sector list
+ *  @param p_obj -- Source object being checked
+ *
+ *  @return FALSE = colliding with an edge.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean IIsFloorAndCeilingOk(
               T_word16 lineNum,
               E_Boolean f_add,
@@ -526,49 +477,21 @@ E_Boolean IIsFloorAndCeilingOk(
 }
 
 #if 0
-/****************************************************************************/
-/*  Routine:  ICheckSegmentHitBox                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICheckSegmentHitBox determines if a line hits a box and returns       */
-/*  what egdes are being hit.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 lineNum            -- Wall to check floors and ceilings.     */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- Upper left point of box                */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Lower right of box                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- 4 bit encoded word telling what sides  */
-/*                                   are hitting the line.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICheckSegmentHitBox
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICheckSegmentHitBox determines if a line hits a box and returns
+ *  what egdes are being hit.
+ *
+ *  @param lineNum -- Wall to check floors and ceilings.
+ *  @param y1 -- Upper left point of box
+ *  @param y2 -- Lower right of box
+ *
+ *  @return 4 bit encoded word telling what sides
+ *      are hitting the line.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 ICheckSegmentHitBox(
               T_word16 lineNum,
               T_sword16 x1,
@@ -675,47 +598,21 @@ T_sword16 ICheckSegmentHitBox(
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  Collide3dCheckSegmentHitBox            * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Collide3dCheckSegmentHitBox determines quickly if a line hits a box.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 lineNum            -- Wall to check floors and ceilings.     */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- Upper left point of box                */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Lower right of box                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- TRUE=collision, else FALSE             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  Collide3dCheckSegmentHitBox
+ *-------------------------------------------------------------------------*/
+/**
+ *  Collide3dCheckSegmentHitBox determines quickly if a line hits a box.
+ *
+ *  @param lineNum -- Wall to check floors and ceilings.
+ *  @param x1 -- Left point of box
+ *  @param y1 -- Upper point of box
+ *  @param x2 -- Right of box
+ *  @param y2 -- Lower of box
+ *
+ *  @return TRUE=collision, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 Collide3dCheckSegmentHitBox(
               T_word16 lineNum,
               T_sword16 x1,
@@ -804,48 +701,24 @@ T_sword16 Collide3dCheckSegmentHitBox(
     return FALSE ;
 }
 
-/****************************************************************************/
-/*  Routine:  ProjectXYOntoLine                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ProjectXYOntoLine does the calculation necessary to do a linear       */
-/*  projection of a vector going through the origin (the point) along       */
-/*  a given line through the origin (the slope).  The new point is returned */
-/*  by reference.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Large values can cause overflow.  Always be careful.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 *pointX, *pointY  -- Point to project                       */
-/*                                                                          */
-/*    T_sword32 slopeX, slopeY    -- Slope to project along                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Mult32By32AndDiv                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ProjectXYOntoLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  ProjectXYOntoLine does the calculation necessary to do a linear
+ *  projection of a vector going through the origin (the point) along
+ *  a given line through the origin (the slope).  The new point is returned
+ *  by reference.
+ *
+ *  NOTE: 
+ *  Large values can cause overflow.  Always be careful.
+ *
+ *  @param pointX -- X Point to project
+ *  @param pointY -- Y Point to project
+ *  @param slopeX -- X Slope to project along
+ *  @param slopeY -- Y Slope to project along
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ProjectXYOntoLine(
            T_sword32 *pointX,
            T_sword32 *pointY,
@@ -917,50 +790,25 @@ T_void ProjectXYOntoLine(
 }
 
 #if 0
-/****************************************************************************/
-/*  Routine:  CheckVertexHit                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CheckVertexHit is a routine to determine if the given box collides    */
-/*  with any of the vertices of the lines on the map.  The old location     */
-/*  is given to better determine the angle of approach and what the rebound */
-/*  slope should be.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine is not currently being used and might be removed soon.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 oldX, oldY        -- Where box has moved from               */
-/*                                                                          */
-/*    T_sword32 x1, y1            -- Upper left of box                      */
-/*                                                                          */
-/*    T_sword32 x2, y2            -- Lower right of box                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = vertex was hit.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsFloorAndCeilingOk                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CheckVertexHit
+ *-------------------------------------------------------------------------*/
+/**
+ *  CheckVertexHit is a routine to determine if the given box collides
+ *  with any of the vertices of the lines on the map.  The old location
+ *  is given to better determine the angle of approach and what the rebound
+ *  slope should be.
+ *
+ *  NOTE: 
+ *  This routine is not currently being used and might be removed soon.
+ *
+ *  @param oldY -- Where box has moved from
+ *  @param y1 -- Upper left of box
+ *  @param y2 -- Lower right of box
+ *
+ *  @return TRUE = vertex was hit.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean CheckVertexHit(
               T_sword32 oldX,
               T_sword32 oldY,
@@ -1077,48 +925,22 @@ E_Boolean CheckVertexHit(
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  IGetBlock                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IGetBlock is used to determine what list of lines to used based       */
-/*  on a coordinate on the map.  These list of lines are used to determine  */
-/*  what walls are near a location.  It speeds up collision detection very  */
-/*  much.  The returned value is not the index of the list, but an index    */
-/*  to that list exactly (from the start of all lists).                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- Point to get Block for                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                   -- Index to list from beginning, or -1    */
-/*                                   if point is out of bounds.             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IGetBlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IGetBlock is used to determine what list of lines to used based
+ *  on a coordinate on the map.  These list of lines are used to determine
+ *  what walls are near a location.  It speeds up collision detection very
+ *  much.  The returned value is not the index of the list, but an index
+ *  to that list exactly (from the start of all lists).
+ *
+ *  @param y -- Point to get Block for
+ *
+ *  @return Index to list from beginning, or -1
+ *      if point is out of bounds.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sword32 IGetBlock(T_sword16 x, T_sword16 y)
 {
     T_sword16 row, column ;
@@ -1146,85 +968,25 @@ static T_sword32 IGetBlock(T_sword16 x, T_sword16 y)
     return index ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dAllowDip                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Allow the next collisions to consider water dipping.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dAllowDip
+ *-------------------------------------------------------------------------*/
+/**
+ *  Allow the next collisions to consider water dipping.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dAllowDip(T_void)
 {
     G_allowDip = TRUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dDisallowDip                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Disallow the next collisions to consider water dipping.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dDisallowDip
+ *-------------------------------------------------------------------------*/
+/**
+ *  Disallow the next collisions to consider water dipping.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dDisallowDip(T_void)
 {
     G_allowDip = FALSE ;
@@ -1235,45 +997,17 @@ E_Boolean View3dIsAllowDip(T_void)
     return G_allowDip ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUpdateSectorHeights               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUpdateSectorHeights is used to update the group of variables that    */
-/*  tell what are the heightest and lowest sectors in a square and what     */
-/*  their values are.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- sector to update                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUpdateSectorHeights
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUpdateSectorHeights is used to update the group of variables that
+ *  tell what are the heightest and lowest sectors in a square and what
+ *  their values are.
+ *
+ *  @param sector -- sector to update
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IUpdateSectorHeights(T_word16 sector)
 {
     T_sword16 floor, ceiling, limit ;
@@ -1299,55 +1033,26 @@ T_void IUpdateSectorHeights(T_word16 sector)
     }
 }
 
-/****************************************************************************/
-/*  Routine:  ILineHitInBlock                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ILineHitInBlock checks all the lines/walls in a block map to determine*/
-/*  if there is a collision.  At the same time it upkeeps a list of sectors */
-/*  this square is over and what are the highest and lowest sector of       */
-/*  that square.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 lastX, lastY      -- Old location for angular information   */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- Upper left corner of square            */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Lower right corner of square           */
-/*                                                                          */
-/*    T_sword32 index             -- Index to list of walls to consider     */
-/*                                                                          */
-/*    T_sword16 radius            -- Radius of the given box                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Collide3dCheckSegmentHitBox                                               */
-/*    IIsFloorAndCeilingOk                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILineHitInBlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  ILineHitInBlock checks all the lines/walls in a block map to determine
+ *  if there is a collision.  At the same time it upkeeps a list of sectors
+ *  this square is over and what are the highest and lowest sector of
+ *  that square.
+ *
+ *  @param lastX -- Old X location for angular information
+ *  @param lastY -- Old Y location for angular information
+ *  @param x1 -- Left corner of square
+ *  @param y1 -- Upper corner of square
+ *  @param x2 -- Right corner of square
+ *  @param y2 -- Lower corner of square
+ *  @param index -- Index to list of walls to consider
+ *  @param radius -- Radius of the given box
+ *  @param p_obj -- Source object being checked
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ILineHitInBlock(
               T_sword16 lastX,
               T_sword16 lastY,
@@ -1447,53 +1152,30 @@ T_void ILineHitInBlock(
     }
 }
 
-/****************************************************************************/
-/*  Routine:  LineHit                            * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    LineHit is used to determine if any line collides with the given box. */
-/*  It also works to determine the sectors, their heights, etc. in the area.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Due to the way this routine works (find the four corners) and the     */
-/*  size of the map blocks, do NOT call this routine with a box bigger than */
-/*  256x256.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 lastX, lastY      -- Old location for angular information   */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- Upper left corner of square            */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Lower right corner of square           */
-/*                                                                          */
-/*    T_sword16 radius            -- Radius of the given box                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=collision, else FALSE             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IGetBlock                                                             */
-/*    ILineHitInBlock                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  LineHit
+ *-------------------------------------------------------------------------*/
+/**
+ *  LineHit is used to determine if any line collides with the given box.
+ *  It also works to determine the sectors, their heights, etc. in the area.
+ *
+ *  NOTE: 
+ *  Due to the way this routine works (find the four corners) and the
+ *  size of the map blocks, do NOT call this routine with a box bigger than
+ *  256x256.
+ *
+ *  @param lastX -- Old X location for angular information
+ *  @param lastY -- Old Y location for angular information
+ *  @param x1 -- Left corner of square
+ *  @param y1 -- Upper corner of square
+ *  @param x2 -- Right corner of square
+ *  @param y2 -- Lower corner of square
+ *  @param radius -- Radius of the given box
+ *  @param p_obj -- Source object
+ *
+ *  @return TRUE=collision, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean LineHit(
               T_sword16 lastX,
               T_sword16 lastY,
@@ -1543,50 +1225,19 @@ E_Boolean LineHit(
 }
 
 #if 0
-/****************************************************************************/
-/*  Routine:  View3dObjectHit                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dObjectHit is used to determine if there are any objects in the  */
-/*  given x, y, and radius (box).  In addition the slope is calculated.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- Location of point to check             */
-/*                                                                          */
-/*    T_word16 radius             -- Radius around point to check           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=object found, else FALSE          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetAttributes                                                   */
-/*    CalculateEstimateDistance                                             */
-/*    ObjectGetX16                                                          */
-/*    ObjectGetY16                                                          */
-/*    ObjectGetRadius                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dObjectHit
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dObjectHit is used to determine if there are any objects in the
+ *  given x, y, and radius (box).  In addition the slope is calculated.
+ *
+ *  @param y -- Location of point to check
+ *  @param radius -- Radius around point to check
+ *
+ *  @return TRUE=object found, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean View3dObjectHit(T_sword16 x, T_sword16 y, T_word16 radius)
 {
     T_sword32 distance ;
@@ -1638,62 +1289,26 @@ E_Boolean View3dObjectHit(T_sword16 x, T_sword16 y, T_word16 radius)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  View3dObjectHitFast                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dObjectHitFast is used to determine if an object will collide    */
-/*  with another object or volume.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- Center location to check               */
-/*                                                                          */
-/*    T_word16 radius             -- Radius around point to check           */
-/*                                                                          */
-/*    T_sword16 lastX, lastY      -- Last location for angular info.        */
-/*                                                                          */
-/*    T_sword16 zBOttom, zTop     -- Bottom and top of the object           */
-/*                                                                          */
-/*    T_sword16 height            -- Height of full object                  */
-/*                                                                          */
-/*    T_3dObject *p_movingObject  -- Object being moved                     */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=object found, else FALSE          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetAttributes                                                   */
-/*    ObjectGetX16                                                          */
-/*    ObjectGetY16                                                          */
-/*    ObjectGetZ16                                                          */
-/*    ObjectGetHeight                                                       */
-/*    MapGetCeilingHeight                                                   */
-/*    ObjectGetHighestPoint                                                 */
-/*    ObjectGetAreaCeilingSector                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dObjectHitFast
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dObjectHitFast is used to determine if an object will collide
+ *  with another object or volume.
+ *
+ *  @param x -- Center X location to check
+ *  @param y -- Center Y location to check
+ *  @param radius -- Radius around point to check
+ *  @param lastX -- Last X location for angular info.
+ *  @param lastY -- Last Y location for angular info.
+ *  @param zBottom -- Bottom of the object
+ *  @param zTop -- Top of the object
+ *  @param height -- Height of full object
+ *  @param p_movingObject -- Object being moved
+ *
+ *  @return TRUE=object found, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean View3dObjectHitFast(
               T_sword16 x,
               T_sword16 y,
@@ -1903,52 +1518,26 @@ printf("  obj x: %08lX, y: %08lX, z: %08lX, h:%d\n", ObjectGetX(p_obj), ObjectGe
     return FALSE ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dMoveToXY                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dMoveTo is used to move the player from the current point        */
-/*  to a new point.                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 *oldX, *oldY      -- Start location and place to put final  */
-/*                                   ending location.                       */
-/*                                                                          */
-/*    T_word16 newx, newy         -- New location to move to                */
-/*                                                                          */
-/*    T_sword32 radius            -- Radius of collision detection.         */
-/*                                                                          */
-/*    T_sword16 height            -- Current height.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CalculateDistance                                                     */
-/*    IMoveToXYWithSteps                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dMoveToXY
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dMoveTo is used to move the player from the current point
+ *  to a new point.
+ *
+ *  @param oldX -- Start X location and place to put final
+ *      ending location.
+ *  @param oldY -- Start Y location and place to put final
+ *      ending location.
+ *  @param newx -- New X location to move to
+ *  @param newy -- New Y location to move to
+ *  @param radius -- Radius of collision detection.
+ *  @param foot -- Foot height of object
+ *  @param head -- Head height of object
+ *  @param height -- Current height.
+ *  @param p_obj -- Object moving
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 View3dMoveToXY(
               T_sword32 *oldX,
               T_sword32 *oldY,
@@ -1991,52 +1580,26 @@ T_sword16 View3dMoveToXY(
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dMoveToXYFast                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dMoveToXYFast is used to move from a point to another point      */
-/*  using the fast version of the algorithms.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 *oldX, *oldY      -- Start location and place to put final  */
-/*                                   ending location.                       */
-/*                                                                          */
-/*    T_word16 newx, newy         -- New location to move to                */
-/*                                                                          */
-/*    T_sword32 radius            -- Radius of collision detection.         */
-/*                                                                          */
-/*    T_sword16 height            -- Current height.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CalculateDistance                                                     */
-/*    IMoveToXYWithSteps                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/29/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dMoveToXYFast
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dMoveToXYFast is used to move from a point to another point
+ *  using the fast version of the algorithms.
+ *
+ *  @param oldX -- Start X location and place to put final
+ *      ending location.
+ *  @param oldY -- Start Y location and place to put final
+ *      ending location.
+ *  @param newx -- New X location to move to
+ *  @param newy -- New Y location to move to
+ *  @param foot -- Foot height of object
+ *  @param head -- Head height of object
+ *  @param radius -- Radius of collision detection.
+ *  @param height -- Current height.
+ *  @param p_obj -- Object moving
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 View3dMoveToXYFast(
               T_sword32 *oldX,
               T_sword32 *oldY,
@@ -2053,7 +1616,7 @@ T_sword16 View3dMoveToXYFast(
     E_Boolean hit ;
 
     sector = View3dFindSectorNum(
-                 (T_sword16)(newx>>16), 
+                 (T_sword16)(newx>>16),
                  (T_sword16)(newy>>16)) ;
     if (sector == 0xFFFF)
         return TRUE ;
@@ -2073,54 +1636,26 @@ T_sword16 View3dMoveToXYFast(
     return hit ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dMoveTo                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dMoveTo is used to move the player from the current point        */
-/*  to a new point.                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 *oldX, *oldY      -- Start location and place to put final  */
-/*                                   ending location.                       */
-/*                                                                          */
-/*    T_word16 angle              -- What angle to move to                  */
-/*                                                                          */
-/*    T_sword32 step              -- Amount to step along direction         */
-/*                                                                          */
-/*    T_sword32 radius            -- Radius of collision detection.         */
-/*                                                                          */
-/*    T_sword16 height            -- Current height.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IMoveToXYWithSteps                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/15/95  Created                                                */
-/*    LES  05/12/95  Extracted functionality and put in IMoveToXYWithStep   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dMoveTo
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dMoveTo is used to move the player from the current point
+ *  to a new point.
+ *
+ *  @param oldX -- X Start location and place to put final
+ *      ending location.
+ *  @param oldY -- Y Start location and place to put final
+ *      ending location.
+ *  @param angle -- What angle to move to
+ *  @param step -- Amount to step along direction
+ *  @param radius -- Radius of collision detection.
+ *  @param foot -- Foot height of object moving
+ *  @param head -- Head height of object moving
+ *  @param height -- Current height.
+ *  @param p_obj -- Pointer to object moving
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 View3dMoveTo(
          T_sword32 *oldX,
          T_sword32 *oldY,
@@ -2227,54 +1762,33 @@ E_Boolean CheckLineCanStepThrough(T_word16 i, T_3dObject *p_obj)
     return canStep ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMoveToXYWithStep                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMoveToXYWithStep moves the player to given new location and must     */
-/*  also be given the amount of distance is being traveled.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    G_currentHeight MUST be set in order for this routine to work         */
-/*  correctly.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 *oldX, *oldY      -- Start location and place to put final  */
-/*                                   ending location.                       */
-/*                                                                          */
-/*    T_sword32 newX, newY        -- End location to move to                */
-/*                                                                          */
-/*    T_sword32 radius            -- Radius of collision detection.         */
-/*                                                                          */
-/*    T_sword32 step              -- Amount to step along direction         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MoveTo                                                                */
-/*    ProjectXYOntoLine                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/12/95  Created.  Most of code came from View3dMoveTo          */
-/*                                                                          */
-/****************************************************************************/
 extern T_byte8 IOnRightOfLine(T_sword16 x, T_sword16 y, T_word16 line) ;
 
+/*-------------------------------------------------------------------------*
+ * Routine:  IMoveToXYWithStep
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMoveToXYWithStep moves the player to given new location and must
+ *  also be given the amount of distance is being traveled.
+ *
+ *  NOTE: 
+ *  G_currentHeight MUST be set in order for this routine to work
+ *  correctly.
+ *
+ *  @param oldX -- X Start location and place to put final
+ *      ending location.
+ *  @param oldY -- Y Start location and place to put final
+ *      ending location.
+ *  @param newX -- End X location to move to
+ *  @param newY -- End Y location to move to
+ *  @param radius -- Radius of collision detection.
+ *  @param step -- Amount to step along direction
+ *  @param foot -- Foot level
+ *  @param head -- Head level
+ *  @param height -- Height of this object
+ *  @param p_obj -- Object doing the movement
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 IMoveToXYWithStep(
               T_sword32 *oldX,
               T_sword32 *oldY,
@@ -2599,47 +2113,17 @@ T_sword16 IMoveToXYWithStep(
     return code ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetFloorAndCeilingHeight                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dGetFloorAndCeilingHeight is used to get the highest and lowest  */
-/*  floor and ceiling of the last collisional move.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 *floor            -- Returned floor height                  */
-/*                                                                          */
-/*    T_sword16 *ceiling          -- Returned ceiling height                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetFloorAndCeilingHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dGetFloorAndCeilingHeight is used to get the highest and lowest
+ *  floor and ceiling of the last collisional move.
+ *
+ *  @param floor -- Returned floor height
+ *  @param ceiling -- Returned ceiling height
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dGetFloorAndCeilingHeight(T_sword16 *floor, T_sword16 *ceiling)
 {
     DebugRoutine("View3dGetFloorAndCeilingHeight") ;
@@ -2650,45 +2134,16 @@ T_void View3dGetFloorAndCeilingHeight(T_sword16 *floor, T_sword16 *ceiling)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetFloorAbove                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dGetFloorAbove returns the highest floor that the collisional    */
-/*  move moved over.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 *above            -- Returned floor                         */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetFloorAbove
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dGetFloorAbove returns the highest floor that the collisional
+ *  move moved over.
+ *
+ *  @param above -- Returned floor
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dGetFloorAbove(T_word16 *above)
 {
     DebugRoutine("View3dGetFloorAbove") ;
@@ -2699,45 +2154,16 @@ T_void View3dGetFloorAbove(T_word16 *above)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetCeilingBelow                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dGetCeilingBelow returns the lowest ceiilng that the collisional */
-/*  move moved over.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 *below            -- Returned ceiling                       */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetCeilingBelow
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dGetCeilingBelow returns the lowest ceiilng that the collisional
+ *  move moved over.
+ *
+ *  @param below -- Returned ceiling
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dGetCeilingBelow(T_word16 *below)
 {
     DebugRoutine("View3dGetCeilngBelow") ;
@@ -2748,45 +2174,16 @@ T_void View3dGetCeilingBelow(T_word16 *below)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dSetExceptObject                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dSetExceptObject declares   what object is to be consider non-   */
-/*  collidable                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 exceptId           -- ID of object to exclude                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectFind                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dSetExceptObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dSetExceptObject declares   what object is to be consider non-
+ *  collidable
+ *
+ *  @param exceptId -- ID of object to exclude
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dSetExceptObject(T_word16 exceptId)
 {
     T_3dObject *p_obj ;
@@ -2801,45 +2198,17 @@ T_void View3dSetExceptObject(T_word16 exceptId)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dSetExceptObjectByPtr                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dSetExceptObjectByPtr declares what object is to be consider non-*/
-/*  collidable                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *p_objMove  -- Direct pointer to object's move struc  */
-/*                                   to exclude.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dSetExceptObjectByPtr
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dSetExceptObjectByPtr declares what object is to be consider non-
+ *  collidable
+ *
+ *  @param p_objMove -- Direct pointer to object's move struc
+ *      to exclude.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dSetExceptObjectByPtr(T_objMoveStruct *p_objMove)
 {
     DebugRoutine("View3dSetExceptObjectByPtr") ;
@@ -2849,44 +2218,21 @@ T_void View3dSetExceptObjectByPtr(T_objMoveStruct *p_objMove)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetSurroundingSectors                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine returns a pointer to a list of sectors and the number    */
-/*  sectors in that list.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The data at the returned pointer is NOT to be modified, just copied.  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 *numSectors        -- Returned number of sectors in list.    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 *                  -- Pointer to list of sectors             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetSurroundingSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine returns a pointer to a list of sectors and the number
+ *  sectors in that list.
+ *
+ *  NOTE: 
+ *  The data at the returned pointer is NOT to be modified, just copied.
+ *
+ *  @param numSectors -- Returned number of sectors in list.
+ *
+ *  @return Pointer to list of sectors
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 *View3dGetSurroundingSectors(T_word16 *numSectors)
 {
     DebugRoutine("View3dGetSurroundingSectors") ;
@@ -2898,44 +2244,14 @@ T_word16 *View3dGetSurroundingSectors(T_word16 *numSectors)
     return G_surroundingSectors ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dMoveToFast                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dMoveToFast is the same as View3dMoveTo but does not try to      */
-/*  slide and thus is a faster version.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dMoveToFast
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dMoveToFast is the same as View3dMoveTo but does not try to
+ *  slide and thus is a faster version.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 View3dMoveToFast(
          T_sword32 *oldX,
          T_sword32 *oldY,
@@ -2959,74 +2275,42 @@ T_sword16 View3dMoveToFast(
     G_numSurroundingSectors = 0 ;
 
     code = MoveToFast(
-               oldX, 
-               oldY, 
-               newX, 
-               newY, 
-               step, 
-               radius, 
-               foot, 
-               head, 
-               (T_sword16)height, 
+               oldX,
+               oldY,
+               newX,
+               newY,
+               step,
+               radius,
+               foot,
+               head,
+               (T_sword16)height,
                p_obj) ;
 
     return code ;
 }
 
-/****************************************************************************/
-/*  Routine:  MoveToFast                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MoveToFast takes a given object and tries to move it to another       */
-/*  location.  If a collision is detected, a flag is returned and the       */
-/*  global variables are filled with additional information.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 *oldX, *oldY      -- Start point, and returned final point  */
-/*                                                                          */
-/*    T_sword32 newX, newY        -- Target end-point                       */
-/*                                                                          */
-/*    T_sword32 distance          -- How far along this is (status)         */
-/*                                                                          */
-/*    T_sword32 radius            -- Size of object                         */
-/*                                                                          */
-/*    T_sword32 foot              -- Foot height (foot + climbHeight)       */
-/*                                                                          */
-/*    T_sword32 head              -- top of head                            */
-/*                                                                          */
-/*    T_sword16 height            -- Height of object (fully)               */
-/*                                                                          */
-/*    T_3dObject *p_movingObject  -- Object being moved                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=collision                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MoveToFast                                                            */
-/*    LineHit                                                               */
-/*    View3dObjectHitFast                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  MoveToFast
+ *-------------------------------------------------------------------------*/
+/**
+ *  MoveToFast takes a given object and tries to move it to another
+ *  location.  If a collision is detected, a flag is returned and the
+ *  global variables are filled with additional information.
+ *
+ *  @param oldX -- X Start point, and returned final point
+ *  @param oldY -- Y Start point, and returned final point
+ *  @param newX -- X Target end-point
+ *  @param newY -- Y Target end-point
+ *  @param distance -- How far along this is (status)
+ *  @param radius -- Size of object
+ *  @param foot -- Foot height (foot + climbHeight)
+ *  @param head -- top of head
+ *  @param height -- Height of object (fully)
+ *  @param p_movingObject -- Object being moved
+ *
+ *  @return TRUE=collision
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MoveToFast(
          T_sword32 *oldX,
          T_sword32 *oldY,
@@ -3145,51 +2429,24 @@ T_sword32 midX, midY ;
     return FALSE ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICheckLineHitsLine                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICheckLineHitsLine takes in the coordinates of a line and determines  */
-/*  if it hits the given line number on the map.  If they do hit, the       */
-/*  distance to that line is returned.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- First point of line to check           */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Second point of line to check          */
-/*                                                                          */
-/*    T_word16 lineNum            -- Line to check collision with           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Distance along line of where hit occurs*/
-/*                                   or -1 if no hit.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*    LES  09/07/95  Commented                                              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICheckLineHitsLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICheckLineHitsLine takes in the coordinates of a line and determines
+ *  if it hits the given line number on the map.  If they do hit, the
+ *  distance to that line is returned.
+ *
+ *  @param x1 -- X First point of line to check
+ *  @param y1 -- X First point of line to check
+ *  @param x2 -- Y Second point of line to check
+ *  @param y2 -- Y Second point of line to check
+ *  @param lineNum -- Line to check collision with
+ *
+ *  @return Distance along line of where hit occurs
+ *      or -1 if no hit.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 ICheckLineHitsLine(
               T_sword16 x1,
               T_sword16 y1,
@@ -3262,56 +2519,26 @@ T_sword16 ICheckLineHitsLine(
     return x ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dFindLineHits                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dFindLineHits takes the given line coordinates and array and     */
-/*  determines a list of lines that intersect.  Instead of returning        */
-/*  intersection coordinates, distances to that line is returned.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- First point of line to check           */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Second point of line to check          */
-/*                                                                          */
-/*    T_word16 maxHits            -- Maximum number of array points         */
-/*                                                                          */
-/*    T_sword16 *lines            -- List of lines and distances found.     */
-/*                                   The array alternates between line      */
-/*                                   number and then distance.              */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of lines hit.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MathArcTangent                                                        */
-/*    MathCosineLookup                                                      */
-/*    MathSineLookup                                                        */
-/*    ICheckLineHitsLine                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  ??/??/95  Created                                                */
-/*    LES  09/07/95  Commented                                              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dFindLineHits
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dFindLineHits takes the given line coordinates and array and
+ *  determines a list of lines that intersect.  Instead of returning
+ *  intersection coordinates, distances to that line is returned.
+ *
+ *  @param x1 -- First X point of line to check
+ *  @param y1 -- First Y point of line to check
+ *  @param x2 -- Second X point of line to check
+ *  @param y2 -- Second Y point of line to check
+ *  @param maxHits -- Maximum number of array points
+ *  @param lines -- List of lines and distances found.
+ *      The array alternates between line
+ *      number and then distance.
+ *
+ *  @return Number of lines hit.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 View3dFindLineHits(
            T_sword16 x1,
            T_sword16 y1,
@@ -3353,56 +2580,30 @@ T_word16 View3dFindLineHits(
     return count ;
 }
 
-/****************************************************************************/
-/*  Routine:  Mult32By32AndDiv32                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Mult32By32AndDiv32 is more of a macro to compute the following:       */
-/*                                                                          */
-/*                f(a, b, c) = (a * b) / c                                  */
-/*                                                                          */
-/*  Since all the values are 32 bit, the first multiply can result in       */
-/*  a 64 bit number.  If assembly is turned on, this 64 bit number is       */
-/*  can be quickly divided by c since the internal registers hold this      */
-/*  value correctly.  However, if assembly is turned off, all the values    */
-/*  are shifted right by 16 bits, but the answer is roughly the same.       */
-/*  Unfortunately, this can cause problems in accuracy and divide by zero   */
-/*  errors.                                                                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    See above.  Calling routine must be sure that c is not zero.          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 a                 -- Value to multiply                      */
-/*                                                                          */
-/*    T_sword32 b                 -- Value to multiply                      */
-/*                                                                          */
-/*    T_sword32 c                 -- Value to divide                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                   -- (a * b) / c                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  Mult32By32AndDiv32
+ *-------------------------------------------------------------------------*/
+/**
+ *  Mult32By32AndDiv32 is more of a macro to compute the following -
+ *  f(a, b, c) = (a * b) / c
+ *  Since all the values are 32 bit, the first multiply can result in
+ *  a 64 bit number.  If assembly is turned on, this 64 bit number is
+ *  can be quickly divided by c since the internal registers hold this
+ *  value correctly.  However, if assembly is turned off, all the values
+ *  are shifted right by 16 bits, but the answer is roughly the same.
+ *  Unfortunately, this can cause problems in accuracy and divide by zero
+ *  errors.
+ *
+ *  NOTE: 
+ *  See above.  Calling routine must be sure that c is not zero.
+ *
+ *  @param a -- Value to multiply
+ *  @param b -- Value to multiply
+ *  @param c -- Value to divide
+ *
+ *  @return (a * b) / c
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifdef NO_ASSEMBLY
 T_sword32 Mult32By32AndDiv32(
               T_sword32 a,
@@ -3422,49 +2623,21 @@ T_sword32 Mult32By32AndDiv32(
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  IIsOnLeftOfLine                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IIsOnLeftOfLine tests to see if a point is on the left side           */
-/*  of a line (left is defined as you look from the start/first point       */
-/*  and look at the end/second point) or if the point is on the line.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 pointX, pointY    -- Point to test if on left or equal      */
-/*                                                                          */
-/*    T_sword32 lineX1, lineY1    -- Start/First point                      */
-/*                                                                          */
-/*    T_sword32 lineX2, lineY2    -- End/Second point                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=on side of line, else FALSE       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Mult32x32AndCompare                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IIsOnLeftOfLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  IIsOnLeftOfLine tests to see if a point is on the left side
+ *  of a line (left is defined as you look from the start/first point
+ *  and look at the end/second point) or if the point is on the line.
+ *
+ *  @param pointY -- Point to test if on left or equal
+ *  @param lineY1 -- Start/First point
+ *  @param lineY2 -- End/Second point
+ *
+ *  @return TRUE=on side of line, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IIsOnLeftOfLine(
                      T_sword32 pointX,
                      T_sword32 pointY,
@@ -3490,55 +2663,30 @@ static E_Boolean IIsOnLeftOfLine(
 
 }
 
-/****************************************************************************/
-/*  Routine:  Mult32x32AndCompare                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Mult32x32AndCompare is a specialize routine that does an estimate     */
-/*  of the following fuction:                                               */
-/*                                                                          */
-/*    f(a,b,c,d) = (c*d) - (a*b)                                            */
-/*                                                                          */
-/*  The reason it is an estimate is that you can only depend on getting     */
-/*  three values:                                                           */
-/*    0 if the two sides are equal.                                         */
-/*    POSITIVE if (c*d) is greater than (a*b)                               */
-/*    NEGATIVE if (c*d) is less than (a*b)                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The C routine is a 32 bit approximization of the assembly version     */
-/*  which is true to 64 bits.  Downgrading may cause more 0's returned      */
-/*  than expected.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 a,b,c,d           -- Input values                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                   -- 0, POSITIVE, or NEGATIVE               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
 #ifdef NO_ASSEMBLY
+/*-------------------------------------------------------------------------*
+ * Routine:  Mult32x32AndCompare
+ *-------------------------------------------------------------------------*/
+/**
+ *  Mult32x32AndCompare is a specialize routine that does an estimate
+ *  of the following fuction -
+ *  f(a,b,c,d) = (c*d) - (a*b)
+ *  The reason it is an estimate is that you can only depend on getting
+ *  three values -
+ *  0 if the two sides are equal.
+ *  POSITIVE if (c*d) is greater than (a*b)
+ *  NEGATIVE if (c*d) is less than (a*b)
+ *
+ *  NOTE: 
+ *  The C routine is a 32 bit approximization of the assembly version
+ *  which is true to 64 bits.  Downgrading may cause more 0's returned
+ *  than expected.
+ *
+ *  @param a,b,c,d -- Input values
+ *
+ *  @return 0, POSITIVE, or NEGATIVE
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 Mult32x32AndCompare(
               T_sword32 a,
               T_sword32 b,
@@ -3562,53 +2710,24 @@ T_sword32 Mult32x32AndCompare(
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  MoveTo                                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MoveTo     takes a given object and tries to move it to another       */
-/*  location.  If a collision is detected, a flag is returned and the       */
-/*  global variables are filled with additional information.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 oldX, oldY        -- Start point                            */
-/*                                                                          */
-/*    T_sword32 newX, newY        -- Target end-point                       */
-/*                                                                          */
-/*    T_sword32 distance          -- How far along this is (status)         */
-/*                                                                          */
-/*    T_3dObject *p_movingObject  -- Object being moved                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=collision                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MoveTo                                                                */
-/*    LineHit                                                               */
-/*    View3dObjectHitFast                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MoveTo
+ *-------------------------------------------------------------------------*/
+/**
+ *  MoveTo takes a given object and tries to move it to another
+ *  location.  If a collision is detected, a flag is returned and the
+ *  global variables are filled with additional information.
+ *
+ *  @param oldX -- Start X point
+ *  @param oldY -- Start Y point
+ *  @param newX -- Target X end-point
+ *  @param newY -- Target Y end-point
+ *  @param distance -- How far along this is (status)
+ *  @param p_obj -- Object being moved
+ *
+ *  @return TRUE=collision
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MoveTo(
          T_sword32 oldX,
          T_sword32 oldY,
@@ -3705,51 +2824,22 @@ E_Boolean MoveTo(
     return FALSE ;
 }
 
-/****************************************************************************/
-/*  Routine:  Collide3dGetWallsInBox                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Collide3dGetLinesInBox takes the given square (coordinate and square  */
-/*  radius) and determines all walls that collide with this box.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 x, y              -- Center of box                          */
-/*                                                                          */
-/*    T_sword16 radius            -- Radius of box                          */
-/*                                                                          */
-/*    T_word16 maxWalls           -- Max walls allowed to find              */
-/*                                                                          */
-/*    T_word16 *p_walls           -- Where to put the walls                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number walls/lines found               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      IGetBlock                                                           */
-/*      IWallTouchInBlock                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  Collide3dGetWallsInBox
+ *-------------------------------------------------------------------------*/
+/**
+ *  Collide3dGetLinesInBox takes the given square (coordinate and square
+ *  radius) and determines all walls that collide with this box.
+ *
+ *  @param x -- X Center of box
+ *  @param y -- Y Center of box
+ *  @param radius -- Radius of box
+ *  @param maxWalls -- Max walls allowed to find
+ *  @param p_walls -- Where to put the walls
+ *
+ *  @return Number walls/lines found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 Collide3dGetWallsInBox(
              T_sword32 x,
              T_sword32 y,
@@ -3833,55 +2923,24 @@ T_word16 Collide3dGetWallsInBox(
     return numLines ;
 }
 
-/****************************************************************************/
-/*  Routine:  IWallTouchInBlock                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IWallTouchInBlock checks the given block and determines if there      */
-/*  are any walls in that block that touches the given region.  If there    */
-/*  is, that wall is added to the wall list (unless already there).         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x1, y1            -- Upper left corner of box               */
-/*                                                                          */
-/*    T_sword16 x2, y2            -- Lower right corner of box              */
-/*                                                                          */
-/*    T_sword32 block             -- Block in to check walls in             */
-/*                                                                          */
-/*    T_word16 maxWalls           -- Max walls allowed to find              */
-/*                                                                          */
-/*    T_word16 *p_numWalls        -- Walls already found (increment as find)*/
-/*                                                                          */
-/*    T_word16 *p_walls           -- Where to put the walls                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if ran over max walls.            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Collide3dCheckSegmentHitBox                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IWallTouchInBlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IWallTouchInBlock checks the given block and determines if there
+ *  are any walls in that block that touches the given region.  If there
+ *  is, that wall is added to the wall list (unless already there).
+ *
+ *  @param y1 -- Upper left corner of box
+ *  @param y2 -- Lower right corner of box
+ *  @param block -- Block in to check walls in
+ *  @param maxWalls -- Max walls allowed to find
+ *  @param p_numWalls -- Walls already found (increment as find)
+ *  @param p_walls -- Where to put the walls
+ *
+ *  @return TRUE if ran over max walls.
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IWallTouchInBlock(
                      T_sword16 x1,
                      T_sword16 y1,
@@ -3946,54 +3005,23 @@ static E_Boolean IWallTouchInBlock(
     return overflowOccured ;
 }
 
-/****************************************************************************/
-/*  Routine:  Collide3dGetSectorsInBox                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Collide3dGetSectorsInBox determines all the sectors that are in a     */
-/*  square radius box.  In addition, it returns a boolean telling if it     */
-/*  found the box touching a void area.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 x, y              -- Center of box                          */
-/*                                                                          */
-/*    T_sword16 radius            -- Radius of box                          */
-/*                                                                          */
-/*    T_word16 maxSectors         -- Max sectors allowed to be found        */
-/*                                                                          */
-/*    T_word16 *p_sectors         -- Where to put the sectors               */
-/*                                                                          */
-/*    T_word16 *p_numSectors      -- Pointer to store num sectors found     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- Found void area                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Collide3dGetWallsInBox                                                */
-/*    View3dFindSectorNum                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  Collide3dGetSectorsInBox
+ *-------------------------------------------------------------------------*/
+/**
+ *  Collide3dGetSectorsInBox determines all the sectors that are in a
+ *  square radius box.  In addition, it returns a boolean telling if it
+ *  found the box touching a void area.
+ *
+ *  @param y -- Center of box
+ *  @param radius -- Radius of box
+ *  @param maxSectors -- Max sectors allowed to be found
+ *  @param p_sectors -- Where to put the sectors
+ *  @param p_numSectors -- Pointer to store num sectors found
+ *
+ *  @return Found void area
+ *
+ *<!-----------------------------------------------------------------------*/
 #define COLLIDE_3D_MAX_LINES_FOR_SECTORS 100
 E_Boolean Collide3dGetSectorsInBox(
               T_sword32 x,
@@ -4020,7 +3048,7 @@ E_Boolean Collide3dGetSectorsInBox(
 
     /* Start by finding the sector that we are over. */
     sector = View3dFindSectorNum(
-                 (T_sword16)(x>>16), 
+                 (T_sword16)(x>>16),
                  (T_sword16)(y>>16)) ;
 
     /* If this is void, make a note of it. */
@@ -4114,53 +3142,23 @@ E_Boolean Collide3dGetSectorsInBox(
     return foundVoid ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICanSqueezeThrough                      * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICanSqueezeThrough checks to see if the given parameters will fit     */
-/*  in the given list of sectors (typically returned via                    */
-/*  Collide3dGetSectorsInBox).                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 zPos              -- Z height of check                      */
-/*                                                                          */
-/*    T_sword16 climbHeight       -- Height to attempt to stepping up to    */
-/*                                                                          */
-/*    T_sword16 height            -- Vertical height required               */
-/*                                                                          */
-/*    T_word16 numSectors         -- Number of sectors in sector list       */
-/*                                                                          */
-/*    T_word16 *p_sectorList      -- List of sectors to check               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=can fit, else FALSE               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICanSqueezeThrough
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICanSqueezeThrough checks to see if the given parameters will fit
+ *  in the given list of sectors (typically returned via
+ *  Collide3dGetSectorsInBox).
+ *
+ *  @param zPos -- Z height of check
+ *  @param climbHeight -- Height to attempt to stepping up to
+ *  @param height -- Vertical height required
+ *  @param numSectors -- Number of sectors in sector list
+ *  @param p_sectorList -- List of sectors to check
+ *
+ *  @return TRUE=can fit, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean ICanSqueezeThrough(
                      T_sword16 zPos,
                      T_sword16 height,
@@ -4237,53 +3235,23 @@ static E_Boolean ICanSqueezeThrough(
     return canSqueeze ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICanSqueezeThrough                      * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICanSqueezeThrough checks to see if the given parameters will fit     */
-/*  in the given list of sectors (typically returned via                    */
-/*  Collide3dGetSectorsInBox).                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 zPos              -- Z height of check                      */
-/*                                                                          */
-/*    T_sword16 climbHeight       -- Height to attempt to stepping up to    */
-/*                                                                          */
-/*    T_sword16 height            -- Vertical height required               */
-/*                                                                          */
-/*    T_word16 numSectors         -- Number of sectors in sector list       */
-/*                                                                          */
-/*    T_word16 *p_sectorList      -- List of sectors to check               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=can fit, else FALSE               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICanSqueezeThrough
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICanSqueezeThrough checks to see if the given parameters will fit
+ *  in the given list of sectors (typically returned via
+ *  Collide3dGetSectorsInBox).
+ *
+ *  @param zPos -- Z height of check
+ *  @param climbHeight -- Height to attempt to stepping up to
+ *  @param height -- Vertical height required
+ *  @param numSectors -- Number of sectors in sector list
+ *  @param p_sectorList -- List of sectors to check
+ *
+ *  @return TRUE=can fit, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean ICanSqueezeThroughWithClimb(
                      T_sword16 *zPos,
                      T_sword16 climbHeight,
@@ -4377,47 +3345,20 @@ static E_Boolean ICanSqueezeThroughWithClimb(
     return canSqueeze ;
 }
 
-/****************************************************************************/
-/*  Routine:  Collide3dMoveToXYZ                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Collide3dMoveToXYZ takes an object and moves to the given XYZ.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to move                         */
-/*                                                                          */
-/*    T_sword32 newX, newY, newZ  -- Target end-point                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=collision                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MoveTo                                                                */
-/*    LineHit                                                               */
-/*    View3dObjectHitFast                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  Collide3dMoveToXYZ
+ *-------------------------------------------------------------------------*/
+/**
+ *  Collide3dMoveToXYZ takes an object and moves to the given XYZ.
+ *
+ *  @param p_obj -- Object to move
+ *  @param newX -- X Target end-point
+ *  @param newY -- Y Target end-point
+ *  @param newZ -- Z Target end-point
+ *
+ *  @return TRUE=collision
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean Collide3dMoveToXYZ(
               T_3dObject *p_obj,
               T_sword32 newX,
@@ -4595,7 +3536,7 @@ if (ObjectIsCreature(p_obj)) {
     return collided ;
 }
 
-/* LES: 04/12/96 */
+/* LES 04/12/96 */
 T_sword16 Collide3dCheckSegmentHitsSegment(
               T_sword16 x1,
               T_sword16 y1,
@@ -4674,7 +3615,7 @@ T_sword16 Collide3dCheckSegmentHitsSegment(
     return 1 ;
 }
 
-/* LES: 04/12/96 */
+/* LES 04/12/96 */
 T_byte8 Collide3dPointOnRight(
             T_sword32 lineX1,
             T_sword32 lineY1,
@@ -4689,7 +3630,7 @@ T_byte8 Collide3dPointOnRight(
     return 0 ;
 }
 
-/* LES: 04/12/96 */
+/* LES 04/12/96 */
 E_Boolean Collide3dCheckLineOfSight(
               T_sword16 sightStartX,
               T_sword16 sightStartY,
@@ -4744,7 +3685,7 @@ E_Boolean Collide3dCheckLineOfSight(
     return FALSE ;
 }
 
-/* LES: 04/23/96 -- Get a list of walls that intersect the given */
+/* LES 04/23/96 -- Get a list of walls that intersect the given */
 /* line.  Returns the number of walls found. */
 T_word16 Collide3dFindWallList(
              T_sword16 x1,
@@ -4826,14 +3767,18 @@ T_word16 Collide3dFindWallList(
     return count ;
 }
 
-/****************************************************************************/
-/* Routine: Collide3dSetWallDefinition is used to tell what flags */
-/* in a line are actually used for determine a collision. */
-/* Currently, only 2 types of definitions are used: */
-/* A) LINE_IS_IMPASSIBLE    <== used for the player and */
-/*                              normal objects (including missiles) */
-/* B) LINE_IS_IMPASSIBLE | LINE_IS_CREATURE_IMPASSIBLE  <== used */
-/*                              for normal creatures */
+/*-------------------------------------------------------------------------*
+ * Routine:  Collide3dSetWallDefinition is used to tell what flags
+ *-------------------------------------------------------------------------*/
+/**
+ *  in a line are actually used for determine a collision.
+ *  Currently, only 2 types of definitions are used.
+ *  A) LINE_IS_IMPASSIBLE    <== used for the player and
+ *  normal objects (including missiles)
+ *  B) LINE_IS_IMPASSIBLE | LINE_IS_CREATURE_IMPASSIBLE  <== used
+ *  for normal creatures
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void Collide3dSetWallDefinition(T_word16 lineFlags)
 {
     DebugRoutine("Collide3dSetWallDefinition") ;
@@ -4853,7 +3798,6 @@ T_void Collide3dSetWallDefinition(T_word16 lineFlags)
 //    LINE_IS_CREATURE_IMPASSIBLE) ;
 //
 
-/****************************************************************************/
 E_Boolean Collide3dObjectToObjectCheckLineOfSight(
               T_3dObject *p_from,
               T_3dObject *p_to)
@@ -4880,7 +3824,6 @@ E_Boolean Collide3dObjectToObjectCheckLineOfSight(
     return isBlocked ;
 }
 
-/****************************************************************************/
 T_void Collide3dUpdateLineOfSightLast(
            T_lineOfSightLast *p_lastSight,
            T_3dObject *p_target)
@@ -4896,7 +3839,6 @@ T_void Collide3dUpdateLineOfSightLast(
     }
 }
 
-/****************************************************************************/
 E_Boolean Collide3dObjectToXYCheckLineOfSight(
               T_3dObject *p_from,
               T_lineOfSightLast *p_lastSight,
@@ -4931,8 +3873,6 @@ E_Boolean Collide3dObjectToXYCheckLineOfSight(
     return isBlocked ;
 }
 
-/****************************************************************************/
-/* LES: 04/12/96 */
 E_Boolean Collide3dCheckLineOfSightWithZ(
               T_sword16 sightStartX,
               T_sword16 sightStartY,
@@ -4988,7 +3928,6 @@ E_Boolean Collide3dCheckLineOfSightWithZ(
     return FALSE ;
 }
 
-/****************************************************************************/
 E_Boolean Collide3dObjectToXYCheckLineOfSightWithZ(
               T_3dObject *p_from,
               T_sword16 x,
@@ -5020,6 +3959,7 @@ E_Boolean Collide3dObjectToXYCheckLineOfSightWithZ(
     return isBlocked ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  3D_COLLI.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  3D_COLLI.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  AREASND.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  AREASND.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Area sounds are sound effects on a map.  They are used for environmental
+ * effects such as lava and water or just windy corridors.
+ *
+ * @addtogroup AREASND
+ * @brief Sound effects over areas of the map
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_TRIG.H"
 #include "3D_VIEW.H"
 #include "AREASND.H"
@@ -74,45 +84,15 @@ static T_areaSoundStruct *IFindAreaSoundByID(T_word32 id) ;
 static T_void IDestroyMarked(T_void) ;
 
 
-/****************************************************************************/
-/*  Routine:  AreaSoundInitialize                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundInitialize starts up the area sound module.  Really not too  */
-/*  much is done here.  Should things change in the future, more will be    */
-/*  done.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundInitialize starts up the area sound module.  Really not too
+ *  much is done here.  Should things change in the future, more will be
+ *  done.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundInitialize(T_void)
 {
     DebugRoutine("AreaSoundInitialize") ;
@@ -124,44 +104,14 @@ T_void AreaSoundInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  AreaSoundFinish                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundFinish frees up all memory used by the area sound module     */
-/*  after turning off all the sounds.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundFinish frees up all memory used by the area sound module
+ *  after turning off all the sounds.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundFinish(T_void)
 {
     DebugRoutine("AreaSoundFinish") ;
@@ -178,44 +128,16 @@ T_void AreaSoundFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundLoad                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundLoad loads a whole level of area sounds for the given level  */
-/*  number.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 mapNumber          -- Map/level sounds to load               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    sprintf                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundLoad loads a whole level of area sounds for the given level
+ *  number.
+ *
+ *  @param mapNumber -- Map/level sounds to load
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundLoad(T_word32 mapNumber)
 {
     DebugRoutine("AreaSoundLoad") ;
@@ -298,63 +220,29 @@ AreaSoundCheck() ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundCreate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundCreate creates and sets up a new area sound.  As well, it    */
-/*  sets up the new location and placement of the area sound in reference   */
-/*  to its group.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- Location of area sound                 */
-/*                                                                          */
-/*    T_word16 radius             -- Radius at point zero sound             */
-/*                                                                          */
-/*    T_word16 volume             -- Maximum volume at center               */
-/*                                                                          */
-/*    E_areaSoundType type        -- One shot, or loop                      */
-/*                                                                          */
-/*    T_word16 length             -- How long is sound to play (not used    */
-/*                                   if looping)                            */
-/*                                                                          */
-/*    T_areaSound p_groupLeader   -- Connect to which group?                */
-/*                                                                          */
-/*    T_areaSoundFinishCallback p_callback -- who to call when ONCE done    */
-/*                                                                          */
-/*    T_word16 soundNum           -- Number of sound to play                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_areaSound                 -- area sound handle that was created     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*    LES  04/27/95  Added delete flag and scheduled event if the sound     */
-/*                   is not looping.                                        */
-/*                   Added data for callback routine.                       */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundCreate creates and sets up a new area sound.  As well, it
+ *  sets up the new location and placement of the area sound in reference
+ *  to its group.
+ *
+ *  @param x -- X Location of area sound
+ *  @param y -- Y Location of area sound
+ *  @param radius -- Radius at point zero sound
+ *  @param volume -- Maximum volume at center
+ *  @param type -- One shot, or loop
+ *  @param length -- How long is sound to play (not used
+ *      if looping)
+ *  @param p_groupLeader -- Connect to which group?
+ *  @param p_callback -- who to call when ONCE done
+ *  @param data -- Extra data field
+ *  @param soundNum -- Number of sound to play
+ *
+ *  @return area sound handle that was created
+ *
+ *<!-----------------------------------------------------------------------*/
 T_areaSound AreaSoundCreate(
                 T_sword16 x,
                 T_sword16 y,
@@ -428,47 +316,16 @@ T_areaSound AreaSoundCreate(
     return((T_areaSound)p_sound) ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundDestroy                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundDestroy turns off a given sound AND removes it from the list */
-/*  of sounds.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSound areaSound       -- Area sound to destroy                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    IFindPrevSound                                                        */
-/*    TriggerOff                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*    LES  04/27/95  Added callback call (with check)                       */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundDestroy turns off a given sound AND removes it from the list
+ *  of sounds.
+ *
+ *  @param areaSound -- Area sound to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundDestroy(T_areaSound areaSound)
 {
     T_areaSoundStruct *p_sound ;
@@ -535,46 +392,18 @@ T_void AreaSoundDestroy(T_areaSound areaSound)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundMove                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundMove changes the placement of the given area sound to the    */
-/*  new location.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSound areaSound       -- area sound to move                     */
-/*                                                                          */
-/*    T_sword16 newX, newY        -- New XY location of sound               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundMove
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundMove changes the placement of the given area sound to the
+ *  new location.
+ *
+ *  @param areaSound -- area sound to move
+ *  @param newX -- New X location of sound
+ *  @param newY -- New Y location of sound
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundMove(T_areaSound areaSound, T_sword16 newX, T_sword16 newY)
 {
     DebugRoutine("AreaSoundMove") ;
@@ -588,45 +417,17 @@ T_void AreaSoundMove(T_areaSound areaSound, T_sword16 newX, T_sword16 newY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundUpdate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundUpdate updates the volumes and activity of all sounds        */
-/*  based on the sound areas and the given listening location.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 listenX, listenY  -- Position where sounds are heard.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUpdateActiveSounds                                                   */
-/*    IUpdateInactiveSounds                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundUpdate updates the volumes and activity of all sounds
+ *  based on the sound areas and the given listening location.
+ *
+ *  @param listenX -- X Position where sounds are heard.
+ *  @param listenY -- Y Position where sounds are heard.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundUpdate(T_sword16 listenX, T_sword16 listenY)
 {
     DebugRoutine("AreaSoundUpdate") ;
@@ -641,44 +442,18 @@ T_void AreaSoundUpdate(T_sword16 listenX, T_sword16 listenY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindGroupLeader                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindGroupLeader searches through the list of area sounds and finds   */
-/*  the first instance of a given areaSound.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 groupId            -- Group id to find leader of.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_areaSound                 -- Found group leader, or AREA_SOUND_BAD  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindGroupLeader
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindGroupLeader searches through the list of area sounds and finds
+ *  the first instance of a given areaSound.
+ *
+ *  @param groupId -- Group id to find leader of.
+ *
+ *  @return Found group leader, or AREA_SOUND_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 T_areaSound IFindGroupLeader(T_word16 groupId)
 {
     T_areaSoundStruct *p_areaSound ;
@@ -700,48 +475,18 @@ T_areaSound IFindGroupLeader(T_word16 groupId)
     return((T_areaSound)p_areaSound) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISetGroupLeaderAndId                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISetGroupLeaderAndId changes the group leader and id for the given    */
-/*  instance.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSound areaSound       -- area sound to change group leader      */
-/*                                                                          */
-/*    T_areaSound groupLeader     -- Group leader to change to              */
-/*                                                                          */
-/*    T_word16 groupId            -- Group Id to change to                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISetGroupLeaderAndId
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISetGroupLeaderAndId changes the group leader and id for the given
+ *  instance.
+ *
+ *  @param areaSound -- area sound to change group leader
+ *  @param groupLeader -- Group leader to change to
+ *  @param groupId -- Group Id to change to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ISetGroupLeaderAndId(
            T_areaSound areaSound,
            T_areaSound groupLeader,
@@ -758,44 +503,18 @@ T_void ISetGroupLeaderAndId(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindPrevSound                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindPrevSound searches in the linked list for the previous sound     */
-/*  to the given sound.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSoundStruct *p_sound  -- Sound to find previous of              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_areaSoundStruct *         -- Previous sound, or NULL                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindPrevSound
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindPrevSound searches in the linked list for the previous sound
+ *  to the given sound.
+ *
+ *  @param p_sound -- Sound to find previous of
+ *
+ *  @return Previous sound, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 T_areaSoundStruct *IFindPrevSound(T_areaSoundStruct *p_sound)
 {
     T_areaSoundStruct *p_prev ;
@@ -833,50 +552,18 @@ T_areaSoundStruct *IFindPrevSound(T_areaSoundStruct *p_sound)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IUpdateActiveSounds                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUpdateActiveSounds go through the listof area sounds and identifies  */
-/*  those sounds that are active and determines their new volume level      */
-/*  and if they should be turned off.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 listenX, listenY  -- Position where sounds are heard.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TriggerStatus                                                         */
-/*    ICalculateVolume                                                      */
-/*    TriggerVolume                                                         */
-/*    AreaSoundDestroy                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*    LES  04/27/95  Added check to see if sound needs to be deleted.       */
-/*    LES  04/08/96  Stopped using SoundIsDone                              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUpdateActiveSounds
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUpdateActiveSounds go through the listof area sounds and identifies
+ *  those sounds that are active and determines their new volume level
+ *  and if they should be turned off.
+ *
+ *  @param listenX -- X Position where sounds are heard.
+ *  @param listenY -- Y Position where sounds are heard.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IUpdateActiveSounds(T_sword16 listenX, T_sword16 listenY)
 {
     T_areaSoundStruct *p_sound ;
@@ -915,44 +602,17 @@ T_void IUpdateActiveSounds(T_sword16 listenX, T_sword16 listenY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUpdateInactiveSounds                                         */
-/****************************************************************************/
-/*                                                                           */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUpdateInactiveSounds does the work of determining if there are new   */
-/*  sounds that can be played or "take over" other sounds.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 listenX, listenY  -- Position where sounds are heard.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUpdateInactiveSounds
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUpdateInactiveSounds does the work of determining if there are new
+ *  sounds that can be played or "take over" other sounds.
+ *
+ *  @param listenX -- X Position where sounds are heard.
+ *  @param listenY -- Y Position where sounds are heard.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IUpdateInactiveSounds(T_sword16 listenX, T_sword16 listenY)
 {
     T_areaSoundStruct *p_sound ;
@@ -1009,47 +669,18 @@ T_void IUpdateInactiveSounds(T_sword16 listenX, T_sword16 listenY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICalculateVolume                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICalculateVolume determines the volume level of a sound given the     */
-/*  listening location.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSoundStruct *p_sound  -- Pointer to sound to calc. volume.      */
-/*                                                                          */
-/*    T_sword16 listenX, listenY  -- Position where sounds are heard.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CalculateDistance                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/25/95  Created                                                */
-/*    LES  04/26/95  Fixed if/else bug.  (left off the else)                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICalculateVolume
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICalculateVolume determines the volume level of a sound given the
+ *  listening location.
+ *
+ *  @param p_sound -- Pointer to sound to calc. volume.
+ *  @param listenX -- X Position where sounds are heard.
+ *  @param listenY -- Y Position where sounds are heard.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ICalculateVolume(
              T_areaSoundStruct *p_sound,
              T_sword16 listenX,
@@ -1085,44 +716,17 @@ T_word16 ICalculateVolume(
     return volume ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICalculateAllVolumes                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICalculateAllVolumes is a routine that determines volume levels       */
-/*  for all the area sounds.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 listenX, listenY  -- Position where sounds are heard.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICalculateVolume                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICalculateAllVolumes
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICalculateAllVolumes is a routine that determines volume levels
+ *  for all the area sounds.
+ *
+ *  @param listenX -- X Position where sounds are heard.
+ *  @param listenY -- Y Position where sounds are heard.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ICalculateAllVolumes(T_sword16 listenX, T_sword16 listenY)
 {
     T_areaSoundStruct *p_sound ;
@@ -1149,44 +753,16 @@ T_void ICalculateAllVolumes(T_sword16 listenX, T_sword16 listenY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindLoudestNotChannelSound                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindLoudestNotChannelSound searches throught the area sounds to      */
-/*  find the loudest audible sound that is not being played.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_areaSoundStruct *         -- loudest non-playing sound, or NULL     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindLoudestNotChannelSound
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindLoudestNotChannelSound searches throught the area sounds to
+ *  find the loudest audible sound that is not being played.
+ *
+ *  @return loudest non-playing sound, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 T_areaSoundStruct *IFindLoudestNotChannelSound(T_void)
 {
     T_areaSoundStruct *p_sound ;
@@ -1226,46 +802,15 @@ T_areaSoundStruct *IFindLoudestNotChannelSound(T_void)
     return p_soundLoudest ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundCheck                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundCheck is a routine only used in debugging to check to        */
-/*  see that the sounds have not been corrupted.  If there is a problem,    */
-/*  it will crash the program.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/27/95  Created                                                */
-/*    LES  05/08/95  Added more checks.                                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundCheck
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundCheck is a routine only used in debugging to check to
+ *  see that the sounds have not been corrupted.  If there is a problem,
+ *  it will crash the program.
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifndef NDEBUG
 T_void AreaSoundCheck(T_void)
 {
@@ -1293,46 +838,17 @@ T_void AreaSoundCheck(T_void)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  IAreaSoundDeterminePan                  * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAreaSoundDeterminePan is called to calculate the panning value of    */
-/*  the sound in reference to the listening x, y position.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSoundStruct *p_sound  -- Sound to calculate pan                 */
-/*                                                                          */
-/*    T_sword16 listenX, listenY  -- Position of listener                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MathArcTangent                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/18/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAreaSoundDeterminePan
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAreaSoundDeterminePan is called to calculate the panning value of
+ *  the sound in reference to the listening x, y position.
+ *
+ *  @param p_sound -- Sound to calculate pan
+ *  @param listenY -- Position of listener
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IAreaSoundDeterminePan(
                     T_areaSoundStruct *p_sound,
                     T_sword16 listenX,
@@ -1366,34 +882,19 @@ static T_word16 IAreaSoundDeterminePan(
     return pan ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISoundForAreaSoundIsDone                * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISoundForAreaSoundIsDone is called to say, "your sound is complete"   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine is called by an interrupt, therefore, no debug routines  */
-/*  are allowed.  DONT add them.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to the area sound              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISoundForAreaSoundIsDone
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISoundForAreaSoundIsDone is called to say, "your sound is complete"
+ *
+ *  NOTE: 
+ *  This routine is called by an interrupt, therefore, no debug routines
+ *  are allowed.  DONT add them.
+ *
+ *  @param p_data -- Pointer to the area sound
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ISoundForAreaSoundIsDone(
                   T_void *p_data)
 {
@@ -1443,33 +944,18 @@ static T_areaSoundStruct *IFindAreaSoundByID(T_word32 id)
     return p_find ;
 }
 
-/****************************************************************************/
-/*  Routine:  AreaSoundFindGroupLeader                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundFindGroupLeader finds the group leader for a given group id. */
-/*  returns AREA_SOUND_BAD if no group is found, or groupID is zero.        */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 groupID            -- ID of group                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_areaSound                 -- identifier for area sound              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundFindGroupLeader
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundFindGroupLeader finds the group leader for a given group id.
+ *  returns AREA_SOUND_BAD if no group is found, or groupID is zero.
+ *
+ *  @param groupID -- ID of group
+ *
+ *  @return identifier for area sound
+ *
+ *<!-----------------------------------------------------------------------*/
 T_areaSound AreaSoundFindGroupLeader(T_word16 groupID)
 {
     T_areaSound groupLeader = AREA_SOUND_BAD ;
@@ -1485,34 +971,16 @@ T_areaSound AreaSoundFindGroupLeader(T_word16 groupID)
 }
 
 
-/****************************************************************************/
-/*  Routine:  AreaSoundSetGroupId                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    AreaSoundSetGroupId changes the group id on an area sound.            */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_areaSound areaSound       -- Area sound to affect                   */
-/*                                                                          */
-/*    T_word16 groupID            -- ID of the group to attach sound        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  AreaSoundSetGroupId
+ *-------------------------------------------------------------------------*/
+/**
+ *  AreaSoundSetGroupId changes the group id on an area sound.
+ *
+ *  @param areaSound -- Area sound to affect
+ *  @param groupID -- ID of the group to attach sound
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void AreaSoundSetGroupId(T_areaSound areaSound, T_word16 groupID)
 {
     T_areaSoundStruct *p_sound ;
@@ -1553,6 +1021,7 @@ static T_void IDestroyMarked(T_void)
 }
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  AREASND.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  AREASND.C
+ *-------------------------------------------------------------------------*/

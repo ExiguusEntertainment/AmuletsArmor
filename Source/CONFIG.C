@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  CONFIG.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CONFIG.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Loading and saving of the configuration file CONFIG.INI is handled
+ * here.  Some global configuration settings also are grouped here.
+ *
+ * @addtogroup CONFIG
+ * @brief CONFIG.INI File
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CONFIG.H"
 #include "GENERAL.H"
 #include "KEYMAP.H"
@@ -25,38 +35,13 @@ static E_Boolean G_invertMouseY = FALSE;
 
 T_word32 FreeMemory(T_void) ;
 
-/****************************************************************************/
-/*  Routine:  ConfigOpen                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ConfigOpen opens up the config file for reading and changes.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ConfigOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  ConfigOpen opens up the config file for reading and changes.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_iniFile ConfigOpen(T_void)
 {
     DebugRoutine("ConfigOpen") ;
@@ -72,38 +57,13 @@ T_iniFile ConfigOpen(T_void)
     return G_configINIFile;
 }
 
-/****************************************************************************/
-/*  Routine:  ConfigClose                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ConfigClose closes the config file and writes out any changes.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ConfigClose
+ *-------------------------------------------------------------------------*/
+/**
+ *  ConfigClose closes the config file and writes out any changes.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ConfigClose(T_void)
 {
     DebugRoutine("ConfigClose") ;
@@ -118,49 +78,15 @@ T_void ConfigClose(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ConfigLoad                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ConfigLoad reads in a variety of variables on how the game is to      */
-/*  operate.  In particular, the GAME.CFG file determines the amount of     */
-/*  graphic detail is to be shown.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fopen                                                                 */
-/*    fgets                                                                 */
-/*    fclose                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/16/95  Created                                                */
-/*    LES  05/24/95  Added memory check to downgrade frames per image if    */
-/*                   low memory constraints.                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ConfigLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  ConfigLoad reads in a variety of variables on how the game is to
+ *  operate.  In particular, the GAME.CFG file determines the amount of
+ *  graphic detail is to be shown.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ConfigLoad(T_void)
 {
     T_word32 memFree ;
@@ -292,6 +218,7 @@ void ConfigReadOptions(T_iniFile iniFile)
 
     DebugEnd();
 }
-/****************************************************************************/
-/*    END OF FILE:  CONFIG.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CONFIG.C
+ *-------------------------------------------------------------------------*/

@@ -1,7 +1,20 @@
-/****************************************************************************/
-/*    FILE:  3D_IO.C                                                        */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * File:  3D_IO.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Routines for loading maps are handled here.  This code differs from
+ * the MAP code by handling the raw 3D information about a map.  It
+ * knows about vertixes, wall segments, objects on the map, and any
+ * of the 'raw' information about the world needed for rendering.
+ * At the heart of it, it is loading DOOM PWAD/IWAD maps since
+ * Deep 95 was used to make the maps.
+ *
+ * @addtogroup _3D_IO
+ * @brief 3D Loading and unloading of maps
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 //#include "standard.h"
 #include <ctype.h>
 #include "3D_IO.H"
@@ -148,45 +161,14 @@ T_word16             G_objCollisionNumY ;
 T_word16             G_lastCollisionList ;
 T_doubleLinkList    *G_3dObjCollisionLists ;
 
-/****************************************************************************/
-/*  Routine:  View3dLoadMap                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dLoadMap loads into memory a precompiled map that contains       */
-/*  all walls, sectors, lines, things, etc.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  05/22/96  Added code to initilaize special object list           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dLoadMap
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dLoadMap loads into memory a precompiled map that contains
+ *  all walls, sectors, lines, things, etc.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dLoadMap(T_byte8 *MapName)
 {
     const T_word32 level = 0 ;
@@ -310,43 +292,13 @@ puts("Not a valid file!\n") ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dUnloadMap                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dUnloadMap unallocates any memory used by the current map.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dUnloadMap
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dUnloadMap unallocates any memory used by the current map.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dUnloadMap(T_void)
 {
     DebugRoutine("View3dUnloadMap") ;
@@ -398,48 +350,16 @@ T_void View3dUnloadMap(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadObjects                        * INTERNAL *              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of things from the given file.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to objects    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  05/22/96  Added code to put special objects on the special list  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadObjects
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of things from the given file.
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to objects
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadObjects(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -580,47 +500,16 @@ printf("  Object #%d loaded: type %d, x=%d, y=%d\n",
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadSegs                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of line segments from the given file.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to segments   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadSegs
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of line segments from the given file.
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to segments
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadSegs(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -643,47 +532,16 @@ static T_void ILoadSegs(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadSides                         * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of line sides from the given file.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to sides      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadSides
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of line sides from the given file.
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to sides
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadSides(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -706,47 +564,16 @@ static T_void ILoadSides(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadLines                         * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of lines from the given file                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to lines      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadLines
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of lines from the given file
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to lines
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadLines(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -768,47 +595,16 @@ static T_void ILoadLines(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadNodes                         * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of nodes from the given file                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to lines      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadNodes
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of nodes from the given file
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to lines
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadNodes(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -843,49 +639,16 @@ static T_void ILoadNodes(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadSectors                       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of sectors from the given file                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to sectors    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  05/17/95  Modified to handle sector info array and deleted xy    */
-/*                   offset allocation.                                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of sectors from the given file
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to sectors
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadSectors(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -920,47 +683,16 @@ static T_void ILoadSectors(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ILoadVertexes                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of vertexes from the given file                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to vertexes   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadVertexes
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of vertexes from the given file
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to vertexes
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadVertexes(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -982,48 +714,17 @@ static T_void ILoadVertexes(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadSegmentSectors                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads a group of segment sectors from the given file.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to segment    */
-/*                                   sectors.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadSegmentSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads a group of segment sectors from the given file.
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to segment
+ *      sectors.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadSegmentSectors(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -1137,47 +838,16 @@ static T_void IDumpData(T_void)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  ILoadBlockMap                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Loads the block map of the given file                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_file file                 -- File to read from                      */
-/*                                                                          */
-/*    T_directoryEntry *p_dir     -- Directory entry refering to vertexes   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadBlockMap
+ *-------------------------------------------------------------------------*/
+/**
+ *  Loads the block map of the given file
+ *
+ *  @param file -- File to read from
+ *  @param p_dir -- Directory entry refering to vertexes
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadBlockMap(
                   T_file file,
                   T_directoryEntry *p_dir)
@@ -1243,47 +913,16 @@ T_void IPrepareObjects(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILockPictures                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ILockPictures goes through all the sides and sectors looking for      */
-/*  textures and locks those textures into memory.  These textures will     */
-/*  later be used to decide what are the floor, ceiling, and walls will     */
-/*  look like.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    strncpy                                                               */
-/*    PictureLock                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILockPictures
+ *-------------------------------------------------------------------------*/
+/**
+ *  ILockPictures goes through all the sides and sectors looking for
+ *  textures and locks those textures into memory.  These textures will
+ *  later be used to decide what are the floor, ceiling, and walls will
+ *  look like.
+ *
+ *<!-----------------------------------------------------------------------*/
 /* Hash pattern used for no textures */
 static T_byte8 G_textureNone[] = {
     2, 0, 2, 0, 31, 226, 226, 31,
@@ -1454,46 +1093,16 @@ static T_void ILockPictures(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUnlockPictures                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUnlockPictures is the opposite to ILockPictures.  All data that      */
-/*  was locked into memory must be released when done with the map.         */
-/*  This routine goes through all sides and sectors and unlocks the         */
-/*  pictures from memory.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlock                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUnlockPictures
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUnlockPictures is the opposite to ILockPictures.  All data that
+ *  was locked into memory must be released when done with the map.
+ *  This routine goes through all sides and sectors and unlocks the
+ *  pictures from memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUnlockPictures(T_void)
 {
     T_word16 i ;
@@ -1598,48 +1207,17 @@ static T_void ILoadReject(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILoadSectorInfo                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ILoadSectorInfo reads in all the accompany information data that      *//*  was locked into memory must be released when done with the map.         */
-/*  This routine goes through all sides and sectors and unlocks the         */
-/*  pictures from memory.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *mapName            -- Name of .SEC file                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fopen                                                                 */
-/*    fgets                                                                 */
-/*    fclose                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/17/95  Created                                                */
-/*    AMT  07/24/95  Added support for light animation and fixed the reader.*/
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILoadSectorInfo
+ *-------------------------------------------------------------------------*/
+/**
+ *  ILoadSectorInfo reads in all the accompany information data that      *//*  was locked into memory must be released when done with the map.
+ *  This routine goes through all sides and sectors and unlocks the
+ *  pictures from memory.
+ *
+ *  @param mapName -- Name of .SEC file
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILoadSectorInfo(T_byte8 *mapName)
 {
     T_word16 sector, sector2 ;
@@ -1964,47 +1542,18 @@ T_void View3dSetSectorType(T_word16 sector, T_word16 sectorType)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetStartLocation                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ILoadSectorInfo reads in all the accompany information data that      *//*  was locked into memory must be released when done with the map.         */
-/*  This routine goes through all sides and sectors and unlocks the         */
-/*  pictures from memory.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 num                -- Number of map location (0-3)           */
-/*                                                                          */
-/*    T_sword16 *p_x, *p_y        -- Pointer to coordinate values           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetStartLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  ILoadSectorInfo reads in all the accompany information data that      *//*  was locked into memory must be released when done with the map.
+ *  This routine goes through all sides and sectors and unlocks the
+ *  pictures from memory.
+ *
+ *  @param num -- Number of map location (0-3)
+ *  @param p_y -- Pointer to coordinate values
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dGetStartLocation(
            T_word16 num,
            T_sword16 *p_x,
@@ -2190,46 +1739,17 @@ T_void ReleaseMipMap(T_byte8 *p_mipmap)
 #endif
 #endif
 
-/****************************************************************************/
-/*  Routine:  View3dResolveSpecialObjects                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dResolveSpecialObjects is used to actually create all the        *//*  was locked into memory must be released when done with the map.         */
-/*  special effects created by the special objects.  The special objects    */
-/*  list is run through 3 times.  1) to place primary effects (doors,       */
-/*  sector definitions, etc.), 2) to place modifiers/secondary effects      */
-/*  (door goes higher, door has different sound), and 3) to delete the list.*/
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    NOne.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/22/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dResolveSpecialObjects
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dResolveSpecialObjects is used to actually create all the        *//*  was locked into memory must be released when done with the map.
+ *  special effects created by the special objects.  The special objects
+ *  list is run through 3 times.  1) to place primary effects (doors,
+ *  sector definitions, etc.), 2) to place modifiers/secondary effects
+ *  (door goes higher, door has different sound), and 3) to delete the list.
+ *
+ *<!-----------------------------------------------------------------------*/
 #define SPECIAL_OBJECT_DOOR                      1500
 #define SPECIAL_OBJECT_LOCK_DOOR                 1501
 #define SPECIAL_OBJECT_GENERATOR                 1502
@@ -3016,7 +2536,6 @@ static T_void IOutputReject(T_void)
     fclose(fp) ;
 }
 
-/****************************************************************************/
 static T_void IObjCollisionListsInit(T_void)
 {
     T_word16 size ;
@@ -3041,7 +2560,6 @@ static T_void IObjCollisionListsInit(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
 static T_void IObjCollisionListsFinish(T_void)
 {
     T_word16 size ;
@@ -3072,6 +2590,7 @@ static T_void IObjCollisionListsFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  3D_IO.C                                                 */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  3D_IO.C
+ *-------------------------------------------------------------------------*/

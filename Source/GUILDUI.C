@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  GUILDUI.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  GUILDUI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Used for players to meet each other and join when networking.
+ *
+ * @addtogroup GUILDUI
+ * @brief Guild User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BUTTON.H"
 #include "CLI_SEND.H"
 #include "CSYNCPCK.H"
@@ -1116,8 +1125,6 @@ T_void GuildUIConfirmJoinGame (T_void)
 }
 
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 static T_word16 GuildUIGetSelectedAdventure(T_void)
 {
     T_word16 adventure ;
@@ -1150,8 +1157,6 @@ static T_word16 GuildUIGetSelectedAdventure(T_void)
     return adventure ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_void GuildUIGetSelectedGame(
                   T_word16 *p_mapNumber,
                   T_gameGroupID *p_groupID)
@@ -1183,3 +1188,7 @@ T_void GuildUIGetSelectedGame(
     DebugEnd() ;
 }
 
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  GUILDUI.C
+ *-------------------------------------------------------------------------*/

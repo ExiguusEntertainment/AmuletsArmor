@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  CSYNCPCK.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CSYNCPCK.C
+ *-------------------------------------------------------------------------*/
+/**
+ * When A&A was converted to the new communications system, this layer
+ * of code was added underneath the current client/server system to allow
+ * synchronized communications.
+ *
+ * @addtogroup CSYNCPCK
+ * @brief Synchronized Communication Packet Handling
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_TRIG.H"
 #include "ACTIVITY.H"
 #include "AREASND.H"
@@ -125,8 +136,6 @@ typedef struct {
 T_syncObjectIdHistoryItem G_syncObjectIdHistory[MAX_OBJECT_ID_HISTORY] ;
 T_word16 G_syncObjectIdHistoryPos = 0 ;
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncInit(T_void)
 {
     T_word16 i ;
@@ -176,8 +185,6 @@ T_void ClientSyncInit(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncInitPlayersHere(T_void)
 {
     T_word16 i ;
@@ -193,8 +200,6 @@ T_void ClientSyncInitPlayersHere(T_void)
 }
 
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncFinish(T_void)
 {
     T_word16 i ;
@@ -227,29 +232,16 @@ T_void ClientSyncFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSyncPacketEvaluate                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSyncPacketProcess processes a full sync packet that was received*/
-/*  from the server.  This may or may not be refering to the player.        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_syncronizePacket *p_sync  -- Syncronize packet to process           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSyncPacketEvaluate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSyncPacketProcess processes a full sync packet that was received
+ *  from the server.  This may or may not be refering to the player.
+ *
+ *  @param p_sync -- Syncronize packet to process
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSyncPacketEvaluate(T_syncronizePacket *p_sync)
 {
     T_3dObject *p_playerObj ;
@@ -513,7 +505,6 @@ T_void ClientSyncPacketEvaluate(T_syncronizePacket *p_sync)
     DebugEnd() ;
 }
 
-/****************************************************************************/
 static T_void ICheckCollides(T_void)
 {
     T_word16 i ;
@@ -559,34 +550,19 @@ static T_void ICheckCollides(T_void)
     }
 }
 
-/****************************************************************************/
-/*  Routine:  IClientSyncDoPlayerAction                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IClientSyncDoAction is called to make an object do the action that    */
-/*  another player or this player did.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_playerObj     -- Pointer to player object               */
-/*                                                                          */
-/*    T_playerAction actionType   -- Type of action to perform              */
-/*                                                                          */
-/*    T_word16 *p_actionData      -- Pointer to 4 T_word16's that are used  */
-/*                                   for the action performed.              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IClientSyncDoPlayerAction
+ *-------------------------------------------------------------------------*/
+/**
+ *  IClientSyncDoAction is called to make an object do the action that
+ *  another player or this player did.
+ *
+ *  @param p_playerObj -- Pointer to player object
+ *  @param actionType -- Type of action to perform
+ *  @param p_actionData -- Pointer to 4 T_word16's that are used
+ *      for the action performed.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IClientSyncDoPlayerAction(
                   T_3dObject *p_playerObj,
                   T_playerAction actionType,
@@ -991,8 +967,6 @@ static T_void IClientSyncDoPlayerAction(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 static T_void IClientSyncSendAction(
                   T_playerAction action,
                   T_word16 data1,
@@ -1026,8 +1000,6 @@ static T_void IClientSyncSendAction(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionChangeSelf(
            T_bodyPartLocation location,
            T_word16 newPart)
@@ -1044,8 +1016,6 @@ T_void ClientSyncSendActionChangeSelf(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionMeleeAttack(
            T_word16 damageAmount,
            E_effectDamageType damageType,
@@ -1063,8 +1033,6 @@ T_void ClientSyncSendActionMeleeAttack(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionMissileAttack(
            T_word16 missileType,
            T_word16 target)
@@ -1081,8 +1049,6 @@ T_void ClientSyncSendActionMissileAttack(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionActivateForward(T_void)
 {
     DebugRoutine("ClientSyncSendActionActivateForward") ;
@@ -1097,11 +1063,9 @@ T_void ClientSyncSendActionActivateForward(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  10/18/96  Created                                                */
 T_void ClientSyncSendActionPickLock(
            T_word16 doorSector,
-           T_word16 pickerID) 
+           T_word16 pickerID)
 {
     DebugRoutine("ClientSyncSendActionPickLock") ;
 
@@ -1115,8 +1079,6 @@ T_void ClientSyncSendActionPickLock(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  09/16/96  Created                                                */
 T_void ClientSyncSendActionDropAt(
            T_word16 objectType,
            T_sword16 x,
@@ -1135,8 +1097,6 @@ T_void ClientSyncSendActionDropAt(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionLeaveLevel(
        T_word16 newLevel)
 {
@@ -1152,8 +1112,6 @@ T_void ClientSyncSendActionLeaveLevel(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionPickUpItem(
            T_word16 itemID,
            E_Boolean autoStore)
@@ -1170,8 +1128,6 @@ T_void ClientSyncSendActionPickUpItem(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionThrowItem(
            T_word16 itemType,
            T_word16 angle,
@@ -1190,8 +1146,6 @@ T_void ClientSyncSendActionThrowItem(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* LES  08/17/96  Created                                                   */
 T_void ClientSyncSendGotoPlace(T_word16 newPlace)
 {
     DebugRoutine("ClientSyncSendGotoPlace") ;
@@ -1206,8 +1160,6 @@ T_void ClientSyncSendGotoPlace(T_word16 newPlace)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionSteal(
            T_word16 objectID,
            T_word16 stealerID,
@@ -1225,8 +1177,6 @@ T_void ClientSyncSendActionSteal(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionStolen(
            T_word16 objectType,
            T_word16 stealerID)
@@ -1243,8 +1193,6 @@ T_void ClientSyncSendActionStolen(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionAreaSound(
            T_word16 sound,
            T_word16 radius,
@@ -1262,8 +1210,6 @@ T_void ClientSyncSendActionAreaSound(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionPauseGameToggle(T_void)
 {
     DebugRoutine("ClientSyncSendActionPauseGameToggle") ;
@@ -1278,8 +1224,6 @@ T_void ClientSyncSendActionPauseGameToggle(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncSendActionAbortLevel(T_void)
 {
     DebugRoutine("ClientSyncSendActionAbortLevel") ;
@@ -1294,9 +1238,6 @@ T_void ClientSyncSendActionAbortLevel(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Send out the next syncronized update. */
-/*    LES  06/12/96  Created                                                */
 T_void ClientSyncUpdate(T_void)
 {
     T_doubleLinkListElement element ;
@@ -1989,15 +1930,11 @@ T_void ClientSyncReset(T_void)
 }
 
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_gameGroupID ClientSyncGetGameGroupID(T_void)
 {
     return G_groupID ;
 }
 
-/****************************************************************************/
-/*    LES  08/21/96  Created                                                */
 T_void ClientSyncSetGameGroupID(T_gameGroupID groupID)
 {
     DebugRoutine("ClientSyncSetGameGroupID") ;
@@ -2012,8 +1949,6 @@ printf(" by %s\n", DebugGetCallerName()) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    LES  10/24/96  Created                                                */
 T_void ClientSyncSendIdSelf(T_byte8 *p_name)
 {
     T_word16 i ;
@@ -2038,6 +1973,7 @@ T_void ClientSyncSendIdSelf(T_byte8 *p_name)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  CSYNCPCK.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CSYNCPCK.C
+ *-------------------------------------------------------------------------*/

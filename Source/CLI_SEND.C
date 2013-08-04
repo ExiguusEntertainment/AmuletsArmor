@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  CLI_SEND.C             Client Send Packet Module               */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CLI_SEND.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The client/server interface is broken into a send and receive side.
+ * This is the send/request side.  Responses from the server/world will
+ * come back on the receive side later when ready to be processed.
+ *
+ * @addtogroup CLI_SEND
+ * @brief Client Send Packet Communications
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "CMDQUEUE.H"
 #include "CLI_RECV.H"
@@ -19,44 +30,14 @@
 #include "SMCCHOOS.H"
 #include "STATS.H"
 
-/****************************************************************************/
-/*  Routine:  ClientSendMessage                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendMessage sends the message that the user just typed in across*/
-/*  the network and to everyone else in range.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendLongPacket                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendMessage
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendMessage sends the message that the user just typed in across
+ *  the network and to everyone else in range.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendMessage(T_byte8 *message)
 {
     T_packetLong packet ;
@@ -85,43 +66,14 @@ T_void ClientSendMessage(T_byte8 *message)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendRequestServerIDPacket                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendRequestServerIDPacket sends to the server a packet          */
-/*  requesting for the server's unique id.                                  */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendRequestServerIDPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendRequestServerIDPacket sends to the server a packet
+ *  requesting for the server's unique id.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendRequestServerIDPacket(T_void)
 {
     T_packetLong packet ;
@@ -143,43 +95,14 @@ T_void ClientSendRequestServerIDPacket(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientSendRequestEnterPacket                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendRequestEnterPacket sends a request to server for            */
-/*  entering the server's first screen.                                     */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendRequestEnterPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendRequestEnterPacket sends a request to server for
+ *  entering the server's first screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendRequestEnterPacket(T_void)
 {
     T_packetLong packet ;
@@ -200,44 +123,14 @@ T_void ClientSendRequestEnterPacket(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendRequestCharacterListing                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendRequestCharacterListing sends out a request char listing    */
-/*  packet to the server.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendRequestCharacterListing
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendRequestCharacterListing sends out a request char listing
+ *  packet to the server.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendRequestCharacterListing(T_void)
 {
     T_packetLong packet ;
@@ -263,41 +156,17 @@ T_void ClientSendRequestCharacterListing(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendLoadCharacter                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendLoadCharacter tells the server to load the given character  */
-/*  and to start a transfer if necessary.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 slot                -- Slot of character to load              */
-/*                                                                          */
-/*    T_word32 checksum           -- Checksum to check against              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendLoadCharacter
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendLoadCharacter tells the server to load the given character
+ *  and to start a transfer if necessary.
+ *
+ *  @param slot -- Slot of character to load
+ *  @param checksum -- Checksum to check against
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendLoadCharacter(T_byte8 slot, T_word32 checksum)
 {
     DebugRoutine("ClientSendLoadCharacter") ;
@@ -308,42 +177,19 @@ T_void ClientSendLoadCharacter(T_byte8 slot, T_word32 checksum)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendCreateCharacter                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendCreateCharacter sends a packet to tell the server to create */
-/*  a character with the given checksum.  A transfer of the character is    */
-/*  then started.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 slot                -- Slot of character password to create   */
-/*                                                                          */
-/*    T_word32 checksum           -- Checksum to use.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendCreateCharacter
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendCreateCharacter sends a packet to tell the server to create
+ *  a character with the given checksum.  A transfer of the character is
+ *  then started.
+ *
+ *  @param slot -- Slot of character password to create
+ *  @param checksum -- Checksum to use.
+ *  @param p_password -- Password to attach to character
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendCreateCharacter(
            T_byte8 slot,
            T_word32 checksum,
@@ -357,39 +203,16 @@ T_void ClientSendCreateCharacter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendDeleteCharacter                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendDeleteCharacter sends a packet to tell the server to delete */
-/*  the given character slot.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 slot                -- Slot of character password to delete   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendDeleteCharacter
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendDeleteCharacter sends a packet to tell the server to delete
+ *  the given character slot.
+ *
+ *  @param slot -- Slot of character password to delete
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendDeleteCharacter(T_byte8 slot)
 {
     DebugRoutine("ClientSendDeleteCharacter") ;
@@ -400,41 +223,17 @@ T_void ClientSendDeleteCharacter(T_byte8 slot)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendCheckPassword                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendCheckPassword asks the server to check the given password   */
-/*  against the given character slot's password.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 slot                -- Slot of character password to check    */
-/*                                                                          */
-/*    T_byte8 password            -- Password to check                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendCheckPassword
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendCheckPassword asks the server to check the given password
+ *  against the given character slot's password.
+ *
+ *  @param slot -- Slot of character password to check
+ *  @param password -- Password to check
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendCheckPassword(
            T_byte8 slot,
            T_byte8 password[MAX_SIZE_PASSWORD])
@@ -447,43 +246,18 @@ T_void ClientSendCheckPassword(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendChangePassword                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendChangePassword tells the server to change the password      */
-/*  of the given character slot.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 slot                -- Slot of character password to change   */
-/*                                                                          */
-/*    T_byte8 password            -- Old password                           */
-/*                                                                          */
-/*    T_byte8 newPassword         -- New password                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendChangePassword
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendChangePassword tells the server to change the password
+ *  of the given character slot.
+ *
+ *  @param slot -- Slot of character password to change
+ *  @param password -- Old password
+ *  @param newPassword -- New password
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendChangePassword(
            T_byte8 slot,
            T_byte8 password[MAX_SIZE_PASSWORD],
@@ -496,42 +270,19 @@ T_void ClientSendChangePassword(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientRequestTake                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientRequestTake sends the proper packet to the server to request    */
-/*  permission to take an object.  The object is actually 'taken' if the    */
-/*  server responds with permission with a SC_TAKE_REPLY packet.  See       */
-/*  ClientReceiveTakeReply().                                               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_3dObject *p_obj              -- Object to request taking.           */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientGetLoginId                                                        */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientRequestTake
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientRequestTake sends the proper packet to the server to request
+ *  permission to take an object.  The object is actually 'taken' if the
+ *  server responds with permission with a SC_TAKE_REPLY packet.  See
+ *  ClientReceiveTakeReply().
+ *
+ *  @param p_obj -- Object to request taking.
+ *  @param autoStore -- Flag TRUE if Automatically store the item
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientRequestTake(T_3dObject *p_obj, E_Boolean autoStore)
 {
     T_word16 dist;
@@ -584,31 +335,19 @@ T_void ClientRequestTake(T_3dObject *p_obj, E_Boolean autoStore)
     DebugEnd ();
 }
 
-/****************************************************************************/
-/*  Routine:  ClientRequestRetransmit                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientRequestRetransmit sends out a request to get back in sync       */
-/*  with a particular player.                                               */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 player                 -- Player being request to retrans     */
-/*                                                                          */
-/*    T_byte8 transmitStart          -- Packet to start retransmiting from  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/17/96  Created                                                */
-/*    LES  08/21/96  Added group ID                                         */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientRequestRetransmit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientRequestRetransmit sends out a request to get back in sync
+ *  with a particular player.
+ *
+ *  @param player -- Player being request to retrans
+ *  @param transmitStart -- Packet to start retransmiting from
+ *  @param groupID -- ID of this game group
+ *  @param destination -- Desired destination
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientRequestRetransmit(
            T_byte8 player,
            T_byte8 transmitStart,
@@ -636,30 +375,17 @@ T_void ClientRequestRetransmit(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendGotoSucceeded                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendGotoSucceeded tells the server that the location has been   */
-/*  reached and is now just waiting for the "OK" (PlaceStartPacket).        */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 placeNumber           -- Place player went to                */
-/*                                                                          */
-/*    T_byte8 startLocation          -- Sub-place player went to            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/23/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendGotoSucceeded
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendGotoSucceeded tells the server that the location has been
+ *  reached and is now just waiting for the "OK" (PlaceStartPacket).
+ *
+ *  @param placeNumber -- Place player went to
+ *  @param startLocation -- Sub-place player went to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendGotoSucceeded(
            T_word16 placeNumber,
            T_word16 startLocation)
@@ -685,30 +411,16 @@ T_void ClientSendGotoSucceeded(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendTownUIAddMessage                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendTownUIAddMessage tells everyone in the pub/town to add a    */
-/*  message.                                                                */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_name                -- Name of player                      */
-/*                                                                          */
-/*    T_byte8 startLocation          -- Sub-place player went to            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendTownUIAddMessage
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendTownUIAddMessage tells everyone in the pub/town to add a
+ *  message.
+ *
+ *  @param p_msg -- Message to send
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendTownUIAddMessage(T_byte8 *p_msg)
 {
     T_townUIMessagePacket *p_msgPacket ;
@@ -728,24 +440,14 @@ T_void ClientSendTownUIAddMessage(T_byte8 *p_msg)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendPlayerIDSelf                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendPlayerIDSelf is used for several things.  Mainly it is used */
-/*  to identify a player's location at particular times.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/19/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendPlayerIDSelf
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendPlayerIDSelf is used for several things.  Mainly it is used
+ *  to identify a player's location at particular times.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendPlayerIDSelf(T_void)
 {
     T_packetLong packet ;
@@ -765,24 +467,14 @@ T_void ClientSendPlayerIDSelf(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendRequestPlayerID                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSendRequestPlayerID asks that the given player tell what        */
-/*  location and state the player is in.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/20/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendRequestPlayerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSendRequestPlayerID asks that the given player tell what
+ *  location and state the player is in.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendRequestPlayerID(T_void)
 {
     T_packetShort packet ;
@@ -800,24 +492,14 @@ T_void ClientSendRequestPlayerID(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendRespondToJoinPacket                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is used by a creator of a game to respond to a players   */
-/*  request to enter an already existing game.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/21/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendRespondToJoinPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is used by a creator of a game to respond to a players
+ *  request to enter an already existing game.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendRespondToJoinPacket(
            T_directTalkUniqueAddress uniqueAddress,
            T_gameGroupID groupID,
@@ -843,24 +525,14 @@ T_void ClientSendRespondToJoinPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendRequestJoin                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is used by a player wanting to join a game already       */
-/*  created.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/21/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendRequestJoin
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is used by a player wanting to join a game already
+ *  created.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendRequestJoin(
             T_word16 map,
             T_gameGroupID instance)
@@ -886,24 +558,14 @@ T_void ClientSendRequestJoin(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSendGameStartPacket                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is used by a player starting up a game that has already  */
-/*  been constructed.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSendGameStartPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is used by a player starting up a game that has already
+ *  been constructed.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSendGameStartPacket(
            T_gameGroupID groupID,
            T_word16 adventure,
@@ -939,7 +601,7 @@ T_void ClientSendGameStartPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE: CLI_SEND.C       Client Send Packet Module               */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CLI_SEND.C
+ *-------------------------------------------------------------------------*/

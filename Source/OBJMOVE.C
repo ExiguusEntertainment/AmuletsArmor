@@ -1,6 +1,19 @@
-/****************************************************************************/
-/*    FILE:  OBJMOVE.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  OBJMOVE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Object Movement subsystem is where all the handling of objects
+ * occurs.  You can think of it as "object physics".  It handles objects
+ * sliding against walls and other objects.  It does the actual movement
+ * of objects in the world.  It even determines what sector(s) an object
+ * is on/in.
+ *
+ * @addtogroup OBJMOVE
+ * @brief Object Movement Subsystem
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_TRIG.H"
@@ -21,56 +34,23 @@ T_void IObjMoveClipVelocity(T_objMoveStruct *ObjMoveStruct) ;
 T_3dObject *ObjMoveFindHighestObject(T_objMoveStruct *ObjMoveStruct) ;
 T_3dObject *ObjMoveFindLowestObject(T_objMoveStruct *ObjMoveStruct) ;
 
-/****************************************************************************/
-/*  Routine:  ObjMoveUpdate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveUpdate is called on objects to update any movement that they   */
-/*  might have due to accelerations in any X, Y, or Z direction.   Since    */
-/*  all moveable items in the engine are objects (monsters, players, &      */
-/*  items), this routine should handle ALL movement in the game.  Note      */
-/*  that if you are not using this routine, you are doing it wrong.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    6/14/95: Still using Stats variables for all objects.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct -- Pointer to object to move           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dSetExceptObjectByPtr                                            */
-/*    View3dMoveToXY                                                        */
-/*    View3dGetSurroundingSectors                                           */
-/*    View3dGetFloorAndCeiling                                              */
-/*    View3dGetFloorAbove                                                   */
-/*    StatsGetClimbHeight                                                   */
-/*    StatsHurtPlayer                                                       */
-/*    StatsGetMaxFallV                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/10/95  Created                                                */
-/*    LES  06/12/95  Finished creating and wrong most of the heart of it.   */
-/*                   Most of it translated from old VIEW.C                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveUpdate is called on objects to update any movement that they
+ *  might have due to accelerations in any X, Y, or Z direction.   Since
+ *  all moveable items in the engine are objects (monsters, players, &
+ *  items), this routine should handle ALL movement in the game.  Note
+ *  that if you are not using this routine, you are doing it wrong.
+ *
+ *  NOTE: 
+ *  6/14/95 Still using Stats variables for all objects.
+ *
+ *  @param ObjMoveStruct -- Pointer to object to move
+ *  @param delta -- Delta in time
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveUpdate(T_objMoveStruct *ObjMoveStruct, T_sword32 delta)
 {
 	T_sword32 newX, newY, newZ;
@@ -398,44 +378,15 @@ if (ObjectIsCreature((T_3dObject *)ObjMoveStruct))
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveInit                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveInit is used to initialize an object's movement information.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct -- Pointer to object move info to init */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/10/95  Created                                                */
-/*    LES  09/15/95  Add code to initialize Z, lowestPoint, & highestPoint  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveInit is used to initialize an object's movement information.
+ *
+ *  @param ObjMoveStruct -- Pointer to object move info to init
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveInit (T_objMoveStruct *ObjMoveStruct)
 {
 	DebugRoutine ("ObjMoveInit");
@@ -877,46 +828,17 @@ T_word16 ObjMoveGetNthAreaSector(
     return sector ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveAddX                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveAddX is a quick routine to transpose the position along the    */
-/*  X direction.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to transpose            */
-/*                                                                          */
-/*    T_sword32 addx                      -- amount to add                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveAddX
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveAddX is a quick routine to transpose the position along the
+ *  X direction.
+ *
+ *  @param ObjMoveStruct -- object to transpose
+ *  @param addx -- amount to add
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveAddX   (T_objMoveStruct *ObjMoveStruct,
 						T_sword32 addx)
 {
@@ -928,46 +850,17 @@ T_void ObjMoveAddX   (T_objMoveStruct *ObjMoveStruct,
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveAddY                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveAddY is a quick routine to transpose the position along the    */
-/*  Y direction.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to transpose            */
-/*                                                                          */
-/*    T_sword32 addy                      -- amount to add                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveAddY
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveAddY is a quick routine to transpose the position along the
+ *  Y direction.
+ *
+ *  @param ObjMoveStruct -- object to transpose
+ *  @param addy -- amount to add
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveAddY   (T_objMoveStruct *ObjMoveStruct,
 						T_sword32 addy)
 {
@@ -979,46 +872,17 @@ T_void ObjMoveAddY   (T_objMoveStruct *ObjMoveStruct,
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveAddZ                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveAddZ is a quick routine to transpose the position along the    */
-/*  Z direction.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to transpose            */
-/*                                                                          */
-/*    T_sword32 addz                      -- amount to add                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveAddZ
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveAddZ is a quick routine to transpose the position along the
+ *  Z direction.
+ *
+ *  @param ObjMoveStruct -- object to transpose
+ *  @param addz -- amount to add
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveAddZ   (T_objMoveStruct *ObjMoveStruct,
 						T_sword32 addz)
 {
@@ -1030,44 +894,16 @@ T_void ObjMoveAddZ   (T_objMoveStruct *ObjMoveStruct,
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveGetMaxVelocity                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveGetMaxVelocity returns the maximum velocity that the given     */
-/*  object is allowed to move.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to get velocity of      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveGetMaxVelocity
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveGetMaxVelocity returns the maximum velocity that the given
+ *  object is allowed to move.
+ *
+ *  @param ObjMoveStruct -- object to get velocity of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjMoveGetMaxVelocity(T_objMoveStruct *ObjMoveStruct)
 {
     T_word16 velocity ;
@@ -1082,46 +918,17 @@ T_word16 ObjMoveGetMaxVelocity(T_objMoveStruct *ObjMoveStruct)
     return velocity ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveSetMaxVelocity                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveSetMaxVelocity changes the maximum velocity that the given     */
-/*  object is allowed to move.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to set velocity of      */
-/*                                                                          */
-/*    T_word16 maxVelocity                -- new maximum velocity           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveSetMaxVelocity
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveSetMaxVelocity changes the maximum velocity that the given
+ *  object is allowed to move.
+ *
+ *  @param ObjMoveStruct -- object to set velocity of
+ *  @param maxVelocity -- new maximum velocity
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveSetMaxVelocity(
            T_objMoveStruct *ObjMoveStruct,
            T_word16 maxVelocity)
@@ -1136,46 +943,17 @@ T_void ObjMoveSetMaxVelocity(
 #endif
 
 #ifndef NDEBUG
-/****************************************************************************/
-/*  Routine:  ObjMovePrint                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMovePrint dumps out the given object move information to the       */
-/*  given file/output.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    FILE *fp                    -- File to output object move info        */
-/*                                                                          */
-/*    T_objMoveStruct *p_om       -- Object move struct to print            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fprintf                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMovePrint
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMovePrint dumps out the given object move information to the
+ *  given file/output.
+ *
+ *  @param fp -- File to output object move info
+ *  @param p_om -- Object move struct to print
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMovePrint(FILE *fp, T_objMoveStruct *p_om)
 {
     T_word16 i ;
@@ -1184,7 +962,7 @@ T_void ObjMovePrint(FILE *fp, T_objMoveStruct *p_om)
 
     fprintf(fp, "ObjMove: %p\n", p_om) ;
     fprintf(fp, "  for object ID %d\n", ObjectGetServerId (((T_3dObject *)p_om)));
-    fprintf(fp, "  X : %08lX\n", p_om->X) ; 
+    fprintf(fp, "  X : %08lX\n", p_om->X) ;
     fprintf(fp, "  Y : %08lX\n", p_om->Y) ;
     fprintf(fp, "  Z : %08lX\n", p_om->Z) ;
     fprintf(fp, "  VX: %08lX\n", p_om->XV) ;
@@ -1210,49 +988,20 @@ T_void ObjMovePrint(FILE *fp, T_objMoveStruct *p_om)
 
 #endif
 
-/****************************************************************************/
-/*  Routine:  ObjMoveAddExternalVelocity                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveAddExternalVelocity pushes an object in a direction with       */
-/*  a constant velocity.  Unlike normal velocity, external velocity         */
-/*  is not clipped by the maximum velocity.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 dVX               -- 32 bit delta X velocity                */
-/*                                                                          */
-/*    T_sword32 dVY               -- 32 bit delta Y velocity                */
-/*                                                                          */
-/*    T_sword32 dVZ               -- 32 bit delta Z velocity                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveAddExternalVelocity
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveAddExternalVelocity pushes an object in a direction with
+ *  a constant velocity.  Unlike normal velocity, external velocity
+ *  is not clipped by the maximum velocity.
+ *
+ *  @param ObjMoveStruct -- Current obj's move structure
+ *  @param dVX -- 32 bit delta X velocity
+ *  @param dVY -- 32 bit delta Y velocity
+ *  @param dVZ -- 32 bit delta Z velocity
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveAddExternalVelocity(
            T_objMoveStruct *ObjMoveStruct,
            T_sword32 dVX,
@@ -1270,50 +1019,19 @@ T_void ObjMoveAddExternalVelocity(
 	DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveSetAngularVelocity                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveSetAngularVelocity declares the direction and magnitude that   */
-/*  the object is to take.  Any other velocity that the object had was lost.*/
-/*  Object acceleration is still the same.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *p_objM     -- ObjMove to set angular velocity of     */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to move toward                   */
-/*                                                                          */
-/*    T_sword16 magnitude         -- How fast to go.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetXVel                                                        */
-/*    ObjMoveSetYVel                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/29/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveSetAngularVelocity
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveSetAngularVelocity declares the direction and magnitude that
+ *  the object is to take.  Any other velocity that the object had was lost.
+ *  Object acceleration is still the same.
+ *
+ *  @param p_objM -- ObjMove to set angular velocity of
+ *  @param angle -- Angle to move toward
+ *  @param magnitude -- How fast to go.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveSetAngularVelocity(
            T_objMoveStruct *p_objM,
            T_word16 angle,
@@ -1432,46 +1150,16 @@ T_void ObjMoveStopMoving(T_objMoveStruct *ObjMoveStruct)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IObjMoveClipVelocity               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveSetMaxVelocity changes the maximum velocity that the given     */
-/*  object is allowed to move.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to set velocity of      */
-/*                                                                          */
-/*    T_word16 maxVelocity                -- new maximum velocity           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjMoveClipVelocity
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveSetMaxVelocity changes the maximum velocity that the given
+ *  object is allowed to move.
+ *
+ *  @param ObjMoveStruct -- object to set velocity of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IObjMoveClipVelocity(T_objMoveStruct *ObjMoveStruct)
 {
     T_sword32 velocityMag ;
@@ -1505,45 +1193,16 @@ printf("obj: %d (t: %d) -- velocity is %d, clip to %d\n",
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveSetUpSectors                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveSetUpSectors performs all the calculations necessary to update */
-/*  the sector information in an obj move structure.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object to fix up sectors       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/16/95  Created                                                */
-/*    AMT  07/20/95  Made it handle DO_NOT_SINK items.                      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveSetUpSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveSetUpSectors performs all the calculations necessary to update
+ *  the sector information in an obj move structure.
+ *
+ *  @param ObjMoveStruct -- object to fix up sectors
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveSetUpSectors(T_objMoveStruct *ObjMoveStruct)
 {
     T_sword32 OX,OY;
@@ -1952,44 +1611,16 @@ T_3dObject *ObjMoveFindLowestObject(T_objMoveStruct *ObjMoveStruct)
     return p_lowest ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjMoveSetMovedFlag                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjMoveSetMovedFlag notes that an object has been moved and ever      */
-/*  moved.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objMoveStruct *ObjMoveStruct      -- object that moved              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjMoveSetMovedFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjMoveSetMovedFlag notes that an object has been moved and ever
+ *  moved.
+ *
+ *  @param ObjMoveStruct -- object that moved
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjMoveSetMovedFlag(T_objMoveStruct *ObjMoveStruct)
 {
     DebugRoutine("ObjMoveSetMovedFlag") ;
@@ -2128,7 +1759,7 @@ T_void ObjMoveUpdateZVel(
     }
 }
 
-/****************************************************************************/
-/*    END OF FILE: OBJMOVE.C                                                */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  OBJMOVE.C
+ *-------------------------------------------------------------------------*/

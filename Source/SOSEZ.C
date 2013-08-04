@@ -278,7 +278,7 @@ _SOS_SAMPLE * cdecl sosEZLoadSample( PSTR szName )
       if ( ( hFile = open( szName, O_RDONLY | O_BINARY ) ) == -1 )
          return( _NULL );
 
-      // seek to the end of the file to determine 
+      // seek to the end of the file to determine
       // the file length;
       wSize =  lseek( hFile, 0, SEEK_END );
 
@@ -325,7 +325,7 @@ _SOS_SAMPLE * cdecl sosEZLoadSample( PSTR szName )
          pWaveHeader = ( _WAVHEADER * )( pData + sizeof( _SOS_SAMPLE ) );
 
          // set size of the sample and pointer to the sample
-         pSample->pSample        =  ( PSTR )pData + sizeof( _SOS_SAMPLE ) + 
+         pSample->pSample        =  ( PSTR )pData + sizeof( _SOS_SAMPLE ) +
             sizeof( _WAVHEADER );
          pSample->wLength        = pWaveHeader->dwDataLength - sizeof( _WAVHEADER );
          pSample->wBitsPerSample = pWaveHeader->wBitsPerSample;

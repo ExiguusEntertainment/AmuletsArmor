@@ -1,6 +1,22 @@
-/****************************************************************************/
-/*    FILE:  CLIENT.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CLIENT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * An interface between the player ("client" here) and originally the
+ * server world is the Client system.  The game system has the player
+ * make requests to the world through the Client interface.
+ *
+ * Much of this code is the player "top level" control and has a mix of
+ * many pieces of code.
+ *
+ * The game keyboard controls are handled in ClientHandleKeyboard().
+ *
+ * @addtogroup CLIENT
+ * @brief Client Player Actions
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include <ctype.h>
 #include <malloc.h>
 #include "3D_COLLI.H"
@@ -179,44 +195,14 @@ static T_byte8 G_nextStart = 0xFF ;
 static T_void IClientDrawStatus(T_word16 left, T_word16 bottom) ;
 #endif
 
-/****************************************************************************/
-/*  Routine:  ClientInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientInit starts up and cleans up any initial items needed by        */
-/*  the client.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientInit starts up and cleans up any initial items needed by
+ *  the client.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientInitMouseAndColor (T_void)
 {
     T_word16 numPlayers ;
@@ -420,38 +406,14 @@ T_void ClientInit(T_void)
      DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientShootFireballAck                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientShootFireballAck confirms that a fireball was sent, and emits   */
-/*  the fireball-shooting sound.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  08/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientShootFireballAck
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientShootFireballAck confirms that a fireball was sent, and emits
+ *  the fireball-shooting sound.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientShootFireballAck (T_word32 extraData,
                                T_packetEitherShortOrLong *p_packet)
 {
@@ -462,51 +424,14 @@ T_void ClientShootFireballAck (T_word32 extraData,
    DebugEnd ();
 }
 
-/****************************************************************************/
-/*  Routine:  ClientShootFireball                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientShootFireball creates a fireball object and requests that the   */
-/*  server add it to the game.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TickerGet                                                             */
-/*    ObjectCreate                                                          */
-/*    PlayerGetX                                                            */
-/*    PlayerGetY                                                            */
-/*    ViewActiveObject                                                      */
-/*    ObjectDeclareMoveable                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/26/95  Created                                                */
-/*    AMT  07/17/95  Made it create a new object rather than always use the */
-/*                   same one.  (i.e. switched it to the new obj. system)   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientShootFireball
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientShootFireball creates a fireball object and requests that the
+ *  server add it to the game.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientShootFireball(T_void)
 {
     T_sword32 x, y ;
@@ -719,43 +644,13 @@ T_void ClientObjectShootObject(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientAttackSent                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientAttackSent confirms that the attack was done.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientAttackSent
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientAttackSent confirms that the attack was done.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientAttackSent(T_word32 extraData, T_packetEitherShortOrLong *p_packet)
 {
     DebugRoutine("ClientAttacklSent") ;
@@ -766,50 +661,18 @@ T_void ClientAttackSent(T_word32 extraData, T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IClientGainExperienceIfHit              * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IClientGainExperienceIfHit checks the given object and if it is a     */
-/*  player or a creature, the given damage value is the amount of           */
-/*  experience earned.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object being hit to check              */
-/*                                                                          */
-/*    T_word32 damage             -- Amount of damage done                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetScript                                                       */
-/*    ObjectIsPassible                                                      */
-/*    ObjectIsPiecewise                                                     */
-/*    StatsChangePlayerExperience                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IClientGainExperienceIfHit
+ *-------------------------------------------------------------------------*/
+/**
+ *  IClientGainExperienceIfHit checks the given object and if it is a
+ *  player or a creature, the given damage value is the amount of
+ *  experience earned.
+ *
+ *  @param p_obj -- Object being hit to check
+ *  @param damage -- Amount of damage done
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IClientGainExperienceIfHit(
                       T_3dObject *p_obj,
                       T_word32 damage)
@@ -979,42 +842,13 @@ T_void ClientMakeObjectGoSplat(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientFinish cleans up the client data and stuff.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientFinish cleans up the client data and stuff.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientFinish (T_void)
 {
    DebugRoutine ("ClientFinish");
@@ -1025,44 +859,14 @@ T_void ClientFinish (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientCheckScrolling                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientCheckScrolling checks to see if the player has pressed either   */
-/*  the Page up or Page down keys to scroll the messages.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientCheckScrolling
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientCheckScrolling checks to see if the player has pressed either
+ *  the Page up or Page down keys to scroll the messages.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientCheckScrolling(T_void)
 {
     static T_word32 nextAttempt = 0 ;
@@ -1163,51 +967,20 @@ static T_3dObject *IDrawTargetItem(T_word16 x, T_word16 y, T_word16 drawX, T_wor
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientHandleOverlay                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientHandleOverlay is called when the 3D engine is done drawing      */
-/*  the 3d view.  This routine draws everything that is to appear on top    */
-/*  of the 3D view.                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left               -- left edge of view                      */
-/*                                                                          */
-/*    T_word16 top                -- top edge of view                       */
-/*                                                                          */
-/*    T_word16 right              -- right edge of view                     */
-/*                                                                          */
-/*    T_word16 bottom             -- bottom edge of view                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientHandleOverlay
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientHandleOverlay is called when the 3D engine is done drawing
+ *  the 3d view.  This routine draws everything that is to appear on top
+ *  of the 3D view.
+ *
+ *  @param left -- left edge of view
+ *  @param top -- top edge of view
+ *  @param right -- right edge of view
+ *  @param bottom -- bottom edge of view
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientHandleOverlay(
            T_word16 left,
            T_word16 top,
@@ -1392,44 +1165,16 @@ static T_void IClientDrawStatus(T_word16 left, T_word16 bottom)
     GrDrawShadowedText(G_clientSyncStatus, COLOR_WHITE, COLOR_BLACK) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetDelta                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetDelta returns the number of timer clicks (ticks) that have   */
-/*  passed since this routine was last called.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Ticks since last call.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetDelta
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetDelta returns the number of timer clicks (ticks) that have
+ *  passed since this routine was last called.
+ *
+ *  @return Ticks since last call.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ClientGetDelta(T_void)
 {
     static T_word32 lastTime = 0 ;
@@ -1447,45 +1192,17 @@ T_word16 ClientGetDelta(T_void)
     return delta ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientLogin                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientLogin requests to login into the server.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that the client has already attached to server and there*/
-/*  is a data communications path open.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*    AMT  07/20/95  Modified to handle visage/demeanor stuff.              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientLogin
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientLogin requests to login into the server.
+ *
+ *  NOTE: 
+ *  It is assumed that the client has already attached to server and there
+ *  is a data communications path open.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientLogin(T_void)
 {
     T_packetShort packet ;
@@ -1507,43 +1224,14 @@ T_void ClientLogin(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IClientLoginAck                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IClientLoginAck notes that the player is successfully connected to    */
-/*  the server.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IClientLoginAck
+ *-------------------------------------------------------------------------*/
+/**
+ *  IClientLoginAck notes that the player is successfully connected to
+ *  the server.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IClientLoginAck(
                   T_word32 extraData,
                   T_packetEitherShortOrLong *p_packet)
@@ -1555,44 +1243,14 @@ T_void IClientLoginAck(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientLogoffFinish                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientLogoffFinish declares the client no longer on.  This routine    */
-/*  closes out the client and anything else that must be done.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientLogoffFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientLogoffFinish declares the client no longer on.  This routine
+ *  closes out the client and anything else that must be done.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientLogoffFinish(
            T_word32 extraData,
            T_packetEitherShortOrLong *p_packet)
@@ -1613,44 +1271,17 @@ T_void ClientLogoffFinish(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientLogoff                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientLogoff tells the server that the client is leaving.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that the client has already attached to server and there*/
-/*  is a data communications path open.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientLogoff
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientLogoff tells the server that the client is leaving.
+ *
+ *  NOTE: 
+ *  It is assumed that the client has already attached to server and there
+ *  is a data communications path open.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientLogoff(T_void)
 {
     DebugRoutine("ClientLogoff") ;
@@ -1674,43 +1305,15 @@ T_void ClientLogoff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientIsLogin                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Simple put, "Am I logged into the server?"                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- FALSE = no, TRUE = yes                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientIsLogin
+ *-------------------------------------------------------------------------*/
+/**
+ *  Simple put, "Am I logged into the server?"
+ *
+ *  @return FALSE = no, TRUE = yes
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ClientIsLogin(T_void)
 {
     E_Boolean isLogin ;
@@ -1724,44 +1327,14 @@ E_Boolean ClientIsLogin(T_void)
     return isLogin ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientUpdate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientUpdate does all the activities that a client needs to do for    */
-/*  a single time slice.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientUpdate does all the activities that a client needs to do for
+ *  a single time slice.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientUpdate(T_void)
 {
     T_word16 sector;
@@ -2113,44 +1686,16 @@ T_void ClientUpdateHealth()
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientTakeDamage                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientTakeDamage is the one routine that should be called when        */
-/*  a player takes damage.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 amount                     -- Amount of damage to give       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientTakeDamage
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientTakeDamage is the one routine that should be called when
+ *  a player takes damage.
+ *
+ *  @param amount -- Amount of damage to give
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientTakeDamage(T_word16 amount)
 {
     DebugRoutine("ClientTakeDamage") ;
@@ -2224,46 +1769,17 @@ void IClientHandleMapKeys(T_word16 scankey)
     }
 }
 
-/****************************************************************************/
-/*  Routine:  ClientHandleKeyboard                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientHandleKeyboard takes care of all keyboard events created by     */
-/*  the client.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_keyboardEvent event               -- Keyboard event to process      */
-/*                                                                          */
-/*    T_byte8 scanKey                     -- Key to go with event           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientHandleKeyboard
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientHandleKeyboard takes care of all keyboard events created by
+ *  the client.
+ *
+ *  @param event -- Keyboard event to process
+ *  @param scanKey -- Key to go with event
+ *
+ *<!-----------------------------------------------------------------------*/
 T_mapHandle G_mapHandleA = MAP_HANDLE_BAD ;
 T_mapHandle G_mapHandleB = MAP_HANDLE_BAD ;
 T_word16 G_mapAorB = 0 ;  /* 0 = A, 1 = B */
@@ -2879,48 +2395,19 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientCreateGlobalAreaSound                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientCreateGlobalAreaSound causes an area sound to be created that   */
-/*  all players hear.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- center for area sound                  */
-/*                                                                          */
-/*    T_word16 radius             -- range of sound from center             */
-/*                                                                          */
-/*    T_word16 soundID            -- sound number                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientCreateGlobalAreaSound
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientCreateGlobalAreaSound causes an area sound to be created that
+ *  all players hear.
+ *
+ *  @param x -- X center for area sound
+ *  @param y -- Y center for area sound
+ *  @param radius -- range of sound from center
+ *  @param soundID -- sound number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientCreateGlobalAreaSound(
            T_sword16 x,
            T_sword16 y,
@@ -2940,46 +2427,17 @@ T_void ClientCreateGlobalAreaSound(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGotoPlace                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGotoPlace tells the client to initiate a request to go to       */
-/*  a different location.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 location           -- location number                        */
-/*                                                                          */
-/*    T_word16 startLocation      -- Location within map                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGotoPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGotoPlace tells the client to initiate a request to go to
+ *  a different location.
+ *
+ *  @param locationNumber -- location number
+ *  @param startLocation -- Location within map
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientGotoPlace(T_word32 locationNumber, T_word16 startLocation)
 {
     T_packetShort packet ;
@@ -3049,44 +2507,16 @@ T_void ClientGotoPlace(T_word32 locationNumber, T_word16 startLocation)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGotoForm                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGotoForm starts up a form that is either hardcoded or           */
-/*  communications based.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 formNumber         -- Number of form to load.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGotoForm
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGotoForm starts up a form that is either hardcoded or
+ *  communications based.
+ *
+ *  @param formNumber -- Number of form to load.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientGotoForm(T_word32 formNumber)
 {
     T_packetShort packet ;
@@ -3132,46 +2562,17 @@ T_void ClientGotoForm(T_word32 formNumber)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientOverlayDone                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientOverlayDone is a callback for OverlayAnimate.  It is called     */
-/*  when an attack is done or when a flag is encounter within the anim.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 animnum            -- Number of animation                    */
-/*                                                                          */
-/*    T_byte8 flag                -- Flag found, else 0 if end of anim.     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SoundPlayByNumber                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/19/96  Commented and changed to use sound effects.            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientOverlayDone
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientOverlayDone is a callback for OverlayAnimate.  It is called
+ *  when an attack is done or when a flag is encounter within the anim.
+ *
+ *  @param animnum -- Number of animation
+ *  @param flag -- Flag found, else 0 if end of anim.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ClientOverlayDone (T_word16 animnum, T_byte8 flag)
 {
 
@@ -3218,48 +2619,18 @@ static T_void ClientOverlayDone (T_word16 animnum, T_byte8 flag)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientThrowObject                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientThrowObject is called to throw an object at a given speed       */
-/*  and angle.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to throw.                       */
-/*                                                                          */
-/*    T_sword16 throwspeed        -- Speed to throw object                  */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to throw along.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientThrowObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientThrowObject is called to throw an object at a given speed
+ *  and angle.
+ *
+ *  @param p_obj -- Object to throw.
+ *  @param throwspeed -- Speed to throw object
+ *  @param angle -- Angle to throw along.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientThrowObject(
            T_3dObject *p_obj,
            T_sword16 throwspeed,
@@ -3276,49 +2647,18 @@ T_void ClientThrowObject(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IClientUpdateAndDrawFramesPerSecond                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IClientUpdateAndDrawFramesPerSecond is a routine that calculates      */
-/*  how many frames per second the engine is getting based on the speed     */
-/*  of the calls to this routine.  Also, it draws the rate on the screen.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left               -- Left edge of window with 3d view       */
-/*                                                                          */
-/*    T_word16 bottom             -- Bottom edge of window with 3d view     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TickerGet                                                             */
-/*    GrDrawRectangle                                                       */
-/*    GrDrawShadowedText                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IClientUpdateAndDrawFramesPerSecond
+ *-------------------------------------------------------------------------*/
+/**
+ *  IClientUpdateAndDrawFramesPerSecond is a routine that calculates
+ *  how many frames per second the engine is getting based on the speed
+ *  of the calls to this routine.  Also, it draws the rate on the screen.
+ *
+ *  @param left -- Left edge of window with 3d view
+ *  @param bottom -- Bottom edge of window with 3d view
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifndef COMPILE_OPTION_FRAME_SPEED_OFF
 static T_void IClientUpdateAndDrawFramesPerSecond(
                   T_word16 left,
@@ -3359,43 +2699,13 @@ itoa(G_numSoundsPlaying, buffer, 10) ;
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  ClientAttack                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientAttack puts the client in the motions of doing an attack.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSendAttackPacket                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientAttack
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientAttack puts the client in the motions of doing an attack.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientAttack(T_void)
 {
     G_attackComplete = FALSE ;
@@ -3403,86 +2713,30 @@ T_void ClientAttack(T_void)
 //    ClientSendAttackPacket() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientIsAttemptingLogout                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientIsAttemptingLogout returns true if the client is logging out    */
-/*  of the system.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = attempting logout               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientIsAttemptingLogout
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientIsAttemptingLogout returns true if the client is logging out
+ *  of the system.
+ *
+ *  @return TRUE = attempting logout
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ClientIsAttemptingLogout(T_void)
 {
     return G_logoutAttempted ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientIsActive                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Simple put, "Am I logged into the server?"                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- FALSE = no, TRUE = yes                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientIsActive
+ *-------------------------------------------------------------------------*/
+/**
+ *  Simple put, "Am I logged into the server?"
+ *
+ *  @return FALSE = no, TRUE = yes
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ClientIsActive(T_void)
 {
     E_Boolean isActive ;
@@ -3496,723 +2750,243 @@ E_Boolean ClientIsActive(T_void)
     return isActive ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetActive                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetActive declares the client to now be active.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetActive
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetActive declares the client to now be active.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetActive(T_void)
 {
     G_clientIsActive = TRUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetInactive                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetInactive declares the client to not be active.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetInactive
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetInactive declares the client to not be active.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetInactive(T_void)
 {
     G_clientIsActive = FALSE ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientIsInit                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientIsActive returns TRUE if the client is initialized.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = client is initialized           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientIsInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientIsActive returns TRUE if the client is initialized.
+ *
+ *  @return TRUE = client is initialized
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ClientIsInit(T_void)
 {
     return G_clientInit ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetMode                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetMode returns the mode that the client is in.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_clientMode                -- mode client is in.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetMode
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetMode returns the mode that the client is in.
+ *
+ *  @return mode client is in.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_clientMode ClientGetMode(T_void)
 {
     return G_clientMode ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetMode                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetMode declares the mode that the client is in.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_clientMode                -- mode client is in.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetMode
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetMode declares the mode that the client is in.
+ *
+ *  @param newMode -- mode client is in.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetMode(E_clientMode newMode)
 {
 //printf("G_clientMode = %d\n", newMode) ;  fflush(stdout) ;
     G_clientMode = newMode ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetLoginId                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetLoginId retrieves the 'login ID' of the client.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 loginId                 -- login ID (0xFFFF if not logged in)*/
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetLoginId
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetLoginId retrieves the 'login ID' of the client.
+ *
+ *  @return login ID (0xFFFF if not logged in)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ClientGetLoginId(T_void)
 {
    return G_loginId;
 }
 
 
-/****************************************************************************/
-/*  Routine:  ClientSetLoginId                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetLoginId stores    the 'login ID' of the client.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 loginId                 -- login ID                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetLoginId
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetLoginId stores    the 'login ID' of the client.
+ *
+ *  @param loginId -- login ID
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetLoginId(T_word16 loginId)
 {
     G_loginId = loginId ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetCurrentPlace                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetCurrentPlace returns the number of the current place.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Number of current place                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetCurrentPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetCurrentPlace returns the number of the current place.
+ *
+ *  @return Number of current place
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ClientGetCurrentPlace(T_void)
 {
     return G_currentPlace ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetCurrentPlace                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetCurrentPlace declares where the current place is.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32                    -- Number of current place                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetCurrentPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetCurrentPlace declares where the current place is.
+ *
+ *  @param newPlace -- Number of current place
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetCurrentPlace(T_word32 newPlace)
 {
     G_currentPlace = newPlace ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetCurrentStartLocation                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetCurrentStartLocation returns what position within a place    */
-/*  client is at.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of current start location       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetCurrentStartLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetCurrentStartLocation returns what position within a place
+ *  client is at.
+ *
+ *  @return Number of current start location
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ClientGetCurrentStartLocation(T_void)
 {
     return G_currentStartLocation ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetCurrentStartLocation                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetCurrentStartLocation returns what position within a place    */
-/*  client is at.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 newStartLocation   -- Number of current start location       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetCurrentStartLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetCurrentStartLocation returns what position within a place
+ *  client is at.
+ *
+ *  @param newStartLocation -- Number of current start location
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetCurrentStartLocation(T_word16 newStartLocation)
 {
     G_currentStartLocation = newStartLocation ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetCurrentServerID                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetCurrentServerID returns the id of the current server.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Server ID                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetCurrentServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetCurrentServerID returns the id of the current server.
+ *
+ *  @return Server ID
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ClientGetCurrentServerID(T_void)
 {
     return G_currentServerID ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetCurrentServerID                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetCurrentServerID sets    the id of the current server.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32                    -- Server ID                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetCurrentServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetCurrentServerID sets    the id of the current server.
+ *
+ *  @param newServerID -- Server ID
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetCurrentServerID(T_word32 newServerID)
 {
     G_currentServerID = newServerID ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetServerEnterStatus                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetServerEnterStatus sets what state in enter the server we     */
-/*  are in.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_requestEnterStatus status -- New status                             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetServerEnterStatus
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetServerEnterStatus sets what state in enter the server we
+ *  are in.
+ *
+ *  @param status -- New status
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetServerEnterStatus(E_requestEnterStatus status)
 {
     G_enterServerStatus = status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientGetServerEnterStatus                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientGetServerEnterStatus gets what state in enter the server we     */
-/*  are in.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_requestEnterStatus status -- status                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientGetServerEnterStatus
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientGetServerEnterStatus gets what state in enter the server we
+ *  are in.
+ *
+ *  @return status
+ *
+ *<!-----------------------------------------------------------------------*/
 E_requestEnterStatus ClientGetServerEnterStatus(T_void)
 {
     return G_enterServerStatus ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetSaveCharStatus                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetSaveCharStatus sets what status the last attempt to save     */
-/*  a character is in.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_clientSaveCharStatus      -- Current save char status               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetSaveCharStatus
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetSaveCharStatus sets what status the last attempt to save
+ *  a character is in.
+ *
+ *  @return Current save char status
+ *
+ *<!-----------------------------------------------------------------------*/
 E_clientSaveCharStatus ClientGetSaveCharStatus(T_void)
 {
     return G_clientSaveCharStatus ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientSetSaveCharStatus                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientSetSaveCharStatus sets what status the last attempt to save     */
-/*  a character is in.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_clientSaveCharStatus status -- New save char status                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientSetSaveCharStatus
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientSetSaveCharStatus sets what status the last attempt to save
+ *  a character is in.
+ *
+ *  @param status -- New save char status
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientSetSaveCharStatus(E_clientSaveCharStatus status)
 {
     G_clientSaveCharStatus = status ;
@@ -4669,7 +3443,6 @@ E_Boolean ClientIsGod (T_void)
     return (isGod);
 }
 
-/****************************************************************************/
 E_Boolean ClientDropInventoryItem(T_word16 numItems, T_word16 itemType, T_word16 accData)
 {
     E_Boolean doDestroy = FALSE ;
@@ -4700,7 +3473,6 @@ E_Boolean ClientDropInventoryItem(T_word16 numItems, T_word16 itemType, T_word16
     return doDestroy ;
 }
 
-/****************************************************************************/
 T_void ClientDied(T_void)
 {
     T_word16 i ;
@@ -4798,7 +3570,6 @@ T_void ClientDied(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientRevive(T_void)
 {
     T_sword16 xPos, yPos ;
@@ -4843,7 +3614,6 @@ T_void ClientRevive(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
 E_Boolean ClientIsDead()
 {
     return G_deadState ;
@@ -4872,7 +3642,6 @@ E_Boolean ClientIsPaused(T_void)
     return G_pauseGame ;
 }
 
-/****************************************************************************/
 static T_3dObject *G_stealFromObject ;
 
 static E_Boolean IClientFindSteal(
@@ -4899,7 +3668,6 @@ static E_Boolean IClientFindSteal(
     return stopSearch ;
 }
 
-/****************************************************************************/
 T_void ClientDoSteal(T_void)
 {
     T_sword32 frontX, frontY ;
@@ -5025,6 +3793,7 @@ T_void ClientSetAdventureNumber(T_word16 adventureNum)
     G_adventureNumber = adventureNum ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  CLIENT.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CLIENT.C
+ *-------------------------------------------------------------------------*/

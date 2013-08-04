@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  SERVERSH.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SERVERSH.C
+ *-------------------------------------------------------------------------*/
+/**
+ * In the past, there was a "shared" group of code between different
+ * server types.  This code needs to be combined with SERVER.C.
+ *
+ * @addtogroup SERVERSH
+ * @brief Server shared code
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_TRIG.H"
 #include "CLIENT.H"
@@ -16,42 +26,17 @@
 /* Module:  Server Shared Routines (between client server and game server) */
 extern T_sword32 G_sourceX, G_sourceY, G_sourceZ ;
 
-/****************************************************************************/
-/*  Routine:  ServerDamageObjectXYZ                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerDamageObject does damage to any object.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to damage                       */
-/*                                                                          */
-/*    T_word32 data               -- Amount of damage to do and what type   */
-/*                                   and owner                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/95  Created                                                */
-/*    LES  06/14/96  Modified for syncronous server                         */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerDamageObjectXYZ
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerDamageObject does damage to any object.
+ *
+ *  @param p_obj -- Object to damage
+ *  @param data -- Amount of damage to do and what type
+ *      and owner
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ServerDamageObjectXYZ(
               T_3dObject *p_obj,
               T_word32 data)
@@ -255,7 +240,7 @@ T_word16 ServerUnlockDoorsInArea(
     return bestLevel ;
 }
 
-/****************************************************************************/
-/*    END OF FILE: SERVERSH.C                                               */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SERVERSH.C
+ *-------------------------------------------------------------------------*/

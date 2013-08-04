@@ -1,6 +1,19 @@
-/****************************************************************************/
-/*    FILE:  DBLLINK.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  DBLLINK.C
+ *-------------------------------------------------------------------------*/
+/**
+ * In my crazed days, I decided that having a double link list 'class'
+ * would be useful and I would no longer have to write this code over
+ * and over.  Amulets & Armor uses this code for all double linked lists.
+ * This version has been optimized to not use malloc and free per node
+ * pointer structure.
+ *
+ * @addtogroup DBLLINK
+ * @brief Double Linked List
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "DBLLINK.H"
 #include "GENERAL.H"
 #include "GRAPHICS.H"
@@ -40,44 +53,16 @@ static T_doubleLinkListStruct G_nodes[MAX_ALLOCATED_NODES] ;
 static T_word16 G_firstFreeNode = 0xFFFF ;
 static T_word16 G_numAllocatedNodes = 0 ;
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListCreate                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListCreate creates a new double link list and sets up       */
-/*  the list to receive new nodes.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkList            -- Created double link list.              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICreateNode                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListCreate creates a new double link list and sets up
+ *  the list to receive new nodes.
+ *
+ *  @return Created double link list.
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifndef NDEBUG
 T_void IDumpMaxCount(T_void)
 {
@@ -117,46 +102,21 @@ printf("!A 1 list_%s\n", DebugGetCallerName()) ;
     return (T_doubleLinkList) p_head ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListDestroy                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListDestroy goes through a list of double link list nodes   */
-/*  and detaches the data with them and then deletes all the nodes.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  The calling routine must realize that this routine does not    */
-/*  deallocate memory attached to a node, it is assumed that the calling    */
-/*  routine will do this.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- Handle to link list to destroy         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDestroyNode                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListDestroy goes through a list of double link list nodes
+ *  and detaches the data with them and then deletes all the nodes.
+ *
+ *  NOTE:
+ *  The calling routine must realize that this routine does not
+ *  deallocate memory attached to a node, it is assumed that the calling
+ *  routine will do this.
+ *
+ *  @param linkList -- Handle to link list to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoubleLinkListDestroy(T_doubleLinkList linkList)
 {
     T_doubleLinkListStruct *p_head ;
@@ -183,46 +143,17 @@ printf("!F 1 list_%s\n", DebugGetCallerName()) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListAddElementAtEnd                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListAddElementAtEnd appends a new element at the end of the */
-/*  link list.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- Handle to link list to append item     */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to element data                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICreateNode                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListAddElementAtEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListAddElementAtEnd appends a new element at the end of the
+ *  link list.
+ *
+ *  @param linkList -- Handle to link list to append item
+ *  @param p_data -- Pointer to element data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListAddElementAtEnd(
                             T_doubleLinkList linkList,
                             T_void *p_data)
@@ -263,46 +194,17 @@ printf("!A 1 node_%s\n", DebugGetCallerName()) ;
     return ((T_doubleLinkListElement)p_element) ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListAddElementAtFront                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListAddElementAtFront adds a new element at the front of    */
-/*  the link list.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- Handle to link list to insert item     */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to element data                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICreateNode                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListAddElementAtFront
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListAddElementAtFront adds a new element at the front of
+ *  the link list.
+ *
+ *  @param linkList -- Handle to link list to insert item
+ *  @param p_data -- Pointer to element data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListAddElementAtFront(
                             T_doubleLinkList linkList,
                             T_void *p_data)
@@ -343,46 +245,17 @@ printf("!A 1 node_%s\n", DebugGetCallerName()) ;
     return ((T_doubleLinkListElement)p_element) ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListAddElementAfterElement                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListAddElementAfterElement adds a new element after         */
-/*  another element in a link list.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListElement element -- handle of element to go after      */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to element data                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICreateNode                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListAddElementAfterElement
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListAddElementAfterElement adds a new element after
+ *  another element in a link list.
+ *
+ *  @param element -- handle of element to go after
+ *  @param p_data -- Pointer to element data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListAddElementAfterElement(
                             T_doubleLinkListElement element,
                             T_void *p_data)
@@ -427,46 +300,17 @@ printf("!A 1 node_%s\n", DebugGetCallerName()) ;
     return ((T_doubleLinkListElement)p_element) ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListAddElementBeforeElement                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListAddElementBeforeElement adds a new element before       */
-/*  another element in a link list.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListElement element -- handle of element to go before     */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to element data                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICreateNode                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListAddElementBeforeElement
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListAddElementBeforeElement adds a new element before
+ *  another element in a link list.
+ *
+ *  @param element -- handle of element to go before
+ *  @param p_data -- Pointer to element data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListAddElementBeforeElement(
                             T_doubleLinkListElement element,
                             T_void *p_data)
@@ -511,44 +355,18 @@ printf("!A 1 node_%s\n", DebugGetCallerName()) ;
     return ((T_doubleLinkListElement)p_element) ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListGetNumberElements                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListGetNumberElements returns the number of elements in     */
-/*  the given link list.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- Link list to get count of              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Number of elements                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListGetNumberElements
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListGetNumberElements returns the number of elements in
+ *  the given link list.
+ *
+ *  @param linkList -- Link list to get count of
+ *
+ *  @return Number of elements
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 DoubleLinkListGetNumberElements(T_doubleLinkList linkList)
 {
     T_doubleLinkListStruct *p_head ;
@@ -568,44 +386,18 @@ T_word32 DoubleLinkListGetNumberElements(T_doubleLinkList linkList)
     return count ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListRemoveElement                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListRemoveElement removes  an element from a link list.     */
-/*  This routine also returns the data that was attached to this element.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListElement element --  removes the element from the list.*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- Previously attached node data          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDestroyNode                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListRemoveElement
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListRemoveElement removes  an element from a link list.
+ *  This routine also returns the data that was attached to this element.
+ *
+ *  @param element --  removes the element from the list.
+ *
+ *  @return Previously attached node data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *DoubleLinkListRemoveElement(T_doubleLinkListElement element)
 {
     T_doubleLinkListStruct *p_node ;
@@ -645,53 +437,26 @@ printf("!F 1 node_%s\n", DebugGetCallerName()) ;
 }
 
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListTraverse                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListTraverse travels along the link list and calls the      */
-/*  given callback for each of the nodes.  In addition, the callback        */
-/*  has the choice of aborting the routine.  If the traversal stops early   */
-/*  that element's handle is returned, else DOUBLE_LINK_LIST_ELEMENT_BAD    */
-/*  is returned.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- List to traverse                       */
-/*                                                                          */
-/*    T_doubleLinkListTraverseCallback callback -- callback to call on each */
-/*                                                 element, returns FALSE   */
-/*                                                 to stop traversing.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkListElement     -- Element that traverse stopped on,      */
-/*                                   or DOUBLE_LINK_LIST_ELEMENT_NONE if    */
-/*                                   completed list.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    (callback)                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListTraverse
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListTraverse travels along the link list and calls the
+ *  given callback for each of the nodes.  In addition, the callback
+ *  has the choice of aborting the routine.  If the traversal stops early
+ *  that element's handle is returned, else DOUBLE_LINK_LIST_ELEMENT_BAD
+ *  is returned.
+ *
+ *  @param linkList -- List to traverse
+ *  @param callback -- callback to call on each
+ *      element, returns FALSE
+ *      to stop traversing.
+ *
+ *  @return Element that traverse stopped on,
+ *      or DOUBLE_LINK_LIST_ELEMENT_NONE if
+ *      completed list.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListTraverse(
                             T_doubleLinkList linkList,
                             T_doubleLinkListTraverseCallback callback)
@@ -725,44 +490,18 @@ T_doubleLinkListElement DoubleLinkListTraverse(
     return ((T_doubleLinkListElement)p_at) ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListElementGetData                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListElementGetData pulls out the data pointer from a        */
-/*  double link list element.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListElement element -- Element to get data out of         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- Found data pointer on element          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListElementGetData
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListElementGetData pulls out the data pointer from a
+ *  double link list element.
+ *
+ *  @param element -- Element to get data out of
+ *
+ *  @return Found data pointer on element
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *DoubleLinkListElementGetData(T_doubleLinkListElement element)
 {
     T_void *p_data ;
@@ -786,44 +525,18 @@ T_void *DoubleLinkListElementGetData(T_doubleLinkListElement element)
     return p_data ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListElementGetNext                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListElementGetData pulls out the next element from a        */
-/*  double link list element.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListElement element -- Element to get next element        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkListElement     -- Next element                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListElementGetNext
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListElementGetData pulls out the next element from a
+ *  double link list element.
+ *
+ *  @param element -- Element to get next element
+ *
+ *  @return Next element
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListElementGetNext(
                             T_doubleLinkListElement element)
 {
@@ -851,44 +564,18 @@ T_doubleLinkListElement DoubleLinkListElementGetNext(
     return nextElement ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListElementGetPrevious                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListElementGetPrevious pulls out the previous element from a*/
-/*  double link list element.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListElement element -- Element to get previous element    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkListElement     -- Previous element                       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListElementGetPrevious
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListElementGetPrevious pulls out the previous element from a
+ *  double link list element.
+ *
+ *  @param element -- Element to get previous element
+ *
+ *  @return Previous element
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListElementGetPrevious(
                             T_doubleLinkListElement element)
 {
@@ -916,45 +603,19 @@ T_doubleLinkListElement DoubleLinkListElementGetPrevious(
     return previousElement ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListGetFirst                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListGetFirst returns the first element in a                 */
-/*  double link list.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- List to get first                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkListElement     -- First element, or                      */
-/*                                   DOUBLE_LINK_LIST_ELEMENT_BAD if none.  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListGetFirst
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListGetFirst returns the first element in a
+ *  double link list.
+ *
+ *  @param linkList -- List to get first
+ *
+ *  @return First element, or
+ *      DOUBLE_LINK_LIST_ELEMENT_BAD if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListGetFirst(T_doubleLinkList linkList)
 {
     T_doubleLinkListStruct *p_head ;
@@ -978,45 +639,19 @@ T_doubleLinkListElement DoubleLinkListGetFirst(T_doubleLinkList linkList)
     return first ;
 }
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListGetLast                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListGetLast  returns the last  element in a                 */
-/*  double link list.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- List to get last element               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkListElement     -- Last  element, or                      */
-/*                                   DOUBLE_LINK_LIST_ELEMENT_BAD if none.  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListGetLast
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListGetLast  returns the last  element in a
+ *  double link list.
+ *
+ *  @param linkList -- List to get last element
+ *
+ *  @return Last  element, or
+ *      DOUBLE_LINK_LIST_ELEMENT_BAD if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_doubleLinkListElement DoubleLinkListGetLast(T_doubleLinkList linkList)
 {
     T_doubleLinkListStruct *p_head ;
@@ -1040,45 +675,16 @@ T_doubleLinkListElement DoubleLinkListGetLast(T_doubleLinkList linkList)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICreateNode                             * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICreateNode is used to create a new node structure item and clean it  */
-/*  up before processing.  All fields are set to zero.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_doubleLinkListStruct *    -- Newly create node.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memset                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICreateNode
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICreateNode is used to create a new node structure item and clean it
+ *  up before processing.  All fields are set to zero.
+ *
+ *  @return Newly create node.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_doubleLinkListStruct *ICreateNode(T_void)
 {
     T_doubleLinkListStruct *p_node ;
@@ -1126,44 +732,15 @@ static T_doubleLinkListStruct *ICreateNode(T_void)
     return p_node ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDestroyNode                            * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDestroyNode gets rid of a previously created node.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkListStruct *p_node -- node to destroy                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    memset                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/04/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDestroyNode
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDestroyNode gets rid of a previously created node.
+ *
+ *  @param p_node -- node to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDestroyNode(T_doubleLinkListStruct *p_node)
 {
     T_word32 nodeNum ;
@@ -1233,40 +810,17 @@ T_void DoubleLinkListDisplay(T_doubleLinkList linkList)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  DoubleLinkListFreeAndDestroy                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DoubleLinkListFreeAndDestroy goes through a linked list and does a    */
-/*  MemFree on each of the data elements and then calls Destroy on the      */
-/*  whole list.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_doubleLinkList linkList   -- Handle to link list to destroy         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDestroyNode                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/30/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DoubleLinkListFreeAndDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  DoubleLinkListFreeAndDestroy goes through a linked list and does a
+ *  MemFree on each of the data elements and then calls Destroy on the
+ *  whole list.
+ *
+ *  @param linkList -- Handle to link list to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DoubleLinkListFreeAndDestroy(T_doubleLinkList *linkList)
 {
     T_doubleLinkListStruct *p_head ;
@@ -1304,6 +858,7 @@ printf("!F 1 list_%s\n", DebugGetCallerName()) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  DBLLINK.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  DBLLINK.C
+ *-------------------------------------------------------------------------*/

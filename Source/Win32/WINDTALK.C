@@ -30,10 +30,11 @@ static T_directTalkUniqueAddress G_blankAddress ;
 /**
  * @brief     DirectTalk initialization routine.
  *
- * @param p_callRecv Routine to call each time a packet is received.
- * @param p_callSend Routine to call each time a packet has been sent or 0.
- * @param p_callConnect Routine called when a new connection is made or 0.
- * @param p_callDisconnet Routine called when a connection is dropped or 0.
+ * @param p_callRecv -- Routine to call each time a packet is received.
+ * @param p_callSend -- Routine to call each time a packet has been sent or 0.
+ * @param p_callConnect -- Routine called when a new connection is made or 0.
+ * @param p_callDisconnect -- Routine called when a connection is dropped or 0.
+ * @param handle -- Direct talk handle
  *
  * @return The handle to the direct talk system.
  */
@@ -317,7 +318,7 @@ T_void DirectTalkSetServiceType(E_directTalkServiceType serviceType)
 /**
  * @brief   Set the destination of the next sent data.
  *
- * @param   Unique address of the next packet.
+ * @param p_dest -- Unique address of the next packet.
  */
 /*--------------------------------------------------------------------------*/
 T_void DirectTalkSetDestination(T_directTalkUniqueAddress *p_dest)

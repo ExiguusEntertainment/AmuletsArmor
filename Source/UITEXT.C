@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  UITEXT.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  UITEXT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * DEPRECATED!
+ *
+ * @addtogroup UITEXT
+ * @brief User Interface for Text
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "MEMORY.H"
 #include "MOUSEMOD.H"
 #include "UITEXT.H"
@@ -110,86 +119,42 @@ static T_word16 IUITextFindLineNumber(
 
 static T_void IUITextBackspace(T_UIText uiText) ;
 
-/****************************************************************************/
-/*  Routine:  UITextCreate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextCreate will do everything that needs to be done to create       */
-/*  and set up a ui text object that will be used in a UI Group.  Just      */
-/*  pass it a long list of parameters that declare what type of text object */
-/*  you want.  From this point on, all the options will be in full force.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup                   -- UI Group to add ui text to.            */
-/*                                                                          */
-/*    left                        -- Left border of text.                   */
-/*                                                                          */
-/*    top                         -- Top border of text.                    */
-/*                                                                          */
-/*    right                       -- Right border of text.                  */
-/*                                                                          */
-/*    bottom                      -- Bottom border of text.                 */
-/*                                                                          */
-/*    T_word16 maxSize            -- Tells what is the maximum number of    */
-/*                                   characters allowed in the text region. */
-/*                                                                          */
-/*    E_UITextMode textMode       -- Choose between text you can edit,      */
-/*                                   text to view, or text where each       */
-/*                                   line is selectable.                    */
-/*                                                                          */
-/*    T_resource font             -- Font text will be in.                  */
-/*                                                                          */
-/*    T_screen backgroundScreen   -- Background picture to use when         */
-/*                                   characters are erased.  If you specify */
-/*                                   NULL, no background will be used.      */
-/*                                                                          */
-/*    T_color textColor           -- Color of the text.                     */
-/*                                                                          */
-/*    T_color backgroundColor     -- Color of the background.  Use          */
-/*                                   COLOR_CLEAR if you are using a         */
-/*                                   background screen.                     */
-/*                                                                          */
-/*    T_color selectedTextColor   -- Color of text that is selected.        */
-/*                                                                          */
-/*    T_color selectedTextBackgroundColor                                   */
-/*                                -- Color of background when text is       */
-/*                                   selected.  Pass COLOR_CLEAR if you do  */
-/*                                   not want a background selected color.  */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_UIText                    -- Create ui text object is returned.     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    UIObjectSetArea                                                       */
-/*    UIObjectSetEventHandler                                               */
-/*    UIGroupAttachUIObject                                                 */
-/*    ResourceLock                                                          */
-/*    ResourceUnlock                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/25/94  Added initialization of cursorOn and line's CR         */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextCreate will do everything that needs to be done to create
+ *  and set up a ui text object that will be used in a UI Group.  Just
+ *  pass it a long list of parameters that declare what type of text object
+ *  you want.  From this point on, all the options will be in full force.
+ *
+ *  @param group -- UI Group to add ui text to.
+ *  @param left -- Left border of text.
+ *  @param top -- Top border of text.
+ *  @param right -- Right border of text.
+ *  @param bottom -- Bottom border of text.
+ *  @param maxSize -- Tells what is the maximum number of
+ *      characters allowed in the text region.
+ *  @param textMode -- Choose between text you can edit,
+ *      text to view, or text where each
+ *      line is selectable.
+ *  @param font -- Font text will be in.
+ *  @param backgroundScreen -- Background picture to use when
+ *      characters are erased.  If you specify
+ *      NULL, no background will be used.
+ *  @param textColor -- Color of the text.
+ *  @param backgroundColor -- Color of the background.  Use
+ *      COLOR_CLEAR if you are using a
+ *      background screen.
+ *  @param selectedTextColor -- Color of text that is selected.
+ *      T_color selectedTextBackgroundColor
+ *  @param selectedTextBackgroundColor -- Color of background when text is
+ *      selected.  Pass COLOR_CLEAR if you do
+ *      not want a background selected color.
+ *
+ *  @return Create ui text object is returned.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_UIText UITextCreate(
              T_UIGroup group,
              T_word16 left,
@@ -307,45 +272,16 @@ T_UIText UITextCreate(
     return uiText ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextDeleteAll                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextDeleteAll will delete all text from the current UI Text object. */
-/*  It will draw the differences on the screen as well.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text to have all deleted from.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawChanges                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextDeleteAll
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextDeleteAll will delete all text from the current UI Text object.
+ *  It will draw the differences on the screen as well.
+ *
+ *  @param uiText -- Text to have all deleted from.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextDeleteAll(T_UIText uiText)
 {
     T_word16 i ;
@@ -386,48 +322,17 @@ T_void UITextDeleteAll(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextAppend                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextAppend adds a given string to the end of the current.           */
-/*  Any text that is past the end of the allowed range is lost.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_uiText uiText             -- UI Text object to append text onto.    */
-/*                                                                          */
-/*    T_byte8 *string             -- String of characters to append         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextAppendCharacter                                                */
-/*    IUITextDrawChanges                                                    */
-/*    IUITextFormat                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextAppend
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextAppend adds a given string to the end of the current.
+ *  Any text that is past the end of the allowed range is lost.
+ *
+ *  @param uiText -- UI Text object to append text onto.
+ *  @param string -- String of characters to append
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextAppend(T_UIText uiText, T_byte8 *string)
 {
     DebugRoutine("UITextAppend") ;
@@ -448,49 +353,23 @@ T_void UITextAppend(T_UIText uiText, T_byte8 *string)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextSetTab                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextSetTab is used to declare the position of tabs within a         */
-/*  text line (actually, all text lines in a ui text), so that when a tab   */
-/*  character (0x9) is found, the characters move to tab location.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    In the debuging version, trying to create more than 8 tabs will bomb. */
-/*    Also, all tabs should be defined before adding text or being drawn.   */
-/*  If you don't, unpredictable results may occur.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to get tab                 */
-/*                                                                          */
-/*    T_word16 tabPosition        -- Tab position from left of object       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextSetTab
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextSetTab is used to declare the position of tabs within a
+ *  text line (actually, all text lines in a ui text), so that when a tab
+ *  character (0x9) is found, the characters move to tab location.
+ *
+ *  NOTE: 
+ *  In the debuging version, trying to create more than 8 tabs will bomb.
+ *  Also, all tabs should be defined before adding text or being drawn.
+ *  If you don't, unpredictable results may occur.
+ *
+ *  @param uiText -- Text object to get tab
+ *  @param tabPosition -- Tab position from left of object
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextSetTab(T_UIText uiText, T_word16 tabPosition)
 {
     T_UITextStruct *p_text ;
@@ -545,44 +424,16 @@ T_void UITextSetTab(T_UIText uiText, T_word16 tabPosition)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextScrollDown                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextScrollDown will scroll the display down one line (if it can).   */
-/*  It will always try to leave one line on the display.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have scrolled.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawAll                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextScrollDown
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextScrollDown will scroll the display down one line (if it can).
+ *  It will always try to leave one line on the display.
+ *
+ *  @param uiText -- Text object to have scrolled.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextScrollDown(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -606,43 +457,15 @@ T_void UITextScrollDown(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextScrollUp                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextScrollUp will scroll the display up one line (if it can).       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have scrolled.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawAll                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextScrollUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextScrollUp will scroll the display up one line (if it can).
+ *
+ *  @param uiText -- Text object to have scrolled.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextScrollUp(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -666,44 +489,16 @@ T_void UITextScrollUp(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextGotoTop                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextGotoTop will home the given text ui so that the top of the      */
-/*  document is being shown.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to go to the top.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextGotoTop
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextGotoTop will home the given text ui so that the top of the
+ *  document is being shown.
+ *
+ *  @param uiText -- Text object to go to the top.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextGotoTop(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -728,45 +523,16 @@ T_void UITextGotoTop(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UITextGotoEnd                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UITextGotoEnd will move the display to the very end and show text     */
-/*  as much of the text as possible.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to go to the top.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UITextGotoEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  UITextGotoEnd will move the display to the very end and show text
+ *  as much of the text as possible.
+ *
+ *  @param uiText -- Text object to go to the top.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UITextGotoEnd(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -791,46 +557,17 @@ T_void UITextGotoEnd(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextDrawAll                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextDrawAll marks all the lines in a UI Text object as being       */
-/*  changed (even it it was not) and then makes a call to                   */
-/*  IUITextDrawChanges.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to draw                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawChanges                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextDrawAll
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextDrawAll marks all the lines in a UI Text object as being
+ *  changed (even it it was not) and then makes a call to
+ *  IUITextDrawChanges.
+ *
+ *  @param uiText -- Text object to draw
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextDrawAll(T_UIText uiText)
 {
     T_word16 i ;
@@ -852,48 +589,17 @@ static T_void IUITextDrawAll(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextDrawChanges                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextDrawChanges searches the ui text object given for changes      */
-/*  that have occured and calls IUITextDrawLine for each line that has      */
-/*  been changed.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have changes drawn      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawLine                                                       */
-/*    MouseHide                                                             */
-/*    MouseShow                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextDrawChanges
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextDrawChanges searches the ui text object given for changes
+ *  that have occured and calls IUITextDrawLine for each line that has
+ *  been changed.
+ *
+ *  @param uiText -- Text object to have changes drawn
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextDrawChanges(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -920,61 +626,18 @@ static T_void IUITextDrawChanges(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextDrawLine                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextDrawLine does the brute work of determining if a line is       */
-/*  on the screen, and if it is, draws the whole line and text inside       */
-/*  it.                                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to draw line from          */
-/*                                                                          */
-/*    T_byte8 lineIndex           -- Line to draw within text object        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawRectangle                                                       */
-/*    GrSetScreen                                                           */
-/*    GrTransferRectangle                                                   */
-/*    ResourceLock                                                          */
-/*    ResourceUnlock                                                        */
-/*    UIObjectGetLeftPosition                                               */
-/*    UIObjectGetRightPosition                                              */
-/*    UIObjectGetTopPosition                                                */
-/*    IUITextCalculateOffsetPosition                                        */
-/*    MouseHide                                                             */
-/*    MouseShow                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/25/94  Made the routine use the cursorOn flag.                */
-/*                   Fixed bug on how it draws selected areas.              */
-/*    LES  11/29/94  Converted to new technique                             */
-/*    LES  11/30/94  Made it no longer draw '\n' characters                 */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextDrawLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextDrawLine does the brute work of determining if a line is
+ *  on the screen, and if it is, draws the whole line and text inside
+ *  it.
+ *
+ *  @param uiText -- Text object to draw line from
+ *  @param lineIndex -- Line to draw within text object
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextDrawLine(T_UIText uiText, T_byte8 lineIndex)
 {
     T_UITextStruct *p_text ;
@@ -1202,55 +865,27 @@ static T_void IUITextDrawLine(T_UIText uiText, T_byte8 lineIndex)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextCalculateOffsetPosition                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextCalculateOffsetPosition is used to determine how far from the  */
-/*  left border in pixels is a certain location of a character in a         */
-/*  particular text line.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine assumes that the currently active font is the font       */
-/*  that the ui text object is using.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to find position within    */
-/*                                                                          */
-/*    T_byte8 lineIndex           -- Line to find position within           */
-/*                                                                          */
-/*    T_byte8 charIndex           -- Character index from start of line     */
-/*                                   to find position of.                   */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of pixels from left edge        */
-/*                                   til reaches the character.             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIGetClosestTabPosition                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*    LES  12/12/94  Removed DebugCheck on charIndex                        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextCalculateOffsetPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextCalculateOffsetPosition is used to determine how far from the
+ *  left border in pixels is a certain location of a character in a
+ *  particular text line.
+ *
+ *  NOTE: 
+ *  This routine assumes that the currently active font is the font
+ *  that the ui text object is using.
+ *
+ *  @param uiText -- Text object to find position within
+ *  @param lineIndex -- Line to find position within
+ *  @param charIndex -- Character index from start of line
+ *      to find position of.
+ *
+ *  @return Number of pixels from left edge
+ *      til reaches the character.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IUITextCalculateOffsetPosition(
                     T_UIText uiText,
                     T_word16 lineIndex,
@@ -1290,49 +925,21 @@ static T_word16 IUITextCalculateOffsetPosition(
     return offset ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIGetClosestTabPosition                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIGetClosestTabPosition uses the given pixel location from the       */
-/*  left of a uiText object to determine where to tab over to.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to find tab within         */
-/*                                                                          */
-/*    T_byte16 offset             -- Number of pixels already over from     */
-/*                                   left.                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Position of next tab.  If 0, there     */
-/*                                   was no next tab.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIGetClosestTabPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIGetClosestTabPosition uses the given pixel location from the
+ *  left of a uiText object to determine where to tab over to.
+ *
+ *  @param uiText -- Text object to find tab within
+ *  @param offset -- Number of pixels already over from
+ *      left.
+ *
+ *  @return Position of next tab.  If 0, there
+ *      was no next tab.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IUIGetClosestTabPosition(T_UIText uiText, T_word16 offset)
 {
     T_word16 i ;
@@ -1369,49 +976,21 @@ static T_word16 IUIGetClosestTabPosition(T_UIText uiText, T_word16 offset)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextAppendCharacter             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextAppendCharacter adds one character to the end of the given     */
-/*  text object.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine appends the character but the character will not appear  */
-/*  until a IUITextFormat command is issued.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to append to               */
-/*                                                                          */
-/*    T_byte8 character           -- Character to append to text object     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/25/94  Adding code to handle '\n' characters                  */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextAppendCharacter
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextAppendCharacter adds one character to the end of the given
+ *  text object.
+ *
+ *  NOTE: 
+ *  This routine appends the character but the character will not appear
+ *  until a IUITextFormat command is issued.
+ *
+ *  @param uiText -- Text object to append to
+ *  @param character -- Character to append to text object
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextAppendCharacter(T_UIText uiText, T_byte8 character)
 {
     T_UITextStruct *p_text ;
@@ -1431,49 +1010,20 @@ static T_void IUITextAppendCharacter(T_UIText uiText, T_byte8 character)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextStandardEventHandler        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- This particular ui object/button       */
-/*                                                                          */
-/*    E_UIEvent event             -- The event to process                   */
-/*                                                                          */
-/*    T_word16 data1              -- Mouse X coordinate (not used)          */
-/*                                                                          */
-/*    T_word16 data2              -- Mouse Y coordinate (not used)          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE  = Processed event                */
-/*                                   FALSE = Event ignored                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Made routine read all keys in buffer instead of just 1 */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextStandardEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *  @param object -- This particular ui object/button
+ *  @param event -- The event to process
+ *  @param data1 -- Mouse X coordinate (not used)
+ *  @param data2 -- Mouse Y coordinate (not used)
+ *
+ *  @return TRUE  = Processed event
+ *      FALSE = Event ignored
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IUITextStandardEventHandler(
               T_UIObject object,
               E_UIEvent event,
@@ -1562,51 +1112,18 @@ static E_Boolean IUITextStandardEventHandler(
     return handled ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextPositionCursor              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextPositionCursor moves the cursor to the given coordinates       */
-/*  on the screen (and the given text object).                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have cursor positioned. */
-/*                                                                          */
-/*    T_word16 posX               -- Screen position X                      */
-/*                                                                          */
-/*    T_word16 posY               -- Screen position Y                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    UIObjectGetTopPosition                                                */
-/*    IUITextCalculateCursorInLine                                          */
-/*    IUITextDrawLine                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextPositionCursor
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextPositionCursor moves the cursor to the given coordinates
+ *  on the screen (and the given text object).
+ *
+ *  @param uiText -- Text object to have cursor positioned.
+ *  @param posX -- Screen position X
+ *  @param posY -- Screen position Y
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextPositionCursor(
                   T_UIText uiText,
                   T_word16 posX,
@@ -1657,51 +1174,18 @@ static T_void IUITextPositionCursor(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextDragCursor                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextDragCursor determines the end point of the area of text that   */
-/*  is about to be selected and selects it.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have cursor positioned. */
-/*                                                                          */
-/*    T_word16 posX               -- Screen position X                      */
-/*                                                                          */
-/*    T_word16 posY               -- Screen position Y                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    UIObjectGetTopPosition                                                */
-/*    IUITextCalculateCursorInLine                                          */
-/*    IUITextSelectArea                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextDragCursor
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextDragCursor determines the end point of the area of text that
+ *  is about to be selected and selects it.
+ *
+ *  @param uiText -- Text object to have cursor positioned.
+ *  @param posX -- Screen position X
+ *  @param posY -- Screen position Y
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextDragCursor(
                   T_UIText uiText,
                   T_word16 posX,
@@ -1745,49 +1229,23 @@ static T_void IUITextDragCursor(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextCalculateCursorInLine       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextPositionCursorInLine moves the cursor to a new location        */
-/*  in a UI text line based on a given x position and the line.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The font of the line is assumed to be the active font.                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have cursor positioned. */
-/*                                                                          */
-/*    T_word16 line               -- Text line within the text object       */
-/*                                                                          */
-/*    T_word16 posY               -- Screen position Y                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character offset into the given line.  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    UIObjectGetLeftPosition                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextCalculateCursorInLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextPositionCursorInLine moves the cursor to a new location
+ *  in a UI text line based on a given x position and the line.
+ *
+ *  NOTE: 
+ *  The font of the line is assumed to be the active font.
+ *
+ *  @param uiText -- Text object to have cursor positioned.
+ *  @param line -- Text line within the text object
+ *  @param posY -- Screen position Y
+ *
+ *  @return Character offset into the given line.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IUITextCalculateCursorInLine(
                     T_UIText uiText,
                     T_word16 line,
@@ -1836,45 +1294,17 @@ static T_word16 IUITextCalculateCursorInLine(
     return offset ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextSelectArea                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextSelectArea goes through and selects all the text that is       */
-/*  between the cursor and the end of the selection range (determined by    */
-/*  where the mouse was dragged).                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have area selected.     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawChanges                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextSelectArea
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextSelectArea goes through and selects all the text that is
+ *  between the cursor and the end of the selection range (determined by
+ *  where the mouse was dragged).
+ *
+ *  @param uiText -- Text object to have area selected.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextSelectArea(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -1974,46 +1404,17 @@ static T_void IUITextSelectArea(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextSelectNone                  * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextSelectNone makes the given text no longer selected and removes */
-/*  the selection block from the screen.  The cursor returns to where it    */
-/*  was originally when the selection area was made.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to have area selected.     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextDrawChanges                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextSelectNone
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextSelectNone makes the given text no longer selected and removes
+ *  the selection block from the screen.  The cursor returns to where it
+ *  was originally when the selection area was made.
+ *
+ *  @param uiText -- Text object to have area selected.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextSelectNone(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -2038,52 +1439,19 @@ static T_void IUITextSelectNone(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextClipCoordinates             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextClipCoordinates looks at a text object and two coordinates     */
-/*  and determines if the coodinates are outside the text object, and if    */
-/*  they are, it clips them to stay in the box.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to clip coordinates to.    */
-/*                                                                          */
-/*    T_word16 *posX              -- Pointer to X position to clip.         */
-/*                                                                          */
-/*    T_word16 *posY              -- Pointer to Y position to clip.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    UIObjectGetTopPosition                                                */
-/*    UIObjectGetLeftPosition                                               */
-/*    UIObjectGetRightPosition                                              */
-/*    UIObjectGetBottomPosition                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextClipCoordinates
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextClipCoordinates looks at a text object and two coordinates
+ *  and determines if the coodinates are outside the text object, and if
+ *  they are, it clips them to stay in the box.
+ *
+ *  @param uiText -- Text object to clip coordinates to.
+ *  @param posX -- Pointer to X position to clip.
+ *  @param posY -- Pointer to Y position to clip.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextClipCoordinates(
                   T_UIText uiText,
                   T_word16 *posX,
@@ -2136,49 +1504,16 @@ static T_void IUITextClipCoordinates(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextInsertKeystroke             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Perhaps one of the most important routines, this routine takes        */
-/*  keys off the keyboard and inserts them at the current cursor location.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to send keystrokes         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextInsertCharacter                                                */
-/*    IUITextBackspace                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/30/94  Made the routine filter out \r and replace with \n.    */
-/*    LES  12/12/94  Added call to IUITextBackspace                         */
-/*                   Changed routine so it uses a character passed in       */
-/*                   instead of reading from the keyboard.                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextInsertKeystroke
+ *-------------------------------------------------------------------------*/
+/**
+ *  Perhaps one of the most important routines, this routine takes
+ *  keys off the keyboard and inserts them at the current cursor location.
+ *
+ *  @param uiText -- Text object to send keystrokes
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextInsertKeystroke(T_UIText uiText, T_byte8 character)
 {
     DebugRoutine("IUITextInsertKeystroke") ;
@@ -2204,48 +1539,21 @@ static T_void IUITextInsertKeystroke(T_UIText uiText, T_byte8 character)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextInsertCharacter             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextInsertCharacter does the actual job of inserting new           */
-/*  characters at the cursor location.  Word wrap is also checked.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that the font of the text is the active graphics        */
-/*  font.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to insert char into.       */
-/*                                                                          */
-/*    T_byte8 character           -- ASCII character to insert.             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextWordWrap                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextInsertCharacter
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextInsertCharacter does the actual job of inserting new
+ *  characters at the cursor location.  Word wrap is also checked.
+ *
+ *  NOTE: 
+ *  It is assumed that the font of the text is the active graphics
+ *  font.
+ *
+ *  @param uiText -- Text object to insert char into.
+ *  @param character -- ASCII character to insert.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextInsertCharacter(T_UIText uiText, T_byte8 character)
 {
     T_UITextStruct *p_text ;
@@ -2296,46 +1604,20 @@ static T_void IUITextInsertCharacter(T_UIText uiText, T_byte8 character)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextMoveCursorRight             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextMoveCursorRight moves the cursor one character to the right.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    IUITextMoveCursorRight does not draw the changed line on the screen.  */
-/*  However, this can be useful if you wish to call this routine multiple   */
-/*  times.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text to have cursor moved right.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextMoveCursorRight
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextMoveCursorRight moves the cursor one character to the right.
+ *
+ *  NOTE: 
+ *  IUITextMoveCursorRight does not draw the changed line on the screen.
+ *  However, this can be useful if you wish to call this routine multiple
+ *  times.
+ *
+ *  @param uiText -- Text to have cursor moved right.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextMoveCursorRight(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -2355,47 +1637,20 @@ static T_void IUITextMoveCursorRight(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextMoveCursorLeft              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextMoveCursorLeft  moves the cursor one character to the left.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    IUITextMoveCursorLeft  does not draw the changed line on the screen.  */
-/*  However, this can be useful if you wish to call this routine multiple   */
-/*  times.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text to have cursor moved right.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*    LES  11/28/94  Converted to new technique                             */
-/*    LES  12/12/94  Fixed bug in this routine (bad if statement).          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextMoveCursorLeft
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextMoveCursorLeft  moves the cursor one character to the left.
+ *
+ *  NOTE: 
+ *  IUITextMoveCursorLeft  does not draw the changed line on the screen.
+ *  However, this can be useful if you wish to call this routine multiple
+ *  times.
+ *
+ *  @param uiText -- Text to have cursor moved right.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextMoveCursorLeft(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -2415,49 +1670,18 @@ static T_void IUITextMoveCursorLeft(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextGetCharacterWidth           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextGetCharacterWidth determines how wide a character in the       */
-/*  current text is.  The routine uses the given x position to determine    */
-/*  what special characters like tab and return will do.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that the current font is the correct font.              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIGetClosestTabPosition                                              */
-/*    GrGetCharacterWidth                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/94  Created                                                */
-/*    LES  11/30/94  Fixed problem of zero width ... now returns full width.*/
-/*                   This is necessary when you have repeated \n char's.    */
-/*    LES  12/12/94  Carriage returns now are of zero width ... always.     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextGetCharacterWidth
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextGetCharacterWidth determines how wide a character in the
+ *  current text is.  The routine uses the given x position to determine
+ *  what special characters like tab and return will do.
+ *
+ *  NOTE: 
+ *  It is assumed that the current font is the correct font.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IUITextGetCharacterWidth(
                     T_UIText uiText,
                     T_word16 offset,
@@ -2489,47 +1713,21 @@ static T_word16 IUITextGetCharacterWidth(
     return width ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextMoveCursorToIndex           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextMoveCursorToIndex will change where the cursor is currently    */
-/*  located.  It will move it appropriately and update it's line index.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Not that the cursor will not update on the screen until a             */
-/*  IUITextDrawChanges call is made.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object with cursor to move        */
-/*                                                                          */
-/*    T_word16 cursorIndex        -- Index location of new cursor.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUITextFindLineNumber                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextMoveCursorToIndex
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextMoveCursorToIndex will change where the cursor is currently
+ *  located.  It will move it appropriately and update it's line index.
+ *
+ *  NOTE: 
+ *  Not that the cursor will not update on the screen until a
+ *  IUITextDrawChanges call is made.
+ *
+ *  @param uiText -- Text object with cursor to move
+ *  @param cursorIndex -- Index location of new cursor.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextMoveCursorToIndex(
                   T_UIText uiText,
                   T_word16 cursorIndex)
@@ -2561,47 +1759,20 @@ static T_void IUITextMoveCursorToIndex(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextFindLineNumber              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextFindLineNumber uses the given index to determine what line     */
-/*  the index is found on.  The number is returned.  If too far, the        */
-/*  last line is returned.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to find line within        */
-/*                                                                          */
-/*    T_word16 index              -- Index into data                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- line number of text                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextFindLineNumber
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextFindLineNumber uses the given index to determine what line
+ *  the index is found on.  The number is returned.  If too far, the
+ *  last line is returned.
+ *
+ *  @param uiText -- Text object to find line within
+ *  @param index -- Index into data
+ *
+ *  @return line number of text
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IUITextFindLineNumber(
                     T_UIText uiText,
                     T_word16 index)
@@ -2637,46 +1808,17 @@ static T_word16 IUITextFindLineNumber(
     return lastLine ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextFormat                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUITextFormat goes through and formats the lines of the text          */
-/*  so that characters are where they should be.  This includes word        */
-/*  wrapping and such.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to format                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/94  Created                                                */
-/*    LES  12/12/94  Modified to \n to work better (the way they should).   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextFormat
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextFormat goes through and formats the lines of the text
+ *  so that characters are where they should be.  This includes word
+ *  wrapping and such.
+ *
+ *  @param uiText -- Text object to format
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextFormat(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -2835,44 +1977,16 @@ static T_void IUITextFormat(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUITextBackspace                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      IUITextBackspace deletes one character to the left of the cursor    */
-/*  location.  If the cursor is at the start, no characters are deleted.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIText uiText             -- Text object to delete character        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUITextBackspace
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUITextBackspace deletes one character to the left of the cursor
+ *  location.  If the cursor is at the start, no characters are deleted.
+ *
+ *  @param uiText -- Text object to delete character
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUITextBackspace(T_UIText uiText)
 {
     T_UITextStruct *p_text ;
@@ -2912,6 +2026,7 @@ static T_void IUITextBackspace(T_UIText uiText)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  UITEXT.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  UITEXT.C
+ *-------------------------------------------------------------------------*/

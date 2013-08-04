@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  DEBUG.C                                                        */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  DEBUG.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Debugging routines to help with working on the code without a debugger.
+ * It tracks stacks so when a problem occurs a call stack can be output.
+ *
+ * @addtogroup DEBUG
+ * @brief Debug Call Stack System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "DEBUG.H"
 #include "MEMORY.H"
 #if defined(_DEBUG) && defined(WIN32)
@@ -42,54 +52,28 @@ static T_byte8 G_savedPIC ;
 
 T_void IDebugReportTimeSlots(T_void) ;
 
-/****************************************************************************/
-/*  Routine: DebugAddRoutine                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    DebugAddRoutine is NOT called directly.  It is called by the use      */
-/*  of the macro "DebugRoutine."  DebugRoutine is used to declare that      */
-/*  the program is entering a section of code that needs to be debugged.    */
-/*  The name of the routine is added to a call stack and will be removed    */
-/*  later by DebugRemoveRoutine.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The current system only allows DEBUG_MAX_STACK_DEPTH levels of        */
-/*  calling.  Should you go deeper, this routine will create an error.      */
-/*  Also, this stack is only coherent as long as calls are made in each     */
-/*  functions.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_routineName      -- String to add to call stack            */
-/*                                                                          */
-/*    Assumptoings:                                                         */
-/*        p_routineName is not NULL.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    DebugCheck                                                            */
-/*    DebugFail                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*    LES  12/12/94  Modified to handle file name and line numbers          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DebugAddRoutine
+ *-------------------------------------------------------------------------*/
+/**
+ *  DebugAddRoutine is NOT called directly.  It is called by the use
+ *  of the macro "DebugRoutine."  DebugRoutine is used to declare that
+ *  the program is entering a section of code that needs to be debugged.
+ *  The name of the routine is added to a call stack and will be removed
+ *  later by DebugRemoveRoutine.
+ *
+ *  NOTE: 
+ *  The current system only allows DEBUG_MAX_STACK_DEPTH levels of
+ *  calling.  Should you go deeper, this routine will create an error.
+ *  Also, this stack is only coherent as long as calls are made in each
+ *  functions.
+ *
+ *  @param p_routineName -- String to add to call stack
+ *      p_routineName is not NULL.
+ *  @param p_filename -- String of source filename
+ *  @param lineNum -- Source line number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DebugAddRoutine(
            const char *p_routineName,
            const char *p_filename,
@@ -124,59 +108,27 @@ T_void DebugAddRoutine(
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:                                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     Debug Fail is called when a DebugCheck macro finds an illegal        */
-/*  assumption.  It will call this routine and expect the system to print   */
-/*  out the error messages both to the screen and to an "ERROR.LOG."        */
-/*  A list of routines is also printed out.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*     This current version does not change to text mode.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*     T_byte8 *p_msg             -- Message as to why it died/failed       */
-/*                                                                          */
-/*     T_byte8 *p_file            -- Name of file it died in                */
-/*                                                                          */
-/*     T_word16 line              -- Line number where failure occured      */
-/*                                                                          */
-/*     Assumptions:                                                         */
-/*        All of the above are assumed to be valid pointers.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*     "ERROR.LOG"                -- File containing explanation            */
-/*                                                                          */
-/*     Assumptions:                                                         */
-/*        I'm assuming that we can still open a file and do a dump.         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*     fclose                                                               */
-/*     fflush                                                               */
-/*     fopen                                                                */
-/*     fprintf                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*    LES  12/12/94  Added to stack trace all the files and line numbers.   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DebugFail
+ *-------------------------------------------------------------------------*/
+/**
+ *  Debug Fail is called when a DebugCheck macro finds an illegal
+ *  assumption.  It will call this routine and expect the system to print
+ *  out the error messages both to the screen and to an "ERROR.LOG."
+ *  A list of routines is also printed out.
+ *
+ *  NOTE: 
+ *  This current version does not change to text mode.
+ *
+ *  @param p_msg -- Message as to why it died/failed
+ *  @param p_file -- Name of file it died in
+ *  @param line -- Line number where failure occured
+ *      All of the above are assumed to be valid pointers.
+ *
+ *  @return File containing explanation
+ *      I'm assuming that we can still open a file and do a dump.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DebugFail(const char *p_msg, const char *p_file, long line)
 {
     FILE *fp ;
@@ -218,46 +170,19 @@ T_void DebugFail(const char *p_msg, const char *p_file, long line)
     exit(3) ;
 }
 
-/****************************************************************************/
-/*  Routine:  DebugRemoveRoutine                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     DebugRemoveRoutine is not called directly.  It is called by the      */
-/*  macro "DebugEnd" which is used at the end of a debugged routine.        */
-/*  This routine removes the text that was added to the calling stack       */
-/*  by "DebugAddRoutine" (called via DebugRoutine).                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None that I know of.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DebugRemoveRoutine
+ *-------------------------------------------------------------------------*/
+/**
+ *  DebugRemoveRoutine is not called directly.  It is called by the
+ *  macro "DebugEnd" which is used at the end of a debugged routine.
+ *  This routine removes the text that was added to the calling stack
+ *  by "DebugAddRoutine" (called via DebugRoutine).
+ *
+ *  NOTE: 
+ *  None that I know of.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DebugRemoveRoutine(T_void)
 {
 #if HEAP_CHECK_LESS_OFTEN
@@ -283,7 +208,7 @@ T_void DebugRemoveRoutine(T_void)
         _ASSERTE( _CrtCheckMemory( ) );
 #endif
 #if HEAP_CHECK_LESS_OFTEN
-        }   
+        }
 #endif
     }
 
@@ -301,45 +226,15 @@ T_void DebugRemoveRoutine(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  DebugHeapOn                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     DebugHeapOn turns on heap checking after each routine is called      */
-/*  (actually for each "DebugEnd" statement executed).  The heap is checked */
-/*  for consistency and bombs with an error message if corrupted.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DebugHeapOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  DebugHeapOn turns on heap checking after each routine is called
+ *  (actually for each "DebugEnd" statement executed).  The heap is checked
+ *  for consistency and bombs with an error message if corrupted.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DebugHeapOn(T_void)
 {
     DebugRoutine("DebugHeapOn") ;
@@ -349,45 +244,15 @@ T_void DebugHeapOn(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DebugHeapOff                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     DebugHeapOff turns off heap checking after each routine is called    */
-/*  (actually for each "DebugEnd" statement executed).  The heap is checked */
-/*  for consistency and bombs with an error message if corrupted.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DebugHeapOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  DebugHeapOff turns off heap checking after each routine is called
+ *  (actually for each "DebugEnd" statement executed).  The heap is checked
+ *  for consistency and bombs with an error message if corrupted.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DebugHeapOff(T_void)
 {
     DebugRoutine("DebugHeapOff") ;
@@ -397,44 +262,14 @@ T_void DebugHeapOff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DebugCompareCheck                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     DebugCompareCheck determines if the routine you are in is equal to   */
-/*  the name you have given it.   If not, failure occurs.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DebugCompareCheck
+ *-------------------------------------------------------------------------*/
+/**
+ *  DebugCompareCheck determines if the routine you are in is equal to
+ *  the name you have given it.   If not, failure occurs.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DebugCompareCheck(T_byte8 *str, T_byte8 *p_file, T_word16 line)
 {
     T_byte8 msg[80] ;
@@ -527,7 +362,7 @@ T_void DebugCheckVectorTable(T_void)
 
 #endif // !NDEBUG
 
-/****************************************************************************/
-/*    END OF FILE:  DEBUG.C                                                 */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  DEBUG.C
+ *-------------------------------------------------------------------------*/

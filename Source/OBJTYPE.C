@@ -1,6 +1,20 @@
-/****************************************************************************/
-/*    FILE:  OBJTYPE.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  OBJTYPE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * This would probably be better called "Object Animation System".
+ * ObjType is the code that handles animations of objects as they step
+ * through pre-determined animation types.  So, you can have a creature
+ * with a multi-step death scene yell and fall to the ground using this.
+ * Objects have "Info" file resources that have all the animation
+ * information compiled into them.
+ *
+ * @addtogroup OBJTYPE
+ * @brief Object Types
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "AREASND.H"
 #include "MEMORY.H"
 #include "OBJECT.H"
@@ -24,31 +38,18 @@ typedef T_sword16 T_bodyParts[MAX_BODY_PARTS] ;
 
 static E_Boolean G_somewhatLow = FALSE ;
 
-/****************************************************************************/
-/*  Enumeration:  E_objectAnimateType                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      E_objectAnimateType declares the type of animation "movement" that  */
-/*    an animate object undergoes.  Below is the different types.           */
-/*                                                                          */
-/*  Types:                                                                  */
-/*                                                                          */
-/*    ORDERED           -- 1, 2, 3, 4, 1, 2, 3, 4, etc.                     */
-/*    BOUNCE            -- 1, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, etc.            */
-/*    RANDOM            -- Like it says, bro.  1423424242E43144231123123    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/03/95  Created                                                */
-/*    AMT  08/10/95  See below.                                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Enbumeration:  E_objectAnimateType
+ *-------------------------------------------------------------------------*/
+/**
+ *  E_objectAnimateType declares the type of animation "movement" that
+ *  an animate object undergoes.  Below is the different types.
+ *
+ *  @param ORDERED -- 1, 2, 3, 4, 1, 2, 3, 4, etc.
+ *  @param BOUNCE -- 1, 2, 3, 4, 3, 2, 1, 2, 3, 4, 3, etc.
+ *  @param RANDOM -- Like it says, bro.  1423424242E43144231123123
+ *
+ *<!-----------------------------------------------------------------------*/
 /*
 typedef enum T_word16 {
     OBJECT_ANIMATE_ORDERED=0,
@@ -71,44 +72,27 @@ typedef T_word16 E_objectAnimateType;
 #define OBJECT_ANIMATE_RANDOM  2
 #define OBJECT_ANIMATE_UNKNOWN 3
 
-/****************************************************************************/
-/*  Typedef:  T_objectStance                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      An animated object can be broken down into the number of stances    */
-/*    that makes up the animation.  A stance is in itself an animation      */
-/*    state (e.g., walking, talking, flying, etc.) or transition            */
-/*    (e.g. landing, getting hit, taking off, etc.).                        */
-/*                                                                          */
-/*  Fields:                                                                 */
-/*                                                                          */
-/*    numFrames         -- Number of frames that make up this stance.       */
-/*                                                                          */
-/*    speed             -- Interval in between animation frames.            */
-/*                         A speed of 0 means not to animate at all.  This  */
-/*                         is useful for objects with only one frame.       */
-/*                                                                          */
-/*    type              -- What type of animation                           */
-/*                         (See E_objectAnimateType)                        */
-/*                                                                          */
-/*    nextStance        -- Stance to go to after completion of animation.   */
-/*                                                                          */
-/*    offsetFrameList   -- Offset in bytes from the beginning of            */
-/*                         T_objectType structure that this stance is in to */
-/*                         the list of frames that make up this stance.     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/03/95  Created                                                */
-/*    AMT  08/10/95  Commented out typeExpand, and redefined type.          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Typedef:  T_objectStance
+ *-------------------------------------------------------------------------*/
+/**
+ *  An animated object can be broken down into the number of stances
+ *  that makes up the animation.  A stance is in itself an animation
+ *  state (e.g., walking, talking, flying, etc.) or transition
+ *  (e.g. landing, getting hit, taking off, etc.).
+ *
+ *  @param numFrames -- Number of frames that make up this stance.
+ *  @param speed -- Interval in between animation frames.
+ *      A speed of 0 means not to animate at all.  This
+ *      is useful for objects with only one frame.
+ *  @param type -- What type of animation
+ *      (See E_objectAnimateType)
+ *  @param nextStance -- Stance to go to after completion of animation.
+ *  @param offsetFrameList -- Offset in bytes from the beginning of
+ *      T_objectType structure that this stance is in to
+ *      the list of frames that make up this stance.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_word16             numFrames          PACK ;
     T_word16             speed              PACK ;
@@ -117,34 +101,21 @@ typedef struct {
     T_word16             offsetFrameList    PACK ;
 } T_objectStance ;
 
-/****************************************************************************/
-/*  Typedef:  T_objectFrame                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      An object Frame is a part of a stance animation at one moment.      */
-/*    A frame can have either 1 or 8 pictures for each angle.               */
-/*                                                                          */
-/*  Fields:                                                                 */
-/*                                                                          */
-/*    numAngles         -- how many views does this frame have.   Only      */
-/*                         1 or 8 is allowed.                               */
-/*                                                                          */
-/*    offsetPicList     -- Offset in bytes from the beginning of            */
-/*                         T_objectType structure that this is in to the    */
-/*                         list of pics (T_objectPic) that make up this     */
-/*                         frame.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Typedef:  T_objectFrame
+ *-------------------------------------------------------------------------*/
+/**
+ *  An object Frame is a part of a stance animation at one moment.
+ *  A frame can have either 1 or 8 pictures for each angle.
+ *
+ *  @param numAngles -- how many views does this frame have.   Only
+ *      1 or 8 is allowed.
+ *  @param offsetPicList -- Offset in bytes from the beginning of
+ *      T_objectType structure that this is in to the
+ *      list of pics (T_objectPic) that make up this
+ *      frame.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_byte8 numAngles                       PACK ;
     T_word16 offsetPicList                  PACK ;
@@ -153,69 +124,41 @@ typedef struct {
     T_word16 objectAttributes               PACK ;
 } T_objectFrame ;
 
-/****************************************************************************/
-/*  Typedef:  T_objectPic                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      Picture information block for one angle of a frame.                 */
-/*                                                                          */
-/*  Fields:                                                                 */
-/*                                                                          */
-/*    number            -- Index number of picture to use in resource file  */
-/*                         for this object.                                 */
-/*                                                                          */
-/*    T_void *resource  -- Resource for picture when locked in memory.      */
-/*                         NULL when not locked in memory.                  */
-/*                                                                          */
-/*    T_void *p_pic     -- Pointer to picture when locked in memory.        */
-/*                         NULL when not locked in memory.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Typedef:  T_objectPic
+ *-------------------------------------------------------------------------*/
+/**
+ *  Picture information block for one angle of a frame.
+ *
+ *  @param number -- Index number of picture to use in resource file
+ *      for this object.
+ *  @param resource -- Resource for picture when locked in memory.
+ *      NULL when not locked in memory.
+ *  @param p_pic -- Pointer to picture when locked in memory.
+ *      NULL when not locked in memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_sword16 number                          PACK ;
     T_resource resource                       PACK ;
     T_void *p_pic                             PACK;
 } T_objectPic ;
 
-/****************************************************************************/
-/*  Typedef:  T_objectType                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      T_objectType is the description structure for an object used in the */
-/*    game.  It describes everything that needs to be know about this object*/
-/*    and how it interacts with the world.   This is basically the class    */
-/*    description for the object, and instances are made from this type.    */
-/*                                                                          */
-/*                                                                          */
-/*  Fields:                                                                 */
-/*                                                                          */
-/*    numStances        -- Number of stances that make up this object       */
-/*                                                                          */
-/*    lockCount         -- How many times this type of object has been      */
-/*                         locked into memory.  This feature is used to try */
-/*                         to keep as much art in memory as possible.       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Typedef:  T_objectType
+ *-------------------------------------------------------------------------*/
+/**
+ *  T_objectType is the description structure for an object used in the
+ *  game.  It describes everything that needs to be know about this object
+ *  and how it interacts with the world.   This is basically the class
+ *  description for the object, and instances are made from this type.
+ *
+ *  @param numStances -- Number of stances that make up this object
+ *  @param lockCount -- How many times this type of object has been
+ *      locked into memory.  This feature is used to try
+ *      to keep as much art in memory as possible.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_word16 numStances               PACK ;
     T_word32 lockCount                PACK ;
@@ -229,47 +172,25 @@ typedef struct {
     T_objectStance stances[1]         PACK ;
 } T_objectType ;
 
-/****************************************************************************/
-/*  Typedef:  T_objTypeInstanceStruct                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    For each object there is a T_objTypeInstanceStruct that tells what    */
-/*  type of object it is, where the information about it is, and what       */
-/*  state of animation it is in.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Fields:                                                                 */
-/*                                                                          */
-/*    nextAnimationTime -- When to update the animation cycling.            */
-/*                                                                          */
-/*    objTypeNum        -- Number of the object type.                       */
-/*                                                                          */
-/*    resource          -- Resource handle for the object type info block.  */
-/*                                                                          */
-/*    p_objectType      -- Pointer to the actual   object type info block.  */
-/*                                                                          */
-/*    stanceNumber      -- Current stance number                            */
-/*                                                                          */
-/*    frameNumber       -- Current frameNumber                              */
-/*                                                                          */
-/*    stateData         -- accessory data depending on the type             */
-/*                                                                          */
-/*    p_obj             -- pointer to object whose type I am                */
-/*                                                                          */
-/*    T_areaSound       -- area sound handle for my current sound.          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/04/95  Created                                                */
-/*    AMT  07/17/95  Added the p_obj and currSound fields                   */
-/*    LES  07/21/95  Added p_parts to the list for body parts (when applied)*/
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Typedef:  T_objTypeInstanceStruct
+ *-------------------------------------------------------------------------*/
+/**
+ *  For each object there is a T_objTypeInstanceStruct that tells what
+ *  type of object it is, where the information about it is, and what
+ *  state of animation it is in.
+ *
+ *  @param nextAnimationTime -- When to update the animation cycling.
+ *  @param objTypeNum -- Number of the object type.
+ *  @param resource -- Resource handle for the object type info block.
+ *  @param p_objectType -- Pointer to the actual   object type info block.
+ *  @param stanceNumber -- Current stance number
+ *  @param frameNumber -- Current frameNumber
+ *  @param stateData -- accessory data depending on the type
+ *  @param p_obj -- pointer to object whose type I am
+ *  @param T_areaSound -- area sound handle for my current sound.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_word32 nextAnimationTime ;
     T_word16 objTypeNum ;
@@ -301,52 +222,20 @@ static T_void IOverlayPicture(T_byte8 *p_picture, T_byte8 *p_workArea) ;
 
 
 
-/****************************************************************************/
-/*  Routine:  ObjTypeCreate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeCreate instantiates a structure for the given object type      */
-/*  number. In addition, all pictures are locked into memory as needed.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objTypeNum         -- Type of object to instantiate          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_objTypeInstace            -- Handle to created object instance, or  */
-/*                                   OBJECT_TYPE_INSTANCE_BAD               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    sprintf                                                               */
-/*    memset                                                                */
-/*    IObjTypeLock                                                          */
-/*    PictureFind                                                           */
-/*    PictureLockData                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/04/95  Created                                                */
-/*    AMT  07/17/95  Added support for the p_obj and currSound fields       */
-/*    LES  07/21/95  Added support piecewise objects                        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeCreate instantiates a structure for the given object type
+ *  number. In addition, all pictures are locked into memory as needed.
+ *
+ *  @param objTypeNum -- Type of object to instantiate
+ *  @param p_obj -- Pointer to 3D Object to link.
+ *
+ *  @return Handle to created object instance, or
+ *      OBJECT_TYPE_INSTANCE_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 T_objTypeInstance ObjTypeCreate(T_word16 objTypeNum, T_3dObject *p_obj)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -465,49 +354,16 @@ T_objTypeInstance ObjTypeCreate(T_word16 objTypeNum, T_3dObject *p_obj)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjTypeDestroy                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeDestroy removes all references to the object type of an object */
-/*  and, if necessary, unlocks all the pictures attached to it.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objTypeNum         -- Type of object to instantiate          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_objTypeInstace            -- Handle to created object instance, or  */
-/*                                   OBJECT_TYPE_INSTANCE_BAD               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    IObjTypeUnlock                                                        */
-/*    PictureUnlockData                                                     */
-/*    PictureUnfind                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/04/95  Created                                                */
-/*    LES  07/21/95  Added support piecewise objects                        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeDestroy removes all references to the object type of an object
+ *  and, if necessary, unlocks all the pictures attached to it.
+ *
+ *  @param objTypeInst -- Type of object to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjTypeDestroy(T_objTypeInstance objTypeInst)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -581,49 +437,21 @@ T_void ObjTypeDestroy(T_objTypeInstance objTypeInst)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeAnimate                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeAnimate updates the animation state for the object.  However,  */
-/*  an object must call ObjTypeGetPicture followed with a call to           */
-/*  ObjectSetPicture to get the image to update.  This routine is ONLY      */
-/*  to change the state.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- Handle to the instance to update     */
-/*                                                                          */
-/*    T_word32 currentTime        -- current time to update for             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if there is a change              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/04/95  Created                                                */
-/*    AMT  07/18/95  Added frame-based sound and attribute-change support   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeAnimate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeAnimate updates the animation state for the object.  However,
+ *  an object must call ObjTypeGetPicture followed with a call to
+ *  ObjectSetPicture to get the image to update.  This routine is ONLY
+ *  to change the state.
+ *
+ *  @param objTypeInst -- Handle to the instance to update
+ *  @param currentTime -- current time to update for
+ *
+ *  @return TRUE if there is a change
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ObjTypeAnimate(
               T_objTypeInstance objTypeInst,
               T_word32 currentTime)
@@ -797,44 +625,17 @@ E_Boolean ObjTypeAnimate(
 }
 
 
-/****************************************************************************/
-/*  Routine:  IObjTypeUpdateFrameChanges                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine checks the current stance/frame of the given object type */
-/*  instance, and if applicable, creates sounds and changes attributes as   */
-/*  directed by the .oaf description file.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstanceStruct *p_objType -- pointer to obj.type instance    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjTypeUpdateFrameChanges
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine checks the current stance/frame of the given object type
+ *  instance, and if applicable, creates sounds and changes attributes as
+ *  directed by the .oaf description file.
+ *
+ *  @param p_objType -- pointer to obj.type instance
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IObjTypeUpdateFrameChanges (T_objTypeInstanceStruct *p_objType)
 {
    T_objectType *p_type;
@@ -889,44 +690,18 @@ static T_void IObjTypeUpdateFrameChanges (T_objTypeInstanceStruct *p_objType)
    DebugEnd ();
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetRadius                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetRadius returns the defined radius for the given object      */
-/*  type's instance data.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- Handle to the instance to update     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Radius of object type                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetRadius
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetRadius returns the defined radius for the given object
+ *  type's instance data.
+ *
+ *  @param objTypeInst -- Handle to the instance to update
+ *
+ *  @return Radius of object type
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetRadius(T_objTypeInstance objTypeInst)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -952,44 +727,18 @@ T_word16 ObjTypeGetRadius(T_objTypeInstance objTypeInst)
     return radius ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetAttributes                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetAttributes returns the set of predefined characteristic     */
-/*  flags defined for this object type.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- Handle to the instance to update     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Attributes of object type              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetAttributes
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetAttributes returns the set of predefined characteristic
+ *  flags defined for this object type.
+ *
+ *  @param objTypeInst -- Handle to the instance to update
+ *
+ *  @return Attributes of object type
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetAttributes(T_objTypeInstance objTypeInst)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -1014,47 +763,21 @@ T_word16 ObjTypeGetAttributes(T_objTypeInstance objTypeInst)
     return attributes ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetPicture                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetPicture returns the pointer to a picture that is appropriate*/
-/*  for the current stance, frame, and angle.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- Handle to the instance to update     */
-/*                                                                          */
-/*    T_word16 angle              -- Angle that object is facing relative   */
-/*                                   to the view.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Attributes of object type              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetPicture
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetPicture returns the pointer to a picture that is appropriate
+ *  for the current stance, frame, and angle.
+ *
+ *  @param objTypeInst -- Handle to the instance to update
+ *  @param angle -- Angle that object is facing relative
+ *      to the view.
+ *  @param p_orient -- Pointer to picture orientation
+ *
+ *  @return Attributes of object type
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *ObjTypeGetPicture(
            T_objTypeInstance objTypeInst,
            T_word16 angle,
@@ -1156,45 +879,17 @@ if ((p_pic[angle].resource == RESOURCE_BAD) &&
     return p_picData ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypesSetResolution                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypesSetResolution declares what power of two to cut out pictures  */
-/*  from animation frames.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 resolution         -- Power of 2 loss (0 = none, 1=half,     */
-/*                                   2=fourth, 3=eighth)                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypesSetResolution
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypesSetResolution declares what power of two to cut out pictures
+ *  from animation frames.
+ *
+ *  @param resolution -- Power of 2 loss (0 = none, 1=half,
+ *      2=fourth, 3=eighth)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjTypesSetResolution(T_word16 resolution)
 {
     DebugRoutine("ObjTypesSetResolution") ;
@@ -1205,45 +900,17 @@ T_void ObjTypesSetResolution(T_word16 resolution)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypesGetResolution                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypesGetResolution retruns  what power of two to cut out pictures  */
-/*  from animation frames.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16 resolution         -- Power of 2 loss (0 = none, 1=half,     */
-/*                                   2=fourth, 3=eighth)                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypesGetResolution
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypesGetResolution retruns  what power of two to cut out pictures
+ *  from animation frames.
+ *
+ *  @return Power of 2 loss (0 = none, 1=half,
+ *      2=fourth, 3=eighth)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypesGetResolution(T_void)
 {
     T_word16 resolution ;
@@ -1257,47 +924,17 @@ T_word16 ObjTypesGetResolution(T_void)
     return resolution ;
 }
 
-/****************************************************************************/
-/*  Routine:  IObjTypeLock                       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IObjTypeLock goes through all the pictures in an object type and locks*/
-/*  all the pictures into memory.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectType *p_type        -- Pointer to object type to lock         */
-/*                                                                          */
-/*    T_word16 typeNumber         -- Object index type                      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjTypeLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IObjTypeLock goes through all the pictures in an object type and locks
+ *  all the pictures into memory.
+ *
+ *  @param p_type -- Pointer to object type to lock
+ *  @param typeNumber -- Object index type
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IObjTypeLock(T_objectType *p_type, T_word16 typeNumber)
 {
     T_byte8 resName[80] ;
@@ -1465,44 +1102,16 @@ fflush(stdout) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IObjTypeUnlock                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IObjTypeUnlock goes through all the pictures in an object type and    */
-/*  unlocks them from memory.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectType *p_type        -- Pointer to object type to lock         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlock                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjTypeUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IObjTypeUnlock goes through all the pictures in an object type and
+ *  unlocks them from memory.
+ *
+ *  @param p_type -- Pointer to object type to lock
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IObjTypeUnlock(T_objectType *p_type)
 {
     T_objectStance *p_stance ;
@@ -1546,47 +1155,17 @@ static T_void IObjTypeUnlock(T_objectType *p_type)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeSetStance                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeSetStance changes the stance of the given object type instance */
-/*  to new declare stance.  The frame of the stance is set to zero.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set stance of*/
-/*                                                                          */
-/*    T_word16 stance             -- Stance to be                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*    AMT  07/19/95  Added support for IObjTypeUpdateFrameChanges           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeSetStance
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeSetStance changes the stance of the given object type instance
+ *  to new declare stance.  The frame of the stance is set to zero.
+ *
+ *  @param objTypeInst -- object type instance to set stance of
+ *  @param stance -- Stance to be
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjTypeSetStance(T_objTypeInstance objTypeInst, T_word16 stance)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -1625,43 +1204,17 @@ T_void ObjTypeSetStance(T_objTypeInstance objTypeInst, T_word16 stance)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetStance                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetStance gets the current stance of the object.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set stance of*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                      -- object stance                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetStance
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetStance gets the current stance of the object.
+ *
+ *  @param objTypeInst -- object type instance to set stance of
+ *
+ *  @return object stance
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetStance(T_objTypeInstance objTypeInst)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -1684,44 +1237,18 @@ T_word16 ObjTypeGetStance(T_objTypeInstance objTypeInst)
     return stance ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetScript                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetScript gets the script associated with the given object     */
-/*  type instance.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to get script of*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                      -- object script                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetScript
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetScript gets the script associated with the given object
+ *  type instance.
+ *
+ *  @param objTypeInst -- object type instance to get script of
+ *
+ *  @return object script
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ObjTypeGetScript(T_objTypeInstance objTypeInst)
 {
     DebugCheck((T_objTypeInstanceStruct *)objTypeInst != NULL) ;
@@ -1730,45 +1257,17 @@ T_word32 ObjTypeGetScript(T_objTypeInstance objTypeInst)
     return ((T_objTypeInstanceStruct *)objTypeInst)->p_objectType->script ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeSetScript                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetScript sets the script associated for  the given object     */
-/*  type instance.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set script of*/
-/*                                                                          */
-/*    T_word32 script               -- object script                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeSetScript
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetScript sets the script associated for  the given object
+ *  type instance.
+ *
+ *  @param objTypeInst -- object type instance to set script of
+ *  @param script -- object script
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjTypeSetScript(T_objTypeInstance objTypeInst, T_word32 script)
 {
     DebugCheck((T_objTypeInstanceStruct *)objTypeInst != NULL) ;
@@ -1778,82 +1277,34 @@ T_void ObjTypeSetScript(T_objTypeInstance objTypeInst, T_word32 script)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetHealth                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetHealth retreives the health value for the object type.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set script of*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                      -- health value                         */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetHealth
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetHealth retreives the health value for the object type.
+ *
+ *  @param objTypeInst -- object type instance to set script of
+ *
+ *  @return health value
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetHealth (T_objTypeInstance objTypeInst)
 {
     return ((T_objTypeInstanceStruct *)objTypeInst)->p_objectType->health;
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetWeight                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetHealth retreives the weight value for the object type.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set script of*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                      -- health value                         */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  12/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetWeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetHealth retreives the weight value for the object type.
+ *
+ *  @param objTypeInst -- object type instance to set script of
+ *
+ *  @return health value
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetWeight (T_objTypeInstance objTypeInst)
 {
     return ((T_objTypeInstanceStruct *)objTypeInst)->p_objectType->weight;
@@ -1861,41 +1312,17 @@ T_word16 ObjTypeGetWeight (T_objTypeInstance objTypeInst)
 
 
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetValue                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetHealth retreives the weight value for the object type.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set script of*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                      -- health value                         */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  12/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetValue
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetHealth retreives the weight value for the object type.
+ *
+ *  @param objTypeInst -- object type instance to set script of
+ *
+ *  @return health value
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetValue (T_objTypeInstance objTypeInst)
 {
     return ((T_objTypeInstanceStruct *)objTypeInst)->p_objectType->value;
@@ -1903,88 +1330,35 @@ T_word16 ObjTypeGetValue (T_objTypeInstance objTypeInst)
 
 
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetMoveFlags                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetMoveFlags retreives the movement flags associated with the  */
-/*  given type instance.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- object type instance to set script of*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                      -- health value                         */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetMoveFlags
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetMoveFlags retreives the movement flags associated with the
+ *  given type instance.
+ *
+ *  @param objTypeInst -- object type instance to set script of
+ *
+ *  @return health value
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetMoveFlags (T_objTypeInstance objTypeInst)
 {
     return ((T_objTypeInstanceStruct *)objTypeInst)->p_objectType->objMoveAttr;
 }
 
 #ifndef NDEBUG
-/****************************************************************************/
-/*  Routine:  ObjTypePrint                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypePrint is a utility routine to print out the instance           */
-/*  for a type of object.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    FILE *fp                    -- output device                          */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- instance to dispaly                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypePrint
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypePrint is a utility routine to print out the instance
+ *  for a type of object.
+ *
+ *  @param fp -- output device
+ *  @param objTypeInst -- instance to dispaly
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjTypePrint(FILE *fp, T_objTypeInstance objTypeInst)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -2074,44 +1448,18 @@ T_void ObjTypePrint(FILE *fp, T_objTypeInstance objTypeInst)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  ObjTypeGetHeight                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeGetHeight looks at the first frame of the first stance and     */
-/*  determines the picture's height.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstance objTypeInst -- instance to find height of           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- height                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureGetHeight                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/24/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeGetHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeGetHeight looks at the first frame of the first stance and
+ *  determines the picture's height.
+ *
+ *  @param objTypeInst -- instance to find height of
+ *
+ *  @return height
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjTypeGetHeight(T_objTypeInstance objTypeInst)
 {
     T_void *p_picture ;
@@ -2129,44 +1477,16 @@ T_word16 ObjTypeGetHeight(T_objTypeInstance objTypeInst)
     return height ;
 }
 
-/****************************************************************************/
-/*  Routine:  IObjTypeFreePieces                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IObjTypeFreePieces goes through all the pictures in a piecewise       */
-/*    object type and frees them from memory.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectType *p_type        -- Pointer to object type to lock         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjTypeFreePieces
+ *-------------------------------------------------------------------------*/
+/**
+ *  IObjTypeFreePieces goes through all the pictures in a piecewise
+ *  object type and frees them from memory.
+ *
+ *  @param p_type -- Pointer to object type to lock
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IObjTypeFreePieces(T_objectType *p_type)
 {
     T_objectStance *p_stance ;
@@ -2213,46 +1533,17 @@ static T_void IObjTypeFreePieces(T_objectType *p_type)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjTypeRebuildPiecewise                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjTypeRebuildPiecewise goes through all the frames in an object type */
-/*  and builds the appropriate picture out of parts as based on this        */
-/*  instance of the object.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectType *p_type        -- Pointer to object type to lock         */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjTypeRebuildPiecewise
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjTypeRebuildPiecewise goes through all the frames in an object type
+ *  and builds the appropriate picture out of parts as based on this
+ *  instance of the object.
+ *
+ *  @param objTypeInst -- Pointer to object type to lock
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjTypeRebuildPieces(T_objTypeInstance objTypeInst)
 {
     T_objTypeInstanceStruct *p_objType ;
@@ -2374,59 +1665,22 @@ T_void ObjTypeRebuildPieces(T_objTypeInstance objTypeInst)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IBuildView                         * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IBuildView is the routine that creates one view of a piecewise object.*/
-/*  Just pass in what stance, frame, and angle to build and the picture     */
-/*  is returned (compressed) in a newly allocated memory block.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objTypeInstanceStruct *p_objType -- objType to build pic for        */
-/*                                                                          */
-/*    T_word16 stance             -- Number of stance to draw for           */
-/*                                                                          */
-/*    T_word16 frame              -- Frame to draw for                      */
-/*                                                                          */
-/*    T_word16 angle              -- Angle of view to draw for              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- Pointer to compressed bitmap created.  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    PictureExist                                                          */
-/*    PictureLock                                                           */
-/*    IOverlayPicture                                                       */
-/*    ICompressPicture                                                      */
-/*    PictureUnlock                                                         */
-/*    PictureUnfind                                                         */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IBuildView
+ *-------------------------------------------------------------------------*/
+/**
+ *  IBuildView is the routine that creates one view of a piecewise object.
+ *  Just pass in what stance, frame, and angle to build and the picture
+ *  is returned (compressed) in a newly allocated memory block.
+ *
+ *  @param p_objType -- objType to build pic for
+ *  @param stance -- Number of stance to draw for
+ *  @param frame -- Frame to draw for
+ *  @param angle -- Angle of view to draw for
+ *
+ *  @return Pointer to compressed bitmap created.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void *IBuildView(
                    T_objTypeInstanceStruct *p_objType,
                    T_word16 stance,
@@ -2514,47 +1768,17 @@ angle = (2+angle) & 7 ;
     return p_compress+4 ;
 }
 
-/****************************************************************************/
-/*  Routine:  IOverlayPicture                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IOverlayPicture takes a mpress'd picture and overlays it into a       */
-/*  work area that is correctly sized for the mpression.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_picture          -- Pointer to mpress'd picture            */
-/*                                                                          */
-/*    T_byte8 *p_workArea         -- Number of stance to draw for           */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IOverlayPicture
+ *-------------------------------------------------------------------------*/
+/**
+ *  IOverlayPicture takes a mpress'd picture and overlays it into a
+ *  work area that is correctly sized for the mpression.
+ *
+ *  @param p_picture -- Pointer to mpress'd picture
+ *  @param p_workArea -- Number of stance to draw for
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IOverlayPicture(T_byte8 *p_picture, T_byte8 *p_workArea)
 {
     T_word16 pos ;
@@ -2583,48 +1807,22 @@ static T_void IOverlayPicture(T_byte8 *p_picture, T_byte8 *p_workArea)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICompressPicture                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICompressPicture takes a section of memory and compresses it into     */
-/*  the .CPC format that is already used by the other object pictures.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Note that the pointer returned by this routine is a pointer to the    */
-/*  start of the compression table, just past the x & y size information.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_picture          -- Pointer to picture to compress.        */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to compressed picture.         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memcpy                                                                */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICompressPicture
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICompressPicture takes a section of memory and compresses it into
+ *  the .CPC format that is already used by the other object pictures.
+ *
+ *  NOTE: 
+ *  Note that the pointer returned by this routine is a pointer to the
+ *  start of the compression table, just past the x & y size information.
+ *
+ *  @param p_picture -- Pointer to picture to compress.
+ *
+ *  @return Pointer to compressed picture.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_word16 offset ;
     T_byte8 start ;
@@ -2859,6 +2057,7 @@ E_Boolean ObjTypeIsLowPiecewiseRes(T_void)
     return G_somewhatLow ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  OBJTYPE.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  OBJTYPE.C
+ *-------------------------------------------------------------------------*/

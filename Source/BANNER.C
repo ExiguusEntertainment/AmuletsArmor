@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  BANNER.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  BANNER.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Banner UI system is the top level system for handling the player's
+ * banner at the bottom of the screen.  It tracks the current sub-window
+ * open as well as spells being cast.
+ *
+ * @addtogroup BANNER
+ * @brief Player's Bottom Banner User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "CLIENT.H"
 #include "COLOR.H"
@@ -86,44 +97,14 @@ static T_void BannerGetCoin(T_buttonID buttonID);
 static T_void BannerSelectAmmo(T_buttonID buttonID);
 static T_void BannerGetAmmo(T_buttonID buttonID);
 
-/****************************************************************************/
-/*  Routine:  BannerInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    BannerInit sets up all the parts necessary to display the banner      */
-/*  at the bottom of the screen.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    HeartInit                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  BannerInit sets up all the parts necessary to display the banner
+ *  at the bottom of the screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerInit(T_void)
 {
     T_bitmap *b1;
@@ -173,43 +154,13 @@ T_void BannerInit(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  BannerUpdate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    BannerUpdate updates all elements of the banner as necessary.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    HeartUpdate                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  BannerUpdate updates all elements of the banner as necessary.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerUpdate(T_void)
 {
     static T_word32 lastupdate = 0;
@@ -230,43 +181,13 @@ T_void BannerUpdate(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  BannerFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    BannerFinish closes out all the stuff that makes up the banner.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    HeartFinish                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  BannerFinish closes out all the stuff that makes up the banner.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerFinish(T_void)
 {
 //    FILE *fp;
@@ -311,45 +232,19 @@ T_void BannerFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  BannerOpenForm                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    BannerOpenForm changes the view to small screen and displays          */
-/*    a form on the right side.  Also, BannerOpenForm creates 6 buttons     */
-/*    for the 'main menu'                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Currently only supports main menus (i.e. always adds main menu        */
-/*    buttons on top of the form                                            */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_bannerFormType FormType                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerOpenForm
+ *-------------------------------------------------------------------------*/
+/**
+ *  BannerOpenForm changes the view to small screen and displays
+ *  a form on the right side.  Also, BannerOpenForm creates 6 buttons
+ *  for the 'main menu'
+ *
+ *  NOTE: 
+ *  Currently only supports main menus (i.e. always adds main menu
+ *  buttons on top of the form
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerOpenForm(E_bannerFormType formtype)
 {
     T_byte8 stmp[48];
@@ -605,39 +500,14 @@ T_void BannerOpenForm(E_bannerFormType formtype)
 
 
 
-/****************************************************************************/
-/*  Routine:  BannerCloseForm                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  Closes any current form displayed on the right side of the window       */
-/*  Deletes main menu buttons                                               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerCloseForm
+ *-------------------------------------------------------------------------*/
+/**
+ *  Closes any current form displayed on the right side of the window
+ *  Deletes main menu buttons
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerCloseForm(T_void)
 {
     T_graphicID graphic;
@@ -687,41 +557,13 @@ T_void BannerCloseForm(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  BannerOpenFormsByButton                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calls BannerOpenForm with the formtype specified by Button->data      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID buttonID                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*  BannerOpenForm                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerOpenFormsByButton
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calls BannerOpenForm with the formtype specified by Button->data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerOpenFormByButton(T_buttonID buttonID)
 {
     DebugRoutine("BannerOpenFormByButton");
@@ -744,46 +586,14 @@ T_void BannerCloseFormByButton(T_buttonID buttonID)
 }
 
 
-/****************************************************************************/
-/*  Routine:  BannerFormControl                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    FormCallBack routine set to control events for forms added            */
-/*    to gaming window display area                                         */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_formObjectType objtype (enum describing type of object)             */
-/*    T_word16 status (enum describing event that happened)                 */
-/*    T_word32 objID (object ID - can be used to retrieve pointer to object */
-/*      with FormGetObjID (objID)                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerFormControl
+ *-------------------------------------------------------------------------*/
+/**
+ *  FormCallBack routine set to control events for forms added
+ *  to gaming window display area
+ *
+ *<!-----------------------------------------------------------------------*/
 
 T_void BannerFormControl(
         E_formObjectType objtype,
@@ -884,46 +694,17 @@ T_void BannerFormControl(
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  BannerCreateBottomButtons                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    BannerCreateBottomButtons creates all the buttons that make up        */
-/*  the banner at the bottom of the screen.                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Don't call if already created.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ButtonCreate                                                          */
-/*    ButtonSetData                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerCreateBottomButtons
+ *-------------------------------------------------------------------------*/
+/**
+ *  BannerCreateBottomButtons creates all the buttons that make up
+ *  the banner at the bottom of the screen.
+ *
+ *  NOTE: 
+ *  Don't call if already created.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerCreateBottomButtons(T_void)
 {
     T_byte8 i ;
@@ -1013,45 +794,17 @@ E_Boolean BannerUseButtonIsDown(T_void)
     return (isdown);
 }
 
-/****************************************************************************/
-/*  Routine:  BannerDestoryBottomButtons                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    BannerDestroyBottomButtons gets rid of all the buttons needed by the  */
-/*  bottom banner.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You can call this multiple times.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ButtonDelete                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerDestoryBottomButtons
+ *-------------------------------------------------------------------------*/
+/**
+ *  BannerDestroyBottomButtons gets rid of all the buttons needed by the
+ *  bottom banner.
+ *
+ *  NOTE: 
+ *  You can call this multiple times.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerDestroyBottomButtons(T_void)
 {
     T_word16 i;
@@ -1100,44 +853,14 @@ T_void BannerRedrawBottomButtons(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  PotionInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PotionInit initializes all the pictures for the potion display on the   */
-/*  banner.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureFind                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Pulled out of CLIENT.C and cleaned up                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PotionInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  PotionInit initializes all the pictures for the potion display on the
+ *  banner.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PotionInit(T_void)
 {
     T_byte8 potionName[] = "UI/3DUI/POTION?";
@@ -1155,44 +878,14 @@ T_void PotionInit(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  PotionInit                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PotionInit removes all pictures used by the potion display on the       */
-/*  banner.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnfind                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Pulled out of CLIENT.C and cleaned up                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PotionInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  PotionInit removes all pictures used by the potion display on the
+ *  banner.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PotionFinish(T_void)
 {
     T_word16 i;
@@ -1209,43 +902,13 @@ T_void PotionFinish(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  PotionUpdate                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PotionUpdate animates the potion                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureFind                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Pulled out of CLIENT.C and cleaned up                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PotionUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  PotionUpdate animates the potion
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PotionUpdate(T_void)
 {
     static T_byte8 potionFrame = 0;
@@ -1359,44 +1022,13 @@ T_void PotionUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  BannerStatusBarInit                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sets up the mini-status bar displayed at the bottom of the 3d banner    */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TxtboxAdd  e                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerStatusBarInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sets up the mini-status bar displayed at the bottom of the 3d banner
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerStatusBarInit(T_void)
 {
     DebugRoutine("BannerStatusBarInit");
@@ -1431,43 +1063,14 @@ T_void BannerStatusBarInit(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  BannerStatusBarUpdate                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Checks to see if stats have changed and updates the mini-status bar   */
-/*    accordingly                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TxtboxSetData                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerStatusBarUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Checks to see if stats have changed and updates the mini-status bar
+ *  accordingly
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerStatusBarUpdate(T_void)
 {
     T_word16 Health, HealthMax;
@@ -1508,44 +1111,13 @@ T_void BannerStatusBarUpdate(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  BannerStatusBarFinish                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Removes text boxes created for the mini status display                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TxtboxDelete                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerStatusBarFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  Removes text boxes created for the mini status display
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerStatusBarFinish(T_void)
 {
     T_word16 i;
@@ -1561,45 +1133,13 @@ T_void BannerStatusBarFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  BannerUpdateManaDisplay                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This routine updates the mana available display                         */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawRectangle                                                       */
-/*    GrDrawLine                                                            */
-/*    StatsGetManaLeft                                                      */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  BannerUpdateManaDisplay
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine updates the mana available display
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void BannerUpdateManaDisplay(T_void)
 {
     T_sword16 Manaleft;
@@ -2517,9 +2057,8 @@ T_void BannerOpenLast(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*    END OF FILE:  BANNER.C                                                */
-/****************************************************************************/
-
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  BANNER.C
+ *-------------------------------------------------------------------------*/
 

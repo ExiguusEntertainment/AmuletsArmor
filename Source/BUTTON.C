@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  BUTTON.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  BUTTON.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Buttons are a type of UI element in the Form system.  As expected,
+ * events can be attached to buttons and handled by the Form handler.
+ * Buttons can be rendered with just a graphic or with text on it too.
+ * Hot keys can also be assigned.
+ *
+ * @addtogroup BUTTON
+ * @brief Button UI Component
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BUTTON.H"
 #include "GENERAL.H"
 #include "KEYSCAN.H"
@@ -24,46 +36,13 @@ static T_buttonID ButtonInit(
 static T_buttonID G_buttonActedOn = NULL;
 static E_buttonAction G_buttonAction = BUTTON_ACTION_NO_ACTION;
 static T_buttonID G_mouseOverButton = NULL;
-/****************************************************************************/
-/*  Routine:  ButtonCreate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Adds a button to the current list of buttons for a form               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x location, y location, a picture, toggletype (true if it's  */
-/*    a toggle button, otherwise false), a hotkey scancode, and two call-   */
-/*    back routines (one is called when the button is pressed, the second   */
-/*    is called when it's released)                                         */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_buttonID (id of the button created)                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Adds a button to the current list of buttons for a form
+ *
+ *<!-----------------------------------------------------------------------*/
 T_buttonID ButtonCreate(
         T_word16 lx,
         T_word16 ly,
@@ -90,45 +69,13 @@ T_buttonID ButtonCreate(
     return (G_buttonarray[i]);
 }
 
-/****************************************************************************/
-/*  Routine:  ButtonInit (* INTERNAL *)                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Allocates memory and inits variables for a new button.                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x location, y location, a picture, toggletype (true if it's  */
-/*    a toggle button, otherwise false), a hotkey scancode, and two call-   */
-/*    back routines (one is called when the button is pressed, the second   */
-/*    is called when it's released)                                         */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_buttonID (id of the button created)                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonInit (
+ *-------------------------------------------------------------------------*/
+/**
+ *  Allocates memory and inits variables for a new button.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_buttonID ButtonInit(
         T_word16 lx,
         T_word16 ly,
@@ -193,41 +140,14 @@ T_void ButtonSetSelectPic(T_buttonID buttonID, char *picname)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ButtonDelete / ButtonCleanUp                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Releases memory allocated to a button                                 */
-/*    Cleanup releases memory allocated to all 'buttons'                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID buttonID / none                                            */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonDelete / ButtonCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  Releases memory allocated to a button
+ *  Cleanup releases memory allocated to all 'buttons'
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ButtonDelete(T_buttonID buttonID)
 {
     T_word16 i;
@@ -289,41 +209,14 @@ T_void ButtonCleanUp(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ButtonKeyControl/ButtonMouseControl                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine acts as a generic keyboard and mouse handling routine    */
-/*    for all active buttons                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_keyboardEvent event, T_byte8 scankey                                */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonKeyControl/ButtonMouseControl
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine acts as a generic keyboard and mouse handling routine
+ *  for all active buttons
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ButtonKeyControl(E_keyboardEvent event, T_word16 scankey)
 {
     T_word16 keyscan;
@@ -504,41 +397,13 @@ T_void ButtonMouseControl(
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ButtonDown/ButtonUp routines                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sets the state (pushed and changed flags) of a button                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID or number corresponding to 'global' list of buttons        */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonDown/ButtonUp routines
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sets the state (pushed and changed flags) of a button
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ButtonDown(T_buttonID buttonID)
 {
     T_buttonStruct *p_button;
@@ -737,42 +602,13 @@ T_void ButtonDisable(T_buttonID buttonID)
 
     DebugEnd();
 }
-/****************************************************************************/
-/*  Routine:  ButtonDoCallback/ButtonDoCallback2                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Executes one of the callback routines pointed to in the button struct */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID                                                            */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Whatever the callback routine happens to be at the moment             */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonDoCallback/ButtonDoCallback2
+ *-------------------------------------------------------------------------*/
+/**
+ *  Executes one of the callback routines pointed to in the button struct
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ButtonDoCallback(T_buttonID buttonID)
 {
     T_buttonStruct *p_button;
@@ -805,42 +641,13 @@ T_void ButtonDoCallback2(T_buttonID buttonID)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ButtonIsPushed/ButtonIsEnabled/ButtonIsAt                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Returns specific information about the status of a given button       */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID                                                            */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonIsPushed/ButtonIsEnabled/ButtonIsAt
+ *-------------------------------------------------------------------------*/
+/**
+ *  Returns specific information about the status of a given button
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ButtonIsPushed(T_buttonID buttonID)
 {
     T_buttonStruct *p_button;
@@ -946,41 +753,15 @@ T_buttonID ButtonGetByKey(T_word16 keycode)
     return (retvalue);
 }
 
-/****************************************************************************/
-/*  Routine:  ButtonDrawCallBack                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    A routine that will be called once the first time a button is drawn.. */
-/*    draws a 'shadow' behind the button, and then sets the graphic draw    */
-/*    callback routine to null.                                             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID - the graphic that called this routine                    */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ButtonDrawCallBack
+ *-------------------------------------------------------------------------*/
+/**
+ *  A routine that will be called once the first time a button is drawn..
+ *  draws a 'shadow' behind the button, and then sets the graphic draw
+ *  callback routine to null.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ButtonDrawCallBack(T_graphicID graphicID, T_word16 info)
 {
     T_graphicStruct *p_graphic;
@@ -1320,3 +1101,8 @@ T_void ButtonSetStateBlock(T_void *p_state)
 {
     memcpy(G_buttonarray, p_state, sizeof(G_buttonarray));
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  BUTTON.C
+ *-------------------------------------------------------------------------*/

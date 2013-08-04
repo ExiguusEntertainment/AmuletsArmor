@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  MEMORY.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  MEMORY.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Memory allocation system is here.  There is a fair amount of
+ * specialized code going on here as we allocate and free memory.
+ * When debug mode is enabled, memory can be tracked by who allocated it
+ * and if there are any memory leaks.
+ *
+ * @addtogroup MEMORY
+ * @brief Memory Allocation/Freeing
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifndef NDEBUG
 #ifdef WIN32
 #define _MEM_CHECK_FULL_
@@ -68,60 +80,33 @@ static T_void ICheckAllocated(T_word16 noteNum) ;
 static T_word16 IFindPointer(T_memBlockHeader *p_ptr) ;
 #endif
 
-/****************************************************************************/
-/*  Routine:  MemAlloc                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Currently, this routine is provided more for debugging than an        */
-/*  actual utility.  However, this should be the one routine that everyone  */
-/*  calls to allocate memory (no matter what system).                       */
-/*    Since we use this for debugging, we will assign a number to each      */
-/*  piece of memory that is allocated and will attach a "tag" at the        */
-/*  beginning to make the system have a way to check if we are later        */
-/*  freeing a block, or just random memory.                                 */
-/*    Space is also provided to allow the block to be declared as discard-  */
-/*  able.  A discardable block needs to be able to be placed on a double    */
-/*  link list and have a call back function (for when the block is actually */
-/*  discarded).  See MemMarkDiscardable for more details.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    I'm sure what the size limitations for this will be, so we had        */
-/*  best stick to 64K or smaller allocations.  Note that this routine is    */
-/*  also made for blocks of typically larger than 256 bytes.  If you got    */
-/*  alot of small parts, you might want to try doing it a different way.    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 size               -- Amount of memory to allocate           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- Pointer or NULL to memory block.       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    malloc                                                                */
-/*    strcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*    LES  11/15/94  Modified to prepare for discardable blocks.            */
-/*                   Did this by expanding the block header.                */
-/*    LES  01/02/96  Added code to watch size allocated in debug version    */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemAlloc
+ *-------------------------------------------------------------------------*/
+/**
+ *  Currently, this routine is provided more for debugging than an
+ *  actual utility.  However, this should be the one routine that everyone
+ *  calls to allocate memory (no matter what system).
+ *  Since we use this for debugging, we will assign a number to each
+ *  piece of memory that is allocated and will attach a "tag" at the
+ *  beginning to make the system have a way to check if we are later
+ *  freeing a block, or just random memory.
+ *  Space is also provided to allow the block to be declared as discard-
+ *  able.  A discardable block needs to be able to be placed on a double
+ *  link list and have a call back function (for when the block is actually
+ *  discarded).  See MemMarkDiscardable for more details.
+ *
+ *  NOTE: 
+ *  I'm sure what the size limitations for this will be, so we had
+ *  best stick to 64K or smaller allocations.  Note that this routine is
+ *  also made for blocks of typically larger than 256 bytes.  If you got
+ *  alot of small parts, you might want to try doing it a different way.
+ *
+ *  @param size -- Amount of memory to allocate
+ *
+ *  @return Pointer or NULL to memory block.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *MemAlloc(T_word32 size)
 {
     T_byte8 *p_memory ;
@@ -240,52 +225,23 @@ printf("(@0x%08X)\n", p_memory) ;
     return p_memory ;
 }
 
-/****************************************************************************/
-/*  Routine:  MemFree                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      MemFree frees a block of memory that was previously allocated.      */
-/*    It also checks the integrity of the pointer given to it.  If the      */
-/*    pointer is NULL, it crashes.  If the pointer does not point to a      */
-/*    block that was allocated, it crashes.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*      None that I can think of (except this will definitely slow down     */
-/*    the system a little).                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*      T_void *p_data            -- Pointer to block to free               */
-/*                                                                          */
-/*      Assumptions:                                                        */
-/*          Normally we can assume p_data points to data and is not NULL.   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*      None.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      free                                                                */
-/*      strcmp                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*    LES  11/15/94  Revised to handle discardable blocks                   */
-/*    LES  01/02/96  Added code to watch size allocated in debug version    */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemFree
+ *-------------------------------------------------------------------------*/
+/**
+ *  MemFree frees a block of memory that was previously allocated.
+ *  It also checks the integrity of the pointer given to it.  If the
+ *  pointer is NULL, it crashes.  If the pointer does not point to a
+ *  block that was allocated, it crashes.
+ *
+ *  NOTE: 
+ *  None that I can think of (except this will definitely slow down
+ *  the system a little).
+ *
+ *  @param p_data -- Pointer to block to free
+ *      Normally we can assume p_data points to data and is not NULL.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MemFree(T_void *p_data)
 {
     T_byte8 *p_bytes ;
@@ -356,61 +312,35 @@ printf("!F %d %s:%s\n", p_header->size, DebugGetCallerFile(), DebugGetCallerName
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MemMarkDiscardable                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    As an alternative to freeing a block of memory, you may choose to     */
-/*  make the memory discardable.  Doing so allows you to keep the block     */
-/*  in memory as long as possible without automatically get rid of it.      */
-/*  This allows for other routines to keep blocks cached in memory instead  */
-/*  of accessing the disk drive over and over again.                        */
-/*    To facilitate discardable blocks, a callback routine is also passed   */
-/*  to tell the original caller that the block is no longer in memory.      */
-/*  Typically the callback routine will remove the item from a list.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All routines that use memory have to use MemAlloc/MemFree or else     */
-/*  several discarded blocks may be using up all the standard memory.  Only */
-/*  MemAlloc actually calls the routines to free up discarded memory.       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to the data block              */
-/*                                                                          */
-/*    T_memDiscardCallbackFunc    -- Pointer to the function that should    */
-/*                                   be called when this block is freed     */
-/*                                   from memory.                           */
-/*                                   You can use NULL if you don't care,    */
-/*                                   but if you do, you might as well use   */
-/*                                   MemFree since this is the link that    */
-/*                                   allows you to know what the block      */
-/*                                   status really is.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemMarkDiscardable
+ *-------------------------------------------------------------------------*/
+/**
+ *  As an alternative to freeing a block of memory, you may choose to
+ *  make the memory discardable.  Doing so allows you to keep the block
+ *  in memory as long as possible without automatically get rid of it.
+ *  This allows for other routines to keep blocks cached in memory instead
+ *  of accessing the disk drive over and over again.
+ *  To facilitate discardable blocks, a callback routine is also passed
+ *  to tell the original caller that the block is no longer in memory.
+ *  Typically the callback routine will remove the item from a list.
+ *
+ *  NOTE: 
+ *  All routines that use memory have to use MemAlloc/MemFree or else
+ *  several discarded blocks may be using up all the standard memory.  Only
+ *  MemAlloc actually calls the routines to free up discarded memory.
+ *
+ *  @param p_data -- Pointer to the data block
+ *  @param p_callback -- Pointer to the function that should
+ *      be called when this block is freed
+ *      from memory.
+ *      You can use NULL if you don't care,
+ *      but if you do, you might as well use
+ *      MemFree since this is the link that
+ *      allows you to know what the block
+ *      status really is.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MemMarkDiscardable(
            T_void *p_data,
            T_memDiscardCallbackFunc p_callback)
@@ -491,48 +421,23 @@ T_void MemMarkDiscardable(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MemReclaimDiscardable                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Should you need to use a block that you know you had allocated in     */
-/*  in the past and later marked discardable, you can reclaim the block.    */
-/*  By calling this routine, you remove the block from the discard list     */
-/*  and make it act like a normal block.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The caller must keep up with what blocks are discarded and what their */
-/*  original pointers are.  The callback function provided in MemMarkDisc() */
-/*  provides a method to note when the block is finally removed.            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to originally discarded block  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemReclaimDiscardable
+ *-------------------------------------------------------------------------*/
+/**
+ *  Should you need to use a block that you know you had allocated in
+ *  in the past and later marked discardable, you can reclaim the block.
+ *  By calling this routine, you remove the block from the discard list
+ *  and make it act like a normal block.
+ *
+ *  NOTE: 
+ *  The caller must keep up with what blocks are discarded and what their
+ *  original pointers are.  The callback function provided in MemMarkDisc()
+ *  provides a method to note when the block is finally removed.
+ *
+ *  @param p_data -- Pointer to originally discarded block
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MemReclaimDiscardable(T_void *p_data)
 {
     T_memBlockHeader *p_header ;
@@ -591,53 +496,28 @@ T_void MemReclaimDiscardable(T_void *p_data)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMemFindFreeSpace                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    FindFreeSpace is the routine called by MemAlloc when it just tried    */
-/*  to allocate new memory and could not.  This routine is called to free   */
-/*  up space use by discarded memory.  If there is memory freed up, this    */
-/*  routine returns with a TRUE, otherwise FALSE.  It does this by looking  */
-/*  at the discard list and freeing up the oldest block.  It will only      */
-/*  discard one block and then return with a TRUE status.                   */
-/*    Also, before the block is freed, it's callback routine is called      */
-/*  to note the block's disappearance.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    A future version might want to free up a certain amount of space      */
-/*  instead of being called several times.  However, when you are running   */
-/*  out of memory, this method is probably just as good.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = memory was freed                */
-/*                                   FALSE = no more memory can be freed.   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    callback routine provided in block being freed.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMemFindFreeSpace
+ *-------------------------------------------------------------------------*/
+/**
+ *  FindFreeSpace is the routine called by MemAlloc when it just tried
+ *  to allocate new memory and could not.  This routine is called to free
+ *  up space use by discarded memory.  If there is memory freed up, this
+ *  routine returns with a TRUE, otherwise FALSE.  It does this by looking
+ *  at the discard list and freeing up the oldest block.  It will only
+ *  discard one block and then return with a TRUE status.
+ *  Also, before the block is freed, it's callback routine is called
+ *  to note the block's disappearance.
+ *
+ *  NOTE: 
+ *  A future version might want to free up a certain amount of space
+ *  instead of being called several times.  However, when you are running
+ *  out of memory, this method is probably just as good.
+ *
+ *  @return TRUE = memory was freed
+ *      FALSE = no more memory can be freed.
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IMemFindFreeSpace(T_void)
 {
     E_Boolean answer = FALSE ;
@@ -749,45 +629,18 @@ printf("!F %d %s:%s\n", p_header->size, DebugGetCallerFile(), DebugGetCallerName
 
 #ifndef NDEBUG
 
-/****************************************************************************/
-/*  Routine:  MemDumpDiscarded                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MemDumpDiscarded is for debugging purposes only (and only will        */
-/*  be compiled in debug mode).  It will output a list of blocks to the     */
-/*  file "debugmem.txt".                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fopen, fclose, fprintf                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemDumpDiscarded
+ *-------------------------------------------------------------------------*/
+/**
+ *  MemDumpDiscarded is for debugging purposes only (and only will
+ *  be compiled in debug mode).  It will output a list of blocks to the
+ *  file "debugmem.txt".
+ *
+ *  NOTE: 
+ *  None really.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MemDumpDiscarded(T_void)
 {
 #ifndef REAL_MODE
@@ -1014,130 +867,54 @@ T_void MemCheckData(T_void *p_data)
 
 #endif
 
-/****************************************************************************/
-/*  Routine:  MemGetAllocated                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MemGetAllocated returns the total amount of memory allocated.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Number bytes allocated                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemGetAllocated
+ *-------------------------------------------------------------------------*/
+/**
+ *  MemGetAllocated returns the total amount of memory allocated.
+ *
+ *  NOTE: 
+ *  None really.
+ *
+ *  @return Number bytes allocated
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 MemGetAllocated(T_void)
 {
     return G_sizeAllocated ;
 }
 
-/****************************************************************************/
-/*  Routine:  MemGetMaxAllocated                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MemGetMaxAllocated returns the maximum amount of memory that has been */
-/*  allocated at any one time.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Max bytes allocated since program      */
-/*                                   started.                               */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemGetMaxAllocated
+ *-------------------------------------------------------------------------*/
+/**
+ *  MemGetMaxAllocated returns the maximum amount of memory that has been
+ *  allocated at any one time.
+ *
+ *  NOTE: 
+ *  None really.
+ *
+ *  @return Max bytes allocated since program
+ *      started.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 MemGetMaxAllocated(T_void)
 {
     return G_maxSizeAllocated ;
 }
 
-/****************************************************************************/
-/*  Routine:  MemFlushDiscardable                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MemFlushDiscardable goes through the list of discardable memory       */
-/*  and frees it out.  This is useful for checking memory leaks or just     */
-/*  wanting the system to reset to the beginning.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MemFlushDiscardable
+ *-------------------------------------------------------------------------*/
+/**
+ *  MemFlushDiscardable goes through the list of discardable memory
+ *  and frees it out.  This is useful for checking memory leaks or just
+ *  wanting the system to reset to the beginning.
+ *
+ *  NOTE: 
+ *  None really.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MemFlushDiscardable(T_void)
 {
     DebugRoutine("MemFlushDiscardable") ;
@@ -1191,6 +968,7 @@ T_word32 FreeMemory(T_void)
 
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  MEMORY.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  MEMORY.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  UIBUTTON.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  UIBUTTON.C
+ *-------------------------------------------------------------------------*/
+/**
+ * DEPRECATED!
+ *
+ * @addtogroup UIBUTTON
+ * @brief User Interface Button Code
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "UIBUTTON.H"
 
 #define UI_BUTTON_STATE_FOCUSED    0x01    /* -------1 */
@@ -27,69 +36,39 @@ static E_Boolean IUIButtonStandardEventHandler(
 
 static T_void IUIButtonDraw(T_UIButtonStruct *p_button) ;
 
-/****************************************************************************/
-/*  Routine:  UIButtonCreate                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIButtonCreate does all the work to set up a button to be displayed   */
-/*  on the screen.  Just give it a group, 3 resource pictures, and a        */
-/*  XY coordinate to place it on the screen.  The button will then appear   */
-/*  when the group is drawn.                                                */
-/*    Note:  The passed button resources are for masked bitmaps, so you     */
-/*  will want the graphics drawn accordingly.  However, the button WILL     */
-/*  be pressed if in the rectangular area (no checks are made to look into  */
-/*  the bitmap).                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure that the x & y coordinates leave enough room on the screen  */
-/*  for the whole button.  Otherwise, it will bomb when it is drawn.        */
-/*    Also, make sure that all your resource bitmaps are the same size.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup group             -- Group to add button to.                */
-/*                                                                          */
-/*    T_resource focusPic        -- Picture to use when mouse is over      */
-/*                                   button.                                */
-/*                                                                          */
-/*    T_resource notFocusPic     -- Picture to use when mouse is elsewhere */
-/*                                                                          */
-/*    T_resource pressedPic       -- Picture to use when mouse is pressing  */
-/*                                   down on button.                        */
-/*                                                                          */
-/*    T_word16 x                  -- X position of button                   */
-/*                                                                          */
-/*    T_word16 y                  -- Y position of button                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_UIButton                  -- Returned handle to button created      */
-/*                                   or else will be UI_BUTTON_BAD          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceLock                                                          */
-/*    ResourceUnlock                                                        */
-/*    UIObjectCreate                                                        */
-/*    UIObjectSetEventHandler                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Change parameter passing to UIObjectCreate             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIButtonCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIButtonCreate does all the work to set up a button to be displayed
+ *  on the screen.  Just give it a group, 3 resource pictures, and a
+ *  XY coordinate to place it on the screen.  The button will then appear
+ *  when the group is drawn.
+ *
+ *  NOTE:
+ *  The passed button resources are for masked bitmaps, so you
+ *  will want the graphics drawn accordingly.  However, the button WILL
+ *  be pressed if in the rectangular area (no checks are made to look into
+ *  the bitmap).
+ *
+ *  NOTE: 
+ *  Make sure that the x & y coordinates leave enough room on the screen
+ *  for the whole button.  Otherwise, it will bomb when it is drawn.
+ *  Also, make sure that all your resource bitmaps are the same size.
+ *
+ *  @param group -- Group to add button to.
+ *  @param focusPic -- Picture to use when mouse is over
+ *      button.
+ *  @param notFocusPic -- Picture to use when mouse is elsewhere
+ *  @param pressedPic -- Picture to use when mouse is pressing
+ *      down on button.
+ *  @param x -- X position of button
+ *  @param y -- Y position of button
+ *
+ *  @return Returned handle to button created
+ *      or else will be UI_BUTTON_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 T_UIButton UIButtonCreate(
                T_UIGroup group,
                T_resource focusPic,
@@ -155,46 +134,18 @@ T_UIButton UIButtonCreate(
     return button ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIButtonSetHandler                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIButtonSetHandler will declare the handler that will be used for     */
-/*  this button.  Basically, the handler will be called when the button     */
-/*  is pressed.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonHandler             -- Function to call when button is pressed*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Got rid of need to use UIObjectGetAddOn routine        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIButtonSetHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIButtonSetHandler will declare the handler that will be used for
+ *  this button.  Basically, the handler will be called when the button
+ *  is pressed.
+ *
+ *  @param button -- Button to set handler upon
+ *  @param buttonHandler -- Function to call when button is pressed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIButtonSetHandler(T_UIButton button, T_buttonHandler buttonHandler)
 {
     T_UIButtonStruct *p_button ;
@@ -212,55 +163,24 @@ T_void UIButtonSetHandler(T_UIButton button, T_buttonHandler buttonHandler)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIButtonStandardEventHandler      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIButtonStandardEventHandler is the standard ui handler that is      */
-/*  used for all buttons.  Most applications will never need to change      */
-/*  this.  It basically does all the processing of a button including       */
-/*  the changing of pictures.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- This particular ui object/button       */
-/*                                                                          */
-/*    E_UIEvent event             -- The event to process                   */
-/*                                                                          */
-/*    T_word16 data1              -- Mouse X coordinate (not used)          */
-/*                                                                          */
-/*    T_word16 data2              -- Mouse Y coordinate (not used)          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE  = Processed event                */
-/*                                   FALSE = Event ignored                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIButtonDraw                                                         */
-/*    Whatever handle is defined in T_UIButtonStruct                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Got rid of need to use UIObjectGetAddOn routine        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIButtonStandardEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIButtonStandardEventHandler is the standard ui handler that is
+ *  used for all buttons.  Most applications will never need to change
+ *  this.  It basically does all the processing of a button including
+ *  the changing of pictures.
+ *
+ *  @param object -- This particular ui object/button
+ *  @param event -- The event to process
+ *  @param data1 -- Mouse X coordinate (not used)
+ *  @param data2 -- Mouse Y coordinate (not used)
+ *
+ *  @return TRUE  = Processed event
+ *      FALSE = Event ignored
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IUIButtonStandardEventHandler(
               T_UIObject object,
               E_UIEvent event,
@@ -341,48 +261,16 @@ static E_Boolean IUIButtonStandardEventHandler(
     return handled ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIButtonDraw                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIButtonDraw draws the appropriate picture based on the state of     */
-/*  the button.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIButtonStructure *p_button  -- Pointer to the actual button struct */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawBitmapMasked                                                    */
-/*    ResourceLock                                                          */
-/*    ResourceUnlock                                                        */
-/*    MouseHide                                                             */
-/*    MouseShow                                                             */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  12/12/94  Added missing Debug statements.                        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIButtonDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIButtonDraw draws the appropriate picture based on the state of
+ *  the button.
+ *
+ *  @param p_button -- Pointer to the actual button struct
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUIButtonDraw(T_UIButtonStruct *p_button)
 {
     T_bitmap *p_bitmap ;
@@ -427,49 +315,20 @@ static T_void IUIButtonDraw(T_UIButtonStruct *p_button)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIButtonSetAccessoryData                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Every button has a slot available for storing one 32 bit word.        */
-/*  This data slot can be used for anything that the calling module         */
-/*  wishes.  Most of the time, it is used to record a button ID.  The       */
-/*  ID allows the programmer to use the same button handler for multiple    */
-/*  buttons.  This routine is used to store that data.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIButton button           -- Button to store data within            */
-/*                                                                          */
-/*    T_word32 data               -- Data to store                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIButtonSetAccessoryData
+ *-------------------------------------------------------------------------*/
+/**
+ *  Every button has a slot available for storing one 32 bit word.
+ *  This data slot can be used for anything that the calling module
+ *  wishes.  Most of the time, it is used to record a button ID.  The
+ *  ID allows the programmer to use the same button handler for multiple
+ *  buttons.  This routine is used to store that data.
+ *
+ *  @param button -- Button to store data within
+ *  @param data -- Data to store
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIButtonSetAccessoryData(T_UIButton button, T_word32 data)
 {
     T_UIButtonStruct *p_button ;
@@ -486,47 +345,21 @@ T_void UIButtonSetAccessoryData(T_UIButton button, T_word32 data)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIButtonGetAccessoryData                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Every button has a slot available for storing one 32 bit word.        */
-/*  This data slot can be used for anything that the calling module         */
-/*  wishes.  Most of the time, it is used to record a button ID.  The       */
-/*  ID allows the programmer to use the same button handler for multiple    */
-/*  buttons.  This routine is used to retrieve that data.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIButton button           -- Button to retrieve data from           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32 data               -- Data that was stored                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIButtonGetAccessoryData
+ *-------------------------------------------------------------------------*/
+/**
+ *  Every button has a slot available for storing one 32 bit word.
+ *  This data slot can be used for anything that the calling module
+ *  wishes.  Most of the time, it is used to record a button ID.  The
+ *  ID allows the programmer to use the same button handler for multiple
+ *  buttons.  This routine is used to retrieve that data.
+ *
+ *  @param button -- Button to retrieve data from
+ *
+ *  @return Data that was stored
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 UIButtonGetAccessoryData(T_UIButton button)
 {
     T_UIButtonStruct *p_button ;
@@ -546,6 +379,7 @@ T_word32 UIButtonGetAccessoryData(T_UIButton button)
     return data ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  UIBUTTON.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  UIBUTTON.C
+ *-------------------------------------------------------------------------*/

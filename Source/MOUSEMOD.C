@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  MOUSEMOD.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  MOUSEMOD.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Mouse to Driver interfacing.
+ *
+ * @addtogroup MOUSEMOD
+ * @brief Mouse OS interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "DBLLINK.H"
 #include "GENERAL.H"
 #include "MOUSEMOD.H"
@@ -97,51 +106,19 @@ static T_word16 G_mousePreRelativeX;
 static T_word16 G_mousePreRelativeY;
 static T_word16 G_relativeSensitivity = 70;
 
-/****************************************************************************/
-/*  Routine:  MouseInitialize                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseInitialize sets up the mouse for all the different information   */
-/*  it needs to hold.  It starts up with all default options and the cursor */
-/*  starts up hidden.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You can only call this routine once.  Call MouseFinish first          */
-/*  if you need to re-initialize the mouse (but you shouldn't).             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MouseHide                                                             */
-/*    MouseAllowEvents                                                      */
-/*    MouseReleaseBounds                                                    */
-/*    MouseSetEventOptions                                                  */
-/*    MouseMoveTo                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*    LES  02/28/96  Added construction of G_eventStack                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseInitialize sets up the mouse for all the different information
+ *  it needs to hold.  It starts up with all default options and the cursor
+ *  starts up hidden.
+ *
+ *  NOTE: 
+ *  You can only call this routine once.  Call MouseFinish first
+ *  if you need to re-initialize the mouse (but you shouldn't).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseInitialize(T_void)
 {
     DebugRoutine("MouseInitialize") ;
@@ -178,50 +155,25 @@ T_void MouseInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseSetEventHandler                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    In order to use the mouse for anything, you MUST have an event        */
-/*  handler.  This handler will receive events to process each time         */
-/*  MouseUpdateEvents() is called (but not until then).                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    There is no way to tell if you are giving this routine a correct      */
-/*  mouse event handler, so it is up to you to make sure you are doing      */
-/*  it right.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mouseEventHandler p_handler  -- Pointer to function that will       */
-/*                                      handle mouse events.  Pass NULL     */
-/*                                      if there is no longer an event      */
-/*                                      handler.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  In order to use the mouse for anything, you MUST have an event
+ *  handler.  This handler will receive events to process each time
+ *  MouseUpdateEvents() is called (but not until then).
+ *
+ *  NOTE: 
+ *  There is no way to tell if you are giving this routine a correct
+ *  mouse event handler, so it is up to you to make sure you are doing
+ *  it right.
+ *
+ *  @param p_handler -- Pointer to function that will
+ *      handle mouse events.  Pass NULL
+ *      if there is no longer an event
+ *      handler.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetEventHandler(T_mouseEventHandler p_handler)
 {
     DebugRoutine("MouseSetEventHandler") ;
@@ -239,45 +191,17 @@ T_mouseEventHandler MouseGetEventHandler (T_void)
     return (P_mouseEventHandler);
 }
 
-/****************************************************************************/
-/*  Routine:  MouseSetEventOptions                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Several different events can be enabled and disabled.  To do so,      */
-/*  use this MouseSetEventOptions to tell what events you want the current  */
-/*  mouse event handler to handle.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 f_options          -- Or'd list of MOUSE_EVENT_OPTION's      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetEventOptions
+ *-------------------------------------------------------------------------*/
+/**
+ *  Several different events can be enabled and disabled.  To do so,
+ *  use this MouseSetEventOptions to tell what events you want the current
+ *  mouse event handler to handle.
+ *
+ *  @param f_options -- Or'd list of MOUSE_EVENT_OPTION's
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetEventOptions(T_byte8 f_options)
 {
     DebugRoutine("MouseSetEventOptions") ;
@@ -289,46 +213,17 @@ T_void MouseSetEventOptions(T_byte8 f_options)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseCheckInstalled                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseCheckInstalled checks to see if a mouse is available.  If there  */
-/*  is one, TRUE is returned.  If not, a FALSE is returned.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = Mouse driver installed          */
-/*                                   FALSE= No mouse driver found           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset                                                                */
-/*    intr                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseCheckInstalled
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseCheckInstalled checks to see if a mouse is available.  If there
+ *  is one, TRUE is returned.  If not, a FALSE is returned.
+ *
+ *  @return TRUE = Mouse driver installed
+ *      FALSE= No mouse driver found
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MouseCheckInstalled(T_void)
 {
 #ifdef DOS32
@@ -353,45 +248,15 @@ E_Boolean MouseCheckInstalled(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseShow                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseShow turns on the mouse cursor.  If the mouse was already on,    */
-/*  it increments the level of showing.  Therefore, it will take an         */
-/*  equal number of MouseHide calls to turn the mouse off.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseShow
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseShow turns on the mouse cursor.  If the mouse was already on,
+ *  it increments the level of showing.  Therefore, it will take an
+ *  equal number of MouseHide calls to turn the mouse off.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseShow(T_void)
 {
 #if 0
@@ -420,45 +285,15 @@ T_void MouseShow(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseHide                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseHide turns off the mouse and can be called multiple times.       */
-/*  Multiple hides require an equal number of calls to MouseShow to make    */
-/*  the mouse reappear.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseHide
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseHide turns off the mouse and can be called multiple times.
+ *  Multiple hides require an equal number of calls to MouseShow to make
+ *  the mouse reappear.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseHide(T_void)
 {
 #if 0
@@ -487,44 +322,14 @@ T_void MouseHide(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseMoveTo                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    To move the mouse to a different location, pass an X & Y position     */
-/*  to MouseMoveTo().  The mouse will then be at that new location.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseMoveTo
+ *-------------------------------------------------------------------------*/
+/**
+ *  To move the mouse to a different location, pass an X & Y position
+ *  to MouseMoveTo().  The mouse will then be at that new location.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseMoveTo(T_word16 x, T_word16 y)
 {
 #ifdef DOS32
@@ -553,52 +358,24 @@ T_void MouseMoveTo(T_word16 x, T_word16 y)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseSetBounds                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseSetBounds declares a box area in which the mouse is not allowed  */
-/*  to move out of.                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    I don't know what happens when the mouse is outside and the box is    */
-/*  then declared.  You should probably do a MouseMoveTo after setting      */
-/*  the bounds.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left               -- Left side of box                       */
-/*                                                                          */
-/*    T_word16 top                -- top edge of box                        */
-/*                                                                          */
-/*    T_word16 right              -- Right side of box                      */
-/*                                                                          */
-/*    T_word16 bottom             -- Bottom edge of box                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetBounds
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseSetBounds declares a box area in which the mouse is not allowed
+ *  to move out of.
+ *
+ *  NOTE: 
+ *  I don't know what happens when the mouse is outside and the box is
+ *  then declared.  You should probably do a MouseMoveTo after setting
+ *  the bounds.
+ *
+ *  @param left -- Left side of box
+ *  @param top -- top edge of box
+ *  @param right -- Right side of box
+ *  @param bottom -- Bottom edge of box
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetBounds(
            T_word16 left,
            T_word16 top,
@@ -633,47 +410,22 @@ T_void MouseSetBounds(
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseSetPicture                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseSetPicture is used to change the look of the mouse cursor        */
-/*  and where it's hot spot (pointing spot) is located.  Just pass to       */
-/*  it a mouse shape pointer and the position of the hot spot.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.  Just make sure the hot spot is within the cursor.              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 hot_spot_x         -- left to right position of hot spot     */
-/*                                                                          */
-/*    T_word16 hot_spot_y         -- top to bottom position of hot spot     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetPicture
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseSetPicture is used to change the look of the mouse cursor
+ *  and where it's hot spot (pointing spot) is located.  Just pass to
+ *  it a mouse shape pointer and the position of the hot spot.
+ *
+ *  NOTE: 
+ *  None.  Just make sure the hot spot is within the cursor.
+ *
+ *  @param hot_spot_x -- left to right position of hot spot
+ *  @param hot_spot_y -- top to bottom position of hot spot
+ *  @param picture -- Mouse picture to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetPicture(
           T_word16 hot_spot_x,
           T_word16 hot_spot_y,
@@ -717,45 +469,18 @@ T_void MouseSetPicture(
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseBlockEvents                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseBlockEvents keeps the mouse module from sending out events.      */
-/*  Use MouseAllowEvents to re-enable blocked events.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You can only call this routine once before having to call             */
-/*  MouseAllowEvents.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseBlockEvents
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseBlockEvents keeps the mouse module from sending out events.
+ *  Use MouseAllowEvents to re-enable blocked events.
+ *
+ *  NOTE: 
+ *  You can only call this routine once before having to call
+ *  MouseAllowEvents.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseBlockEvents(T_void)
 {
     DebugRoutine("MouseBlockEvents") ;
@@ -768,44 +493,17 @@ T_void MouseBlockEvents(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseAllowEvents                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Use MouseAllowEvents to allow events to occur by the mouse module.    */
-/*  Usually MouseBlockEvents will have been called.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You can only call this routine after MouseBlockEvents was called.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseAllowEvents
+ *-------------------------------------------------------------------------*/
+/**
+ *  Use MouseAllowEvents to allow events to occur by the mouse module.
+ *  Usually MouseBlockEvents will have been called.
+ *
+ *  NOTE: 
+ *  You can only call this routine after MouseBlockEvents was called.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseAllowEvents(T_void)
 {
     DebugRoutine("MouseAllowEvents") ;
@@ -818,47 +516,20 @@ T_void MouseAllowEvents(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseUpdateEvents                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Whenever you wish the mouse to be updated and events to be sent       */
-/*  to the event handler (if any), call this routine.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine must be called several times a second to be really       */
-/*  efficient.  I could just tie this routine in with the mouse driver,     */
-/*  but I figured it prudent to have an upper level that controls the       */
-/*  mouse updates.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    P_mouseEventHandler                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseUpdateEvents
+ *-------------------------------------------------------------------------*/
+/**
+ *  Whenever you wish the mouse to be updated and events to be sent
+ *  to the event handler (if any), call this routine.
+ *
+ *  NOTE: 
+ *  This routine must be called several times a second to be really
+ *  efficient.  I could just tie this routine in with the mouse driver,
+ *  but I figured it prudent to have an upper level that controls the
+ *  mouse updates.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseUpdateEvents(T_void)
 {
     T_word16 newX ;
@@ -969,46 +640,15 @@ T_void MouseUpdateEvents(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseFinish                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseFinish is called when you are done with the mouse module         */
-/*  and no longer need it.  All hooks and variables are changed to non-     */
-/*  active mode and you can consider it no longer being used.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*    LES  02/28/96  Added reconstruction of G_eventStack                   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseFinish is called when you are done with the mouse module
+ *  and no longer need it.  All hooks and variables are changed to non-
+ *  active mode and you can consider it no longer being used.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseFinish(T_void)
 {
     DebugRoutine("MouseFinish") ;
@@ -1041,43 +681,13 @@ T_void MouseFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseReleaseBounds                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseReleaseBounds lets the mouse now roam the whole screen.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MouseSetBounds                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseReleaseBounds
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseReleaseBounds lets the mouse now roam the whole screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseReleaseBounds(T_void)
 {
     DebugRoutine("MouseReleaseBounds") ;
@@ -1089,45 +699,17 @@ T_void MouseReleaseBounds(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMouseGetButtonStatus              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMouseGetButtonStatus checks to see if any of the mouse buttons       */
-/*  are being held and returns the status of those buttons.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- the bit combination of the mouse       */
-/*                                   mouse buttons.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMouseGetButtonStatus
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMouseGetButtonStatus checks to see if any of the mouse buttons
+ *  are being held and returns the status of those buttons.
+ *
+ *  @return the bit combination of the mouse
+ *      mouse buttons.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_buttonClick IMouseGetButtonStatus(T_void)
 {
 #if DOS32
@@ -1152,47 +734,18 @@ static T_buttonClick IMouseGetButtonStatus(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  IMouseGetMousePosition             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMouseGetMousePosition uses the passed in pointers to return the      */
-/*  x (column) and y (row) coordinate of where the mouse's hotspot is       */
-/*  located.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 *xPos              -- Pointer to x position to store into    */
-/*                                                                          */
-/*    T_word16 *yPos              -- Pointer to y position to store into    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset, intr                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/18/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMouseGetMousePosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMouseGetMousePosition uses the passed in pointers to return the
+ *  x (column) and y (row) coordinate of where the mouse's hotspot is
+ *  located.
+ *
+ *  @param xPos -- Pointer to x position to store into
+ *  @param yPos -- Pointer to y position to store into
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IMouseGetMousePosition(T_word16 *xPos, T_word16 *yPos)
 {
 #ifdef DOS32
@@ -1219,45 +772,17 @@ static T_void IMouseGetMousePosition(T_word16 *xPos, T_word16 *yPos)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  MouseSetBitmap                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseSetBitmap changes the picture used for the mouse and its hotspot.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 hot_spot_x, y      -- x, y position for hot spot             */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- COMPRESSED Bitmap to use               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseSetBitmap changes the picture used for the mouse and its hotspot.
+ *
+ *  @param hot_spot_x -- x position for hot spot
+ *  @param hot_spot_y -- y position for hot spot
+ *  @param p_bitmap -- COMPRESSED Bitmap to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetBitmap(
           T_word16 hot_spot_x,
           T_word16 hot_spot_y,
@@ -1291,45 +816,17 @@ T_void MouseGetBitmap(
     *p_bitmap = G_bitmap ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseSetDefaultBitmap                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseSetDefaultBitmap changes the picture's default bitmap.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 hot_spot_x, y      -- x, y position for hot spot             */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- COMPRESSED Bitmap to use               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetDefaultBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseSetDefaultBitmap changes the picture's default bitmap.
+ *
+ *  @param hot_spot_x -- x position for hot spot
+ *  @param hot_spot_y -- y position for hot spot
+ *  @param p_bitmap -- COMPRESSED Bitmap to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetDefaultBitmap(
           T_word16 hot_spot_x,
           T_word16 hot_spot_y,
@@ -1346,45 +843,13 @@ T_void MouseSetDefaultBitmap(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseDraw                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseDraw is used to force the mouse to display on the screen.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 hot_spot_x, y      -- x, y position for hot spot             */
-/*                                                                          */
-/*    T_bitmap *p_bitmap          -- COMPRESSED Bitmap to use               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseDraw is used to force the mouse to display on the screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseDraw(T_void)
 {
     T_word16 mx, my ;
@@ -1418,43 +883,13 @@ T_void MouseDraw(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseErase                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseErase removes the mouse from the display using the hidden data.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseErase
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseErase removes the mouse from the display using the hidden data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseErase(T_void)
 {
     DebugRoutine("MouseErase") ;
@@ -1466,43 +901,13 @@ T_void MouseErase(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMouseTransfer                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseErase removes the mouse from the display using the hidden data.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMouseTransfer
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseErase removes the mouse from the display using the hidden data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IMouseTransfer(T_word16 x, T_word16 y, T_screen from, T_screen to)
 {
     T_screen was ;
@@ -1587,43 +992,13 @@ T_void IMouseGetUpperLeft(T_word16 *p_x, T_word16 *p_y)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MouseUseDefaultBitmap                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseUseDefaultBitmap returns the mouse to its default picture.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MouseSetBitmap                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseUseDefaultBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseUseDefaultBitmap returns the mouse to its default picture.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseUseDefaultBitmap()
 {
     DebugRoutine("MouseUseDefaultBitmap") ;
@@ -1638,44 +1013,14 @@ T_void MouseUseDefaultBitmap()
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMouseInstallCallback                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMouseInstallCallback puts sets up the mouse driver to call the       */
-/*  IMouseCallback routine every time something is moved.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    segread                                                               */
-/*    int386x                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  IMouseInstallCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMouseInstallCallback puts sets up the mouse driver to call the
+ *  IMouseCallback routine every time something is moved.
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifdef DOS32
 T_void IMouseInstallCallback(T_void)
 {
@@ -1709,43 +1054,13 @@ puts("Installing mouse callback") ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMouseUninstallCallback                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMouseUninstallCallback turns off the mouse driver callback capability*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/15/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMouseUninstallCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMouseUninstallCallback turns off the mouse driver callback capability
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IMouseUninstallCallback(T_void)
 {
     union REGS inregs ;
@@ -1792,44 +1107,19 @@ static T_void _loadds __far IMouseCallback(T_word32 max, T_word32 mcx, T_word32 
 #pragma on (check_stack)
 #endif
 
-/****************************************************************************/
-/*  Routine:  MouseSetColorize                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MouseSetColorize sets the colorization table to be used with the      */
-/*  picture of the mouse.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Colorize does not work with the default cursor.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_colorizeTable colorTable  -- Colorization table to use              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/27/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MouseSetColorize
+ *-------------------------------------------------------------------------*/
+/**
+ *  MouseSetColorize sets the colorization table to be used with the
+ *  picture of the mouse.
+ *
+ *  NOTE: 
+ *  Colorize does not work with the default cursor.
+ *
+ *  @param colorTable -- Colorization table to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MouseSetColorize(E_colorizeTable colorTable)
 {
     DebugRoutine("MouseSetColorize") ;
@@ -1850,46 +1140,14 @@ T_void MouseAllowUpdate(T_void)
     G_allowUpdate = TRUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  MousePopEventHandler                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MousePopEventHandler restores the last handler on the stack           */
-/*  (if there is one).                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListGetFirst                                                */
-/*    DoubleLinkListElementGetData                                          */
-/*    MouseSetEventHandler                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MousePopEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  MousePopEventHandler restores the last handler on the stack
+ *  (if there is one).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MousePopEventHandler(T_void)
 {
     T_doubleLinkListElement first ;
@@ -1912,48 +1170,18 @@ T_void MousePopEventHandler(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MousePushEventHandler                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MousePushEventHandler removes the old handler by placing it on        */
-/*  a stack and sets up the new event handler.  The old event handler       */
-/*  will be restored when a call to MousePopEventHandler is called.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_keyboardEventHandler keyboardEventHandler                           */
-/*                                -- function to call on events, or NULL    */
-/*                                   for none.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListAddElementAtFront                                       */
-/*    MouseSetEventHandler                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MousePushEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  MousePushEventHandler removes the old handler by placing it on
+ *  a stack and sets up the new event handler.  The old event handler
+ *  will be restored when a call to MousePopEventHandler is called.
+ *
+ *  @param mouseEventHandler -- function to call on events, or NULL
+ *      for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MousePushEventHandler(T_mouseEventHandler mouseEventHandler)
 {
     DebugRoutine("MousePushEventHandler") ;
@@ -2052,6 +1280,7 @@ T_buttonClick MouseGetButtonStatus(T_void)
     return buttonStatus;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  MOUSEMOD.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  MOUSEMOD.C
+ *-------------------------------------------------------------------------*/

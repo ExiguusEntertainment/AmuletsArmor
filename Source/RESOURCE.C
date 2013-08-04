@@ -1,6 +1,22 @@
-/****************************************************************************/
-/*    FILE:  RESOURCE.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  RESOURCE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Resource files are any .RES file that contains pictures, sounds,
+ * animations etc.  Resources are also a bit sneakier because they are
+ * locked in memory when needed and unlocked when not needed.  But they
+ * are not discarded from memory immediately.  If memory becomes tight,
+ * they are unloaded.  If memory does not become tight, on the next
+ * lock, they are just marked as locked and are ready to use immediately.
+ * Resources are loaded on an as needed basis.  A map load will typically
+ * walk through all the resources desired and lock them in.
+ *
+ * @addtogroup RESOURCE
+ * @brief Resource File System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "MEMORY.H"
 #include "RESOURCE.H"
 #include "PICS.H"
@@ -84,53 +100,27 @@ static T_loadLink *G_loadedEntries = NULL ;
 #define ICheckDirEntries(a)
 #endif
 
-/****************************************************************************/
-/*  Routine:  ResourceOpen                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Open a resource file for locking and unlocking of blocks.  The        */
-/*  resource file allows you to have several "files" grouped together into  */
-/*  one real world file.  In addition, it also makes sure that blocks       */
-/*  stay in memory as long as possible (based on the computer's available   */
-/*  memory).                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The biggest problem is not in the opening file, it is how the items   */
-/*  are ordered in the resource.  All names used in a resource should       */
-/*  alphabetical, or else searches for items may fail.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_filename         -- Name of resource file (may include     */
-/*                                   the path to the file).                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resourceFile              -- handle to resource block.              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileOpen                                                              */
-/*    FileRead                                                              */
-/*    FileSeek                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/95  Created                                                */
-/*    LES  06/12/95  Added multiple open/close file capability              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  Open a resource file for locking and unlocking of blocks.  The
+ *  resource file allows you to have several "files" grouped together into
+ *  one real world file.  In addition, it also makes sure that blocks
+ *  stay in memory as long as possible (based on the computer's available
+ *  memory).
+ *
+ *  NOTE: 
+ *  The biggest problem is not in the opening file, it is how the items
+ *  are ordered in the resource.  All names used in a resource should
+ *  alphabetical, or else searches for items may fail.
+ *
+ *  @param filename -- Name of resource file (may include
+ *      the path to the file).
+ *
+ *  @return handle to resource block.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_resourceFile ResourceOpen(T_byte8 *filename)
 {
     T_resourceFile resourceFile ;
@@ -206,49 +196,18 @@ T_resourceFile ResourceOpen(T_byte8 *filename)
     return resourceFile ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceClose                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourceClose is used to close out the resource and remove all the    */
-/*  blocks in memory.  You cannot call this routine on a resource that      */
-/*  still has locked resource blocks, but you can call it on a resource     */
-/*  that has discarded blocks.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceFile              -- handle to resource file to close       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    none                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileClose                                                             */
-/*    MemFree                                                               */
-/*    MemReclaimDiscardable                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*    LES  06/12/95  Added multiple open/close file capability              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceClose
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourceClose is used to close out the resource and remove all the
+ *  blocks in memory.  You cannot call this routine on a resource that
+ *  still has locked resource blocks, but you can call it on a resource
+ *  that has discarded blocks.
+ *
+ *  @param resourceFile -- handle to resource file to close
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ResourceClose(T_resourceFile resourceFile)
 {
     DebugRoutine("ResourceClose") ;
@@ -303,53 +262,6 @@ T_void ResourceClose(T_resourceFile resourceFile)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceFind                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourceFind is used to find the index into the current resource      */
-/*  file for a particular resource block (referenced by the given name).    */
-/*  You use the returned resource handle to lock and unlock the resource.   */
-/*  (Unlocking the resource will give you a pointer to where it is located).*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Speed is the first problem.  Calling functions should try to use      */
-/*  this routine rarely.                                                    */
-/*    Second, the resource file MUST have it's entries in alpabetical       */
-/*  order.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceFile resourceFile -- handle to resource file                */
-/*                                                                          */
-/*    T_byte *p_resourceName      -- Pointer to resource block name         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resource                  -- Handle to resource that is found,      */
-/*                                   or returns RESOURCE_BAD.               */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    strcmp                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*    LES  06/08/95  Split and created IResourceFind.  This routine does    */
-/*                   higher level part now.                                 */
-/*                                                                          */
-/****************************************************************************/
-
 #ifndef NDEBUG
 T_byte8 *JustEnd(T_byte8 *p_string)
 {
@@ -368,6 +280,28 @@ T_byte8 *JustEnd(T_byte8 *p_string)
 }
 #endif
 
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourceFind is used to find the index into the current resource
+ *  file for a particular resource block (referenced by the given name).
+ *  You use the returned resource handle to lock and unlock the resource.
+ *  (Unlocking the resource will give you a pointer to where it is located).
+ *
+ *  NOTE: 
+ *  Speed is the first problem.  Calling functions should try to use
+ *  this routine rarely.
+ *  Second, the resource file MUST have it's entries in alpabetical
+ *  order.
+ *
+ *  @param resourceFile -- handle to resource file
+ *  @param p_resourceName -- Pointer to resource block name
+ *
+ *  @return Handle to resource that is found,
+ *      or returns RESOURCE_BAD.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_resource ResourceFind(
                T_resourceFile resourceFile,
                T_byte8 *p_resourceName)
@@ -455,53 +389,27 @@ printf("!A 1 file_%s\n", JustEnd(p_resourceName));
     return res ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceLock                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    If you need to get a resource, you should call ResourceLock first.    */
-/*  If you don't already have a resource handle, you need to call           */
-/*  ResourceFind first.  You then can call this routine to "lock" the block */
-/*  at a certain memory location.  This routine will take care of all       */
-/*  cases of where the block may originally be (on disk, in memory, or      */
-/*  discarded).                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Not a whole lot.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource resource         -- handle to resource as returned by      */
-/*                                   ResourceFind()                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- Pointer to memory block that is        */
-/*                                   locked.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileRead                                                              */
-/*    FileSeek                                                              */
-/*    MemAlloc                                                              */
-/*    MemReclaimDiscardable                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  If you need to get a resource, you should call ResourceLock first.
+ *  If you don't already have a resource handle, you need to call
+ *  ResourceFind first.  You then can call this routine to "lock" the block
+ *  at a certain memory location.  This routine will take care of all
+ *  cases of where the block may originally be (on disk, in memory, or
+ *  discarded).
+ *
+ *  NOTE: 
+ *  Not a whole lot.
+ *
+ *  @param resource -- handle to resource as returned by
+ *      ResourceFind()
+ *
+ *  @return Pointer to memory block that is
+ *      locked.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *ResourceLock(T_resource resource)
 {
     T_resourceEntry *p_resource ;
@@ -590,49 +498,21 @@ printf("!A %ld lock_%s\n", p_resource->size, p_resource->p_resourceName) ;
     return (p_resource->p_data) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceUnlock                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Unlock a resource that is in memory.  This doesn't actually destory   */
-/*  the resource.  Instead the resource goes on the discardable memory      */
-/*  list that allows it to be destroyed when more memory is needed.         */
-/*  ResourceLock later to get the block back (or load from disk).           */
-/*    Note, however, that if a resource has been multiply locked, there     */
-/*  has to be an equal number of unlocks to allow the block to be           */
-/*  discarded.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource resource         -- Resource you no longer need.           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemMarkDiscardable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    me   dd/mm/yy  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  Unlock a resource that is in memory.  This doesn't actually destory
+ *  the resource.  Instead the resource goes on the discardable memory
+ *  list that allows it to be destroyed when more memory is needed.
+ *  ResourceLock later to get the block back (or load from disk).
+ *  Note, however, that if a resource has been multiply locked, there
+ *  has to be an equal number of unlocks to allow the block to be
+ *  discarded.
+ *
+ *  @param resource -- Resource you no longer need.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ResourceUnlock(T_resource resource)
 {
     T_resourceEntry *p_resource ;
@@ -674,43 +554,17 @@ if (strcmp(p_resource->resID, "ReS")!=0)  {
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceGetSize                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourceGetSize returns the size of the given resource.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource resource         -- Resource to get the size of            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Size of resource                       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceGetSize
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourceGetSize returns the size of the given resource.
+ *
+ *  @param resource -- Resource to get the size of
+ *
+ *  @return Size of resource
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ResourceGetSize(T_resource resource)
 {
     T_word32 size = 0;
@@ -732,48 +586,23 @@ T_word32 ResourceGetSize(T_resource resource)
 /*** Internal functions to this module:                                   ***/
 
 
-/****************************************************************************/
-/*  Routine:  IResourceMemCallback                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IResourceMemCallback is called for each discardable resource that     */
-/*  is being removed from memory by the Memory Module.  This routine does   */
-/*  not do the freeing of memory, but does mark the block in the resource   */
-/*  index table as no longer in memory.  This is VERY important, since      */
-/*  the Resource Manager needs a way to know when the resources are         */
-/*  gone.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Can't think of any.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_block             -- Pointer to block being removed         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IResourceMemCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  IResourceMemCallback is called for each discardable resource that
+ *  is being removed from memory by the Memory Module.  This routine does
+ *  not do the freeing of memory, but does mark the block in the resource
+ *  index table as no longer in memory.  This is VERY important, since
+ *  the Resource Manager needs a way to know when the resources are
+ *  gone.
+ *
+ *  NOTE: 
+ *  Can't think of any.
+ *
+ *  @param p_block -- Pointer to block being removed
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IResourceMemCallback(T_void *p_block)
 {
     T_resourceEntry *p_entry ;
@@ -818,52 +647,28 @@ printf("!F %ld lock_%s\n", p_entry->size, p_entry->p_resourceName) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IPrimResourceFind                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IPrimResourceFind is used to find the index into the current resource */
-/*  file for a particular resource block (referenced by the given name).    */
-/*  You use the returned resource handle to lock and unlock the resource.   */
-/*  (Unlocking the resource will give you a pointer to where it is located).*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Speed is the first problem.  Calling functions should try to use      */
-/*  this routine rarely.                                                    */
-/*    Second, the resource file MUST have it's entries in alpabetical       */
-/*  order.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceFile resourceFile -- handle to resource file                */
-/*                                                                          */
-/*    T_byte *p_resourceName      -- Pointer to resource block name         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resource                  -- Handle to resource that is found,      */
-/*                                   or returns RESOURCE_BAD.               */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    strcmp                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*    LES  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IPrimResourceFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  IPrimResourceFind is used to find the index into the current resource
+ *  file for a particular resource block (referenced by the given name).
+ *  You use the returned resource handle to lock and unlock the resource.
+ *  (Unlocking the resource will give you a pointer to where it is located).
+ *
+ *  NOTE: 
+ *  Speed is the first problem.  Calling functions should try to use
+ *  this routine rarely.
+ *  Second, the resource file MUST have it's entries in alpabetical
+ *  order.
+ *
+ *  @param resourceFile -- handle to resource file
+ *  @param p_resourceName -- Pointer to resource block name
+ *
+ *  @return Handle to resource that is found,
+ *      or returns RESOURCE_BAD.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_resource IPrimResourceFind(
                       T_resourceDirInfo *p_fileInfo,
                       T_byte8 *p_resourceName)
@@ -915,48 +720,24 @@ static T_resource IPrimResourceFind(
     return resource ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDirLock                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDirLock processes a resource handle and locks the appropriate        */
-/*  directory structure for all future accesses to that directory.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Speed is the first problem.  Calling functions should try to use      */
-/*  this routine rarely.                                                    */
-/*    Second, the resource dir. MUST have it's entries in alpabetical       */
-/*  order.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource dir              -- handle to resource directory           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resourceDirInfo *         -- Directory structure found (if found).  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*    LES  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDirLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDirLock processes a resource handle and locks the appropriate
+ *  directory structure for all future accesses to that directory.
+ *
+ *  NOTE: 
+ *  Speed is the first problem.  Calling functions should try to use
+ *  this routine rarely.
+ *  Second, the resource dir. MUST have it's entries in alpabetical
+ *  order.
+ *
+ *  @param dir -- handle to resource directory
+ *
+ *  @return Directory structure found (if found).
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_resourceDirInfo *IDirLock(T_resource dir)
 {
     T_resourceFileHeader header ;
@@ -1055,45 +836,18 @@ static T_resourceDirInfo *IDirLock(T_resource dir)
 #ifndef NDEBUG
 #ifndef WAS_NDEBUG
 
-/****************************************************************************/
-/*  Routine:  ResourceDumpIndex                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    For debuggine purposes only, this can be used to dump out             */
-/*  a list of indexes for a particular resource file.  Places list          */
-/*  in external file, "RESOURDB.TXT"                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceFile resourceFile -- file to scan through index.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fopen, fclose, fprintf                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceDumpIndex
+ *-------------------------------------------------------------------------*/
+/**
+ *  For debuggine purposes only, this can be used to dump out
+ *  a list of indexes for a particular resource file.  Places list
+ *  in external file, "RESOURDB.TXT"
+ *
+ *  @param fp -- file to scan through index.
+ *  @param p_entry -- Starting entry in resource
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ResourceDumpDir(FILE *fp, T_resourceEntry *p_entry)
 {
     T_resourceEntry *p_index ;
@@ -1191,44 +945,19 @@ T_void ResourceDumpIndex(T_resourceFile resourceFile)
 #endif
 #endif
 
-/****************************************************************************/
-/*  Routine:  IPointAllToDir                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IPointAllToDir makes all the entries in a directory point to the      */
-/*  directory entry for that directory.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceDirInfo *p_dir    -- Directory to fix all pointers.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IPointAllToDir
+ *-------------------------------------------------------------------------*/
+/**
+ *  IPointAllToDir makes all the entries in a directory point to the
+ *  directory entry for that directory.
+ *
+ *  NOTE: 
+ *  None
+ *
+ *  @param p_dir -- Directory to fix all pointers.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IPointAllToDir(
                   T_resourceDirInfo *p_dir,
                   T_resourceFile resourceFile)
@@ -1248,55 +977,29 @@ static T_void IPointAllToDir(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IResourceFind                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IResourceFind is used to find the index into the given directory or   */
-/*  its subdirectory for a particular resource block (referenced by the     */
-/*  given name).  You use the returned resource handle to lock and unlock   */
-/*  the resource.  (Unlocking the resource will give you a pointer to where */
-/*  it is located).                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Speed is the first problem.  Calling functions should try to use      */
-/*  this routine rarely.                                                    */
-/*    Second, the resource file MUST have it's entries in alpabetical       */
-/*  order.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceFile resourceFile -- handle to resource file                */
-/*                                                                          */
-/*    T_byte *p_resourceName      -- Pointer to resource block name         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resource                  -- Handle to resource that is found,      */
-/*                                   or returns RESOURCE_BAD.               */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    strcmp                                                                */
-/*    IDirLock                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/08/95  Created                                                */
-/*    LES  12/12/95  Added code to clean up directory locking if resource   */
-/*                   is not found.                                          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IResourceFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  IResourceFind is used to find the index into the given directory or
+ *  its subdirectory for a particular resource block (referenced by the
+ *  given name).  You use the returned resource handle to lock and unlock
+ *  the resource.  (Unlocking the resource will give you a pointer to where
+ *  it is located).
+ *
+ *  NOTE: 
+ *  Speed is the first problem.  Calling functions should try to use
+ *  this routine rarely.
+ *  Second, the resource file MUST have it's entries in alpabetical
+ *  order.
+ *
+ *  @param resourceFile -- handle to resource file
+ *  @param p_resourceName -- Pointer to resource block name
+ *
+ *  @return Handle to resource that is found,
+ *      or returns RESOURCE_BAD.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_resource IResourceFind(
                T_resourceDirInfo *p_dirInfo,
                T_byte8 *p_resourceName)
@@ -1392,45 +1095,21 @@ static T_resource IResourceFind(
     return resource ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceUnfind                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourceUnfind is called after a resource has been used and no longer */
-/*  needs to be valid.  In effect, this routine closes out any items that   */
-/*  might be locked from this resource.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Given T_resource must only have been Unfind once.  T_resource cannot  */
-/*  be locked.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource res              -- resource to unfind                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDirUnlock                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceUnfind
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourceUnfind is called after a resource has been used and no longer
+ *  needs to be valid.  In effect, this routine closes out any items that
+ *  might be locked from this resource.
+ *
+ *  NOTE: 
+ *  Given T_resource must only have been Unfind once.  T_resource cannot
+ *  be locked.
+ *
+ *  @param res -- resource to unfind
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ResourceUnfind(T_resource res)
 {
     T_resourceEntry *p_entry ;
@@ -1511,45 +1190,16 @@ printf("!F %ld file_%s\n", p_entry->size, p_entry->p_resourceName) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDirUnlock                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDirUnlock starts with a resource and unlocks the directory structure */
-/*  in the tree.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceDirInfo *p_dir    -- directory to unlock                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    ICheckDirEntries                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDirUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDirUnlock starts with a resource and unlocks the directory structure
+ *  in the tree.
+ *
+ *  @param p_dir -- directory to unlock
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDirUnlock(T_resourceDirInfo *p_dir)
 {
     T_resourceEntry *p_entry ;
@@ -1599,44 +1249,16 @@ static T_void IDirUnlock(T_resourceDirInfo *p_dir)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICheckDirEntries                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICheckDirEntries checks to see that all entries in a directory are    */
-/*  freed from memory.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceDirInfo *p_dir    -- directory to check                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICheckDirEntries
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICheckDirEntries checks to see that all entries in a directory are
+ *  freed from memory.
+ *
+ *  @param p_dir -- directory to check
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifndef NDEBUG
 static T_void ICheckDirEntries(T_resourceDirInfo *p_dir)
 {
@@ -1666,46 +1288,20 @@ static T_void ICheckDirEntries(T_resourceDirInfo *p_dir)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  IFindOpenResource                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindOpenResource searches the list of open files to find a matching  */
-/*  already opened resource file.  If none is found, a bad result is        */
-/*  returned.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_filename         -- Pointer to the filename to find        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resourceFile              -- Matching resource file, or             */
-/*                                   RESOURCE_FILE_BAD                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    strcmp                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindOpenResource
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindOpenResource searches the list of open files to find a matching
+ *  already opened resource file.  If none is found, a bad result is
+ *  returned.
+ *
+ *  @param p_filename -- Pointer to the filename to find
+ *
+ *  @return Matching resource file, or
+ *      RESOURCE_FILE_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_resourceFile IFindOpenResource(T_byte8 *p_filename)
 {
     T_word16 i ;
@@ -1736,46 +1332,17 @@ static T_resourceFile IFindOpenResource(T_byte8 *p_filename)
 
 #ifndef NDEBUG
 #ifndef WAS_NDEBUG
-/****************************************************************************/
-/*  Routine:  ResourcePrint                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourcePrint prints out the information tied to the given resource   */
-/*  to the given output.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    FILE *fp                    -- File to output picture info            */
-/*                                                                          */
-/*    T_resource res              -- Resource to print                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fprintf                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourcePrint
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourcePrint prints out the information tied to the given resource
+ *  to the given output.
+ *
+ *  @param fp -- File to output picture info
+ *  @param res -- Resource to print
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ResourcePrint(FILE *fp, T_resource res)
 {
     T_resourceEntry *p_resource ;
@@ -1812,44 +1379,16 @@ T_void ResourcePrint(FILE *fp, T_resource res)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceCheckByPtr                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourceCheckByPtr is a debugging routine used to validate that the   */
-/*  given pointer points to data that is a resource block.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_resData          -- Pointer to res data (not res handle)   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemCheckData                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/27/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceCheckByPtr
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourceCheckByPtr is a debugging routine used to validate that the
+ *  given pointer points to data that is a resource block.
+ *
+ *  @param p_resData -- Pointer to res data (not res handle)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ResourceCheckByPtr(T_byte8 *p_resData)
 {
     DebugRoutine("ResourceCheckByPtr") ;
@@ -1863,48 +1402,23 @@ T_void ResourceCheckByPtr(T_byte8 *p_resData)
 #endif
 #endif
 
-/****************************************************************************/
-/*  Routine:  IResourceMemCallbackForDir                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IResourceMemCallback is called for each discardable resource that     */
-/*  is being removed from memory by the Memory Module.  This routine does   */
-/*  not do the freeing of memory, but does mark the block in the resource   */
-/*  index table as no longer in memory.  This is VERY important, since      */
-/*  the Resource Manager needs a way to know when the resources are         */
-/*  gone.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Can't think of any.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_block             -- Pointer to block being removed         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IResourceMemCallbackForDir
+ *-------------------------------------------------------------------------*/
+/**
+ *  IResourceMemCallback is called for each discardable resource that
+ *  is being removed from memory by the Memory Module.  This routine does
+ *  not do the freeing of memory, but does mark the block in the resource
+ *  index table as no longer in memory.  This is VERY important, since
+ *  the Resource Manager needs a way to know when the resources are
+ *  gone.
+ *
+ *  NOTE: 
+ *  Can't think of any.
+ *
+ *  @param p_block -- Pointer to block being removed
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IResourceMemCallbackForDir(T_void *p_block)
 {
     T_resourceEntry *p_entry ;
@@ -1945,48 +1459,20 @@ static T_void IResourceMemCallbackForDir(T_void *p_block)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDiscardEntries                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDiscardEntries goes through a list of entries and discards them      */
-/*  appropriately AND checks to see if all the items are unlocked.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Can't think of any.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resourceEntry *p_entry    -- Pointer to first entry of array        */
-/*                                                                          */
-/*    T_word16 number             -- Number of entries to discard           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemReclaimDiscardable                                                 */
-/*    MemFree                                                               */
-/*    IResourceMemCallbackForDir                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDiscardEntries
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDiscardEntries goes through a list of entries and discards them
+ *  appropriately AND checks to see if all the items are unlocked.
+ *
+ *  NOTE: 
+ *  Can't think of any.
+ *
+ *  @param p_entry -- Pointer to first entry of array
+ *  @param number -- Number of entries to discard
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDiscardEntries(T_resourceEntry *p_entry, T_word16 number)
 {
     T_word16 index ;
@@ -2058,44 +1544,18 @@ printf("!F %ld lock_%s\n", p_entry->size, p_entry->p_resourceName) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ResourceGetName                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ResourceGetName finds the name that goes with the corresponding       */
-/*  data pointer.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_data              -- Pointer to data to find name of        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to name                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/10/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ResourceGetName
+ *-------------------------------------------------------------------------*/
+/**
+ *  ResourceGetName finds the name that goes with the corresponding
+ *  data pointer.
+ *
+ *  @param p_data -- Pointer to data to find name of
+ *
+ *  @return Pointer to name
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *ResourceGetName(T_void *p_data)
 {
     T_resourceEntry *p_entry ;
@@ -2114,6 +1574,7 @@ T_byte8 *ResourceGetName(T_void *p_data)
     return p_name ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  RESOURCE.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  RESOURCE.C
+ *-------------------------------------------------------------------------*/

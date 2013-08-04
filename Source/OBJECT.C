@@ -1,24 +1,19 @@
-/****************************************************************************/
-/*  FILE:  OBJECT.H                                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Removed all routines that try to change the picture of */
-/*                   an object by any other way that ObjectSetStance or     */
-/*                   ObjectSetType.                                         */
-/*                      ObjectSetPictureByName                              */
-/*                      ObjectSetPictureDirectly                            */
-/*    LES  11/21/95  Added IMakeTempPassable and                            */
-/*                   ObjectsMakeTemporarilyPassableAtXYRadius pair.         */
-/*                   Went through all the code and replace G_First3dObject  */
-/*                   references with ObjectsGetFirst().                     */
-/*                   Did the same with nextObj and ObjectGetNext()          */
-/*                   Did the same with prevObj and ObjectGetPrevious()      */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  OBJECT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Object system is a layer on top of the 3D_IO objects in the renderer.
+ * It tracks all the fluffy information that is needed more than what
+ * the object is.  It handles object types, motion/acceleration, size,
+ * graphics, animation, etc.  There is also object to object collision code
+ * here.
+ *
+ * @addtogroup OBJECT
+ * @brief Objects in World
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_TRIG.H"
@@ -53,44 +48,14 @@ static T_3dObject *IObjectFindBodyPart(
 static T_void IObjectRemoveFromHashTable(T_3dObject *p_obj) ;
 static T_void IObjectAddToHashTable(T_3dObject *p_obj) ;
 
-/****************************************************************************/
-/*  Routine:  ObjectsInitialize                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsInitialize starts up any object info that is needed by this    */
-/*  Object Module.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsInitialize starts up any object info that is needed by this
+ *  Object Module.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsInitialize(T_void)
 {
     DebugRoutine("ObjectsInitialize") ;
@@ -105,43 +70,13 @@ T_void ObjectsInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsFinish                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsFinish cleans up after itself.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsFinish cleans up after itself.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsFinish(T_void)
 {
     DebugRoutine("ObjectsFinish") ;
@@ -152,44 +87,21 @@ T_void ObjectsFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetPictureWidth                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetPictureWidth returns how wide the current picture for the    */
-/*  given object is.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Warning!  Width may change as the object animates.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to get width of                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Width                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetPictureWidth
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetPictureWidth returns how wide the current picture for the
+ *  given object is.
+ *
+ *  NOTE: 
+ *  Warning!  Width may change as the object animates.
+ *
+ *  @param p_obj -- Object to get width of
+ *
+ *  @return Width
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjectGetPictureWidth(T_3dObject *p_obj)
 {
     T_word16 width ;
@@ -210,44 +122,21 @@ T_word16 ObjectGetPictureWidth(T_3dObject *p_obj)
     return width ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetPictureHeight                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetPictureHeight returns how tall the current picture for the   */
-/*  given object is.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Warning!  Height may change as the object animates.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to get height of                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Height                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetPictureHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetPictureHeight returns how tall the current picture for the
+ *  given object is.
+ *
+ *  NOTE: 
+ *  Warning!  Height may change as the object animates.
+ *
+ *  @param p_obj -- Object to get height of
+ *
+ *  @return Height
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjectGetPictureHeight(T_3dObject *p_obj)
 {
     T_word16 height ;
@@ -263,44 +152,21 @@ T_word16 ObjectGetPictureHeight(T_3dObject *p_obj)
     return height ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetPicture                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetPicture returns the pointer to the exact picture information */
-/*  used for the object.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Warning!  Picture may change as the object animates.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to get height of                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to picture                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetPicture
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetPicture returns the pointer to the exact picture information
+ *  used for the object.
+ *
+ *  NOTE: 
+ *  Warning!  Picture may change as the object animates.
+ *
+ *  @param p_obj -- Object to get height of
+ *
+ *  @return Pointer to picture
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *ObjectGetPicture(T_3dObject *p_obj)
 {
     T_byte8 *p_pic ;
@@ -314,44 +180,18 @@ T_byte8 *ObjectGetPicture(T_3dObject *p_obj)
     return p_pic ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetBitmap                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetBitmap returns a pointer to the picture of the object in     */
-/*  bitmap format.  It also grabs the front view.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to get height of                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to picture                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetBitmap returns a pointer to the picture of the object in
+ *  bitmap format.  It also grabs the front view.
+ *
+ *  @param p_obj -- Object to get height of
+ *
+ *  @return Pointer to picture
+ *
+ *<!-----------------------------------------------------------------------*/
 T_bitmap *ObjectGetBitmap(T_3dObject *p_obj)
 {
     T_bitmap *p_bitmap ;
@@ -365,47 +205,18 @@ T_bitmap *ObjectGetBitmap(T_3dObject *p_obj)
     return p_bitmap ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectFind                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectFind searches through the object lists for a matching object    */
-/*  of the given id.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 objId              -- Id of object to find.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Pointer to found object, or NULL       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*    LES  07/07/95  Changed to distinguish between id and SeverId          */
-/*    AMT  07/12/95  Made it search the OutsideWorld list as well.          */
-/*    LES  12/26/95  Changed to use a hashing table for fast accesses.      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectFind searches through the object lists for a matching object
+ *  of the given id.
+ *
+ *  @param id -- Id of object to find.
+ *
+ *  @return Pointer to found object, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ObjectFind(T_word16 id)
 {
     T_3dObject *p_found = NULL ;
@@ -424,49 +235,17 @@ T_3dObject *ObjectFind(T_word16 id)
     return p_found ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectCreate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectCreate     allocates a new object into the 3D engine and        */
-/*  returns the pointer to that object.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Pointer to newly created object, or    */
-/*                                   NULL.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dAllocateObject                                                  */
-/*    ObjMoveInit                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/28/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*    AMT  07/18/95  Separated the "serverID" spaces of the client and servr*/
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectCreate     allocates a new object into the 3D engine and
+ *  returns the pointer to that object.
+ *
+ *  @return Pointer to newly created object, or
+ *      NULL.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ObjectCreate(T_void)
 {
     T_3dObject *p_obj ;
@@ -564,46 +343,20 @@ T_3dObject *ObjectCreateFake(T_void)
     return p_obj ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectAdd                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectAdd        attaches a new object to the list of objects in      */
-/*  the 3d world.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You MUST have the object server Id defined in the object before       */
-/*  calling this routine.  If you don't calls to ObjectFind may not work.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to bring into world.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dAddObject                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/94  Created                                                */
-/*    LES  12/26/95  Added code to put the object on the hash table.        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectAdd
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectAdd        attaches a new object to the list of objects in
+ *  the 3d world.
+ *
+ *  NOTE: 
+ *  You MUST have the object server Id defined in the object before
+ *  calling this routine.  If you don't calls to ObjectFind may not work.
+ *
+ *  @param p_obj -- Object to bring into world.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectAdd(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectAdd") ;
@@ -623,35 +376,21 @@ T_void ObjectAdd(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectAddWithoutHistory                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectAddWithoutHistory is the same as ObjectAdd, except it does      */
-/*  not put the addition into the history hash tables (which are needed     */
-/*  to save the game's state).                                              */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You MUST have the object server Id defined in the object before       */
-/*  calling this routine.  If you don't calls to ObjectFind may not work.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to bring into world.            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/19/96  Created from ObjectAdd                                 */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectAddWithoutHistory
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectAddWithoutHistory is the same as ObjectAdd, except it does
+ *  not put the addition into the history hash tables (which are needed
+ *  to save the game's state).
+ *
+ *  NOTE: 
+ *  You MUST have the object server Id defined in the object before
+ *  calling this routine.  If you don't calls to ObjectFind may not work.
+ *
+ *  @param p_obj -- Object to bring into world.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectAddWithoutHistory(T_3dObject *p_obj)
 {
     T_3dObject *p_chained ;
@@ -701,45 +440,16 @@ T_void ObjectAddWithoutHistory(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectRemove                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectRemove   detaches an    object from the list of objects in      */
-/*  the 3d world.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to bring into world.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dRemoveObject                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/94  Created                                                */
-/*    LES  12/26/95  Now removes the object from the hashing table          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectRemove
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectRemove   detaches an    object from the list of objects in
+ *  the 3d world.
+ *
+ *  @param p_obj -- Object to bring into world.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectRemove(T_3dObject *p_obj)
 {
     T_3dObject *p_chained ;
@@ -803,47 +513,16 @@ T_void ObjectRemove(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectDestroy                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectDestroy     frees up an object in memory given the object       */
-/*  pointer.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Pointer to object to destroy.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dFreeObject                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/28/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*    LES  09/22/95  Added code to destroy chained objects                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectDestroy     frees up an object in memory given the object
+ *  pointer.
+ *
+ *  @param p_obj -- Pointer to object to destroy.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectDestroy(T_3dObject *p_obj)
 {
     T_3dObject *p_chained ;
@@ -904,53 +583,20 @@ T_void ObjectDestroy(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectDeclareStatic                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectDeclareStatic takes a previously created object (by             */
-/*  ObjectCreate) and fills out the information necessary to make           */
-/*  it a static object on the map.  It uses the given x, y, and picture     */
-/*  number to initialize it.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Pointer to object to declare           */
-/*                                                                          */
-/*    T_sword16 mapX              -- X coordinate on map                    */
-/*                                                                          */
-/*    T_sword16 mapY              -- Y coordinate on map                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/28/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  04/11/95  Added sector to object info array                      */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectDeclareStatic
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectDeclareStatic takes a previously created object (by
+ *  ObjectCreate) and fills out the information necessary to make
+ *  it a static object on the map.  It uses the given x, y, and picture
+ *  number to initialize it.
+ *
+ *  @param p_obj -- Pointer to object to declare
+ *  @param mapX -- X coordinate on map
+ *  @param mapY -- Y coordinate on map
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectDeclareStatic(
            T_3dObject *p_obj,
            T_sword16 mapX,
@@ -979,53 +625,20 @@ T_void ObjectDeclareStatic(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectDeclareMoveable                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectDeclareMoveable takes a previously created object (by           */
-/*  ObjectCreate) and fills out the information necessary to make           */
-/*  it a moveable object on the map.  It uses the given x, y, and picture   */
-/*  number to initialize it.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Number of object to declare            */
-/*                                                                          */
-/*    T_word16 mapX               -- X accurate location on map             */
-/*                                                                          */
-/*    T_word16 mapY               -- Y accurate location on map             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/28/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  04/11/95  Added code to set object sector and water heights      */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectDeclareMoveable
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectDeclareMoveable takes a previously created object (by
+ *  ObjectCreate) and fills out the information necessary to make
+ *  it a moveable object on the map.  It uses the given x, y, and picture
+ *  number to initialize it.
+ *
+ *  @param p_obj -- Number of object to declare
+ *  @param mapX -- X accurate location on map
+ *  @param mapY -- Y accurate location on map
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectDeclareMoveable(
            T_3dObject *p_obj,
            T_word16 mapX,
@@ -1054,55 +667,22 @@ T_void ObjectDeclareMoveable(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectTeleport                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectTeleport is one of the key players in getting things to work.   */
-/*  This nice routine moves any object (even static ones) to the new        */
-/*  location.  Note that if you move a static object, it becomes a movable  */
-/*  object (and is no longer static).  If you want to move a static object  */
-/*  without changing its type, use two calls to ViewChangeObject -- one     */
-/*  to erase the old object, one to add an object.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objNum             -- Number of object to affect.            */
-/*                                                                          */
-/*    T_word16 x                  -- Accurate map X position to move to.    */
-/*                                                                          */
-/*    T_word16 y                  -- Accurate map Y position to move to.    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/04/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  04/11/95  Added code to set object sector and water heights      */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectTeleport
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectTeleport is one of the key players in getting things to work.
+ *  This nice routine moves any object (even static ones) to the new
+ *  location.  Note that if you move a static object, it becomes a movable
+ *  object (and is no longer static).  If you want to move a static object
+ *  without changing its type, use two calls to ViewChangeObject -- one
+ *  to erase the old object, one to add an object.
+ *
+ *  @param p_obj -- Number of object to affect.
+ *  @param x -- Accurate map X position to move to.
+ *  @param y -- Accurate map Y position to move to.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectTeleport(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
 {
     T_word16 sector ;
@@ -1134,48 +714,18 @@ T_void ObjectTeleport(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectTeleportAlways                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectTeleportAlways is just like ObjectTeleport, but the object      */
-/*  goes to the position no matter if there is another object there.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objNum             -- Number of object to affect.            */
-/*                                                                          */
-/*    T_word16 x                  -- Accurate map X position to move to.    */
-/*                                                                          */
-/*    T_word16 y                  -- Accurate map Y position to move to.    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/31/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectTeleportAlways
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectTeleportAlways is just like ObjectTeleport, but the object
+ *  goes to the position no matter if there is another object there.
+ *
+ *  @param p_obj -- Number of object to affect.
+ *  @param x -- Accurate map X position to move to.
+ *  @param y -- Accurate map Y position to move to.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectTeleportAlways(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
 {
     T_word16 sector ;
@@ -1214,44 +764,15 @@ T_void ObjectTeleportAlways(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectMakeImpassable                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectMakeImpassable     clears the passibility bit in the object.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Ojbect to affect                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectMakeImpassable
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectMakeImpassable     clears the passibility bit in the object.
+ *
+ *  @param p_obj -- Ojbect to affect
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectMakeImpassable(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectMakeImpassable") ;
@@ -1263,45 +784,15 @@ T_void ObjectMakeImpassable(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectMakePassable                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectMakePassable     sets the passibility bit in the object.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objNum             -- object to affect                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectSetType                                                         */
-/*    ObjectGetType                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectMakePassable
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectMakePassable     sets the passibility bit in the object.
+ *
+ *  @param p_obj -- object to affect
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectMakePassable(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectMakePassable") ;
@@ -1313,52 +804,19 @@ T_void ObjectMakePassable(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectCheckCollide                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectCheckCollide     sees if the position given for an object will  */
-/*  cause it to collide with any of the other objects.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject p_obj            -- object to check for object collision   */
-/*                                                                          */
-/*    T_sword16 x, y              -- position to check for collision        */
-/*                                                                          */
-/*    T_sword16 height            -- New height to check for                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectSetType                                                         */
-/*    ObjectGetType                                                         */
-/*    ObjectGetHeight                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*    LES  09/14/95  Modified to handle height as well as position          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectCheckCollide
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectCheckCollide     sees if the position given for an object will
+ *  cause it to collide with any of the other objects.
+ *
+ *  @param p_obj -- object to check for object collision
+ *  @param x -- X position to check for collision
+ *  @param y -- Y position to check for collision
+ *  @param height -- New height to check for
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ObjectCheckCollide(
               T_3dObject *p_obj,
               T_sword16 x,
@@ -1404,46 +862,18 @@ E_Boolean ObjectCheckCollide(
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetMiddleHeight                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetMiddleHeight calculates the height of the mid section of     */
-/*  an object.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to get middle height of         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- middle height of object.               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/11/95  Created                                                */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetMiddleHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetMiddleHeight calculates the height of the mid section of
+ *  an object.
+ *
+ *  @param p_obj -- Object to get middle height of
+ *
+ *  @return middle height of object.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 ObjectGetMiddleHeight(T_3dObject *p_obj)
 {
     T_sword16 height ;
@@ -1465,44 +895,12 @@ T_sword16 ObjectGetMiddleHeight(T_3dObject *p_obj)
     return height ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsUnload                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlock                                                         */
-/*    PictureUnload                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/11/95  Created                                                */
-/*    LES  06/22/95  Moved from VIEW.C to OBJECT.C and renamed              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsUnload
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsUnload(T_void)
 {
     T_3dObject *p_obj ;
@@ -1561,44 +959,16 @@ T_void ObjectsUnload(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectSetUpSectors                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectSetUpSectors determines the sectors that the object is over     */
-/*  and transfers this information into the object.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to set up the sector            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectSetUpSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectSetUpSectors determines the sectors that the object is over
+ *  and transfers this information into the object.
+ *
+ *  @param p_obj -- Object to set up the sector
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectSetUpSectors(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectSetUpSectors") ;
@@ -1612,49 +982,17 @@ T_void ObjectSetUpSectors(T_3dObject *p_obj)
 
 
 #ifndef NDEBUG
-/****************************************************************************/
-/*  Routine:  ObjectPrint                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectPrint dumps out the given object information to the given       */
-/*  output io port.                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    FILE *fp                    -- File to output object                  */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to print                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fprintf                                                               */
-/*    ObjMovePrint                                                          */
-/*    PicturePrint                                                          */
-/*    ResourcePrint                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectPrint
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectPrint dumps out the given object information to the given
+ *  output io port.
+ *
+ *  @param fp -- File to output object
+ *  @param p_obj -- Object to print
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectPrint(FILE *fp, T_3dObject *p_obj)
 {
     DebugRoutine("ObjectPrint") ;
@@ -1703,46 +1041,15 @@ T_void ObjectPrint(FILE *fp, T_3dObject *p_obj)
 
 #endif
 
-/****************************************************************************/
-/*  Routine:  ObjectsRemoveExtra                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsRemoveExtra removes and destroys any extra objects that are    */
-/*  not in use on this level.  This is useful to get rid of extra monsters  */
-/*  that are turned off.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectRemove                                                          */
-/*    ObjectDestory                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsRemoveExtra
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsRemoveExtra removes and destroys any extra objects that are
+ *  not in use on this level.  This is useful to get rid of extra monsters
+ *  that are turned off.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsRemoveExtra(T_void)
 {
     T_3dObject *p_obj ;
@@ -1775,45 +1082,16 @@ T_void ObjectsRemoveExtra(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjectsUpdateMovement                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsUpdateMovement goes through all the objects and updates their  */
-/*  object move structures and does the appropriate movement actions.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 delta              -- Delta of time since last update        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/29/95  Created                                                */
-/*    AMT  07/18/95  Modified so it handles large deltas.                   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsUpdateMovement
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsUpdateMovement goes through all the objects and updates their
+ *  object move structures and does the appropriate movement actions.
+ *
+ *  @param delta -- Delta of time since last update
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsUpdateMovement(T_word32 delta)
 {
     T_3dObject *p_obj ;
@@ -1937,48 +1215,20 @@ T_void ObjectsUpdateMovement(T_word32 delta)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectSetType                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectSetType changes the object type that is used for this object.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    ALL objects MUST have it's type set at some type to ensure that a     */
-/*  picture be used with the object.  Otherwise, it doesn't have a pic.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to set type of                  */
-/*                                                                          */
-/*    T_word16 type               -- Type of object to become               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/29/95  Created                                                */
-/*    AMT  07/12/95  Made it store the object type number in the structure. */
-/*    AMT  07/19/95  Added support for object move attributes in the type.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectSetType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectSetType changes the object type that is used for this object.
+ *
+ *  NOTE: 
+ *  ALL objects MUST have it's type set at some type to ensure that a
+ *  picture be used with the object.  Otherwise, it doesn't have a pic.
+ *
+ *  @param p_obj -- Object to set type of
+ *  @param type -- Type of object to become
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectSetType(T_3dObject *p_obj, T_word16 type)
 {
     T_3dObject *p_chain ;
@@ -2124,47 +1374,21 @@ if (type == 0)  {
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectSetTypeSimple                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectSetTypeSimple changes the object type that is used for this     */
-/*  object.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    ALL objects MUST have it's type set at some type to ensure that a     */
-/*  picture be used with the object.  Otherwise, it doesn't have a pic.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to set type of                  */
-/*                                                                          */
-/*    T_word16 type               -- Type of object to become               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/29/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectSetTypeSimple
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectSetTypeSimple changes the object type that is used for this
+ *  object.
+ *
+ *  NOTE: 
+ *  ALL objects MUST have it's type set at some type to ensure that a
+ *  picture be used with the object.  Otherwise, it doesn't have a pic.
+ *
+ *  @param p_obj -- Object to set type of
+ *  @param type -- Type of object to become
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectSetTypeSimple(T_3dObject *p_obj, T_word16 type)
 {
     T_word16 basicType, basicObjectType ;
@@ -2215,44 +1439,17 @@ T_void ObjectSetTypeSimple(T_3dObject *p_obj, T_word16 type)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsUpdateAnimation                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsUpdateAnimation goes through all the objects and updates their */
-/*  animation structures.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 currentTime        -- The current time for the animation     */
-/*                                   or 0 if you just want to update angles */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsUpdateAnimation
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsUpdateAnimation goes through all the objects and updates their
+ *  animation structures.
+ *
+ *  @param currentTime -- The current time for the animation
+ *      or 0 if you just want to update angles
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsUpdateAnimation(T_word32 currentTime)
 {
     T_3dObject *p_obj ;
@@ -2273,44 +1470,17 @@ T_void ObjectsUpdateAnimation(T_word32 currentTime)
     TICKER_TIME_ROUTINE_ENDM("ObjectsUpdateAnimation", 500) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectUpdateAnimation                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsUpdateAnimation goes through all the objects and updates their */
-/*  animation structures.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 currentTime        -- The current time for the animation     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectUpdateAnimation
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsUpdateAnimation goes through all the objects and updates their
+ *  animation structures.
+ *
+ *  @param p_obj -- Object to update animation upon
+ *  @param currentTime -- The current time for the animation
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectUpdateAnimation(T_3dObject *p_obj, T_word32 currentTime)
 {
     T_word16 angle ;
@@ -2351,46 +1521,17 @@ T_void ObjectUpdateAnimation(T_3dObject *p_obj, T_word32 currentTime)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectSetStance                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsSetStance declares the stance that the object should now       */
-/*  become.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to change stance of             */
-/*                                                                          */
-/*    T_word16 stance             -- Numberical stance to change to         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjTypeSetStance                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectSetStance
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsSetStance declares the stance that the object should now
+ *  become.
+ *
+ *  @param p_obj -- Object to change stance of
+ *  @param stance -- Numberical stance to change to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectSetStance(T_3dObject *p_obj, T_word16 stance)
 {
     T_3dObject *p_chained ;
@@ -2446,49 +1587,20 @@ if (strcmp(p_obj->tag, "Obj") == 0)  {
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsDoToAll                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsDoToAll is a general routine to go through the list of objects */
-/*  and call a callback for each object in the list.  In addition, if the   */
-/*  callback returns a TRUE, the loop stops.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectDoToAllCallback *p_callback -- routine called for each object.*/
-/*                                If routine returns TRUE, the loop stops.  */
-/*                                Any other values (FALSE) continues.       */
-/*                                                                          */
-/*    T_word32 data               -- data to pass on to the callback.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    (p_callback)                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsDoToAll
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsDoToAll is a general routine to go through the list of objects
+ *  and call a callback for each object in the list.  In addition, if the
+ *  callback returns a TRUE, the loop stops.
+ *
+ *  @param p_callback -- routine called for each object.
+ *      If routine returns TRUE, the loop stops.
+ *      Any other values (FALSE) continues.
+ *  @param data -- data to pass on to the callback.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsDoToAll(T_objectDoToAllCallback p_callback, T_word32 data)
 {
     T_3dObject *p_obj, *p_objNext ;
@@ -2514,50 +1626,21 @@ T_void ObjectsDoToAll(T_objectDoToAllCallback p_callback, T_word32 data)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjectsDoToAllXY                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsDoToAllXY is just like ObjectDoToAll, except it only calls the */
-/*  callback routine if there is an object at the given location.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x, y               -- Position to test for object            */
-/*                                                                          */
-/*    T_objectDoToAllCallback *p_callback -- routine called for each object.*/
-/*                                If routine returns TRUE, the loop stops.  */
-/*                                Any other values (FALSE) continues.       */
-/*                                                                          */
-/*    T_word32 data               -- data to pass on to the callback.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    (p_callback)                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsDoToAllXY
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsDoToAllXY is just like ObjectDoToAll, except it only calls the
+ *  callback routine if there is an object at the given location.
+ *
+ *  @param x -- X Position to test for object
+ *  @param y -- Y Position to test for object
+ *  @param p_callback -- routine called for each object.
+ *      If routine returns TRUE, the loop stops.
+ *      Any other values (FALSE) continues.
+ *  @param data -- data to pass on to the callback.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsDoToAllAtXY(
            T_sword16 x,
            T_sword16 y,
@@ -2630,52 +1713,22 @@ T_void ObjectsDoToAllAtXY(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsDoToAllXYRadius                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsDoToAllXYRadius is similar to ObjectsDoToAllXY, but allows     */
-/*  a "radius of effect."                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x, y               -- Position to test for object            */
-/*                                                                          */
-/*    T_word16 radius             -- Radius around the point to check.      */
-/*                                                                          */
-/*    T_objectDoToAllCallback *p_callback -- routine called for each object.*/
-/*                                If routine returns TRUE, the loop stops.  */
-/*                                Any other values (FALSE) continues.       */
-/*                                                                          */
-/*    T_word32 data               -- data to pass on to the callback.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    (p_callback)                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/17/95  Created (by cloning ObjectsDoToAllAtXY)                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsDoToAllXYRadius
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsDoToAllXYRadius is similar to ObjectsDoToAllXY, but allows
+ *  a "radius of effect."
+ *
+ *  @param x -- X Position to test for object
+ *  @param y -- Y Position to test for object
+ *  @param radius -- Radius around the point to check.
+ *  @param p_callback -- routine called for each object.
+ *      If routine returns TRUE, the loop stops.
+ *      Any other values (FALSE) continues.
+ *  @param data -- data to pass on to the callback.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsDoToAllAtXYRadius(
            T_sword16 x,
            T_sword16 y,
@@ -2758,52 +1811,23 @@ T_void ObjectsDoToAllAtXYRadius(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsDoToAllAtXYZRadius                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsDoToAllAtXYZRadius is similar to DoToALLAtXYRadius, except     */
-/*  it takes into consideration the z vector.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y, z           -- Center point to test for object        */
-/*                                                                          */
-/*    T_word16 radius             -- Spherical radius to go around.         */
-/*                                                                          */
-/*    T_objectDoToAllCallback *p_callback -- routine called for each object.*/
-/*                                If routine returns TRUE, the loop stops.  */
-/*                                Any other values (FALSE) continues.       */
-/*                                                                          */
-/*    T_word32 data               -- data to pass on to the callback.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    (p_callback)                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsDoToAllAtXYZRadius
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsDoToAllAtXYZRadius is similar to DoToALLAtXYRadius, except
+ *  it takes into consideration the z vector.
+ *
+ *  @param x -- X Center point to test for object
+ *  @param y -- Y Center point to test for object
+ *  @param z -- Z Center point to test for object
+ *  @param radius -- Spherical radius to go around.
+ *  @param p_callback -- routine called for each object.
+ *      If routine returns TRUE, the loop stops.
+ *      Any other values (FALSE) continues.
+ *  @param data -- data to pass on to the callback.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsDoToAllAtXYZRadius(
            T_sword16 x,
            T_sword16 y,
@@ -2925,45 +1949,16 @@ T_void ObjectsDoToAllAtXYZRadius(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectSetAngle                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectSetAngle changes the angle and notes that the object has moved. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectDoToAllCallback *p_callback -- routine called for each object.*/
-/*                                If routine returns TRUE, the loop stops.  */
-/*                                Any other values (FALSE) continues.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    (p_callback)                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectSetAngle
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectSetAngle changes the angle and notes that the object has moved.
+ *
+ *  @param p_obj -- Object to set angle on
+ *  @param angle -- Angle of object
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectSetAngle(T_3dObject *p_obj, T_word16 angle)
 {
     T_3dObject *p_chained ;
@@ -3007,54 +2002,21 @@ T_void ObjectSetAngle(T_3dObject *p_obj, T_word16 angle)
 
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectCheckIfCollide                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectCheckIfCollide checks to see if an object will fit at the given */
-/*  location and not collide with anything else.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to test for                     */
-/*                                                                          */
-/*    T_sword32 x, y, z           -- new position                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if blocked, FALSE if not.         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetX                                                            */
-/*    ObjectGetY                                                            */
-/*    ObjectGetZ                                                            */
-/*    ObjectSetX                                                            */
-/*    ObjectSetY                                                            */
-/*    ObjectSetZ                                                            */
-/*    ObjMoveForceUpdate                                                    */
-/*    ObjMoveUpdate                                                         */
-/*    ObjectWasBlocked                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectCheckIfCollide
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectCheckIfCollide checks to see if an object will fit at the given
+ *  location and not collide with anything else.
+ *
+ *  @param p_obj -- Object to test for
+ *  @param x -- new X position
+ *  @param y -- new Y position
+ *  @param z -- new Z position
+ *
+ *  @return TRUE if blocked, FALSE if not.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ObjectCheckIfCollide(
               T_3dObject *p_obj,
               T_sword32 x,
@@ -3126,47 +2088,19 @@ E_Boolean ObjectCheckIfCollide(
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectIsAtXY                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectIsAtXY checks to see if an object is at the given x, y location.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to test for                     */
-/*                                                                          */
-/*    T_sword16 x, y              -- Position to test                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if ther, FALSE if not.            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetX16                                                          */
-/*    ObjectGetY16                                                          */
-/*    ObjectGetRadius                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectIsAtXY
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectIsAtXY checks to see if an object is at the given x, y location.
+ *
+ *  @param p_obj -- Object to test for
+ *  @param x -- X Position to test
+ *  @param y -- Y Position to test
+ *
+ *  @return TRUE if ther, FALSE if not.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ObjectIsAtXY(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
 {
     T_word16 radius ;
@@ -3201,52 +2135,19 @@ E_Boolean ObjectIsAtXY(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetForwardPosition                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetForwardPosition determines what the x and y coordinate is    */
-/*  in front of an object by a given distance.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to find position in front of    */
-/*                                                                          */
-/*    T_word16 dist               -- Distance in front of object            */
-/*                                                                          */
-/*    T_sword32 *p_x, *p_y        -- X and Y pointers for found location.   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetX                                                            */
-/*    ObjectGetY                                                            */
-/*    ObjectGetAngle                                                        */
-/*    MathCosineLookup                                                      */
-/*    MathSineLookup                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetForwardPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetForwardPosition determines what the x and y coordinate is
+ *  in front of an object by a given distance.
+ *
+ *  @param p_obj -- Object to find position in front of
+ *  @param dist -- Distance in front of object
+ *  @param p_x -- X and Y pointers for found location.
+ *  @param p_y -- X and Y pointers for found location.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectGetForwardPosition(
            T_3dObject *p_obj,
            T_word16 dist,
@@ -3275,48 +2176,21 @@ T_void ObjectGetForwardPosition(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectMakeTemporarilyPassableAtXYRadius                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is called when a group of objects touching a circular    */
-/*  area needs to be make passable until they move again without touching   */
-/*  anything.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- Center location of circular area       */
-/*                                                                          */
-/*    T_word16 radius             -- Radius of circular area                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectsDoToAllAtXY                                                    */
-/*    IMakeTempPassable (indirectly)                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectMakeTemporarilyPassableAtXYRadius
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is called when a group of objects touching a circular
+ *  area needs to be make passable until they move again without touching
+ *  anything.
+ *
+ *  @param x -- X Center location of circular area
+ *  @param y -- Y Center location of circular area
+ *  @param radius -- Radius of circular area
+ *  @param zBottom -- Low Z position to check
+ *  @param zTop -- High Z position to check
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsMakeTemporarilyPassableAtXYRadius(
            T_sword16 x,
            T_sword16 y,
@@ -3331,46 +2205,17 @@ T_void ObjectsMakeTemporarilyPassableAtXYRadius(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMakeTempPassable                       * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMakeTempPassable is a callback routine called to declare an object   */
-/*  as passable until free.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to make temporarily passable    */
-/*                                                                          */
-/*    T_word32 data               -- [Not used] required for callback       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectMakePassable                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMakeTempPassable
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMakeTempPassable is a callback routine called to declare an object
+ *  as passable until free.
+ *
+ *  @param p_obj -- Object to make temporarily passable
+ *  @param data -- [Not used] required for callback
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IMakeTempPassable(T_3dObject *p_obj, T_word32 data)
 {
     T_sword16 zBottom, zTop ;
@@ -3409,45 +2254,18 @@ T_void ObjectSetServerId (T_3dObject *p_obj, T_word16 id)
 }
 */
 
-/****************************************************************************/
-/*  Routine:  ObjectsCountType                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsCountType goes through the list of objects in the map and      */
-/*  counts how many have the same type.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objectType         -- Type to count                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Number found                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectsGetFirst                                                       */
-/*    ObjectGetNext                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsCountType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsCountType goes through the list of objects in the map and
+ *  counts how many have the same type.
+ *
+ *  @param objectType -- Type to count
+ *
+ *  @return Number found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ObjectsCountType(T_word16 objectType)
 {
     T_word32 count = 0 ;
@@ -3467,45 +2285,18 @@ T_word32 ObjectsCountType(T_word16 objectType)
     return count ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsCountBasicType                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsCountBasicType goes through the list of objects in the map and */
-/*  counts how many have the same basic type.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objectType         -- Type to count                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Number found                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectsGetFirst                                                       */
-/*    ObjectGetNext                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsCountBasicType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsCountBasicType goes through the list of objects in the map and
+ *  counts how many have the same basic type.
+ *
+ *  @param objectType -- Type to count
+ *
+ *  @return Number found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ObjectsCountBasicType(T_word16 objectType)
 {
     T_word32 count = 0 ;
@@ -3528,46 +2319,17 @@ T_word32 ObjectsCountBasicType(T_word16 objectType)
     return count ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectDuplicate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectDuplicate takes one object and make a copy of it.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to duplicate                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Duplicate object, else NULL            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectCreate                                                          */
-/*    ObjectSetType                                                         */
-/*    ObjectGetType                                                         */
-/*    ObjectTypeGetPicture                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectDuplicate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectDuplicate takes one object and make a copy of it.
+ *
+ *  @param p_obj -- Object to duplicate
+ *
+ *  @return Duplicate object, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ObjectDuplicate(T_3dObject *p_obj)
 {
     T_3dObject *p_new ;
@@ -3604,48 +2366,17 @@ T_3dObject *ObjectDuplicate(T_3dObject *p_obj)
     return p_new ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectSetBodyPartType                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectSetBodyPartType changes the body part on an object.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to change body part on          */
-/*                                                                          */
-/*    T_bodyPartLocation location -- Location of body part                  */
-/*                                                                          */
-/*    T_word16 objType            -- Type of new body part                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IObjectFindBodyPart                                                   */
-/*    ObjectSetType                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectSetBodyPartType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectSetBodyPartType changes the body part on an object.
+ *
+ *  @param p_obj -- Object to change body part on
+ *  @param location -- Location of body part
+ *  @param objType -- Type of new body part
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectSetBodyPartType(
            T_3dObject *p_obj,
            T_bodyPartLocation location,
@@ -3663,46 +2394,18 @@ T_void ObjectSetBodyPartType(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGetBodyPartType                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetBodyPartType gets    the body part on an object.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to get    body part of          */
-/*                                                                          */
-/*    T_bodyPartLocation location -- Location of body part                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- type of part, or 0                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IObjectFindBodyPart                                                   */
-/*    ObjectGetType                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetBodyPartType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetBodyPartType gets    the body part on an object.
+ *
+ *  @param p_obj -- Object to get    body part of
+ *  @param location -- Location of body part
+ *
+ *  @return type of part, or 0
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 ObjectGetBodyPartType(
              T_3dObject *p_obj,
              T_bodyPartLocation location)
@@ -3723,46 +2426,18 @@ T_word16 ObjectGetBodyPartType(
 }
 
 
-/****************************************************************************/
-/*  Routine:  IObjectFindBodyPart                     * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IObjectFindBodyPart looks up a player's object part.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_body          -- Object that has a body                 */
-/*                                                                          */
-/*    T_bodyPartLocation location -- Location of body part                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Pointer to object part, else NULL      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IObjectFindBodyPart                                                   */
-/*    ObjectGetType                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjectFindBodyPart
+ *-------------------------------------------------------------------------*/
+/**
+ *  IObjectFindBodyPart looks up a player's object part.
+ *
+ *  @param p_body -- Object that has a body
+ *  @param location -- Location of body part
+ *
+ *  @return Pointer to object part, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_3dObject *IObjectFindBodyPart(
                       T_3dObject *p_body,
                       T_bodyPartLocation location)
@@ -3798,46 +2473,16 @@ static T_3dObject *IObjectFindBodyPart(
     return p_part ;
 }
 
-/****************************************************************************/
-/*  Routine:  IObjectRemoveFromHashTable              * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IObjectRemoveFromhashTable checks to see if the object is on the      */
-/*  hash table, and if it is, removes it from that table.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to remove from hash table       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetServerId                                                     */
-/*    ObjectGetHashPointer                                                  */
-/*    ObjectSetHashPointer                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjectRemoveFromHashTable
+ *-------------------------------------------------------------------------*/
+/**
+ *  IObjectRemoveFromhashTable checks to see if the object is on the
+ *  hash table, and if it is, removes it from that table.
+ *
+ *  @param p_obj -- Object to remove from hash table
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IObjectRemoveFromHashTable(T_3dObject *p_obj)
 {
     T_3dObject *p_hash ;
@@ -3882,45 +2527,15 @@ static T_void IObjectRemoveFromHashTable(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IObjectAddToHashTable                   * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IObjectAddToHashTable adds the given object onto the hash table.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to add to the  hash table       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetServerId                                                     */
-/*    ObjectGetHashPointer                                                  */
-/*    ObjectSetHashPointer                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IObjectAddToHashTable
+ *-------------------------------------------------------------------------*/
+/**
+ *  IObjectAddToHashTable adds the given object onto the hash table.
+ *
+ *  @param p_obj -- Object to add to the  hash table
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IObjectAddToHashTable(T_3dObject *p_obj)
 {
     T_word16 hash ;
@@ -3936,46 +2551,19 @@ static T_void IObjectAddToHashTable(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectAllocExtraData                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectAllocExtraData allocates memory onto an object for whatever     */
-/*  use is needed by the caller.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to add memory to                */
-/*                                                                          */
-/*    T_word32 sizeData           -- Amount of memory needed.               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                    -- POinter to memory                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectAllocExtraData
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectAllocExtraData allocates memory onto an object for whatever
+ *  use is needed by the caller.
+ *
+ *  @param p_obj -- Object to add memory to
+ *  @param sizeData -- Amount of memory needed.
+ *
+ *  @return POinter to memory
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *ObjectAllocExtraData(T_3dObject *p_obj, T_word32 sizeData)
 {
     T_void *p_data = NULL ;
@@ -3993,45 +2581,20 @@ T_void *ObjectAllocExtraData(T_3dObject *p_obj, T_word32 sizeData)
     return p_data ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectFreeExtraData                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectFreeExtraData frees preivous allocated memory attached to a     */
-/*  given object.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This routine checks to see if there IS memory to free first    */
-/*  and doesn't mind being called with no extra data.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to free memory from.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectFreeExtraData
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectFreeExtraData frees preivous allocated memory attached to a
+ *  given object.
+ *
+ *  NOTE:
+ *  This routine checks to see if there IS memory to free first
+ *  and doesn't mind being called with no extra data.
+ *
+ *  @param p_obj -- Object to free memory from.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectFreeExtraData(T_3dObject *p_obj)
 {
     T_void *p_data = NULL ;
@@ -4049,45 +2612,18 @@ T_void ObjectFreeExtraData(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectIsBeingCrushed                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectIsBeingCrushed checks to see if the given object has a bigger   */
-/*  height than the height it is in.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to check if being crushed       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=yes, crushed, else FALSE          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapGetCeilingHeight                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectIsBeingCrushed
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectIsBeingCrushed checks to see if the given object has a bigger
+ *  height than the height it is in.
+ *
+ *  @param p_obj -- Object to check if being crushed
+ *
+ *  @return TRUE=yes, crushed, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ObjectIsBeingCrushed(T_3dObject *p_obj)
 {
     T_word16 i, num ;
@@ -4121,45 +2657,16 @@ E_Boolean ObjectIsBeingCrushed(T_3dObject *p_obj)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjectRemoveScript                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectRemoveScript checks to see if an object has a script, and if it */
-/*  does, turns off and removes that script.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to remove script from.          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ScriptUnlock                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectRemoveScript
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectRemoveScript checks to see if an object has a script, and if it
+ *  does, turns off and removes that script.
+ *
+ *  @param p_obj -- Object to remove script from.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectRemoveScript(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectRemoveScript") ;
@@ -4178,53 +2685,20 @@ T_void ObjectRemoveScript(T_3dObject *p_obj)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ObjectGetAngularPosition                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGetAngularPosition determines what the x and y coordinate is    */
-/*  in a given direction and distance from a given object                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to find position in front of    */
-/*                                                                          */
-/*    T_word16 angle              -- Angle from the object                  */
-/*                                                                          */
-/*    T_word16 dist               -- Distance in front of object            */
-/*                                                                          */
-/*    T_sword32 *p_x, *p_y        -- X and Y pointers for found location.   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetX                                                            */
-/*    ObjectGetY                                                            */
-/*    MathCosineLookup                                                      */
-/*    MathSineLookup                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGetAngularPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGetAngularPosition determines what the x and y coordinate is
+ *  in a given direction and distance from a given object
+ *
+ *  @param p_obj -- Object to find position in front of
+ *  @param angle -- Angle from the object
+ *  @param dist -- Distance in front of object
+ *  @param p_x -- X and Y pointers for found location.
+ *  @param p_y -- X and Y pointers for found location.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectGetAngularPosition(
            T_3dObject *p_obj,
            T_word16 angle,
@@ -4258,44 +2732,16 @@ T_void ObjectChainingOn(T_void)
     G_objectChainingAllow = TRUE ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectMarkForDestroy                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectMarkForDestroy declares an object needs to be destroyed by      */
-/*  outside routines.  The object system does not automatically destroy.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to mark for destruction         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectMarkForDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectMarkForDestroy declares an object needs to be destroyed by
+ *  outside routines.  The object system does not automatically destroy.
+ *
+ *  @param p_obj -- Object to mark for destruction
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectMarkForDestroy(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectMarkForDestroy") ;
@@ -4314,87 +2760,29 @@ T_void ObjectMarkForDestroy(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsGetNumMarkedForDestroy                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsGetNumMarkedForDestroy returns the number of objects that      */
-/*  have set their MARK_FOR_DESTROY attribute.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsGetNumMarkedForDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsGetNumMarkedForDestroy returns the number of objects that
+ *  have set their MARK_FOR_DESTROY attribute.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ObjectsGetNumMarkedForDestroy(T_void)
 {
     return G_numObjectsMarkedForDestroy ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectsUpdateMovementForFake                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectsUpdateMovementForFake is just like ObjectsUpdateMovement but   */
-/*  it only updates fake objects.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 delta              -- Delta of time since last update        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/17/96  Created from ObjectsUpdateMovement                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectsUpdateMovementForFake
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectsUpdateMovementForFake is just like ObjectsUpdateMovement but
+ *  it only updates fake objects.
+ *
+ *  @param delta -- Delta of time since last update
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectsUpdateMovementForFake(T_word32 delta)
 {
     T_3dObject *p_obj ;
@@ -4505,7 +2893,6 @@ T_word32 ObjectGetNextId(T_void)
     return G_lastObjectId ;
 }
 
-/****************************************************************************/
 T_void ObjectAddAttributesToPiecewise(T_3dObject *p_obj, T_word16 attr)
 {
     T_3dObject *p_chained ;
@@ -4536,7 +2923,6 @@ T_void ObjectAddAttributesToPiecewise(T_3dObject *p_obj, T_word16 attr)
     }
 }
 
-/****************************************************************************/
 T_void ObjectRemoveAttributesFromPiecewise(T_3dObject *p_obj, T_word16 attr)
 {
     T_3dObject *p_chained ;
@@ -4566,7 +2952,6 @@ T_void ObjectRemoveAttributesFromPiecewise(T_3dObject *p_obj, T_word16 attr)
     }
 }
 
-/****************************************************************************/
 T_word16 ObjectGetWeight(T_3dObject *p_obj)
 {
     T_word16 weight ;
@@ -4601,7 +2986,6 @@ T_word16 ObjectGetWeight(T_3dObject *p_obj)
     return (((T_word32)weight) * weightAdjust[color]) / 100 ;
 }
 
-/****************************************************************************/
 T_word16 ObjectGetValue(T_3dObject *p_obj)
 {
     T_word16 value ;
@@ -4636,7 +3020,6 @@ T_word16 ObjectGetValue(T_3dObject *p_obj)
     return (((T_word32)value) * valueAdjust[color]) / 100 ;
 }
 
-/****************************************************************************/
 T_void ObjectDrawFrontScaled(
            T_3dObject *p_obj,
            T_sword16 x,
@@ -4667,7 +3050,6 @@ T_void ObjectDrawFrontScaled(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ObjectUpdateCollisionLink(T_3dObject *p_obj)
 {
     T_word16 group ;
@@ -4711,7 +3093,6 @@ printf("p_obj %p at (%d, %d) put in group %d (list %p)\n",
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ObjectUnlinkCollisionLink(T_3dObject *p_obj)
 {
     DebugRoutine("ObjectUnlinkCollisionLink") ;
@@ -4725,43 +3106,21 @@ T_void ObjectUnlinkCollisionLink(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectCheckCollideAny                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectCheckCollideAny  sees if the position given for an object will  */
-/*  cause it to collide with any of the other objects, passible or not.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject p_obj            -- object to check for object collision   */
-/*                                                                          */
-/*    T_sword16 x, y              -- position to check for collision        */
-/*                                                                          */
-/*    T_sword16 height            -- New height to check for                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = collided, else FALSE            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/30/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectCheckCollideAny
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectCheckCollideAny  sees if the position given for an object will
+ *  cause it to collide with any of the other objects, passible or not.
+ *
+ *  @param p_obj -- object to check for object collision
+ *  @param x -- X position to check for collision
+ *  @param y -- Y position to check for collision
+ *  @param height -- New height to check for
+ *
+ *  @return TRUE = collided, else FALSE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ObjectCheckCollideAny(
               T_3dObject *p_obj,
               T_sword16 x,
@@ -4827,9 +3186,6 @@ E_Boolean ObjectCheckCollideAny(
     return status ;
 }
 
-/****************************************************************************/
-/* Given an object that is pointing to a body part, find a matching */
-/* head that is owning that body part. */
 T_3dObject *ObjectFindBodyPartHead(T_3dObject *p_part)
 {
     T_3dObject *p_search ;
@@ -4862,6 +3218,7 @@ T_3dObject *ObjectFindBodyPartHead(T_3dObject *p_part)
     return NULL ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  OBJECT.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  OBJECT.C
+ *-------------------------------------------------------------------------*/

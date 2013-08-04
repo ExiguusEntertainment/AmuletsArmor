@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  LIGHT.C                                                        */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  LIGHT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All maps have a lighting table that tells how the sectors affect
+ * one another as light enters leaves based on sky, torches, and doors.
+ *
+ * @addtogroup LIGHT
+ * @brief Light Table for Map
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_IO.H"
 #include "DOOR.H"
 #include "LIGHT.H"
@@ -29,47 +39,22 @@ T_byte8 *G_lightCalculations ;
 /* Internal prototypes: */
 static T_void ILightIlluminate(T_byte8 *p_lightList) ;
 
-/****************************************************************************/
-/*  Routine:  LightTableLoad                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    LightTableLoad loads in a light table and initializes a handle for    */
-/*  future references to the light table.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The level has to be loaded before the light table is loaded.  This    */
-/*  program needs to know the number of sectors that are on a map.          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 number             -- Number of light table to load          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_lightTable                -- Handle to light table                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    PictureLockData                                                       */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  LightTableLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  LightTableLoad loads in a light table and initializes a handle for
+ *  future references to the light table.
+ *
+ *  NOTE: 
+ *  The level has to be loaded before the light table is loaded.  This
+ *  program needs to know the number of sectors that are on a map.
+ *
+ *  @param number -- Number of light table to load
+ *
+ *  @return Handle to light table
+ *
+ *<!-----------------------------------------------------------------------*/
 T_lightTable LightTableLoad(T_word32 number)
 {
     T_lightTableStruct *p_light ;
@@ -118,44 +103,15 @@ T_lightTable LightTableLoad(T_word32 number)
     return ((T_lightTable)p_light) ;
 }
 
-/****************************************************************************/
-/*  Routine:  LightTableUnload                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    LightTableUnload frees up a previously allocated light table.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_lightTable                -- Handle to light table to unload        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlockAndUnfind                                                */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  LightTableUnload
+ *-------------------------------------------------------------------------*/
+/**
+ *  LightTableUnload frees up a previously allocated light table.
+ *
+ *  @param light -- Handle to light table to unload
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void LightTableUnload(T_lightTable light)
 {
     T_lightTableStruct *p_light ;
@@ -184,48 +140,17 @@ T_void LightTableUnload(T_lightTable light)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  LightTableRecalculate                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    LightTableRecalculate does the work to recompute all the lighting     */
-/*  values.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_lightTable light          -- Handle to light table to recalculate   */
-/*                                                                          */
-/*    T_byte8 outsideLighting     -- Lighting level of outside (main)       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoorGetPercentOpen                                                    */
-/*    MapSetSectorLighting                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*    LES  02/20/96  Modified to use preLight calculations instead of MapGet*/
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  LightTableRecalculate
+ *-------------------------------------------------------------------------*/
+/**
+ *  LightTableRecalculate does the work to recompute all the lighting
+ *  values.
+ *
+ *  @param light -- Handle to light table to recalculate
+ *  @param outsideLighting -- Lighting level of outside (main)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void LightTableRecalculate(T_lightTable light, T_byte8 outsideLighting)
 {
     T_lightTableStruct *p_light ;
@@ -348,46 +273,14 @@ T_void LightTableRecalculate(T_lightTable light, T_byte8 outsideLighting)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILightIlluminate                        * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ILightIlluminate changes the sector lighting values based on lit      */
-/*  objects.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectsGetFirst                                                       */
-/*    ObjectGetNext                                                         */
-/*    ObjectGetIllumination                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/20/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILightIlluminate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ILightIlluminate changes the sector lighting values based on lit
+ *  objects.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILightIlluminate(T_byte8 *p_lightList)
 {
     T_3dObject *p_obj ;
@@ -437,6 +330,7 @@ static T_void ILightIlluminate(T_byte8 *p_lightList)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  LIGHT.C                                                 */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  LIGHT.C
+ *-------------------------------------------------------------------------*/

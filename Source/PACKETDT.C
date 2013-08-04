@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  PACKET.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  PACKETDT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The low level "packets" in the networking are sent and received here.
+ * They are classified into two sizes:  Short or Long.  This packet
+ * layer interfaces to the Direct Talk communications layer.
+ *
+ * @addtogroup PACKET
+ * @brief Packet Communications
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "PACKET.H"
 
 /* Option to create the file RECEIVE.DAT to record all received bytes */
@@ -14,41 +25,19 @@ static T_word32 G_packetID = 1 ;
 
 static T_word16 IPacketComputeChecksum(T_packetEitherShortOrLong *p_packet) ;
 
-/****************************************************************************/
-/*  Routine:  PacketSendShort                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PacketSendShort is called to small (about 16 byte) packets out the    */
-/*  currently active communications port.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetShort *shortPacket  -- Packet with data entry filled.  The    */
-/*                                   rest of the fields will be filled out. */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- 0 if packet sent, -1 if not sent       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/13/94  Created                                                */
-/*    LES  01/04/95  Modified so it returns a 0 if sent, -1 if not sent.    */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PacketSendShort
+ *-------------------------------------------------------------------------*/
+/**
+ *  PacketSendShort is called to small (about 16 byte) packets out the
+ *  currently active communications port.
+ *
+ *  @param p_shortPacket -- Packet with data entry filled.  The
+ *      rest of the fields will be filled out.
+ *
+ *  @return 0 if packet sent, -1 if not sent
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 PacketSendShort(T_packetShort *p_shortPacket)
 {
     T_sword16 code = -1 ;
@@ -79,41 +68,19 @@ T_sword16 PacketSendShort(T_packetShort *p_shortPacket)
     return code ;
 }
 
-/****************************************************************************/
-/*  Routine:  PacketSendLong                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PacketSendLong sends a long packet of 80 characters out the           */
-/*  currently active communications port.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetLong *p_longPacket  -- Packet with data entry filled.  The    */
-/*                                   rest of the fields will be filled out. */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- 0 if packet sent, -1 if not sent       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/16/94  Created                                                */
-/*    LES  01/04/95  Modified so it returns a 0 if sent, -1 if not sent.    */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PacketSendLong
+ *-------------------------------------------------------------------------*/
+/**
+ *  PacketSendLong sends a long packet of 80 characters out the
+ *  currently active communications port.
+ *
+ *  @param p_longPacket -- Packet with data entry filled.  The
+ *      rest of the fields will be filled out.
+ *
+ *  @return 0 if packet sent, -1 if not sent
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 PacketSendLong(T_packetLong *p_longPacket)
 {
     T_sword16 code = -1 ;
@@ -146,39 +113,18 @@ T_sword16 PacketSendLong(T_packetLong *p_longPacket)
     return code ;
 }
 
-/****************************************************************************/
-/*  Routine:  PacketSendAnyLength                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PacketSendAnyLength sends a packet of any size up to a long packet    */
-/*  size out the active communications port.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- packet to send.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- 0 if packet sent, -1 if not sent       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PacketSendAnyLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  PacketSendAnyLength sends a packet of any size up to a long packet
+ *  size out the active communications port.
+ *
+ *  @param p_anyPacket -- packet to send.
+ *
+ *  @return 0 if packet sent, -1 if not sent
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 PacketSendAnyLength(T_packetEitherShortOrLong *p_anyPacket)
 {
     T_sword16 code = -1 ;
@@ -213,45 +159,16 @@ T_sword16 PacketSendAnyLength(T_packetEitherShortOrLong *p_anyPacket)
     return code ;
 }
 
-/****************************************************************************/
-/*  Routine:  PacketSend                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PacketSend sends either a short or a long packet out the current      */
-/*  communications port.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- packet to send.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PacketSendShort                                                       */
-/*    PacketSendLong                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PacketSend
+ *-------------------------------------------------------------------------*/
+/**
+ *  PacketSend sends either a short or a long packet out the current
+ *  communications port.
+ *
+ *  @param p_packet -- packet to send.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 PacketSend(T_packetEitherShortOrLong *p_packet)
 {
     T_sword16 status ;
@@ -276,83 +193,36 @@ T_sword16 PacketSend(T_packetEitherShortOrLong *p_packet)
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  PacketSetId                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PacketSetId sets the packet Id.  THIS SHOULD ONLY BE CALLED FROM      */
-/*  WITHIN CMDQUEUE.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong * -- Pointer to packet whose ID must be     */
-/*                   p_packet        changed.                               */
-/*    T_word32 packetID           -- New ID to assign to the packet.        */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  PacketSetId
+ *-------------------------------------------------------------------------*/
+/**
+ *  PacketSetId sets the packet Id.  THIS SHOULD ONLY BE CALLED FROM
+ *  WITHIN CMDQUEUE.
+ *
+ *  @param p_packet -- Pointer to packet whose ID must be
+ *      p_packet        changed.
+ *  @param packetID -- New ID to assign to the packet.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PacketSetId (T_packetEitherShortOrLong *p_packet, T_word32 packetID)
 {
     p_packet->header.id = packetID;
 }
 
 
-/****************************************************************************/
-/*  Routine:  IPacketComputeChecksum             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IPacketComputeChecksum calculates a 16 bit checksum for the either    */
-/*  short or long packet passed and returns that value.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *packet -- Packet to compute checksum       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Calculated checksum                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/16/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IPacketComputeChecksum
+ *-------------------------------------------------------------------------*/
+/**
+ *  IPacketComputeChecksum calculates a 16 bit checksum for the either
+ *  short or long packet passed and returns that value.
+ *
+ *  @param packet -- Packet to compute checksum
+ *
+ *  @return Calculated checksum
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IPacketComputeChecksum(T_packetEitherShortOrLong *packet)
 {
     T_word16 checksum ;
@@ -382,55 +252,26 @@ static T_word16 IPacketComputeChecksum(T_packetEitherShortOrLong *packet)
     return checksum ;
 }
 
-/****************************************************************************/
-/*  Routine:  PacketGet                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PacketGet is the routine called to retrieve a packet from the         */
-/*  currently active communications port.  If no packet is found, a -1      */
-/*  is returned.  If a packet is found, a 0 is returned.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetLong *packet        -- Packet location to receive data.       */
-/*                                   Note that you must have room allocated */
-/*                                   for a long packet in case either a     */
-/*                                   long or a short packet is received.    */
-/*                                   You will want to check the packet type */
-/*                                   if you do receive data.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Resultant flag.  A -1 means no         */
-/*                                   packet was received.  A 0 means a      */
-/*                                   packet was found.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommReadData                                                          */
-/*    CommReadByte                                                          */
-/*    CommGetReadBufferLength                                               */
-/*    CommScanByte                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PacketGet
+ *-------------------------------------------------------------------------*/
+/**
+ *  PacketGet is the routine called to retrieve a packet from the
+ *  currently active communications port.  If no packet is found, a -1
+ *  is returned.  If a packet is found, a 0 is returned.
+ *
+ *  @param packet -- Packet location to receive data.
+ *      Note that you must have room allocated
+ *      for a long packet in case either a
+ *      long or a short packet is received.
+ *      You will want to check the packet type
+ *      if you do receive data.
+ *
+ *  @return Resultant flag.  A -1 means no
+ *      packet was received.  A 0 means a
+ *      packet was found.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_packetLong newPacket ;
 static E_Boolean newPacketFilled ;
 
@@ -488,6 +329,7 @@ T_void PacketReceiveData(T_void *p_data, T_word16 size)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  PACKET.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  PACKETDT.C
+ *-------------------------------------------------------------------------*/

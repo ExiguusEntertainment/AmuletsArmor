@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SMMAIN.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMMAIN.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The top level state machine of all the other state machines.
+ *
+ * @addtogroup SMMAIN
+ * @brief State Machine Top
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLIENT.H"
 #include "MEMORY.H"
 #include "SMCONNEC.H"
@@ -267,44 +276,19 @@ static T_stateMachine SMMainStateMachine = {
 static E_Boolean G_init = FALSE ;
 static T_stateMachineHandle G_smMainHandle = STATE_MACHINE_HANDLE_BAD ;
 
-/****************************************************************************/
-/*  Routine:  SMMainCheckFlag                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainCheckFlag checks to see if one of the state flags      */
-/*  of the client connect state machine is set.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to get value of                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                    -- State of flag                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainCheckFlag checks to see if one of the state flags
+ *  of the client connect state machine is set.
+ *
+ *  @param handle -- state machine
+ *  @param flag -- Flag to get value of
+ *
+ *  @return State of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMMainCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -329,46 +313,17 @@ E_Boolean SMMainCheckFlag(
     return stateFlag ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainSetFlag                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainSetFlag sets a flag for the main state                          */
-/*  machine to process as part of its states.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to set                           */
-/*                                                                          */
-/*    E_Boolean state              -- State to set flag to                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainSetFlag sets a flag for the main state
+ *  machine to process as part of its states.
+ *
+ *  @param flag -- Flag to set
+ *  @param state -- State to set flag to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainSetFlag(
               T_word32 flag,
               E_Boolean state)
@@ -389,43 +344,13 @@ T_void SMMainSetFlag(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainInit sets up the main state machine and its data.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineCreate                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainInit sets up the main state machine and its data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMMainInit(T_void)
 {
     DebugRoutine("SMMainInit") ;
@@ -440,43 +365,13 @@ T_stateMachineHandle SMMainInit(T_void)
     return G_smMainHandle ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainFinish cleans up the main state machine's data.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineDestroy                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainFinish cleans up the main state machine's data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainFinish(T_void)
 {
     DebugRoutine("SMMainFinish") ;
@@ -490,43 +385,13 @@ T_void SMMainFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainUpdate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainUpdate updates the main state machine.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineUpdate                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainUpdate updates the main state machine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainUpdate(T_void)
 {
     DebugRoutine("SMMainUpdate") ;
@@ -536,44 +401,16 @@ T_void SMMainUpdate(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainIsDone                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainIsDone checks if the main state machine                         */
-/*  has reached its end and is done.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- Done if TRUE                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetState                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainIsDone
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainIsDone checks if the main state machine
+ *  has reached its end and is done.
+ *
+ *  @return Done if TRUE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMMainIsDone(T_void)
 {
     T_word16 state;
@@ -591,46 +428,16 @@ E_Boolean SMMainIsDone(T_void)
     return isDone ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainInitData                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainInitData creates the data necessary to be associated            */
-/*  to the MAIN STATE MACHINE.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle -- state machine                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memset                                                                */
-/*    StateMachineSetData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainInitData
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainInitData creates the data necessary to be associated
+ *  to the MAIN STATE MACHINE.
+ *
+ *  @param handle -- state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainInitData(T_stateMachineHandle handle)
 {
     T_smMainData *p_data ;
@@ -646,45 +453,15 @@ T_void SMMainInitData(T_stateMachineHandle handle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainFinishData                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainFinishData destroys the data attached to the main state machine.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle -- state machine                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetData                                                   */
-/*    MemFree                                                               */
-/*    StateMachineSetData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainFinishData
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainFinishData destroys the data attached to the main state machine.
+ *
+ *  @param handle -- state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainFinishData(T_stateMachineHandle handle)
 {
     T_smMainData *p_data ;
@@ -700,44 +477,16 @@ T_void SMMainFinishData(T_stateMachineHandle handle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISMMainGetExtraData            * INTERNAL *                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISMMainGetExtraData returns a pointer to the current main SM          */
-/*           global data area.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_smMainData *            -- SMMain's data                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISMMainGetExtraData
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISMMainGetExtraData returns a pointer to the current main SM
+ *  global data area.
+ *
+ *  @return SMMain's data
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_smMainData *ISMMainGetExtraData(T_void)
 {
     T_smMainData *p_data = NULL ;
@@ -755,45 +504,16 @@ static T_smMainData *ISMMainGetExtraData(T_void)
     return p_data ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainConnectStart                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainConnectStart                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainConnectStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainConnectStart
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainConnectStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -819,47 +539,17 @@ T_void SMMainConnectStart(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainConnectEnd                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainConnectEnd                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroy          -- Flag noting if destroying             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainConnectEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainConnectEnd
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- Flag noting if destroying
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainConnectEnd(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -877,45 +567,16 @@ T_void SMMainConnectEnd(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainConnectUpdate                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainConnectUpdate                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainConnectUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainConnectUpdate
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainConnectUpdate(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -935,46 +596,17 @@ T_void SMMainConnectUpdate(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainChooseStart                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainChooseStart brings up the main screen of text and info and      */
-/*  lets the player create/destroy/play a given character.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMMainSetFlag                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainChooseStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainChooseStart brings up the main screen of text and info and
+ *  lets the player create/destroy/play a given character.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainChooseStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -997,45 +629,16 @@ T_void SMMainChooseStart(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainChooseCharacterIdle                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainChooseCharacterIdle                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainChooseCharacterIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainChooseCharacterIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainChooseCharacterIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1053,47 +656,17 @@ T_void SMMainChooseCharacterIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainChooseCharacterExit                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainChooseCharacterExit                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainChooseCharacterExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainChooseCharacterExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainChooseCharacterExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1114,46 +687,17 @@ T_void SMMainChooseCharacterExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainLeaveServerStart                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainLeaveServerStart starts the transaction leaving the server.     */
-/*  To be polite, the system "logs off" from the server.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMMainSetFlag                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainLeaveServerStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainLeaveServerStart starts the transaction leaving the server.
+ *  To be polite, the system "logs off" from the server.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainLeaveServerStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1176,45 +720,16 @@ T_void SMMainLeaveServerStart(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainLeaveServerIdle                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainLeaveServerIdle                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainLeaveServerIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainLeaveServerIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainLeaveServerIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1234,47 +749,17 @@ T_void SMMainLeaveServerIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainLeaveServerExit                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainLeaveServerExit                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainLeaveServerExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainLeaveServerExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainLeaveServerExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1295,46 +780,17 @@ T_void SMMainLeaveServerExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainPlayGameStart                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMMainPlayGameStart gets the 3d engine going and appropriate game     */
-/*  state machine.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMMainSetFlag                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainPlayGameStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainPlayGameStart gets the 3d engine going and appropriate game
+ *  state machine.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainPlayGameStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1360,45 +816,16 @@ T_void SMMainPlayGameStart(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMMainPlayGameIdle                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainPlayGameIdle                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainPlayGameIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainPlayGameIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainPlayGameIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1412,47 +839,17 @@ T_void SMMainPlayGameIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainPlayGameExit                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainPlayGameExit                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/05/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainPlayGameExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainPlayGameExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainPlayGameExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1474,45 +871,16 @@ T_void SMMainPlayGameExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainLogoffEnter                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainLogoffEnter                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainLogoffEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainLogoffEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainLogoffEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1537,45 +905,16 @@ T_void SMMainLogoffEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainLogoffIdle                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainLogoffIdle                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainLogoffIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainLogoffIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainLogoffIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1593,47 +932,17 @@ T_void SMMainLogoffIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainLogoffExit                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainLogoffExit                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainLogoffExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainLogoffExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainLogoffExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1652,45 +961,16 @@ T_void SMMainLogoffExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainDisconnectedEnter                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainDisconnectedEnter                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainDisconnectedEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainDisconnectedEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainDisconnectedEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1712,45 +992,16 @@ T_void SMMainDisconnectedEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainDisconnectedIdle                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainDisconnectedIdle                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainDisconnectedIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainDisconnectedIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainDisconnectedIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1768,47 +1019,17 @@ T_void SMMainDisconnectedIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMMainDisconnectedExit                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMMainDisconnectedExit                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMMainGetExtraData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMMainDisconnectedExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMMainDisconnectedExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMMainDisconnectedExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1827,6 +1048,7 @@ T_void SMMainDisconnectedExit(
 }
 
 
-/****************************************************************************/
-/*    END OF FILE:  SMMAIN.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMMAIN.C
+ *-------------------------------------------------------------------------*/

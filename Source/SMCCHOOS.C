@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SM.C                                                           */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMCCHOOS.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Handle the Main UI as a state machine.
+ *
+ * @addtogroup SMCCHOOS
+ * @brief Choose Character State Machine
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLI_SEND.H"
 #include "CLIENT.H"
 #include "COLOR.H"
@@ -154,9 +163,6 @@ static T_stateMachineHandle G_smHandle ;
 static E_Boolean G_init = FALSE ;
 
 
-/****************************************************************************/
-/*                             CONDITIONALS                                 */
-/****************************************************************************/
 static T_stateMachineConditional SMCChooseWaitForListCond[] = {
     {
         SMCChooseCheckFlag,                           /* conditional callback */
@@ -335,9 +341,6 @@ static T_stateMachineConditional SMCChooseCreateUploadCond[] = {
 /*-------------------------------------------------------------------------*/
 
 
-/****************************************************************************/
-/*                              STATES                                      */
-/****************************************************************************/
 static T_stateMachineState SMCChooseStates[] = {
     /* SMCCHOOSE_WAIT_FOR_LIST_STATE */
     {
@@ -503,43 +506,15 @@ static T_stateMachine SMCChooseStateMachine = {
 
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseInitialize                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseInitialize                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineHandle           -- Handle to state machine created     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseInitialize
+ *
+ *  @return Handle to state machine created
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMCChooseInitialize(T_void)
 {
     DebugRoutine("SMCChooseInitialize") ;
@@ -557,43 +532,13 @@ T_stateMachineHandle SMCChooseInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseFinish                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseFinish                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseFinish
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseFinish(T_void)
 {
     DebugRoutine("SMCChooseFinish") ;
@@ -610,43 +555,13 @@ T_void SMCChooseFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseUpdate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseUpdate
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseUpdate(T_void)
 {
     DebugRoutine("SMCChooseUpdate") ;
@@ -657,43 +572,15 @@ T_void SMCChooseUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDataInit                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDataInit                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDataInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDataInit
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDataInit(T_stateMachineHandle handle)
 {
     T_SMCChooseData *p_data ;
@@ -711,43 +598,15 @@ T_void SMCChooseDataInit(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDataFinish                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDataFinish                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDataFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDataFinish
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDataFinish(T_stateMachineHandle handle)
 {
     T_SMCChooseData *p_data ;
@@ -765,45 +624,16 @@ T_void SMCChooseDataFinish(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCheckFlag                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseCheckFlag                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCheckFlag
+ *
+ *  @param handle -- Handle to state machine
+ *  @param flag -- Flag to change
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMCChooseCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -828,45 +658,16 @@ E_Boolean SMCChooseCheckFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseSetFlag                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseSetFlag                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*    E_Boolean state              -- New state of flag                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseSetFlag
+ *
+ *  @param flag -- Flag to change
+ *  @param state -- New state of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseSetFlag(
            T_word16 flag,
            E_Boolean state)
@@ -888,45 +689,16 @@ T_void SMCChooseSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseWaitForListEnter                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseWaitForListEnter                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseWaitForListEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseWaitForListEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseWaitForListEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -953,45 +725,16 @@ T_void SMCChooseWaitForListEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseWaitForListIdle                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseWaitForListIdle                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseWaitForListIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseWaitForListIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseWaitForListIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1007,45 +750,16 @@ T_void SMCChooseWaitForListIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseChoicesEnter                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseChoicesEnter                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseChoicesEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseChoicesEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseChoicesEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1080,45 +794,16 @@ T_void SMCChooseChoicesEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseChoicesIdle                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseChoicesIdle                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseChoicesIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseChoicesIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseChoicesIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1135,47 +820,17 @@ T_void SMCChooseChoicesIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseChoicesExit                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseChoicesExit                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseChoicesExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseChoicesExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseChoicesExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1195,45 +850,16 @@ T_void SMCChooseChoicesExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCreateEnter                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseCreateEnter                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCreateEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCreateEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCreateEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1263,45 +889,16 @@ T_void SMCChooseCreateEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCreateIdle                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseCreateIdle                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCreateIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCreateIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCreateIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1320,47 +917,17 @@ T_void SMCChooseCreateIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCreateExit                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseCreateExit                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCreateExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCreateExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCreateExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1381,45 +948,16 @@ T_void SMCChooseCreateExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseRequestCreateEnter                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseRequestCreateEnter                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseRequestCreateEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseRequestCreateEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseRequestCreateEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1458,45 +996,16 @@ T_void SMCChooseRequestCreateEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseRequestCreateIdle                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseRequestCreateIdle                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseRequestCreateIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseRequestCreateIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseRequestCreateIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1524,45 +1033,16 @@ T_void SMCChooseRequestCreateIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseLoadEnter                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseLoadEnter                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseLoadEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseLoadEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseLoadEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1599,45 +1079,16 @@ T_void SMCChooseLoadEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseLoadIdle                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseLoadIdle                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseLoadIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseLoadIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseLoadIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1661,45 +1112,16 @@ T_void SMCChooseLoadIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDownloadCharacterEnter                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDownloadCharacterEnter                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDownloadCharacterEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDownloadCharacterEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDownloadCharacterEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1715,40 +1137,16 @@ T_void SMCChooseDownloadCharacterEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDisplayStatsEnter                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDisplayStatsEnter                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDisplayStatsEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDisplayStatsEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDisplayStatsEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1785,45 +1183,16 @@ T_void SMCChooseDisplayStatsEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDisplayStatsIdle                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDisplayStatsIdle                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDisplayStatsIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDisplayStatsIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDisplayStatsIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1836,42 +1205,17 @@ T_void SMCChooseDisplayStatsIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDisplayStatsExit                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDisplayStatsExit                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDisplayStatsExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDisplayStatsExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDisplayStatsExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -1901,45 +1245,16 @@ T_void SMCChooseDisplayStatsExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCheckPasswordForLoadEnter                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseCheckPasswordForLoadEnter                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCheckPasswordForLoadEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCheckPasswordForLoadEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCheckPasswordForLoadEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1978,40 +1293,16 @@ T_void SMCChooseCheckPasswordForLoadEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCheckPasswordForLoadIdle                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseCheckPasswordForLoadIdle                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCheckPasswordForLoadIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCheckPasswordForLoadIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCheckPasswordForLoadIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2044,45 +1335,16 @@ T_void SMCChooseCheckPasswordForLoadIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseChangePasswordEnter                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseChangePasswordEnter                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseChangePasswordEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseChangePasswordEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseChangePasswordEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2148,40 +1410,16 @@ T_void SMCChooseChangePasswordEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseChangePasswordIdle                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseChangePasswordIdle                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseChangePasswordIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseChangePasswordIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseChangePasswordIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2211,45 +1449,16 @@ T_void SMCChooseChangePasswordIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseEnableBeginEnter                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseEnableBeginEnter                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseEnableBeginEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseEnableBeginEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseEnableBeginEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2276,45 +1485,16 @@ T_void SMCChooseEnableBeginEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDeleteEnter                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDeleteEnter                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDeleteEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDeleteEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDeleteEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2377,47 +1557,17 @@ T_void SMCChooseDeleteEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDeleteExit                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDeleteExit                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*    E_Boolean isDestroyed        -- TRUE if state machine is being destroy*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDeleteExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDeleteExit
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- TRUE if state machine is being destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDeleteExit(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -2434,45 +1584,16 @@ T_void SMCChooseDeleteExit(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDeleteCharacterEnter                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDeleteCharacterEnter                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDeleteCharacterEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDeleteCharacterEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDeleteCharacterEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2494,45 +1615,16 @@ T_void SMCChooseDeleteCharacterEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChooseDeleteCharacterIdle                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseDeleteCharacterIdle                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseDeleteCharacterIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseDeleteCharacterIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseDeleteCharacterIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2566,45 +1658,16 @@ T_void SMCChooseDeleteCharacterIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCChoosePlayGameEnter                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChoosePlayGameEnter                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/04/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChoosePlayGameEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChoosePlayGameEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChoosePlayGameEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2621,45 +1684,16 @@ T_void SMCChoosePlayGameEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMCChooseExitEnter                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCChooseExitEnter                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCChooseGetExtraData                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseExitEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseExitEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseExitEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2677,30 +1711,16 @@ T_void SMCChooseExitEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCreateUploadEnter                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    SMCChooseCreateUploadEnter                                            */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/24/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCreateUploadEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCreateUploadEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCreateUploadEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2744,30 +1764,16 @@ static T_void ICreateUploadComplete(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMCChooseCreateUploadIdle                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    SMCChooseCreateUploadIdle                                             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/24/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCChooseCreateUploadIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCChooseCreateUploadIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCChooseCreateUploadIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2782,6 +1788,7 @@ T_void SMCChooseCreateUploadIdle(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SM.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMCCHOOS.C
+ *-------------------------------------------------------------------------*/

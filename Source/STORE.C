@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  STORE.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  STORE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Buying and selling items in the store goes here.
+ * Store stock is also determined here.
+ *
+ * @addtogroup STORE
+ * @brief Store User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "MESSAGE.H"
 #include "OBJECT.H"
@@ -1128,4 +1138,7 @@ T_word16 StoreGetBuyValue (T_inventoryItemStruct *p_inv)
     return (buyValue);
 }
 
-
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  STORE.C
+ *-------------------------------------------------------------------------*/

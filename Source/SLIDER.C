@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  SLIDER.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SLIDER.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Opening doors and walls is a big part of the game, so we made a system
+ * called Sliders that work on these.  This information tracks the
+ * state of the sliding action, but the sectors keep all the real data.
+ *
+ * @addtogroup SLIDER
+ * @brief Sliding Wall/Door System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "ACTIVITY.H"
 #include "MEMORY.H"
 #include "SCHEDULE.H"
@@ -46,45 +57,18 @@ static T_slider *ISliderFind(T_word32 sliderId) ;
 
 
 
-/****************************************************************************/
-/*  Routine:  SliderInitialize                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SliderInitialize is called to start up the slider system.  No other   */
-/*  routines can be called until this first step is taken.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    All other slider routines will bomb unless this is called.  Also,     */
-/*  you must call SliderFinish before calling this routine again.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SliderInitialize is called to start up the slider system.  No other
+ *  routines can be called until this first step is taken.
+ *
+ *  NOTE: 
+ *  All other slider routines will bomb unless this is called.  Also,
+ *  you must call SliderFinish before calling this routine again.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderInitialize(T_void)
 {
     DebugRoutine("SliderInitialize") ;
@@ -98,46 +82,19 @@ T_void SliderInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SliderFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SliderFinish is to be called when the system is done and no longer    */
-/*  needs sliders.  All remaining sliders are discarded from memory.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure that no calls to ScheduleUpdateEvents occur again after     */
-/*  SliderFinish is executed.  This insures that no remaining scheduled     */
-/*  items with callbacks to the slider module are called.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SliderFinish is to be called when the system is done and no longer
+ *  needs sliders.  All remaining sliders are discarded from memory.
+ *
+ *  NOTE: 
+ *  Make sure that no calls to ScheduleUpdateEvents occur again after
+ *  SliderFinish is executed.  This insures that no remaining scheduled
+ *  items with callbacks to the slider module are called.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderFinish(T_void)
 {
     DebugRoutine("SliderFinish") ;
@@ -153,57 +110,29 @@ T_void SliderFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SliderStart                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SliderStart is called to add another slider event to the slider list. */
-/*  A slider is an event that occurs over several points in time and will   */
-/*  range over a start and end value over a given period of time.  Each     */
-/*  time the slider changes the value, a callback routine is called to      */
-/*  handle the new value.  In addition, a optional script activity can      */
-/*  be called once the sliding value has reached its goal value.            */
-/*    In addition, a unique ID is passed to the routine.  Should there      */
-/*  exist a slider already in existance, the slider will redirect its       */
-/*  direction and go to the new value.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Unique ID                              */
-/*                                                                          */
-/*    T_sword32 start, end        -- Starting and ending values             */
-/*                                                                          */
-/*    T_word16 time               -- Time to take to change                 */
-/*                                                                          */
-/*    T_sliderEventHandle handler -- Callback routine for each value change */
-/*                                                                          */
-/*    T_word16 finalActivity      -- Activity to call when done             */
-/*                                   0xFFFF = none.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*    LES  07/30/96  Changed sliders so that start at given start even      */
-/*                   though they already exist and are being redirected.    */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SliderStart is called to add another slider event to the slider list.
+ *  A slider is an event that occurs over several points in time and will
+ *  range over a start and end value over a given period of time.  Each
+ *  time the slider changes the value, a callback routine is called to
+ *  handle the new value.  In addition, a optional script activity can
+ *  be called once the sliding value has reached its goal value.
+ *  In addition, a unique ID is passed to the routine.  Should there
+ *  exist a slider already in existance, the slider will redirect its
+ *  direction and go to the new value.
+ *
+ *  @param sliderId -- Unique ID
+ *  @param start -- Starting value
+ *  @param end -- Ending value
+ *  @param time -- Time to take to change
+ *  @param handler -- Callback routine for each value change
+ *  @param finalActivity -- Activity to call when done
+ *      0xFFFF = none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderStart(
            T_word32 sliderId,
            T_sword32 start,
@@ -272,46 +201,21 @@ T_void SliderStart(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SliderCancel                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SliderCancel stops a slider that is in progress.  The slider is       */
-/*  noted for canceling and on the next call to ScheduleUpdateEvents,       */
-/*  it will be removed/deleted.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Don't call this routine unless you KNOWN a slider is still active.    */
-/*  A bomb will occur if there is no slider.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Slider to cancel.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderCancel
+ *-------------------------------------------------------------------------*/
+/**
+ *  SliderCancel stops a slider that is in progress.  The slider is
+ *  noted for canceling and on the next call to ScheduleUpdateEvents,
+ *  it will be removed/deleted.
+ *
+ *  NOTE: 
+ *  Don't call this routine unless you KNOWN a slider is still active.
+ *  A bomb will occur if there is no slider.
+ *
+ *  @param sliderId -- Slider to cancel.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderCancel(T_word32 sliderId)
 {
     T_slider *p_slider ;
@@ -330,51 +234,25 @@ T_void SliderCancel(T_word32 sliderId)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  SliderReverse                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SliderReverse changes the direction that a slider is going to back    */
-/*  its original value.  If a different value is wanted, just use           */
-/*  SliderCancel and SliderStart than this routine.  In addition, an option */
-/*  new final activity can be supplied.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Don't call this routine unless you KNOWN a slider is still active.    */
-/*  A bomb will occur if there is no slider.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Slider to cancel.                      */
-/*                                                                          */
-/*    T_word16 newActivity        -- New activity to run, or 0x8000 for no  */
-/*                                   change.  Also, a value of -1 (0xFFFF)  */
-/*                                   sets up a non-activity.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISliderFind                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderReverse
+ *-------------------------------------------------------------------------*/
+/**
+ *  SliderReverse changes the direction that a slider is going to back
+ *  its original value.  If a different value is wanted, just use
+ *  SliderCancel and SliderStart than this routine.  In addition, an option
+ *  new final activity can be supplied.
+ *
+ *  NOTE: 
+ *  Don't call this routine unless you KNOWN a slider is still active.
+ *  A bomb will occur if there is no slider.
+ *
+ *  @param sliderId -- Slider to cancel.
+ *  @param newActivity -- New activity to run, or 0x8000 for no
+ *      change.  Also, a value of -1 (0xFFFF)
+ *      sets up a non-activity.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderReverse(T_word32 sliderId, T_word16 newActivity)
 {
     T_slider *p_slider ;
@@ -407,43 +285,15 @@ T_void SliderReverse(T_word32 sliderId, T_word16 newActivity)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  SliderExist                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SliderExist checks to see if the given slider exists.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId           -- Slider to cancel.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISliderFind                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderExist
+ *-------------------------------------------------------------------------*/
+/**
+ *  SliderExist checks to see if the given slider exists.
+ *
+ *  @param sliderId -- Slider to cancel.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SliderExist(T_word32 sliderId)
 {
     T_slider *p_slider ;
@@ -464,46 +314,16 @@ E_Boolean SliderExist(T_word32 sliderId)
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISliderCallback                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISliderCallback is the routine called when a slider updates each      */
-/*  time slice.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 data               -- Casted pointer to the slider struct.   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    slider handler                                                        */
-/*    ScheduleAddEvent                                                      */
-/*    ISliderDestroy                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISliderCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISliderCallback is the routine called when a slider updates each
+ *  time slice.
+ *
+ *  @param data -- Casted pointer to the slider struct.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ISliderCallback(T_word32 data)
 {
     T_slider *p_slider ;
@@ -604,45 +424,20 @@ static T_void ISliderCallback(T_word32 data)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISliderDestroy                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISliderDestroy is called to remove a slider from the slider list      */
-/*  and memory.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that the slider is no longer being pointed to by any    */
-/*  other elements and also is not on the scheduler.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_slider *p_slider          -- slider to destroy                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISliderDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISliderDestroy is called to remove a slider from the slider list
+ *  and memory.
+ *
+ *  NOTE: 
+ *  It is assumed that the slider is no longer being pointed to by any
+ *  other elements and also is not on the scheduler.
+ *
+ *  @param p_slider -- slider to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ISliderDestroy(T_slider *p_slider)
 {
     DebugRoutine("ISliderDestroy") ;
@@ -678,44 +473,14 @@ static T_void ISliderDestroy(T_slider *p_slider)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISliderFind                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISliderFind is used to find a slider by its unique ID.  If a slider   */
-/*  is not found, a NULL is returned.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 sliderId                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISliderFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISliderFind is used to find a slider by its unique ID.  If a slider
+ *  is not found, a NULL is returned.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_slider *ISliderFind(T_word32 sliderId)
 {
     T_slider *p_slider ;
@@ -754,6 +519,7 @@ T_void SliderDestroy(T_word32 sliderId)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SLIDER.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SLIDER.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  HOUSEUI.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  HOUSEUI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * In the old game, there was going to be a place where players could
+ * buy houses on the server and store their goods.  This was the
+ * buy/sell house interface.
+ *
+ * @addtogroup HOUSEUI
+ * @brief Housing User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "BUTTON.H"
 #include "CLIENT.H"
@@ -355,3 +366,8 @@ static T_void HouseUILeaveGame(T_buttonID buttonID)
 
     DebugEnd();
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  HOUSEUI.C
+ *-------------------------------------------------------------------------*/

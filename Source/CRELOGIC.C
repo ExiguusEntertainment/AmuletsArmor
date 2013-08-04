@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*  FILE: CRELOGIC.C                                                        */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CRELOGIC.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All Creature AI goes here.  I would love to turn these into scripts.
+ *
+ * @addtogroup CRELOGIC
+ * @brief Creature Logic and AI
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_TRIG.H"
@@ -644,23 +653,13 @@ static E_Boolean G_init = FALSE ;
 static FILE *G_fp ;
 #endif
 
-/****************************************************************************/
-/*  Routine:  CreaturesInitialize                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CreaturesInitialize sets up the list of creatures.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CreaturesInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  CreaturesInitialize sets up the list of creatures.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CreaturesInitialize(T_void)
 {
     DebugRoutine("CreaturesInitialize") ;
@@ -681,24 +680,14 @@ T_void CreaturesInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CreaturesFinish                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CreaturesFinish unloads all creature based data.  All objects in the  */
-/*  world should already be destroyed.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CreaturesFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  CreaturesFinish unloads all creature based data.  All objects in the
+ *  world should already be destroyed.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CreaturesFinish(T_void)
 {
     DebugRoutine("CreaturesFinish") ;
@@ -718,24 +707,14 @@ T_void CreaturesFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CreatureAttachToObject                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is called to try to make a creature out of an object     */
-/*  if the object type is that of a creature.  If not, nothing happens.     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CreatureAttachToObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is called to try to make a creature out of an object
+ *  if the object type is that of a creature.  If not, nothing happens.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CreatureAttachToObject(T_3dObject *p_obj)
 {
     T_creatureState *p_creature ;
@@ -825,24 +804,14 @@ T_void CreatureAttachToObject(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CreatureDetachFromObject                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is called to destroy creature data on an object.         */
-/*  (making the object no longer a creature but an object).                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CreatureDetachFromObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is called to destroy creature data on an object.
+ *  (making the object no longer a creature but an object).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CreatureDetachFromObject(T_3dObject *p_obj)
 {
     T_doubleLinkListElement element ;
@@ -871,24 +840,14 @@ T_void CreatureDetachFromObject(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICreatureLogicFind                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICreatureLogicFind searches the list of logics for creatures.  If     */
-/*  there is a match, a pointer to that logic is returned.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICreatureLogicFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICreatureLogicFind searches the list of logics for creatures.  If
+ *  there is a match, a pointer to that logic is returned.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_creatureLogic *ICreatureLogicFind(T_word16 objectType)
 {
     T_creatureLogic *p_logic ;
@@ -911,24 +870,14 @@ static T_creatureLogic *ICreatureLogicFind(T_word16 objectType)
     return p_foundLogic ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICreatureFindViaObjectPtr                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICreatureFindViaObjectPtr searches the list of creatures for a        */
-/*  creature that has the given object pointer.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/15/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICreatureFindViaObjectPtr
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICreatureFindViaObjectPtr searches the list of creatures for a
+ *  creature that has the given object pointer.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_doubleLinkListElement ICreatureFindViaObjectPtr(T_3dObject *p_obj)
 {
     T_doubleLinkListElement element ;
@@ -954,22 +903,12 @@ static T_doubleLinkListElement ICreatureFindViaObjectPtr(T_3dObject *p_obj)
     return element ;
 }
 
-/****************************************************************************/
-/*  Routine:  OutputPlayerJunk                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/15/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OutputPlayerJunk
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifndef NDEBUG
 T_void OutputPlayerJunk(T_void)
 {
@@ -1450,9 +1389,6 @@ if ((ObjectGetX(p_obj)!=lx) ||
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Simple berserker ('biff') logic.  DOesn't run away.  Suicidal and nasty. */
-/* LES: 04/15/96  Created */
 static T_void INavBerserkerA(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1489,9 +1425,6 @@ static T_void INavBerserkerA(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Just go in whatever direction we have momentum.                          */
-/* LES: 04/15/96  Created */
 static T_void INavNone(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1508,9 +1441,6 @@ static T_void INavNone(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Same as BerserkerA ecept turns about looking for a target. */
-/* LES: 04/15/96  Created */
 static T_void INavBerserkerB(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1544,9 +1474,6 @@ static T_void INavBerserkerB(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Same as BerserkerB except runs away if hurt. */
-/* LES: 04/15/96  Created */
 static T_void INavBarbarianGuard(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1597,9 +1524,6 @@ static T_void INavBarbarianGuard(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Tries to keep a minimum distance between itself and target to shoot. */
-/* LES: 04/25/96  Created */
 static T_void INavBarbarianArcherB(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1648,9 +1572,6 @@ static T_void INavBarbarianArcherB(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Tries to keep a minimum distance between itself and target to shoot. */
-/* LES: 04/15/96  Created */
 static T_void INavBarbarianArcher(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1692,9 +1613,6 @@ static T_void INavBarbarianArcher(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Neutral creature that walks around until attacked then runs away. */
-/* LES: 04/15/96  Created */
 static T_void INavNeutralWanderer(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1719,9 +1637,6 @@ static T_void INavNeutralWanderer(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Neutral creature that wanders around, and if sees anything, runs. */
-/* LES: 04/15/96  Created */
 static T_void INavScaredyCat(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1745,10 +1660,6 @@ static T_void INavScaredyCat(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Roaming guard that wanders around and beats up the */
-/* first player he finds. */
-/* LES: 04/15/96  Created */
 static T_void INavRoamingGaurd(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1777,11 +1688,6 @@ static T_void INavRoamingGaurd(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Stands around until he sees a plyar, then he starts shooting */
-/* at him.  If the player closes, the monster switches to melee */
-/* attacks instead of trying to run away.  He will run aay if hurt. */
-/* LES: 04/15/96  Created */
 static T_void INavComboFighterArcher(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1834,11 +1740,6 @@ static T_void INavComboFighterArcher(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Stands around until he sees a plyar, then he starts shooting */
-/* at him.  If the player closes, the monster switches to melee */
-/* attacks instead of trying to run away.  He will run aay if hurt. */
-/* LES: 04/15/96  Created */
 static T_void INavApproachAndShoot(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1891,9 +1792,6 @@ static T_void INavApproachAndShoot(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Dipper is the same as Barbarian A, but has a dip mode added. */
-/* LES: 04/26/96  Created */
 static T_void INavDipper(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -1931,10 +1829,6 @@ static T_void INavDipper(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* INavTeleporter is used to move a creature between a bunch of */
-/* object generator points. */
-/* LES: 04/26/96  Created */
 static T_void INavTeleporter(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2031,9 +1925,6 @@ static T_void INavTeleporter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Handling homing missiles. */
-/* LES: 05/21/96  Created */
 static T_void INavHoming(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2099,10 +1990,6 @@ static T_void INavHoming(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* INavStraightLine is used to move a creature between two points */
-/* and then back */
-/* LES: 04/26/96  Created */
 static T_void INavStraightLine(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2269,9 +2156,6 @@ static T_void INavStraightLine(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* INavCloud is for non-moving clouds */
-/* LES: 09/20/96  Created */
 static T_void INavCloud(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2338,10 +2222,6 @@ static T_void INavCloud(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Standard routine that checks to see if the target is still around */
-/* and what is the relative angle and distance. */
-/* LES: 04/15/96  Created */
 static T_void IUpdateTarget(T_creatureState *p_creature)
 {
     T_3dObject *p_target ;                  /* Current target. */
@@ -2518,10 +2398,6 @@ static T_void IUpdateTarget(T_creatureState *p_creature)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Standard routine that makes the creature look for a player in the */
-/* area. */
-/* LES: 04/15/96  Created */
 static T_player ICreatureScanA(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2657,9 +2533,6 @@ static T_player ICreatureScanA(
     return foundPlayer ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature chase after player. */
-/* LES: 04/15/96  Created */
 static T_void ICreatureScanB(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2738,9 +2611,6 @@ static T_void ICreatureScanB(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature chase after player. */
-/* LES: 04/15/96  Created */
 static T_void IApproachTargetDirect(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2797,9 +2667,6 @@ static T_void IApproachTargetDirect(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature walk after a target. */
-/* LES: 04/15/96  Created */
 static T_void IMoveForwardViaWalking(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2829,10 +2696,6 @@ static T_void IMoveForwardViaWalking(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature run away in a */
-/* straight line from target */
-/* LES: 04/15/96  Created */
 static T_void IFleeDirect(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2883,10 +2746,6 @@ static T_void IFleeDirect(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature run away in a */
-/* indirect line from target */
-/* LES: 04/15/96  Created */
 static T_void IFleeIndirect(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2943,9 +2802,6 @@ static T_void IFleeIndirect(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature wander around bored. */
-/* LES: 04/15/96  Created */
 static T_void IWander(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2965,10 +2821,6 @@ static T_void IWander(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that does the same as wander, but also scans */
-/* for the closest person in sight. */
-/* LES: 04/15/96  Created */
 static T_void IWanderAndScan(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -2988,9 +2840,8 @@ static T_void IWanderAndScan(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 /* Routine that makes a creature step forward at stepSize distance
-/* LES: 04/15/96  Created */
+/* LES 04/15/96  Created */
 static T_void IStepForward(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3173,10 +3024,9 @@ stepSize += (stepSize>>1) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
 /* IHandleBlockedMove is called when the creature was blocked when it moved
 /* the last move.
-/* LES: 04/15/96  Created */
+/* LES 04/15/96  Created */
 static T_void IHandleBlockedMove(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3271,9 +3121,6 @@ static T_void IHandleBlockedMove(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine that makes the creature fly after a target. */
-/* LES: 04/15/96  Created */
 static T_void IMoveForwardViaFlying(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3450,9 +3297,6 @@ static T_void IMoveForwardViaFlying(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Routine to dispatch call to appropriate creature target logic routine. */
-/* LES: 04/17/96  Created */
 static E_Boolean ICreatureTargetLogic(
                      T_creatureState *p_creature,
                      T_creatureLogic *p_logic,
@@ -3491,9 +3335,6 @@ printf("ICTL: fp %d for %d (%d)\n", p_logic->targetLogic, ObjectGetServerId(p_ob
     return isGone ;
 }
 
-/****************************************************************************/
-/* Targetting is turned off for this creature.  Do nothing. */
-/* LES: 04/15/96  Created */
 static E_Boolean ITargetNone(
                      T_creatureState *p_creature,
                      T_creatureLogic *p_logic,
@@ -3505,10 +3346,6 @@ static E_Boolean ITargetNone(
     return FALSE ;
 }
 
-/****************************************************************************/
-/* Hit if within melee range, shoot if in missile range, otherwise */
-/* do nothing. */
-/* LES: 04/15/96  Created */
 static E_Boolean ITargetStandardHitOrShoot(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3537,9 +3374,9 @@ static E_Boolean ITargetStandardHitOrShoot(
                  (attackLow <= targetTop))  {
                 /* The target is at the right height, do an attack. */
                 IAttackTargetWithMelee(
-                    p_creature, 
-                    p_logic, 
-                    p_obj, 
+                    p_creature,
+                    p_logic,
+                    p_obj,
                     (T_sword16)((targetBottom+targetTop)>>1)) ;
             }
         } else {
@@ -3559,9 +3396,6 @@ static E_Boolean ITargetStandardHitOrShoot(
     return FALSE ;
 }
 
-/****************************************************************************/
-/* Targetting is turned off for this creature.  Do nothing. */
-/* LES: 04/15/96  Created */
 static E_Boolean ITargetSuicideExplosion(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3592,9 +3426,6 @@ static E_Boolean ITargetSuicideExplosion(
     return isGone ;
 }
 
-/****************************************************************************/
-/* Targetting is turned off for this creature.  Do nothing. */
-/* LES: 04/15/96  Created */
 static E_Boolean ITargetExplodeOnCollision(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3654,9 +3485,6 @@ static E_Boolean ITargetExplodeOnCollision(
     return isGone ;
 }
 
-/****************************************************************************/
-/* When in range, scream the damage. */
-/* LES: 05/02/96  Created */
 static E_Boolean ITargetScream(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3728,9 +3556,6 @@ static E_Boolean ITargetScream(
     return FALSE ;
 }
 
-/****************************************************************************/
-/* Summons a creature every so often if can and have a target. */
-/* LES: 04/15/96  Created */
 static E_Boolean ITargetSummonCreature(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3818,9 +3643,6 @@ static E_Boolean ITargetSummonCreature(
     return FALSE ;
 }
 
-/****************************************************************************/
-/* Do a set amount of damage per target call. */
-/* LES: 09/19/96  Created */
 static E_Boolean ITargetConstantDamage(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3835,9 +3657,6 @@ static E_Boolean ITargetConstantDamage(
     return FALSE ;
 }
 
-/****************************************************************************/
-/* Targetting is turned off for this creature.  Do nothing. */
-/* LES: 04/15/96  Created */
 static T_void IShootAtTarget(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -3896,9 +3715,6 @@ static T_void IShootAtTarget(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Targetting is turned off for this creature.  Do nothing. */
-/* LES: 04/15/96  Created */
 static T_void IAttackTargetWithMelee(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -4292,7 +4108,7 @@ printf("Creature %d (%d) takes damage %d (was health %d) by %s\n",
     DebugEnd() ;
 }
 
-/* LES: 04/16/96 */
+/* LES 04/16/96 */
 static T_void IExplodeSelf(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -4360,11 +4176,6 @@ T_void CreaturePlayerGone(T_player player)
 {
 }
 
-/****************************************************************************/
-/* Given the object id, consider if it is better to go after the other */
-/* object.  This routine should be called when the damage is done */
-/* or sounds are made to attract a creature. */
-/* LES: 04/18/96  Created */
 static T_void IConsiderTargetChange(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -4498,9 +4309,6 @@ static T_void IConsiderTargetChange(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Take the creature down into the water. */
-/* LES: 04/26/96  Created */
 #define CREATURE_DIP_AMOUNT_ABOVE_FLOOR 34
 static T_void ICreatureDip(
                   T_creatureState *p_creature,
@@ -4558,9 +4366,6 @@ static T_void ICreatureDip(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/* Bring the creature up out of the water. */
-/* LES: 04/26/96  Created */
 static T_void ICreatureUndip(
                   T_creatureState *p_creature,
                   T_creatureLogic *p_logic,
@@ -4604,9 +4409,8 @@ static T_void ICreatureUndip(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 /* IDeathNone is the standard death routine called that says, yeah, I'm dead.
-/* LES: 04/26/96  Created. */
+/* LES 04/26/96  Created. */
 static E_Boolean IDeathNone(
                      T_creatureState *p_creature,
                      T_creatureLogic *p_logic,
@@ -4626,10 +4430,6 @@ static E_Boolean IDeathNone(
     return deathIsDone ;
 }
 
-/****************************************************************************/
-/* IDeathSink is called to sink the creature into the ground and then */
-/* make the creature disappear. */
-/* LES: 04/26/96  Created. */
 static E_Boolean IDeathSink(
                      T_creatureState *p_creature,
                      T_creatureLogic *p_logic,
@@ -4655,10 +4455,6 @@ static E_Boolean IDeathSink(
     return deathIsDone ;
 }
 
-/****************************************************************************/
-/* IDeathFastDisappear is called not only to say that the creature is */
-/* dead, but to remove the object totally. */
-/* LES: 04/26/96  Created. */
 static E_Boolean IDeathFastDisappear(
                      T_creatureState *p_creature,
                      T_creatureLogic *p_logic,
@@ -4681,10 +4477,6 @@ static E_Boolean IDeathFastDisappear(
 }
 
 #define DEATH_LOGIC_TIME_TO_DECAY      (60*70)  /* One minute to decay */
-/****************************************************************************/
-/* IDeathDecay is called when a creature dies and needs to be "watched" */
-/* until it decays into nothingness or another object. */
-/* LES: 04/26/96  Created. */
 static E_Boolean IDeathDecay(
                      T_creatureState *p_creature,
                      T_creatureLogic *p_logic,
@@ -4728,10 +4520,6 @@ static E_Boolean IDeathDecay(
     return deathIsDone ;
 }
 
-/****************************************************************************/
-/* CreatureIsMissile is called to see if a given object (that is a      */
-/* creature) is a missile. */
-/* LES: 04/26/96  Created. */
 E_Boolean CreatureIsMissile(T_3dObject *p_obj)
 {
     T_creatureState *p_creature ;
@@ -5258,7 +5046,7 @@ static T_void CreatureTakeSectorDamage(
     DebugEnd() ;
 }
 
-/* LES: 09/10/96 */
+/* LES 09/10/96 */
 T_void CreaturesHearSoundOfPlayer(T_3dObject *p_player, T_word16 distance)
 {
     T_doubleLinkListElement element ;
@@ -5333,7 +5121,6 @@ T_void CreaturesHearSoundOfPlayer(T_3dObject *p_player, T_word16 distance)
 }
 
 
-/****************************************************************************/
 T_word32 CreaturesKillAll(T_void)
 {
     T_doubleLinkListElement element ;
@@ -5362,7 +5149,6 @@ T_word32 CreaturesKillAll(T_void)
     return total ;
 }
 
-/****************************************************************************/
 T_void CreaturesAllOnOneTarget(T_word16 targetId)
 {
     T_doubleLinkListElement element ;
@@ -5419,7 +5205,6 @@ T_void CreaturesCheck(T_void)
 }
 #endif
 
-/****************************************************************************/
 T_void CreatureGoSplat(
            T_3dObject *p_obj,
            T_word16 amount,
@@ -5454,7 +5239,7 @@ T_void CreatureGoSplat(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  END OF FILE: CRELOGIC.C                                                 */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CRELOGIC.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  MESSAGE.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  MESSAGE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Messages are drawn here at the top of the game window.  Escape codes
+ * for different colors are included.
+ *
+ * @addtogroup MESSAGE
+ * @brief Message Rendering
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 //#include "standard.h"
 #include <stdarg.h>
 #include "DEBUG.H"
@@ -78,43 +88,13 @@ static T_byte8 *P_Messages[MAX_NUM_MESSAGES] ;
 /* new messages.  */
 static T_word16 G_realMessage = 0 ;
 
-/****************************************************************************/
-/*  Routine:  MessageScrollUp                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MessageScrollUp scrolls up the message display by one line.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MessageScrollUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  MessageScrollUp scrolls up the message display by one line.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MessageScrollUp(T_void)
 {
     DebugRoutine("MessageScrollUp") ;
@@ -126,43 +106,13 @@ T_void MessageScrollUp(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MessageScrollDown                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MessageScrollDown moves one item down the message list.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MessageScrollDown
+ *-------------------------------------------------------------------------*/
+/**
+ *  MessageScrollDown moves one item down the message list.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MessageScrollDown(T_void)
 {
     DebugRoutine("MessageScrollDown") ;
@@ -215,53 +165,24 @@ T_void MessageDrawLine(
     }
 }
 
-/****************************************************************************/
-/*  Routine:  MessageDraw                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MessageDraw draws MAX_VIEWED_MESSAGES of message lines on the         */
-/*  currently active screen at given x and y coordinate.  The amount of     */
-/*  space from line to line is also given by an interleave variable.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that the currently active screen is where the messages  */
-/*  need to be drawn.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- Starting x to draw                     */
-/*                                                                          */
-/*    T_word16 y                  -- Starting y to draw                     */
-/*                                                                          */
-/*    T_word16 interleave         -- How far down to next line              */
-/*                                                                          */
-/*    T_color color               -- Color of text                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrSetCursorPosition                                                   */
-/*    GrDrawShadowedText                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MessageDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  MessageDraw draws MAX_VIEWED_MESSAGES of message lines on the
+ *  currently active screen at given x and y coordinate.  The amount of
+ *  space from line to line is also given by an interleave variable.
+ *
+ *  NOTE: 
+ *  It is assumed that the currently active screen is where the messages
+ *  need to be drawn.
+ *
+ *  @param x -- Starting x to draw
+ *  @param y -- Starting y to draw
+ *  @param interleave -- How far down to next line
+ *  @param color -- Color of text
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MessageDraw(
            T_word16 x,
            T_word16 y,
@@ -326,47 +247,17 @@ T_void MessageDraw(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MessageAdd                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MessageAdd appends a text line to the bottom of the message list.     */
-/*  If needed, the messages are scroll up to make room (and one message     */
-/*  is scroll off the list).                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_string           -- String to add to message list          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memmove                                                               */
-/*    strcpy                                                                */
-/*    MessageScrollDown                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MessageAdd
+ *-------------------------------------------------------------------------*/
+/**
+ *  MessageAdd appends a text line to the bottom of the message list.
+ *  If needed, the messages are scroll up to make room (and one message
+ *  is scroll off the list).
+ *
+ *  @param p_string -- String to add to message list
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MessageAdd(T_byte8 *p_string)
 {
     DebugRoutine("MessageAdd") ;
@@ -413,45 +304,15 @@ T_void MessageAdd(T_byte8 *p_string)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MessageClear                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MessageClear clears all the messages in the list and starts with      */
-/*  a fresh and emtpy list.  This is useful when some people are tired      */
-/*  of seeing the messages.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MessageClear
+ *-------------------------------------------------------------------------*/
+/**
+ *  MessageClear clears all the messages in the list and starts with
+ *  a fresh and emtpy list.  This is useful when some people are tired
+ *  of seeing the messages.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MessageClear(T_void)
 {
     DebugRoutine("MessageClear") ;
@@ -467,42 +328,15 @@ T_void MessageClear(T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  MessageDisplayMessage                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  MessageDisplayMessage searches for a text file in the resource          */
-/*  identified by MESSAGES/MSG##### where ##### is the message number       */
-/*  to display.                                                             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  MessageDisplayMessage
+ *-------------------------------------------------------------------------*/
+/**
+ *  MessageDisplayMessage searches for a text file in the resource
+ *  identified by MESSAGES/MSG##### where ##### is the message number
+ *  to display.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MessageDisplayMessage (T_word16 messagenum)
 {
     T_byte8 *desc1;
@@ -592,6 +426,7 @@ T_void MessageSetAlternateOutputOff(T_void)
 }
 
 
-/****************************************************************************/
-/*    END OF FILE:  MESSAGE.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  MESSAGE.C
+ *-------------------------------------------------------------------------*/

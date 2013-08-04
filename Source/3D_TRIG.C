@@ -1,7 +1,15 @@
-/****************************************************************************/
-/*    FILE:  3D_TRIG.C                                                      */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * File:  3D_TRIG.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All of the 3D Math goes here.
+ *
+ * @addtogroup _3D_TRIG
+ * @brief 3D Math routines
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_TRIG.H"
 #include "FILE.H"
 
@@ -46,45 +54,19 @@ T_void ISetupViewTable(T_void) ;
 
 //extern T_byte8 *P_shadeIndex ;
 
-/****************************************************************************/
-/*  Routine:  MathCosine                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calculates 32768 * cos(angle) and returns in integer format.          */
-/*  Note:  This routine is only called during the trig                      */
-/*  initialization process.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 angle              -- Degrees of angle to report sine of    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathCosine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calculates 32768 * cos(angle) and returns in integer format.
+ *
+ *  NOTE:
+ *  This routine is only called during the trig
+ *  initialization process.
+ *
+ *  @param angle -- Degrees of angle to report sine of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 MathCosine(T_word16 angle)
 {
 /*
@@ -95,45 +77,19 @@ T_sword32 MathCosine(T_word16 angle)
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathSine                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calculates 32768 * sin(angle) and returns in integer format.          */
-/*  Note:  This routine is only called during the trig                      */
-/*  initialization process.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 angle              -- Degrees of angle to report sine of    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathSine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calculates 32768 * sin(angle) and returns in integer format.
+ *
+ *  NOTE:
+ *  This routine is only called during the trig
+ *  initialization process.
+ *
+ *  @param angle -- Degrees of angle to report sine of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 MathSine(T_word16 angle)
 {
 /*
@@ -144,45 +100,19 @@ T_sword32 MathSine(T_word16 angle)
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathTangent                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calculates 32768 * tan(angle) and returns in integer format.          */
-/*  Note:  This routine is only called during the trig                      */
-/*  initialization process.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 angle              -- Degrees of angle to report sine of    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathTangent
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calculates 32768 * tan(angle) and returns in integer format.
+ *
+ *  NOTE:
+ *  This routine is only called during the trig
+ *  initialization process.
+ *
+ *  @param angle -- Degrees of angle to report sine of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 MathTangent(T_word16 angle)
 {
 /*
@@ -193,47 +123,19 @@ T_sword32 MathTangent(T_word16 angle)
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathInitializeInvDistTable                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MathInitializeInvDistTable calculates the inverse distance table      */
-/*  based on the given width of the screen.  All perspective calculations   */
-/*  are based on this table instead of using division during the rendering  */
-/*  process.  Call this routine at any time the width of the view is        */
-/*  changed.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 screenWidth        -- Width of the screen                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathInitializeInvDistTable
+ *-------------------------------------------------------------------------*/
+/**
+ *  MathInitializeInvDistTable calculates the inverse distance table
+ *  based on the given width of the screen.  All perspective calculations
+ *  are based on this table instead of using division during the rendering
+ *  process.  Call this routine at any time the width of the view is
+ *  changed.
+ *
+ *  @param screenWidth -- Width of the screen
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MathInitializeInvDistTable(T_word32 screenWidth)
 {
     T_word32 numerator = (screenWidth/2)<<16 ;
@@ -312,45 +214,21 @@ DebugCheck(fp != NULL) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathInvCosine                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calculates 1/(65536 * cos(angle)) and returns in integer format.      */
-/*  Note:  This routine is only called during the trig                      */
-/*  initialization process.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 angle              -- Degrees of angle to report sine of    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                    -- 1/(65536 * cos(angle))                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathInvCosine
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calculates 1/(65536 * cos(angle)) and returns in integer format.
+ *
+ *  NOTE:
+ *  This routine is only called during the trig
+ *  initialization process.
+ *
+ *  @param angle -- Degrees of angle to report sine of
+ *
+ *  @return 1/(65536 * cos(angle))
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 MathInvCosine(T_word16 angle)
 {
 /*
@@ -364,45 +242,18 @@ T_sword32 MathInvCosine(T_word16 angle)
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathXTimesCosAngle                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Computes:  x * cos(angle)                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x                 -- Multiplier                             */
-/*                                                                          */
-/*    T_word16 angle              -- Angle                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- x * cos(angle)                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathXTimesCosAngle
+ *-------------------------------------------------------------------------*/
+/**
+ *  Computes x * cos(angle)
+ *
+ *  @param x -- Multiplier
+ *  @param angle -- Angle
+ *
+ *  @return x * cos(angle)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 MathXTimesCosAngle(
               T_sword16 x,
               T_word16 angle)
@@ -412,45 +263,18 @@ T_sword16 MathXTimesCosAngle(
     return ((T_sword16) ((tx * MathCosineLookup(angle)) >> 16)) ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathXTimesSinAngle                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Computes:  x * sin(angle)                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x                 -- Multiplier                             */
-/*                                                                          */
-/*    T_word16 angle              -- Angle                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- x * sin(angle)                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathXTimesSinAngle
+ *-------------------------------------------------------------------------*/
+/**
+ *  Computes x * sin(angle)
+ *
+ *  @param x -- Multiplier
+ *  @param angle -- Angle
+ *
+ *  @return x * sin(angle)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 MathXTimesSinAngle(
               T_sword16 x,
               T_word16 angle)
@@ -460,41 +284,13 @@ T_sword16 MathXTimesSinAngle(
     return((T_sword16) ((tx * MathSineLookup(angle)) >> 16)) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISetupViewTable                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISetupViewTable                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISetupViewTable
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISetupViewTable
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ISetupViewTable(T_void)
 {
     T_sword32 i ;
@@ -512,46 +308,19 @@ T_void ISetupViewTable(T_void)
     }
 }
 
-/****************************************************************************/
-/*  Routine:  MathArcTangent                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MathArcTangent takes the given x and y deltas and determines          */
-/*  the atan (using this system's theta values).                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 y                 -- Numerator of tangent fraction          */
-/*                                                                          */
-/*    T_sword16 x                 -- Denomator of tangent fraction          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Angle result                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathArcTangent
+ *-------------------------------------------------------------------------*/
+/**
+ *  MathArcTangent takes the given x and y deltas and determines
+ *  the atan (using this system's theta values).
+ *
+ *  @param y -- Numerator of tangent fraction
+ *  @param x -- Denomator of tangent fraction
+ *
+ *  @return Angle result
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 MathArcTangent(T_sword32 y, T_sword32 x)
 {
     /* Now both x and y must be less than 128 for table lookup. */
@@ -564,45 +333,18 @@ T_word16 MathArcTangent(T_sword32 y, T_sword32 x)
     return (G_arcTanTable[y+128][x+128]) ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathArcTangent32                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MathArcTangent32 is a 32 bit version of MathArcTangent                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 y                 -- Numerator of tangent fraction          */
-/*                                                                          */
-/*    T_sword32 x                 -- Denomator of tangent fraction          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Angle result                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathArcTangent32
+ *-------------------------------------------------------------------------*/
+/**
+ *  MathArcTangent32 is a 32 bit version of MathArcTangent
+ *
+ *  @param y -- Numerator of tangent fraction
+ *  @param x -- Denomator of tangent fraction
+ *
+ *  @return Angle result
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 MathArcTangent32(T_sword32 y, T_sword32 x)
 {
     /* Now both x and y must be less than 128 for table lookup. */
@@ -665,47 +407,18 @@ T_void IMathPower2Init(T_void)
     }
 }
 
-/****************************************************************************/
-/*  Routine:  MathInitialize                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MathInitialize creates all the lookup tables used by the math         */
-/*  routines.  Some of the tables (well, one) needs the width of the        */
-/*  screen as well.  Pass this in to the routine.                           */
-/*    This routine MUST be called before all other routines are used.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 screenWidth        -- Width of view screen.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MathInitializeInvDistTable                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  04/12/95  Made this version work with a single data file.        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  MathInitialize creates all the lookup tables used by the math
+ *  routines.  Some of the tables (well, one) needs the width of the
+ *  screen as well.  Pass this in to the routine.
+ *  This routine MUST be called before all other routines are used.
+ *
+ *  @param screenWidth -- Width of view screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MathInitialize(T_word32 screenWidth)
 {
     T_file fh ;
@@ -756,44 +469,14 @@ T_void MathInitialize(T_word32 screenWidth)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MathFinish                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MathFinish is called when the lookup tables are no longer needed.     */
-/*  They are all unloaded.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MathFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  MathFinish is called when the lookup tables are no longer needed.
+ *  They are all unloaded.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MathFinish(T_void)
 {
     DebugRoutine("MathFinish") ;
@@ -804,6 +487,7 @@ T_void MathFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  3D_TRIG.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  3D_TRIG.C
+ *-------------------------------------------------------------------------*/

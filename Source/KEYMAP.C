@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  KEYMAP.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  KEYMAP.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The user interface has a KEYMAP value and a real key name.  This
+ * maps between them.
+ *
+ * @addtogroup KEYMAP
+ * @brief Key Remapping
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "GENERAL.H"
 #include "KEYMAP.H"
 #include "KEYSCAN.H"
@@ -9,28 +19,16 @@
 T_byte8 G_keyMap[256] ;               /* Array of keyscan codes */
 static E_Boolean G_init = FALSE ;     /* Flag to determine if init'd */
 
-/****************************************************************************/
-/*  Routine:  KeyMapInitialize                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyMapInitialize is called after a iniFile is opened.  This routine   */
-/*  pulls the key configuration out of the keyboard group in the ini file.  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFile iniFile           -- .ini file with keyboard group          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyMapInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyMapInitialize is called after a iniFile is opened.  This routine
+ *  pulls the key configuration out of the keyboard group in the ini file.
+ *
+ *  @param iniFile -- .ini file with keyboard group
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyMapInitialize(T_iniFile iniFile)
 {
     T_word16 i, j ;
@@ -69,27 +67,13 @@ T_void KeyMapInitialize(T_iniFile iniFile)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyMapFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyMapFinish releases any resources it may be using.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFile iniFile           -- .ini file with keyboard group          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyMapFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyMapFinish releases any resources it may be using.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyMapFinish(T_void)
 {
     DebugRoutine("KeyMapFinish") ;
@@ -109,7 +93,7 @@ T_void KeyMapReinitialize(T_iniFile iniFile)
     KeyMapInitialize(iniFile);
     DebugEnd();
 }
-/****************************************************************************/
-/*    END OF FILE:  KEYMAP.C                                                */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  KEYMAP.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  SMACHINE.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMACHINE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * In one of my lame ideas, I created this state machine system.
+ * It is overly complex.  The idea was that with a simple script, I could
+ * create state machine code.  The problem is that I made it too complex
+ * and confusing.  For now, it's in the code, but I want to remove it.
+ *
+ * @addtogroup SMACHINE
+ * @brief State Machine System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "MEMORY.H"
 #include "SMACHINE.H"
 
@@ -23,47 +35,22 @@ typedef struct {
 static T_stateMachineInstance *IIsValidStateMachine(
                                   T_stateMachineHandle handle) ;
 
-/****************************************************************************/
-/*  Routine:  StateMachineCreate                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineCreate starts up an instance of a state machine.  Just    */
-/*  pass in the state machine you want to execute.  Then make calls to      */
-/*  StateMachineUpdate.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachine *p_stateMachine -- "Form" of state machine to start up */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineHandle         -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memset                                                                */
-/*    StateMachineGotoState                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineCreate starts up an instance of a state machine.  Just
+ *  pass in the state machine you want to execute.  Then make calls to
+ *  StateMachineUpdate.
+ *
+ *  NOTE: 
+ *  None
+ *
+ *  @param p_stateMachine -- "Form" of state machine to start up
+ *
+ *  @return Handle to state machine being worked
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle StateMachineCreate(T_stateMachine *p_stateMachine)
 {
     T_stateMachineInstance *p_machine ;
@@ -101,48 +88,22 @@ T_stateMachineHandle StateMachineCreate(T_stateMachine *p_stateMachine)
     return ((T_stateMachineHandle)p_machine) ;
 }
 
-/****************************************************************************/
-/*  Routine:  StateMachineDestroy                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineDestroy gets rid of all allocated memory related to a     */
-/*  state machine after calling the finish callback.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine does not do a MemFree on the extra data attached to the  */
-/*  the state machine.  If there is allocated memory attached, it is up     */
-/*  to the caller to maker sure it is either disposed before this routine   */
-/*  is called or in the finish callback.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsValidStateMachine                                                  */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineDestroy gets rid of all allocated memory related to a
+ *  state machine after calling the finish callback.
+ *
+ *  NOTE: 
+ *  This routine does not do a MemFree on the extra data attached to the
+ *  the state machine.  If there is allocated memory attached, it is up
+ *  to the caller to maker sure it is either disposed before this routine
+ *  is called or in the finish callback.
+ *
+ *  @param handle -- Handle to state machine being worked
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StateMachineDestroy(T_stateMachineHandle handle)
 {
     T_stateMachine *p_stateMachine ;
@@ -174,48 +135,23 @@ T_void StateMachineDestroy(T_stateMachineHandle handle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  StateMachineUpdate                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineUpdate does the "action" for a state.  It checks all the  */
-/*  conditions that transition a state to another state.                    */
-/*    Idle callbacks are only called when there was no state change.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine will only transition from one state to another.  It      */
-/*  never does two at a time or string together transitions.  If multiple   */
-/*  state changes is needed, call this routine multiple times, checking     */
-/*  to see if the state changes after each call.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsValidStateMachine                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineUpdate does the "action" for a state.  It checks all the
+ *  conditions that transition a state to another state.
+ *  Idle callbacks are only called when there was no state change.
+ *
+ *  NOTE: 
+ *  This routine will only transition from one state to another.  It
+ *  never does two at a time or string together transitions.  If multiple
+ *  state changes is needed, call this routine multiple times, checking
+ *  to see if the state changes after each call.
+ *
+ *  @param handle -- Handle to state machine being worked
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StateMachineUpdate(T_stateMachineHandle handle)
 {
     T_stateMachine *p_stateMachine ;
@@ -286,44 +222,18 @@ T_void StateMachineUpdate(T_stateMachineHandle handle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  StateMachineGetExtraData                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineGetExtraData returns a pointer to the data associated     */
-/*  with this instance of the state machine.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_void *                     -- A pointer to the attached data        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsValidStateMachine                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineGetExtraData
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineGetExtraData returns a pointer to the data associated
+ *  with this instance of the state machine.
+ *
+ *  @param handle -- Handle to state machine being worked
+ *
+ *  @return A pointer to the attached data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void *StateMachineGetExtraData(T_stateMachineHandle handle)
 {
     T_void *p_data = NULL ;      /* Default answer. */
@@ -344,44 +254,17 @@ T_void *StateMachineGetExtraData(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  StateMachineSetExtraData                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineSetExtraData declares what piece of data is attached      */
-/*  to the given state machine.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsValidStateMachine                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineSetExtraData
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineSetExtraData declares what piece of data is attached
+ *  to the given state machine.
+ *
+ *  @param handle -- Handle to state machine being worked
+ *  @param p_data -- Pointer to data
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StateMachineSetExtraData(T_stateMachineHandle handle, T_void *p_data)
 {
     T_stateMachineInstance *p_machine ;
@@ -398,46 +281,23 @@ T_void StateMachineSetExtraData(T_stateMachineHandle handle, T_void *p_data)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  StateMachineGetState                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineGetState returns the current state number of the given    */
-/*  state machine.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You should try not to call this routine unless you have very specific */
-/*  states.  Should you edit the order of states in the state list, your    */
-/*  state indexes/ids are not invalid.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                     -- State number                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsValidStateMachine                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineGetState
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineGetState returns the current state number of the given
+ *  state machine.
+ *
+ *  NOTE: 
+ *  You should try not to call this routine unless you have very specific
+ *  states.  Should you edit the order of states in the state list, your
+ *  state indexes/ids are not invalid.
+ *
+ *  @param handle -- Handle to state machine being worked
+ *
+ *  @return State number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 StateMachineGetState(T_stateMachineHandle handle)
 {
     T_word16 currentState ;
@@ -457,44 +317,17 @@ T_word16 StateMachineGetState(T_stateMachineHandle handle)
     return currentState ;
 }
 
-/****************************************************************************/
-/*  Routine:  StateMachineGotoState                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StateMachineGotoState does the work of switching between states and   */
-/*  executing callback routines as necessary.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine being worked  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IIsValidStateMachine                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StateMachineGotoState
+ *-------------------------------------------------------------------------*/
+/**
+ *  StateMachineGotoState does the work of switching between states and
+ *  executing callback routines as necessary.
+ *
+ *  @param handle -- Handle to state machine being worked
+ *  @param stateNumber -- Number of state to go to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StateMachineGotoState(
            T_stateMachineHandle handle,
            T_word16 stateNumber)
@@ -564,45 +397,19 @@ T_void StateMachineGotoState(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IIsValidStateMachine               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IIsValidStateMachine checks the given handle and sees if it is        */
-/*  actually a handle to a state machine.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to validate                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineInstance *     -- Pointer to the actual instance, else  */
-/*                                    NULL.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/14/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IIsValidStateMachine
+ *-------------------------------------------------------------------------*/
+/**
+ *  IIsValidStateMachine checks the given handle and sees if it is
+ *  actually a handle to a state machine.
+ *
+ *  @param handle -- Handle to validate
+ *
+ *  @return Pointer to the actual instance, else
+ *      NULL.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_stateMachineInstance *IIsValidStateMachine(
                                   T_stateMachineHandle handle)
 {
@@ -621,6 +428,7 @@ static T_stateMachineInstance *IIsValidStateMachine(
     return p_machine ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SMACHINE.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMACHINE.C
+ *-------------------------------------------------------------------------*/

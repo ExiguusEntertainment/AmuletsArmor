@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  BANKUI.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  BANKUI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Bank UI is a hard form in the game that provides the player with
+ * a place to buy rings and amulets as well as a simple interface for
+ * storing money so it is not lost during the adventures.
+ *
+ * @addtogroup BANKUI
+ * @brief Bank User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANKUI.H"
 #include "BANNER.H"
 #include "BUTTON.H"
@@ -374,4 +385,7 @@ static T_void BankUIUpdateGraphics (T_void)
     DebugEnd();
 }
 
-
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  BANKUI.C
+ *-------------------------------------------------------------------------*/

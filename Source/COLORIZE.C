@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  COLORIZE.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  COLORIZE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The game has many creatures and items that were rendered with gray
+ * shades.  We then colorize the raw graphics using color translation
+ * tables to other colors.  Doing this allows for more types of creatures.
+ * These routine provide the raw optimized translation.
+ *
+ * @addtogroup COLORIZE
+ * @brief Colorizing Routines (Grayscale to Shade table)
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "COLORIZE.H"
 #include "GENERAL.H"
 #include "PICS.H"
@@ -20,44 +32,17 @@ static E_Boolean G_init = FALSE ;
 static T_resource G_colorizeTablesRes[MAX_COLORIZE_TABLES] ;
 static T_byte8 *G_colorizeTables[MAX_COLORIZE_TABLES] ;
 
-/****************************************************************************/
-/*  Routine:  ColorizeInitialize                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Colorize Initialize loads in all the tables needed for doing          */
-/*  colorization techniques.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Bombs if you call twice before callling ColorizeFinish.               */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLockData                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorizeInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  Colorize Initialize loads in all the tables needed for doing
+ *  colorization techniques.
+ *
+ *  NOTE: 
+ *  Bombs if you call twice before callling ColorizeFinish.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorizeInitialize(T_void)
 {
     T_word16 i ;
@@ -87,43 +72,16 @@ T_void ColorizeInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ColorizeFinish                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ColorizeFinish frees up the tables used by colorize.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Must call ColorizeInitialize first.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorizeFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorizeFinish frees up the tables used by colorize.
+ *
+ *  NOTE: 
+ *  Must call ColorizeInitialize first.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorizeFinish(T_void)
 {
     T_word16 i ;
@@ -145,50 +103,22 @@ T_void ColorizeFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ColorizeMemory                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ColorizeMemory does the brute work of colorizing a section of memory. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The source and destination should be either exactly the same or don't */
-/*  overlap.  If you do, unpredictable results will occur.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_source           -- Memory to colorize                     */
-/*                                                                          */
-/*    T_byte8 *p_destination      -- Where to put the colorized memory      */
-/*                                                                          */
-/*    T_word32 count              -- How many bytes to colorize             */
-/*                                                                          */
-/*    E_colorizeTable table       -- Table to use to colorize               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ColorizeMemAsm                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorizeMemory
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorizeMemory does the brute work of colorizing a section of memory.
+ *
+ *  NOTE: 
+ *  The source and destination should be either exactly the same or don't
+ *  overlap.  If you do, unpredictable results will occur.
+ *
+ *  @param p_source -- Memory to colorize
+ *  @param p_destination -- Where to put the colorized memory
+ *  @param count -- How many bytes to colorize
+ *  @param table -- Table to use to colorize
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorizeMemory(
            T_byte8 *p_source,
            T_byte8 *p_destination,
@@ -211,44 +141,21 @@ T_void ColorizeMemory(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ColorizeGetTable                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ColorizeGetTable returns the actual table of 256 translation values   */
-/*  for the given table.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Don't call this with an unknown table or with COLORIZE_TABLE_NONE     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_colorizeTable table       -- Table to use to colorize               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to table of 256 values         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/27/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorizeGetTable
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorizeGetTable returns the actual table of 256 translation values
+ *  for the given table.
+ *
+ *  NOTE: 
+ *  Don't call this with an unknown table or with COLORIZE_TABLE_NONE
+ *
+ *  @param colorTable -- Table to use to colorize
+ *
+ *  @return Pointer to table of 256 values
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *ColorizeGetTable(E_colorizeTable colorTable)
 {
     T_byte8 *p_colorize = NULL ;
@@ -278,7 +185,7 @@ T_void ColorizeMemAsm(
 }
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  COLORIZE.C                                              */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  COLORIZE.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  INIFILE.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  INIFILE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * A system for opening, reading, editing, and saving .INI files.
+ *
+ * @addtogroup INIFILE
+ * @brief INI File System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "DBLLINK.H"
 #include "INIFILE.H"
 #include "MEMORY.H"
@@ -59,38 +68,17 @@ static T_void IINIFilePutAlways(
 #define IIsDirty(p_ini)  ((p_ini)->isDirty)
 #define IMarkClean(p_ini)  ((p_ini)->isDirty = FALSE)
 
-/****************************************************************************/
-/*  Routine:  INIFileOpen                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    INIFileOpen opens up an ini file for future accesses.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_filename          -- File name to save to (if changes)     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_iniFile                    -- Handle to ini file                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  INIFileOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  INIFileOpen opens up an ini file for future accesses.
+ *
+ *  @param p_filename -- File name to save to (if changes)
+ *
+ *  @return Handle to ini file
+ *
+ *<!-----------------------------------------------------------------------*/
 T_iniFile INIFileOpen(T_byte8 *p_filename)
 {
     T_iniFile iniFile = INIFILE_BAD ;
@@ -161,41 +149,17 @@ T_iniFile INIFileOpen(T_byte8 *p_filename)
     return iniFile ;
 }
 
-/****************************************************************************/
-/*  Routine:  INIFileClose                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    INIFileClose closes out the ini file and if there are changes, saves  */
-/*  the file to the given p_filename.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_filename          -- File name to save to (if changes)     */
-/*                                                                          */
-/*    T_iniFile iniFile            -- IniFile to search                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  INIFileClose
+ *-------------------------------------------------------------------------*/
+/**
+ *  INIFileClose closes out the ini file and if there are changes, saves
+ *  the file to the given p_filename.
+ *
+ *  @param p_filename -- File name to save to (if changes)
+ *  @param iniFile -- IniFile to search
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void INIFileClose(T_byte8 *p_filename, T_iniFile iniFile)
 {
     T_iniFileStruct *p_ini ;
@@ -253,42 +217,19 @@ T_void INIFileClose(T_byte8 *p_filename, T_iniFile iniFile)
 }
 
 
-/****************************************************************************/
-/*  Routine:  INIFileGet                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    INIFileGet searches for a key based on its category.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFile iniFile            -- IniFile to search                     */
-/*                                                                          */
-/*    T_byte8 *p_catName           -- Search category                       */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Search key                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                    -- Value found, else NULL                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  INIFileGet
+ *-------------------------------------------------------------------------*/
+/**
+ *  INIFileGet searches for a key based on its category.
+ *
+ *  @param iniFile -- IniFile to search
+ *  @param p_catName -- Search category
+ *  @param p_keyName -- Search key
+ *
+ *  @return Value found, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *INIFileGet(
              T_iniFile iniFile,
              T_byte8 *p_catName,
@@ -331,45 +272,19 @@ T_byte8 *INIFileGet(
     return p_found ;
 }
 
-/****************************************************************************/
-/*  Routine:  INIFilePut                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    INIFilePut adds or changes a category, key, and value combo.  It      */
-/*  basically does it all to add or change an entry.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFile iniFile            -- IniFile to put entry                  */
-/*                                                                          */
-/*    T_byte8 *p_catName           -- Name of category                      */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Name of key                           */
-/*                                                                          */
-/*    T_byte8 *p_value             -- Value to use                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  INIFilePut
+ *-------------------------------------------------------------------------*/
+/**
+ *  INIFilePut adds or changes a category, key, and value combo.  It
+ *  basically does it all to add or change an entry.
+ *
+ *  @param iniFile -- IniFile to put entry
+ *  @param p_catName -- Name of category
+ *  @param p_keyName -- Name of key
+ *  @param p_value -- Value to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void INIFilePut(
            T_iniFile iniFile,
            T_byte8 *p_catName,
@@ -419,45 +334,19 @@ T_void INIFilePut(
 }
 
 
-/****************************************************************************/
-/*  Routine:  INIFilePut                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    INIFilePut adds or changes a category, key, and value combo.  It      */
-/*  basically does it all to add or change an entry.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFile iniFile            -- IniFile to put entry                  */
-/*                                                                          */
-/*    T_byte8 *p_catName           -- Name of category                      */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Name of key                           */
-/*                                                                          */
-/*    T_byte8 *p_value             -- Value to use                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  INIFilePut
+ *-------------------------------------------------------------------------*/
+/**
+ *  INIFilePut adds or changes a category, key, and value combo.  It
+ *  basically does it all to add or change an entry.
+ *
+ *  @param iniFile -- IniFile to put entry
+ *  @param p_catName -- Name of category
+ *  @param p_keyName -- Name of key
+ *  @param p_value -- Value to use
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IINIFilePutAlways(
            T_iniFile iniFile,
            T_byte8 *p_catName,
@@ -504,41 +393,19 @@ static T_void IINIFilePutAlways(
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICreateCategory                         * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICreateCategory creates a new category with the given name and        */
-/*  attaches it at the end of the category list.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFileStruct *p_ini       -- IniFile to create category            */
-/*                                                                          */
-/*    T_byte8 *p_catName           -- Name of category to create            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_iniCategory *              -- Craete category, else NULL            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICreateCategory
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICreateCategory creates a new category with the given name and
+ *  attaches it at the end of the category list.
+ *
+ *  @param p_ini -- IniFile to create category
+ *  @param p_catName -- Name of category to create
+ *
+ *  @return Craete category, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_iniCategory *ICreateCategory(
                           T_iniFileStruct *p_ini,
                           T_byte8 *p_catName)
@@ -566,40 +433,18 @@ static T_iniCategory *ICreateCategory(
     return p_category ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindCategory                           * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindCategory searches a iniFile's list of categories for match.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFileStruct *p_ini       -- Ini file to search                    */
-/*                                                                          */
-/*    T_byte8 *p_catName           -- Name of category to find              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_iniCategory *              -- Found category, else NULL             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindCategory
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindCategory searches a iniFile's list of categories for match.
+ *
+ *  @param p_ini -- Ini file to search
+ *  @param p_catName -- Name of category to find
+ *
+ *  @return Found category, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_iniCategory *IFindCategory(
                           T_iniFileStruct *p_ini,
                           T_byte8 *p_catName)
@@ -632,40 +477,18 @@ static T_iniCategory *IFindCategory(
 }
 
 
-/****************************************************************************/
-/*  Routine:  IFindKey                                * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindKey searches a category's list of keys for a match.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniCategory *p_category    -- Category to search in                 */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Name of key to find                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_iniKey *                   -- Found key, else NULL                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindKey
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindKey searches a category's list of keys for a match.
+ *
+ *  @param p_category -- Category to search in
+ *  @param p_keyName -- Name of key to find
+ *
+ *  @return Found key, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_iniKey *IFindKey(
                           T_iniCategory *p_category,
                           T_byte8 *p_keyName)
@@ -698,40 +521,18 @@ static T_iniKey *IFindKey(
     return p_key ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFindKeyAndElement                      * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindKey searches a category's list of keys for a match.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniCategory *p_category    -- Category to search in                 */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Name of key to find                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_iniKey *                   -- Found key, else NULL                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindKeyAndElement
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindKey searches a category's list of keys for a match.
+ *
+ *  @param p_category -- Category to search in
+ *  @param p_keyName -- Name of key to find
+ *
+ *  @return Found key, else NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_iniKey *IFindKeyAndElement(
                           T_iniCategory *p_category,
                           T_byte8 *p_keyName,
@@ -768,41 +569,19 @@ static T_iniKey *IFindKeyAndElement(
     return p_key ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICreateKey                              * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICreateKey allocs memory for a key, sets up its name, and adds it     */
-/*  to the given category.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniCategory *p_category    -- Category to add key to                */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Name of key                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_iniKey *                   -- Created key                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICreateKey
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICreateKey allocs memory for a key, sets up its name, and adds it
+ *  to the given category.
+ *
+ *  @param p_category -- Category to add key to
+ *  @param p_keyName -- Name of key
+ *
+ *  @return Created key
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_iniKey *ICreateKey(
                      T_iniCategory *p_category,
                      T_byte8 *p_keyName)
@@ -828,38 +607,15 @@ static T_iniKey *ICreateKey(
     return p_key ;
 }
 
-/****************************************************************************/
-/*  Routine:  IINIDestroy                             * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IINIDestroy frees and destroys the given ini file.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFileStruct *p_ini       -- INIFile to destroy                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IINIDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  IINIDestroy frees and destroys the given ini file.
+ *
+ *  @param p_ini -- INIFile to destroy
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IINIDestroy(T_iniFileStruct *p_ini)
 {
     T_iniCategory *p_cat ;
@@ -898,47 +654,20 @@ static T_void IINIDestroy(T_iniFileStruct *p_ini)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  INIFileGetString                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    INIFileGetString gets a string for a given key and category.  If      */
-/*  the entry cannot be found, a null string is returned.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_iniFile iniFile            -- IniFile to search                     */
-/*                                                                          */
-/*    T_byte8 *p_catName           -- Search category                       */
-/*                                                                          */
-/*    T_byte8 *p_keyName           -- Search key                            */
-/*                                                                          */
-/*    T_byte8 *p_string            -- Where to put string                   */
-/*                                                                          */
-/*    T_word16 maxLength           -- Maximum number characters in string   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  INIFileGetString
+ *-------------------------------------------------------------------------*/
+/**
+ *  INIFileGetString gets a string for a given key and category.  If
+ *  the entry cannot be found, a null string is returned.
+ *
+ *  @param iniFile -- IniFile to search
+ *  @param p_catName -- Search category
+ *  @param p_keyName -- Search key
+ *  @param p_string -- Where to put string
+ *  @param maxLength -- Maximum number characters in string
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void INIFileGetString(
              T_iniFile iniFile,
              T_byte8 *p_catName,
@@ -1042,6 +771,7 @@ T_void INIFileGetString(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  INIFILE.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  INIFILE.C
+ *-------------------------------------------------------------------------*/

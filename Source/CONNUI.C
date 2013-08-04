@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  ConnUI.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CONNUI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Connecting to a server used to go through this user interface.  It
+ * is no longer being used.
+ *
+ * @addtogroup ConnUI
+ * @brief Connect to Server User Interface (deprecated)
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CONNUI.H"
 #include "GENERAL.H"
 #include "MEMORY.H"
@@ -444,44 +454,13 @@ static T_void ConnUISaveCurrentRecord(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ConnMainUIStart                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ConnMainUIStart starts up the connection ui screen.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ConnMainUIInit                                                        */
-/*    FormGenericControlStart                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ConnMainUIStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  ConnMainUIStart starts up the connection ui screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ConnMainUIStart(T_void)
 {
     DebugRoutine ("ConnMainUIStart");
@@ -495,45 +474,13 @@ T_void ConnMainUIStart(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ConnMainUIEnd                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ConnMainUIEnd ends the connection ui screen.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListTraverse                                                */
-/*    DoubleLinkListDestroy                                                 */
-/*    FormGenericControlEnd                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ConnMainUIEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  ConnMainUIEnd ends the connection ui screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ConnMainUIEnd(T_void)
 {
     DebugRoutine("ConnMainUIEnd") ;
@@ -553,43 +500,13 @@ T_void ConnMainUIEnd(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ConnMainUIUpdate                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ConnMainUIUpdate updates the UI for the connection ui screen.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FormGenericControlUpdate                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ConnMainUIUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ConnMainUIUpdate updates the UI for the connection ui screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ConnMainUIUpdate(T_void)
 {
     DebugRoutine("ConnMainUIUpdate") ;
@@ -599,7 +516,7 @@ T_void ConnMainUIUpdate(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  ConnUI.C                                                */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CONNUI.C
+ *-------------------------------------------------------------------------*/

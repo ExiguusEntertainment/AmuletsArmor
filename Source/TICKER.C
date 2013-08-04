@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  TICKER.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  TICKER.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Track the time in the system in 70ths of second since the start of
+ * the application.
+ *
+ * @addtogroup TICKER
+ * @brief Ticker Timer System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "SOUND.H"
 #include "TICKER.H"
 
@@ -46,49 +56,18 @@ static E_Boolean G_installedAtExit = FALSE ;
 
 T_void ITickerAtExit(T_void) ;
 
-/****************************************************************************/
-/*  Routine:  TickerOn                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Before any ticks progress in the system, you need to first turn on    */
-/*  the Ticker by using TickerOn.  After that, the tick count is increment  */
-/*  about 55 times a second.  Use TickerGet to get the current count.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Don't call this routine twice.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _disable                                                              */
-/*    _enable                                                               */
-/*    outp                                                                  */
-/*    _dos_getvect                                                          */
-/*    _dos_setvect                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TickerOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  Before any ticks progress in the system, you need to first turn on
+ *  the Ticker by using TickerOn.  After that, the tick count is increment
+ *  about 55 times a second.  Use TickerGet to get the current count.
+ *
+ *  NOTE: 
+ *  Don't call this routine twice.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TickerOn(T_void)
 {
     T_word16 timerSpeed ;
@@ -152,47 +131,17 @@ T_void TickerOn(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  TickerOff                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    TickerOff will turn off the ticker counter.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine MUST be called before you end the program.  If you       */
-/*  do not, DOS will crash at a later point (most likely).                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _disable                                                              */
-/*    _dos_setvect                                                          */
-/*    _enable                                                               */
-/*    outp                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TickerOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  TickerOff will turn off the ticker counter.
+ *
+ *  NOTE: 
+ *  This routine MUST be called before you end the program.  If you
+ *  do not, DOS will crash at a later point (most likely).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TickerOff(T_void)
 {
     DebugRoutine("TickerOff") ;
@@ -222,49 +171,21 @@ T_void TickerOff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  TickerGet                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    TickerGet returns the number of ticks that have passed since the      */
-/*  TickerOn was called.  Note:  Don't worry about this timer rolling       */
-/*  over because it will take about 2 years of the computer being           */
-/*  constantly on and nobody reseting the computer.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Number of ticks                        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _disable                                                              */
-/*    _enable                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*    LES  09/19/95  Removed Debug lines to keep keyboard interrupt from    */
-/*                   crashing (when memory checking is on).                 */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TickerGet
+ *-------------------------------------------------------------------------*/
+/**
+ *  TickerGet returns the number of ticks that have passed since the
+ *  TickerOn was called.
+ *
+ *  NOTE:
+ *  Don't worry about this timer rolling
+ *  over because it will take about 2 years of the computer being
+ *  constantly on and nobody reseting the computer.
+ *
+ *  @return Number of ticks
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 TickerGet(T_void)
 {
     T_word32 count ;
@@ -295,48 +216,16 @@ T_word32 TickerGetAccurate(T_void)
 {
     return G_tickCount ;
 }
-/****************************************************************************/
-/*  Routine:  ITickerInterrupt                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ITickerInterrupt is the internal interrupt that counts ticks that     */
-/*  have passed since TickerOn was called.  Note that this routine also     */
-/*  makes sure to call the original BIOS routines to keep the time of       */
-/*  day clock correct.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    outp                                                                  */
-/*    IOldTickerInterrupt                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    outp                                                                  */
-/*    IOldTickerInterrupt                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ITickerInterrupt
+ *-------------------------------------------------------------------------*/
+/**
+ *  ITickerInterrupt is the internal interrupt that counts ticks that
+ *  have passed since TickerOn was called.  Note that this routine also
+ *  makes sure to call the original BIOS routines to keep the time of
+ *  day clock correct.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void __interrupt __far ITickerInterrupt(T_void)
 {
     /* Check to see if we are allowed to increment the ticker count. */
@@ -360,48 +249,16 @@ static T_void __interrupt __far ITickerInterrupt(T_void)
     }
 }
 
-/****************************************************************************/
-/*  Routine:  ITickerInterruptSimple                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ITickerInterrupt is the internal interrupt that counts ticks that     */
-/*  have passed since TickerOn was called.  Note that this routine also     */
-/*  makes sure to call the original BIOS routines to keep the time of       */
-/*  day clock correct.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    outp                                                                  */
-/*    IOldTickerInterrupt                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    outp                                                                  */
-/*    IOldTickerInterrupt                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ITickerInterruptSimple
+ *-------------------------------------------------------------------------*/
+/**
+ *  ITickerInterrupt is the internal interrupt that counts ticks that
+ *  have passed since TickerOn was called.  Note that this routine also
+ *  makes sure to call the original BIOS routines to keep the time of
+ *  day clock correct.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void __interrupt __far ITickerInterruptSimple(T_void)
 {
     INDICATOR_LIGHT(0, INDICATOR_GREEN) ;
@@ -418,48 +275,18 @@ static T_void __interrupt __far ITickerInterruptSimple(T_void)
     INDICATOR_LIGHT(0, INDICATOR_RED) ;
 }
 
-/****************************************************************************/
-/*  Routine:  TickerPause                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    TickerPause stops the counter from counting so that future actions    */
-/*  that depend on the ticker think that it is not updating (although       */
-/*  the interrupts will still occur).                                       */
-/*    Note that you can call this routine more than once, but if you do,    */
-/*  you must call TickerContinue an equal number of times for it to         */
-/*  return to its previous state.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TickerPause
+ *-------------------------------------------------------------------------*/
+/**
+ *  TickerPause stops the counter from counting so that future actions
+ *  that depend on the ticker think that it is not updating (although
+ *  the interrupts will still occur).
+ *  Note that you can call this routine more than once, but if you do,
+ *  you must call TickerContinue an equal number of times for it to
+ *  return to its previous state.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TickerPause(T_void)
 {
     DebugRoutine("TickerPause") ;
@@ -470,46 +297,16 @@ T_void TickerPause(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  TickerContinue                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    TickerContinue continues the counter from a previous call to          */
-/*  TickerPause.                                                            */
-/*    Note that you can call this routine more than once, but if you do,    */
-/*  you must call (or have called) TickerPause an equal number of times.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TickerContinue
+ *-------------------------------------------------------------------------*/
+/**
+ *  TickerContinue continues the counter from a previous call to
+ *  TickerPause.
+ *  Note that you can call this routine more than once, but if you do,
+ *  you must call (or have called) TickerPause an equal number of times.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TickerContinue(T_void)
 {
     DebugRoutine("TickerContinue") ;
@@ -520,44 +317,14 @@ T_void TickerContinue(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ITickerAtExit                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ITickerAtExit is the routine called to restore the timer if it        */
-/*  has not already done so.  This is mainly for when a crash occurs.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TickerOff                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ITickerAtExit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ITickerAtExit is the routine called to restore the timer if it
+ *  has not already done so.  This is mainly for when a crash occurs.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ITickerAtExit(T_void)
 {
     if (F_tickerOn == TRUE)  {
@@ -657,6 +424,7 @@ T_void TickerContinue(T_void)
 #endif
 
 
-/****************************************************************************/
-/*    END OF FILE:  TICKER.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  TICKER.C
+ *-------------------------------------------------------------------------*/

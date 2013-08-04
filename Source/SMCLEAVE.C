@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SM.C                                                           */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMCLEAVE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Leave group/game state machine.
+ *
+ * @addtogroup SMLEAVE
+ * @brief State machine for leaving group/game
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLIENT.H"
 #include "MEMORY.H"
 #include "SMCLEAVE.H"
@@ -39,9 +48,6 @@ static E_Boolean G_init = FALSE ;
 extern void HangUp(void);
 
 
-/****************************************************************************/
-/*                             CONDITIONALS                                 */
-/****************************************************************************/
 static T_stateMachineConditional SMCLeaveSendLogoffCond[] = {
     {
         SMCLeaveCheckFlag,                            /* conditional callback */
@@ -65,9 +71,6 @@ static T_stateMachineConditional SMCLeaveHangUpCond[] = {
 /*-------------------------------------------------------------------------*/
 
 
-/****************************************************************************/
-/*                              STATES                                      */
-/****************************************************************************/
 static T_stateMachineState SMCLeaveStates[] = {
     /* SMCLEAVE_SEND_LOGOFF_STATE */
     {
@@ -113,43 +116,15 @@ static T_stateMachine SMCLeaveStateMachine = {
 
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveInitialize                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveInitialize                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_stateMachineHandle           -- Handle to state machine created     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveInitialize
+ *
+ *  @return Handle to state machine created
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMCLeaveInitialize(T_void)
 {
     DebugRoutine("SMCLeaveInitialize") ;
@@ -167,43 +142,13 @@ T_stateMachineHandle SMCLeaveInitialize(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveFinish                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveFinish                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveFinish
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveFinish(T_void)
 {
     DebugRoutine("SMCLeaveFinish") ;
@@ -220,43 +165,13 @@ T_void SMCLeaveFinish(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveUpdate                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveUpdate                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveUpdate
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveUpdate(T_void)
 {
     DebugRoutine("SMCLeaveUpdate") ;
@@ -267,43 +182,15 @@ T_void SMCLeaveUpdate(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveDataInit                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveDataInit                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveDataInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveDataInit
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveDataInit(T_stateMachineHandle handle)
 {
     T_SMCLeaveData *p_data ;
@@ -321,43 +208,15 @@ T_void SMCLeaveDataInit(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveDataFinish                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveDataFinish                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveDataFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveDataFinish
+ *
+ *  @param handle -- Handle to state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveDataFinish(T_stateMachineHandle handle)
 {
     T_SMCLeaveData *p_data ;
@@ -375,45 +234,16 @@ T_void SMCLeaveDataFinish(T_stateMachineHandle handle)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveCheckFlag                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveCheckFlag                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveCheckFlag
+ *
+ *  @param handle -- Handle to state machine
+ *  @param flag -- Flag to change
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMCLeaveCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -438,45 +268,16 @@ E_Boolean SMCLeaveCheckFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveSetFlag                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveSetFlag                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to change                        */
-/*                                                                          */
-/*    E_Boolean state              -- New state of flag                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveSetFlag
+ *
+ *  @param flag -- Flag to change
+ *  @param state -- New state of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveSetFlag(
            T_word16 flag,
            E_Boolean state)
@@ -498,45 +299,16 @@ T_void SMCLeaveSetFlag(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveSendLogoffEnter                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveSendLogoffEnter                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveSendLogoffEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveSendLogoffEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveSendLogoffEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -566,45 +338,16 @@ T_void SMCLeaveSendLogoffEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveSendLogoffIdle                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveSendLogoffIdle                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveSendLogoffIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveSendLogoffIdle
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveSendLogoffIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -635,45 +378,16 @@ T_void SMCLeaveSendLogoffIdle(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveHangUpEnter                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveHangUpEnter                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveHangUpEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveHangUpEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveHangUpEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -699,45 +413,16 @@ T_void SMCLeaveHangUpEnter(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMCLeaveLeaveCompleteEnter                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  SMCLeaveLeaveCompleteEnter                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to state machine               */
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMCLeaveGetExtraData                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMCLeaveLeaveCompleteEnter
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMCLeaveLeaveCompleteEnter
+ *
+ *  @param handle -- Handle to state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMCLeaveLeaveCompleteEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -755,6 +440,7 @@ T_void SMCLeaveLeaveCompleteEnter(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SM.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMCLEAVE.C
+ *-------------------------------------------------------------------------*/

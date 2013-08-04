@@ -1,6 +1,19 @@
-/****************************************************************************/
-/*    FILE:  MAP.C                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  MAP.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All map handling routines come here.  Need to know about a sector's
+ * floor and ceiling heights.  This is the place.  This code differs
+ * from the 3D_IO code because it handles all the extra code needed
+ * for the game for lighting, walls sliding, textures on walls, backdrops,
+ * and traveling.  Perhaps it is best to think of it as the "Map State"
+ *
+ * @addtogroup MAP
+ * @brief Map Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_TRIG.H"
@@ -59,46 +72,14 @@ static T_void IMapPushUpObjects(
                   T_3dObject *p_movingObject,
                   T_sword16 newHeight) ;
 
-/****************************************************************************/
-/*  Routine:  MapInitialize                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapInitialize is called to start up any data or code needed by the    */
-/*  Map Module.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetBackdrop                                                        */
-/*    PictureUnlock                                                         */
-/*    PictureUnfind                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapInitialize is called to start up any data or code needed by the
+ *  Map Module.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapInitialize(T_void)
 {
 //    T_word16 i ;
@@ -116,45 +97,14 @@ T_void MapInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapFinish                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapFinish is called to finish    up any data or code needed by the    */
-/*  Map Module.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlock                                                         */
-/*    PictureUnfind                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapFinish is called to finish    up any data or code needed by the
+ *  Map Module.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapFinish(T_void)
 {
     DebugRoutine("MapFinish") ;
@@ -172,53 +122,19 @@ T_void MapFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapLoad                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapLoad     reads in the given file and uses it as the map for        */
-/*  the current game.  This only controls the map and the objects within.   */
-/*  Player position or other related information is not defined.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 mapNumber          -- Number of the map to load              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    sprintf                                                               */
-/*    View3dLoadMap                                                         */
-/*    ActivitiesLoad                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  04/20/95  Added Door loading.                                    */
-/*    LES  04/26/95  Added area sound loading                               */
-/*    LES  06/21/95  Changed from ViewLoadMap to MapLoad                    */
-/*    LES  04/15/96  Added call to CreaturesInitialize                      */
-/*                                                                          */
-/****************************************************************************/
-
 T_word32 FreeMemory(T_void) ;
+
+/*-------------------------------------------------------------------------*
+ * Routine:  MapLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapLoad     reads in the given file and uses it as the map for
+ *  the current game.  This only controls the map and the objects within.
+ *  Player position or other related information is not defined.
+ *
+ *  @param mapNumber -- Number of the map to load
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapLoad(T_word32 mapNumber)
 {
     T_byte8 filename[20] ;
@@ -386,46 +302,20 @@ MemFree(p_memTest) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSave                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSave     writes the given file and all the information out to      */
-/*  the current map number.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Current 3d engine doesn't allow easy saving of the map.  (Not that    */
-/*  it's impossible or anything -- just not yet).                           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 mapNumber          -- Number of the map to save              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/28/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/21/95  Move to the Map Module (ViewSaveMap -> MapSave)        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSave
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSave     writes the given file and all the information out to
+ *  the current map number.
+ *
+ *  NOTE: 
+ *  Current 3d engine doesn't allow easy saving of the map.  (Not that
+ *  it's impossible or anything -- just not yet).
+ *
+ *  @param mapNumber -- Number of the map to save
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSave(T_word32 mapNumber)
 {
     DebugRoutine("MapSave") ;
@@ -437,50 +327,15 @@ T_void MapSave(T_word32 mapNumber)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine: MapUnload                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    When the current map is no longer needed, call this routine to        */
-/*  remove it.  All information and pictures concerning that map is         */
-/*  removed from memory.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dUnloadMap                                                       */
-/*    ActivitiesUnload                                                      */
-/*    MapSetBackdrop                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/21/95  Changed from ViewUnloadMap to MapUnload                */
-/*    LES  04/15/96  Added call to CreaturesFinish                          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapUnload
+ *-------------------------------------------------------------------------*/
+/**
+ *  When the current map is no longer needed, call this routine to
+ *  remove it.  All information and pictures concerning that map is
+ *  removed from memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapUnload(T_void)
 {
     extern E_Boolean G_serverActive ;
@@ -526,7 +381,7 @@ T_void MapUnload(T_void)
         /* Note that a map is no longer in memory. */
         G_mapLoaded = FALSE ;
 
-// LED 2/28/2013 -- Had a crash here when UpdateMapEnd called EfxFinish, it tried to 
+// LED 2/28/2013 -- Had a crash here when UpdateMapEnd called EfxFinish, it tried to
 // call EfxDestroy which called ObjectMarkForDestroy -- but the object was already destroyed!
 // by ObjectsUnload?  What efx was in use?  Looks like I got hurt as I was exiting the level
 // at the same time!  (EfxUpdateBloodSplat on updateCallback of p_efx (T_efxStruct *))
@@ -546,49 +401,19 @@ T_void MapUnload(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  MapSetBackdrop                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetBackdrop requires a pointer to a 320x100 (or bigger) picture    */
-/*  and copies it into the backdrop to be used by the computer.             */
-/*  (Actually, you pass in a 320x200 picture where the top 100 lines        */
-/*  is half of the image and the next 100 lines are the right half of the   */
-/*  image).                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_backdrop         -- Pointer to backdrop                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/21/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/21/95  Changed from ViewSetBackdrop to MapSetBackdrop         */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetBackdrop
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetBackdrop requires a pointer to a 320x100 (or bigger) picture
+ *  and copies it into the backdrop to be used by the computer.
+ *  (Actually, you pass in a 320x200 picture where the top 100 lines
+ *  is half of the image and the next 100 lines are the right half of the
+ *  image).
+ *
+ *  @param p_backdrop -- Pointer to backdrop
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetBackdrop(T_byte8 *p_backdrop)
 {
     T_word16 sizeX, sizeY ;
@@ -669,47 +494,19 @@ T_void MapSetBackdrop(T_byte8 *p_backdrop)
 /** The following routines are not needed for the server-only build. **/
 #ifndef SERVER_ONLY
 
-/****************************************************************************/
-/*  Routine:  MapGetForwardWallActivation                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetForwardWallActivation is used to get the activation number      */
-/*  of the wall in front of the current POV.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The current 3d engine does not allow for wall activation.             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Activation number                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/04/95  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/21/95  Removed from View.c and put into map.c and renamed.    */
-/*    LES  06/12/96  Modified to work with passed in p_obj                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetForwardWallActivation
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetForwardWallActivation is used to get the activation number
+ *  of the wall in front of the current POV.
+ *
+ *  NOTE: 
+ *  The current 3d engine does not allow for wall activation.
+ *
+ *  @return Activation number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 MapGetForwardWallActivation(T_3dObject *p_obj)
 {
     T_word16 action = 0 ;
@@ -754,51 +551,19 @@ T_word16 MapGetForwardWallActivation(T_3dObject *p_obj)
     return action ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetWallBitmapTextureXY                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetWallBitmapTextureXY changes the x and y offset of a wall's      */
-/*  texture.  Just pass in what wall, side, and the new x & y offset.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 wallNum            -- Number of wall to change.              */
-/*                                                                          */
-/*    T_word16 side               -- Side of the wall (0 or 1)              */
-/*                                                                          */
-/*    T_sword16 offX              -- Offset in X (left to right) direction. */
-/*                                                                          */
-/*    T_sword16 offY              -- Offset in Y (top to bottom) direction. */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/23/95  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetWallBitmapTextureXY
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetWallBitmapTextureXY changes the x and y offset of a wall's
+ *  texture.  Just pass in what wall, side, and the new x & y offset.
+ *
+ *  @param wallNum -- Number of wall to change.
+ *  @param side -- Side of the wall (0 or 1)
+ *  @param offX -- Offset in X (left to right) direction.
+ *  @param offY -- Offset in Y (top to bottom) direction.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetWallBitmapTextureXY(
            T_word16 wallNum,
            T_word16 side,
@@ -816,45 +581,18 @@ T_void MapSetWallBitmapTextureXY(
 
 #endif /** SERVER_ONLY **/
 
-/****************************************************************************/
-/*  Routine:  MapGetSectorAction                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetSectorAction returns the corresponding activity number for the  */
-/*  given sector.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector to get activity of              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Activation number for sector           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/94  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetSectorAction
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetSectorAction returns the corresponding activity number for the
+ *  given sector.
+ *
+ *  @param sector -- Sector to get activity of
+ *
+ *  @return Activation number for sector
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 MapGetSectorAction(T_word16 sector)
 {
     T_word16 activity ;
@@ -869,47 +607,17 @@ T_word16 MapGetSectorAction(T_word16 sector)
     return activity ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetFloorHeight                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetFloorHeight makes the given sector's floor height go to the     */
-/*  given height (instantly).                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector's floor to change.              */
-/*                                                                          */
-/*    T_sword16 height            -- New height for floor.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/94  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetFloorHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetFloorHeight makes the given sector's floor height go to the
+ *  given height (instantly).
+ *
+ *  @param sector -- Sector's floor to change.
+ *  @param height -- New height for floor.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetFloorHeight(T_word16 sector, T_sword16 height)
 {
     DebugRoutine("MapSetFloorHeight") ;
@@ -1118,44 +826,15 @@ static T_void IMapPushUpObjects(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetFloorHeight                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetFloorHeight returns the height of the given sector.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector's floor to get.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/95  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetFloorHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetFloorHeight returns the height of the given sector.
+ *
+ *  @param sector -- Sector's floor to get.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 MapGetFloorHeight(T_word16 sector)
 {
     T_sword16 height ;
@@ -1178,47 +857,17 @@ if (sector >= G_Num3dSectors)  {
     return height ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetWalkingFloorHeight                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetWalkingFloorHeight returns height of the floor if a thing       */
-/*  is walking on it.  For water areas, this can be lower than the actual   */
-/*  floor height.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector's floor to get.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/11/95  Created                                                */
-/*    LES  04/12/95  Fixed if/else mistake                                  */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetWalkingFloorHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetWalkingFloorHeight returns height of the floor if a thing
+ *  is walking on it.  For water areas, this can be lower than the actual
+ *  floor height.
+ *
+ *  @param sector -- Sector's floor to get.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 MapGetWalkingFloorHeight(T_word16 sector)
 {
     T_sword16 height ;
@@ -1247,47 +896,17 @@ if (sector >= G_Num3dSectors)  {
     return height ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetCeilingHeight                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetCeilingHeight makes the given sector's floor height go to   */
-/*  the given height (instantly).                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector's ceiling to change.            */
-/*                                                                          */
-/*    T_sword16 height            -- New height for ceiling.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/94  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetCeilingHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetCeilingHeight makes the given sector's floor height go to
+ *  the given height (instantly).
+ *
+ *  @param sector -- Sector's ceiling to change.
+ *  @param height -- New height for ceiling.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetCeilingHeight(T_word16 sector, T_sword16 height)
 {
     T_3dObject *p_obj ;
@@ -1319,46 +938,15 @@ T_void MapSetCeilingHeight(T_word16 sector, T_sword16 height)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetCeilingHeight                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetCeilingHeight gets the given sector's ceiling height.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector's ceiling to change.            */
-/*                                                                          */
-/*    T_sword16 height            -- New height for ceiling.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/16/95  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetCeilingHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetCeilingHeight gets the given sector's ceiling height.
+ *
+ *  @param sector -- Sector's ceiling to change.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 MapGetCeilingHeight(T_word16 sector)
 {
     T_sword16 height ;
@@ -1378,46 +966,16 @@ T_sword16 MapGetCeilingHeight(T_word16 sector)
     return height ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetSectorLighting                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetSectorLighting makes a sector have a different light level.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Number of sector                       */
-/*                                                                          */
-/*    T_byte8 lightLevel          -- new lighting level                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/05/95  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetSectorLighting
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetSectorLighting makes a sector have a different light level.
+ *
+ *  @param sector -- Number of sector
+ *  @param lightLevel -- new lighting level
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetSectorLighting(T_word16 sector, T_byte8 lightLevel)
 {
     DebugRoutine("MapSetSectorLighting") ;
@@ -1428,46 +986,15 @@ T_void MapSetSectorLighting(T_word16 sector, T_byte8 lightLevel)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetSectorLighting                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetSectorLighting gets  a sector have a different light level.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Number of sector                       */
-/*                                                                          */
-/*    T_byte8 lightLevel          -- new lighting level                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/05/95  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetSectorLighting
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetSectorLighting gets  a sector have a different light level.
+ *
+ *  @param sector -- Number of sector
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 MapGetSectorLighting(T_word16 sector)
 {
     T_byte8 light ;
@@ -1482,49 +1009,20 @@ T_byte8 MapGetSectorLighting(T_word16 sector)
     return light ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapCheckCrush                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapCheckCrush sees if lowering the ceiling of the given sector to     */
-/*  the new height will cause a character to be crushed.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector to consider                     */
-/*                                                                          */
-/*    T_sword16 newHeight         -- New ceiling height to consider         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = object or player is going to    */
-/*                                   be crushed, or FALSE for ok.           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/21/95  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*    LES  07/30/96  Changed to not crush objects that are passible         */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapCheckCrush
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapCheckCrush sees if lowering the ceiling of the given sector to
+ *  the new height will cause a character to be crushed.
+ *
+ *  @param sector -- Sector to consider
+ *  @param newHeight -- New ceiling height to consider
+ *
+ *  @return TRUE = object or player is going to
+ *      be crushed, or FALSE for ok.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MapCheckCrushByCeiling(T_word16 sector, T_sword16 newHeight)
 {
     E_Boolean status = FALSE ;
@@ -1564,42 +1062,20 @@ E_Boolean MapCheckCrushByCeiling(T_word16 sector, T_sword16 newHeight)
 }
 
 
-/****************************************************************************/
-/*  Routine:  MapCheckCrushByFloor                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapCheckCrushByFloor if raising the floor of a given sector    to     */
-/*  the new height will cause a character to be crushed.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector to consider                     */
-/*                                                                          */
-/*    T_sword16 newHeight         -- New floor   height to consider         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = object or player is going to    */
-/*                                   be crushed, or FALSE for ok.           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapCheckCrushByFloor
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapCheckCrushByFloor if raising the floor of a given sector    to
+ *  the new height will cause a character to be crushed.
+ *
+ *  @param sector -- Sector to consider
+ *  @param newHeight -- New floor   height to consider
+ *
+ *  @return TRUE = object or player is going to
+ *      be crushed, or FALSE for ok.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MapCheckCrushByFloor(T_word16 sector, T_sword16 newHeight)
 {
     T_word16 j ;
@@ -1674,44 +1150,14 @@ E_Boolean MapCheckCrushByFloor(T_word16 sector, T_sword16 newHeight)
 
 
 #if 0
-/****************************************************************************/
-/*  Routine:  MapAnimate                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimate goes through and updates any of the frames necessary for   */
-/*  animation.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimate
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimate goes through and updates any of the frames necessary for
+ *  animation.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapAnimate(T_void)
 {
     T_word32 delta ;
@@ -1791,48 +1237,19 @@ T_void MapAnimate(T_void)
 #endif
 
 
-/****************************************************************************/
-/*  Routine:  MapGetStartLocation                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetStartLocation uses the given number to return by indirection    */
-/*  the location of the map's starting point.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 num                -- Number of starting point               */
-/*                                                                          */
-/*    T_sword16 *p_x, *p_y        -- X, Y starting location                 */
-/*                                                                          */
-/*    T_word16 *p_angle           -- Angle of starting location             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetStartLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetStartLocation uses the given number to return by indirection
+ *  the location of the map's starting point.
+ *
+ *  @param num -- Number of starting point
+ *  @param p_x -- X starting location
+ *  @param p_y -- Y starting location
+ *  @param p_angle -- Angle of starting location
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapGetStartLocation(
            T_word16 num,
            T_sword16 *p_x,
@@ -1855,47 +1272,17 @@ T_void MapGetStartLocation(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetNextMapAndPlace                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetNextMapAndPlace returns the map link for the given sector.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sector             -- Sector to get map link                 */
-/*                                                                          */
-/*    T_word16 *p_nextMap         -- Place to store next map number         */
-/*                                                                          */
-/*    T_word16 *p_nextMapPlace    -- Place to store next place number       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/16/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetNextMapAndPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetNextMapAndPlace returns the map link for the given sector.
+ *
+ *  @param sector -- Sector to get map link
+ *  @param p_nextMap -- Place to store next map number
+ *  @param p_nextMapPlace -- Place to store next place number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapGetNextMapAndPlace(
            T_word16 sector,
            T_word16 *p_nextMap,
@@ -1914,128 +1301,41 @@ T_void MapGetNextMapAndPlace(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetOutsideLighting                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetOutsideLighting declares how much light is outside the world.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 outsideLight        -- Light level of outside                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetOutsideLighting
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetOutsideLighting declares how much light is outside the world.
+ *
+ *  @param outsideLight -- Light level of outside
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetOutsideLighting(T_byte8 outsideLight)
 {
     G_outsideLighting = outsideLight ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetOutsideLighting                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetOutsideLighting returns how much light is outside.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 outsideLight        -- Light level of outside                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetOutsideLighting
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetOutsideLighting returns how much light is outside.
+ *
+ *  @return Light level of outside
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 MapGetOutsideLighting(T_void)
 {
     return G_outsideLighting ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapUpdateLighting                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapUpdateLighting updates all lighting effects for the map.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    LightTableRecalculate                                                 */
-/*    View3dUpdateSectorLightAnimation                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapUpdateLighting
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapUpdateLighting updates all lighting effects for the map.
+ *
+ *<!-----------------------------------------------------------------------*/
 #define TICKS_PER_DAY  0x7FFFFL
 
 T_void MapUpdateLighting(T_void)
@@ -2067,7 +1367,6 @@ T_void MapUpdateLighting(T_void)
     TICKER_TIME_ROUTINE_ENDM("MapUpdateLighting", 500) ;
 }
 
-/****************************************************************************/
 E_Boolean MapIsDay(T_void)
 {
     E_Boolean isDay = TRUE ;
@@ -2090,7 +1389,6 @@ E_Boolean MapIsDay(T_void)
     return isDay ;
 }
 
-/****************************************************************************/
 T_void MapOutputTimeOfDay(T_void)
 {
     T_sword32 tickInDay ;
@@ -2119,49 +1417,17 @@ T_void MapOutputTimeOfDay(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetMainTextureForSide                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetMainTexture changes the texture used on the middle part         */
-/*  of walls.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Side definition to affect.             */
-/*                                                                          */
-/*    T_byte8 *p_textureName      -- Name of texture to use.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/27/94  Created                                                */
-/*    LES  06/21/95  Change from View module to map module                  */
-/*    LES  01/09/96  Cleaned up and renamed                                 */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetMainTextureForSide
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetMainTexture changes the texture used on the middle part
+ *  of walls.
+ *
+ *  @param sideNum -- Side definition to affect.
+ *  @param p_textureName -- Name of texture to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetMainTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
@@ -2184,47 +1450,17 @@ T_void MapSetMainTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 }
 
 
-/****************************************************************************/
-/*  Routine:  MapSetLowerTextureForSide                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetLowerTextureForSide changes the texture used on the lower part  */
-/*  of walls.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Side definition to affect.             */
-/*                                                                          */
-/*    T_byte8 *p_textureName      -- Name of texture to use.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created (based off MapSetMainTextureForSide)           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetLowerTextureForSide
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetLowerTextureForSide changes the texture used on the lower part
+ *  of walls.
+ *
+ *  @param sideNum -- Side definition to affect.
+ *  @param p_textureName -- Name of texture to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetLowerTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
@@ -2247,47 +1483,17 @@ T_void MapSetLowerTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetUpperTextureForSide                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetUpperTextureForSide changes the texture used on the lower part  */
-/*  of walls.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Side definition to affect.             */
-/*                                                                          */
-/*    T_byte8 *p_textureName      -- Name of texture to use.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created (based off MapSetMainTextureForSide)           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetUpperTextureForSide
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetUpperTextureForSide changes the texture used on the lower part
+ *  of walls.
+ *
+ *  @param sideNum -- Side definition to affect.
+ *  @param p_textureName -- Name of texture to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetUpperTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
@@ -2310,34 +1516,19 @@ T_void MapSetUpperTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetWallTexture                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetWallTexture tries to be the all-in-wall way to change wall      */
-/*  textures.  If called on a wall, it will only change one part of the     */
-/*  wall based on what exists based on the following priority:              */
-/*  Main, Lower, & Upper.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Side definition to affect.             */
-/*                                                                          */
-/*    T_byte8 *p_textureName      -- Name of texture to use.                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/27/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetWallTexture
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetWallTexture tries to be the all-in-wall way to change wall
+ *  textures.  If called on a wall, it will only change one part of the
+ *  wall based on what exists based on the following priority -
+ *  Main, Lower, & Upper.
+ *
+ *  @param sideNum -- Side definition to affect.
+ *  @param p_textureName -- Name of texture to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetWallTexture(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
@@ -2359,47 +1550,17 @@ T_void MapSetWallTexture(T_word16 sideNum, T_byte8 *p_textureName)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetFloorTextureForSector                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetFloorTextureForSector declares the texture to be used on the    */
-/*  given sector floor.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sectorNum          -- Sector to affect.                      */
-/*                                                                          */
-/*    T_byte8 *p_textureName      -- Name of texture to use.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created (based off MapSetMainTextureForSide)           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetFloorTextureForSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetFloorTextureForSector declares the texture to be used on the
+ *  given sector floor.
+ *
+ *  @param sectorNum -- Sector to affect.
+ *  @param p_textureName -- Name of texture to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetFloorTextureForSector(
            T_word16 sectorNum,
            T_byte8 *p_textureName)
@@ -2419,47 +1580,17 @@ T_void MapSetFloorTextureForSector(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapSetCeilingTextureForSector                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapSetCeilingTextureForSector declares the texture to be used on the  */
-/*  given sector ceiling.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sectorNum          -- Sector to affect.                      */
-/*                                                                          */
-/*    T_byte8 *p_textureName      -- Name of texture to use.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLock                                                           */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created (based off MapSetMainTextureForSide)           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapSetCeilingTextureForSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapSetCeilingTextureForSector declares the texture to be used on the
+ *  given sector ceiling.
+ *
+ *  @param sectorNum -- Sector to affect.
+ *  @param p_textureName -- Name of texture to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapSetCeilingTextureForSector(
            T_word16 sectorNum,
            T_byte8 *p_textureName)
@@ -2479,43 +1610,15 @@ T_void MapSetCeilingTextureForSector(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapExist                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapExist tells if a map exists.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=Map does exist                    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileExist                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/14/96  Created (based off MapSetMainTextureForSide)           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapExist
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapExist tells if a map exists.
+ *
+ *  @return TRUE=Map does exist
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MapExist(T_word32 num)
 {
     E_Boolean mapExist = FALSE ;
@@ -2543,44 +1646,18 @@ E_Boolean MapExist(T_word32 num)
     return mapExist ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetUpperTextureName                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetUpperTextureName  returns the name of the upper texture name    */
-/*  on a given side of a wall.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Number of side                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to 8 characters for name       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureGetName                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetUpperTextureName
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetUpperTextureName  returns the name of the upper texture name
+ *  on a given side of a wall.
+ *
+ *  @param sideNum -- Number of side
+ *
+ *  @return Pointer to 8 characters for name
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *MapGetUpperTextureName(T_word16 sideNum)
 {
     T_byte8 *p_pic ;
@@ -2603,45 +1680,19 @@ T_byte8 *MapGetUpperTextureName(T_word16 sideNum)
     return p_name ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetLowerTextureName                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetLowerTextureName  returns the name of the lower texture name    */
-/*  on a given side of a wall.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Number of side                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to 8 characters for name       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureGetName                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_byte8 *MapGetLowerTextureName(T_word16 sideNum) 
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetLowerTextureName
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetLowerTextureName  returns the name of the lower texture name
+ *  on a given side of a wall.
+ *
+ *  @param sideNum -- Number of side
+ *
+ *  @return Pointer to 8 characters for name
+ *
+ *<!-----------------------------------------------------------------------*/
+T_byte8 *MapGetLowerTextureName(T_word16 sideNum)
 {
     T_byte8 *p_pic ;
     T_byte8 *p_name ;
@@ -2663,45 +1714,19 @@ T_byte8 *MapGetLowerTextureName(T_word16 sideNum)
     return p_name ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetMainTextureName                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetMainTextureName   returns the name of the main  texture name    */
-/*  on a given side of a wall.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Number of side                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to 8 characters for name       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureGetName                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_byte8 *MapGetMainTextureName(T_word16 sideNum) 
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetMainTextureName
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetMainTextureName   returns the name of the main  texture name
+ *  on a given side of a wall.
+ *
+ *  @param sideNum -- Number of side
+ *
+ *  @return Pointer to 8 characters for name
+ *
+ *<!-----------------------------------------------------------------------*/
+T_byte8 *MapGetMainTextureName(T_word16 sideNum)
 {
     T_byte8 *p_pic ;
     T_byte8 *p_name ;
@@ -2723,45 +1748,19 @@ T_byte8 *MapGetMainTextureName(T_word16 sideNum)
     return p_name ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetFloorTextureName                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetFloorTextureName  returns the name of the floor texture name    */
-/*  in a given sector.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sectorNum          -- Number of sector                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to 8 characters for name       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureGetName                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_byte8 *MapGetFloorTextureName(T_word16 sectorNum) 
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetFloorTextureName
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetFloorTextureName  returns the name of the floor texture name
+ *  in a given sector.
+ *
+ *  @param sectorNum -- Number of sector
+ *
+ *  @return Pointer to 8 characters for name
+ *
+ *<!-----------------------------------------------------------------------*/
+T_byte8 *MapGetFloorTextureName(T_word16 sectorNum)
 {
     T_3dSector *p_sector ;
     T_byte8 *p_pic ;
@@ -2779,45 +1778,19 @@ T_byte8 *MapGetFloorTextureName(T_word16 sectorNum)
     return p_name ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetCeilingTextureName                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetCeilingTextureName returens the name of the ceiling texture     */
-/*  in a given sector.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sectorNum          -- Number of sector                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to 8 characters for name       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureGetName                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_byte8 *MapGetCeilingTextureName(T_word16 sectorNum) 
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetCeilingTextureName
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetCeilingTextureName returens the name of the ceiling texture
+ *  in a given sector.
+ *
+ *  @param sectorNum -- Number of sector
+ *
+ *  @return Pointer to 8 characters for name
+ *
+ *<!-----------------------------------------------------------------------*/
+T_byte8 *MapGetCeilingTextureName(T_word16 sectorNum)
 {
     T_3dSector *p_sector ;
     T_byte8 *p_pic ;
@@ -2835,44 +1808,18 @@ T_byte8 *MapGetCeilingTextureName(T_word16 sectorNum)
     return p_name ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetTextureXOffset                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetTextureXOffset returns the x offset of a texture on a wall side.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Number of wall side                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Texture shift in X direction           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
-T_word16 MapGetTextureXOffset(T_word16 sideNum) 
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetTextureXOffset
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetTextureXOffset returns the x offset of a texture on a wall side.
+ *
+ *  @param sideNum -- Number of wall side
+ *
+ *  @return Texture shift in X direction
+ *
+ *<!-----------------------------------------------------------------------*/
+T_word16 MapGetTextureXOffset(T_word16 sideNum)
 {
     T_3dSide *p_side ;
     T_word16 xOffset ;
@@ -2888,43 +1835,17 @@ T_word16 MapGetTextureXOffset(T_word16 sideNum)
     return xOffset ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetTextureYOffset                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetTextureYOffset returns the y offset of a texture on a wall side.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sideNum            -- Number of wall side                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Shift in texture along y direction     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetTextureYOffset
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetTextureYOffset returns the y offset of a texture on a wall side.
+ *
+ *  @param sideNum -- Number of wall side
+ *
+ *  @return Shift in texture along y direction
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 MapGetTextureYOffset(T_word16 sideNum)
 {
     T_3dSide *p_side ;
@@ -2941,43 +1862,19 @@ T_word16 MapGetTextureYOffset(T_word16 sideNum)
     return yOffset ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetWalkingFloorHeightAtXY                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetWalkingFloorHeightAtXY returns the height of the floor given    */
-/*  a map coordinate.                                                       */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y              -- Position on map.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- Height there, or -32767                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/02/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetWalkingFloorHeightAtXY
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetWalkingFloorHeightAtXY returns the height of the floor given
+ *  a map coordinate.
+ *
+ *  @param x -- X Position on map.
+ *  @param y -- Y Position on map.
+ *
+ *  @return Height there, or -32767
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 MapGetWalkingFloorHeightAtXY(T_sword16 x, T_sword16 y)
 {
     T_sword16 floor ;
@@ -3054,37 +1951,20 @@ T_void MapSetSectorState(T_word16 sectorNum, T_word16 sectorState)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetWallDamage                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetWallDamage is called to determine if an object is being damaged */
-/*  by a wall animation.                                                    */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to check                        */
-/*                                                                          */
-/*    T_word16 *p_damageAmount    -- Amount of damage                       */
-/*                                                                          */
-/*    E_effectDamageType *p_damageType -- Type of damage to be done         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE=found damaging wall               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetWallDamage
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetWallDamage is called to determine if an object is being damaged
+ *  by a wall animation.
+ *
+ *  @param p_obj -- Object to check
+ *  @param p_damageAmount -- Amount of damage
+ *  @param p_damageType -- Type of damage to be done
+ *
+ *  @return TRUE=found damaging wall
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MapGetWallDamage(
               T_3dObject *p_obj,
               T_word16 *p_damageAmount,
@@ -3204,30 +2084,14 @@ T_void MapShiftTextureDown(T_sword16 amount)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  MapOpenForwardWall                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapOpenForwardWall tries to open a door attached to the forward       */
-/*  wall.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/10/95  Created                                                */
-/*    LES  06/12/96  Changed to work with p_obj                             */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapOpenForwardWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapOpenForwardWall tries to open a door attached to the forward
+ *  wall.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapOpenForwardWall(
            T_3dObject *p_obj,
            E_Boolean checkForItemRequired)
@@ -3287,30 +2151,17 @@ T_void MapOpenForwardWall(
     } while (stepSize > 0) ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapForceOpenForwardWall                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapForceOpenForwardWall always opens the forward wall.  If the door   */
-/*  is locked and/or requires an item, the door is unlocked and gets rid    */
-/*  of the item.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object doing the open                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapForceOpenForwardWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapForceOpenForwardWall always opens the forward wall.  If the door
+ *  is locked and/or requires an item, the door is unlocked and gets rid
+ *  of the item.
+ *
+ *  @param p_obj -- Object doing the open
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapForceOpenForwardWall(T_3dObject *p_obj)
 {
     T_word16 num ;
@@ -3374,36 +2225,20 @@ T_void MapForceOpenForwardWall(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapGetForwardWallActivationType                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapGetForwardWallActivationType returns the type of action that will  */
-/*  occur (including specific data) if the forward wall is activated.       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Thing opening door                     */
-/*                                                                          */
-/*    E_Boolean checkForItemRequired -- TRUE if you need this checked.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if can open, else false           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapGetForwardWallActivationType
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapGetForwardWallActivationType returns the type of action that will
+ *  occur (including specific data) if the forward wall is activated.
+ *
+ *  @param p_obj -- Thing opening door
+ *  @param p_type -- Type of wall activation
+ *  @param p_data -- Reutrn wall activation value
+ *
+ *  @return TRUE if can open, else false
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapGetForwardWallActivationType(
            T_3dObject *p_obj,
            E_wallActivation *p_type,
@@ -3498,6 +2333,7 @@ T_word32 MapGetMapSpecial(T_void)
     return G_mapSpecial ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  MAP.C                                                   */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  MAP.C
+ *-------------------------------------------------------------------------*/

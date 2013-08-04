@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  UI.C                                                           */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  UI.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All UI components are collected here in one place regardless if it is
+ * a form or banner object.  This handles the layering of the objects
+ * and events.
+ *
+ * @addtogroup UI
+ * @brief User Interface Top Level control
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "KEYBOARD.H"
 #include "KEYSCAN.H"
 #include "MEMORY.H"
@@ -54,49 +65,20 @@ static E_Boolean IUIObjectIsInside(T_UIObject obj, T_word16 x, T_word16 y) ;
 
 static T_void IUIGroupChangeFocus(T_sword16 indexObject) ;
 
-/****************************************************************************/
-/*  Routine:  UISetActiveGroup                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Once a UIGroup object has been declared and set-up with all of its    */
-/*  UIObjects, you can declare the UIGroup to be the active group.          */
-/*  Use this routine to make the UIGroup connect into the system and        */
-/*  receive mouse and keyboard events.  If you no longer need to have an    */
-/*  active UIGroup, send UI_GROUP_BAD to this routine.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup group             -- Group to make active or use            */
-/*                                   UI_GROUP_BAD for none.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    KeyboardSetEventHandler                                               */
-/*    MouseSetEventHandler                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UISetActiveGroup
+ *-------------------------------------------------------------------------*/
+/**
+ *  Once a UIGroup object has been declared and set-up with all of its
+ *  UIObjects, you can declare the UIGroup to be the active group.
+ *  Use this routine to make the UIGroup connect into the system and
+ *  receive mouse and keyboard events.  If you no longer need to have an
+ *  active UIGroup, send UI_GROUP_BAD to this routine.
+ *
+ *  @param group -- Group to make active or use
+ *      UI_GROUP_BAD for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UISetActiveGroup(T_UIGroup group)
 {
     DebugRoutine("UISetActiveGroup") ;
@@ -119,48 +101,22 @@ T_void UISetActiveGroup(T_UIGroup group)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIGroupAttachUIObject                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIGroupAttachUIObject is used to add objects to a UI Group.  Each     */
-/*  added object represents another piece of UI on the screen that will     */
-/*  be passed UI Events.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    I can't really tell if the group and object are truly legal, but      */
-/*  as long as they are not BAD,  you should be ok.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup group             -- Group to add object to                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to add                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIGroupAttachUIObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIGroupAttachUIObject is used to add objects to a UI Group.  Each
+ *  added object represents another piece of UI on the screen that will
+ *  be passed UI Events.
+ *
+ *  NOTE: 
+ *  I can't really tell if the group and object are truly legal, but
+ *  as long as they are not BAD,  you should be ok.
+ *
+ *  @param group -- Group to add object to
+ *  @param object -- Object to add
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIGroupAttachUIObject(T_UIGroup group, T_UIObject object)
 {
     T_UIGroupStruct *p_group ;
@@ -181,46 +137,21 @@ T_void UIGroupAttachUIObject(T_UIGroup group, T_UIObject object)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIGroupCreate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIGroupCreate is used to allocate memory for a new UI Group.          */
-/*  If there is not enough memory, a UI_GROUP_BAD is returned.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure that when you are returned a T_UIGroup that you check       */
-/*  to see if it is UI_GROUP_BAD.  In many cases, it is best just to bomb.  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_UIGroup                   -- UIGroup or UI_GROUP_BAD if out of      */
-/*                                   memory.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIGroupCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIGroupCreate is used to allocate memory for a new UI Group.
+ *  If there is not enough memory, a UI_GROUP_BAD is returned.
+ *
+ *  NOTE: 
+ *  Make sure that when you are returned a T_UIGroup that you check
+ *  to see if it is UI_GROUP_BAD.  In many cases, it is best just to bomb.
+ *
+ *  @return UIGroup or UI_GROUP_BAD if out of
+ *      memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_UIGroup UIGroupCreate(T_void)
 {
     T_UIGroupStruct *p_group ;
@@ -255,47 +186,21 @@ T_UIGroup UIGroupCreate(T_void)
     return ((T_UIGroup)p_group) ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIGroupDestroy                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIGroupDestroy detaches, deallocates, and cleans up all the objects   */
-/*  under and including the UI Group.  This routine is a all in one         */
-/*  technique.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The UIGroup being destroy MUST NOT be the active UI Group.  Make      */
-/*  to call UISetActiveGroup(UI_GROUP_BAD) before executing this command.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup                   -- Group you want destroyed               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIObjectDestroy                                                      */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIGroupDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIGroupDestroy detaches, deallocates, and cleans up all the objects
+ *  under and including the UI Group.  This routine is a all in one
+ *  technique.
+ *
+ *  NOTE: 
+ *  The UIGroup being destroy MUST NOT be the active UI Group.  Make
+ *  to call UISetActiveGroup(UI_GROUP_BAD) before executing this command.
+ *
+ *  @param group -- Group you want destroyed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIGroupDestroy(T_UIGroup group)
 {
     T_UIGroupStruct *p_group ;
@@ -321,52 +226,18 @@ T_void UIGroupDestroy(T_UIGroup group)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIGroupDraw                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIGroupDraw draws the background image and all the objects that are   */
-/*  part of this group.  Note that it only does this to the active group.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Be sure to call UISetActiveGroup and UIGroupSetScreen before using    */
-/*  this command.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrDrawBitmap                                                          */
-/*    GrDrawRectangle                                                       */
-/*    GrScreenSet                                                           */
-/*    ResourceLock                                                          */
-/*    ResourceUnlock                                                        */
-/*    IUIObjectHandleEvent                                                  */
-/*    MouseHide                                                             */
-/*    MouseShow                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIGroupDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIGroupDraw draws the background image and all the objects that are
+ *  part of this group.  Note that it only does this to the active group.
+ *
+ *  NOTE: 
+ *  Be sure to call UISetActiveGroup and UIGroupSetScreen before using
+ *  this command.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIGroupDraw(T_void)
 {
     T_UIGroupStruct *p_group ;
@@ -414,47 +285,21 @@ T_void UIGroupDraw(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:                                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIGroupSetScreen tells what screen to draw all the objects to         */
-/*  under a UI Group.  Usually this will be a screen that was allocated     */
-/*  for the purpose of being drawn once before being displayed.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Screen must not be a NULL or SCREEN_BAD.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup group             -- Group to change screen                 */
-/*                                                                          */
-/*    T_screen screen             -- Screen to use                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIGroupSetScreen
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIGroupSetScreen tells what screen to draw all the objects to
+ *  under a UI Group.  Usually this will be a screen that was allocated
+ *  for the purpose of being drawn once before being displayed.
+ *
+ *  NOTE: 
+ *  Screen must not be a NULL or SCREEN_BAD.
+ *
+ *  @param group -- Group to change screen
+ *  @param screen -- Screen to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIGroupSetScreen(T_UIGroup group, T_screen screen)
 {
     T_UIGroupStruct *p_group ;
@@ -472,47 +317,21 @@ T_void UIGroupSetScreen(T_UIGroup group, T_screen screen)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIGroupSetBackground                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIGroupSetBackground declares the background of the group you         */
-/*  passed.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Note that the background is not drawn until a UIGroupDraw command     */
-/*  is issued.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIGroup group             -- Group to change background of          */
-/*                                                                          */
-/*    T_resource background       -- Background resource to use             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIGroupSetBackground
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIGroupSetBackground declares the background of the group you
+ *  passed.
+ *
+ *  NOTE: 
+ *  Note that the background is not drawn until a UIGroupDraw command
+ *  is issued.
+ *
+ *  @param group -- Group to change background of
+ *  @param background -- Background resource to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIGroupSetBackground(T_UIGroup group, T_resource background)
 {
     T_UIGroupStruct *p_group ;
@@ -530,50 +349,23 @@ T_void UIGroupSetBackground(T_UIGroup group, T_resource background)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectCreate                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIObjectCreate creates a general object that can be added to a        */
-/*  UI Group.  In addition, you can allocate additional memory for whatever */
-/*  use you see fit (usually for the specific UI objects like buttons).     */
-/*  Just tell it how much space you need.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 size               -- Size for ui object to allocate in      */
-/*                                   addition to the normal amount.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_UIObject                  -- Pointer to whole object.               */
-/*                                   Returns UI_OBJECT_BAD if it count not  */
-/*                                   allocate enough memory.                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIObjectCreate creates a general object that can be added to a
+ *  UI Group.  In addition, you can allocate additional memory for whatever
+ *  use you see fit (usually for the specific UI objects like buttons).
+ *  Just tell it how much space you need.
+ *
+ *  @param size -- Size for ui object to allocate in
+ *      addition to the normal amount.
+ *
+ *  @return Pointer to whole object.
+ *      Returns UI_OBJECT_BAD if it count not
+ *      allocate enough memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_UIObject UIObjectCreate(T_word16 size)
 {
     T_UIObjectStruct *p_object ;
@@ -605,58 +397,28 @@ T_UIObject UIObjectCreate(T_word16 size)
     return ((T_UIObject)(((T_UIObjectStruct *)p_object)+1)) ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectSetArea                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIObjectSetArea declares the region in which the UI object exists.    */
-/*  In general, UI objects should never overlap, and if they do, they       */
-/*  will have unpredictable results.  Think of the ui objects as tiles,     */
-/*  and just keep them that way.                                            */
-/*    For this routine, pass the bounds of the rectangle along with the     */
-/*  object handle to change.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure all sides are inside the screen and that left is left of    */
-/*  right and top is above bottom.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_UIObject object           -- Object to change bounds of             */
-/*                                                                          */
-/*    left                        -- Left edge of object                    */
-/*                                                                          */
-/*    top                         -- Top edge of object                     */
-/*                                                                          */
-/*    right                       -- Right edge of object                   */
-/*                                                                          */
-/*    bottom                      -- Bottom edge of object                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectSetArea
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIObjectSetArea declares the region in which the UI object exists.
+ *  In general, UI objects should never overlap, and if they do, they
+ *  will have unpredictable results.  Think of the ui objects as tiles,
+ *  and just keep them that way.
+ *  For this routine, pass the bounds of the rectangle along with the
+ *  object handle to change.
+ *
+ *  NOTE: 
+ *  Make sure all sides are inside the screen and that left is left of
+ *  right and top is above bottom.
+ *
+ *  @param object -- Object to change bounds of
+ *  @param left -- Left edge of object
+ *  @param top -- Top edge of object
+ *  @param right -- Right edge of object
+ *  @param bottom -- Bottom edge of object
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIObjectSetArea(
            T_UIObject object,
            T_word16 left,
@@ -685,48 +447,20 @@ T_void UIObjectSetArea(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectSetEventHandler                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Most objects will need an event handler to control the functionality  */
-/*  of the UI object.  For example, buttons need to press inward when       */
-/*  clicked and windows need to scroll.  This routine declares the handler  */
-/*  for the ui object.  Passing a NULL will also turn off the event         */
-/*  handler.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_uiEventHandler uiEventHandler  -- Routine to handle UI events.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectSetEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  Most objects will need an event handler to control the functionality
+ *  of the UI object.  For example, buttons need to press inward when
+ *  clicked and windows need to scroll.  This routine declares the handler
+ *  for the ui object.  Passing a NULL will also turn off the event
+ *  handler.
+ *
+ *  @param object -- UI Object
+ *  @param uiEventHandler -- Routine to handle UI events.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void UIObjectSetEventHandler(
            T_UIObject object,
            T_uiEventHandler uiEventHandler)
@@ -745,44 +479,15 @@ T_void UIObjectSetEventHandler(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectGetLeftPosition                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIObjectGetLeftPosition returns the left location of the UI Object.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to get left of                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectGetLeftPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIObjectGetLeftPosition returns the left location of the UI Object.
+ *
+ *  @param object -- Object to get left of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 UIObjectGetLeftPosition(T_UIObject object)
 {
     T_UIObjectStruct *p_object ;
@@ -803,44 +508,15 @@ T_word16 UIObjectGetLeftPosition(T_UIObject object)
     return left ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectGetTopPosition                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIObjectGetTopPosition returns the top location of the UI Object.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to get top of                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectGetTopPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIObjectGetTopPosition returns the top location of the UI Object.
+ *
+ *  @param object -- Object to get top of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 UIObjectGetTopPosition(T_UIObject object)
 {
     T_UIObjectStruct *p_object ;
@@ -861,44 +537,15 @@ T_word16 UIObjectGetTopPosition(T_UIObject object)
     return top ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectGetRightPosition                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIObjectGetRightPosition returns the right location of the UI Object. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to get right of                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectGetRightPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIObjectGetRightPosition returns the right location of the UI Object.
+ *
+ *  @param object -- Object to get right of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 UIObjectGetRightPosition(T_UIObject object)
 {
     T_UIObjectStruct *p_object ;
@@ -919,45 +566,16 @@ T_word16 UIObjectGetRightPosition(T_UIObject object)
     return right ;
 }
 
-/****************************************************************************/
-/*  Routine:  UIObjectGetBottomPosition                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UIObjectGetBottomPosition returns the bottom location of the UI       */
-/*  Object.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to get bottom of                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/23/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  UIObjectGetBottomPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  UIObjectGetBottomPosition returns the bottom location of the UI
+ *  Object.
+ *
+ *  @param object -- Object to get bottom of
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 UIObjectGetBottomPosition(T_UIObject object)
 {
     T_UIObjectStruct *p_object ;
@@ -979,50 +597,18 @@ T_word16 UIObjectGetBottomPosition(T_UIObject object)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IUIGroupMouseHandler               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIGroupMouseHandler is an internal function that controls and        */
-/*  interprets the mouse clicks entered by the user while a UIGroup is up.  */
-/*  Each ui object inside the group is checked to see if the action         */
-/*  pertains to that object.                                                */
-/*    Technically, IUIGroupMouseHandler is a fitler that converts from      */
-/*  mouse events to appropriate UI events (including focus events).         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIObjectHandleEvent                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/25/94  Modified to use keep track of the last legally focused */
-/*                   item.                                                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIGroupMouseHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIGroupMouseHandler is an internal function that controls and
+ *  interprets the mouse clicks entered by the user while a UIGroup is up.
+ *  Each ui object inside the group is checked to see if the action
+ *  pertains to that object.
+ *  Technically, IUIGroupMouseHandler is a fitler that converts from
+ *  mouse events to appropriate UI events (including focus events).
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUIGroupMouseHandler(
                   E_mouseEvent event,
                   T_word16 x,
@@ -1108,50 +694,18 @@ static T_void IUIGroupMouseHandler(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIGroupKeyboardHandler            * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIGroupKeyboardHandler handles all the events that are sent from     */
-/*  the keyboard module.  The main thing that this routine does is handle   */
-/*  TAB, SHIFT-TAB, and the sending of keys down to the active focus.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_keyboardEvent event       -- Keyboard event to process              */
-/*                                                                          */
-/*    T_byte16 key                -- Key to process                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    KeyboardGetScanCode                                                   */
-/*    KeyboardBufferGet                                                     */
-/*    IUIGroupChangeFocus                                                   */
-/*    IUIObjectHandleEvent                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIGroupKeyboardHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIGroupKeyboardHandler handles all the events that are sent from
+ *  the keyboard module.  The main thing that this routine does is handle
+ *  TAB, SHIFT-TAB, and the sending of keys down to the active focus.
+ *
+ *  @param event -- Keyboard event to process
+ *  @param key -- Key to process
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUIGroupKeyboardHandler(
                   E_keyboardEvent event,
                   T_word16 key)
@@ -1248,53 +802,23 @@ static T_void IUIGroupKeyboardHandler(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIObjectHandleEvent               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    All events sent to an object group IUIObjectHandleEvent.  This        */
-/*  routine checks to see if the given object can handle the given event.   */
-/*  If no event handler is found, the event is discarded and ignored.       */
-/*  If there is, the handler is called with the given event.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to have event processed         */
-/*                                                                          */
-/*    T_UIEvent event             -- UI event to process                    */
-/*                                                                          */
-/*    T_word16 data1              -- Accessory data.  Usually mouse X coord */
-/*                                                                          */
-/*    T_word16 data2              -- Accessory data.  Usually mouse Y coord */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- Flag to tell if event was processed.   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Object's ui event handler (if defined).                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIObjectHandleEvent
+ *-------------------------------------------------------------------------*/
+/**
+ *  All events sent to an object group IUIObjectHandleEvent.  This
+ *  routine checks to see if the given object can handle the given event.
+ *  If no event handler is found, the event is discarded and ignored.
+ *  If there is, the handler is called with the given event.
+ *
+ *  @param object -- Object to have event processed
+ *  @param event -- UI event to process
+ *  @param data1 -- Accessory data.  Usually mouse X coord
+ *  @param data2 -- Accessory data.  Usually mouse Y coord
+ *
+ *  @return Flag to tell if event was processed.
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IUIObjectHandleEvent(
                     T_UIObject object,
                     E_UIEvent event,
@@ -1323,50 +847,21 @@ static E_Boolean IUIObjectHandleEvent(
     return returnStatus ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIObjectDestroy                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIObjectDestory will finish out and destroy an object that is        */
-/*  no longer is needed.  Note that it passes the UI_EVENT_DESTROY event    */
-/*  to the object before destruction.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Note:  The reason that this routine is internal is that it is         */
-/*           ONLY called by UIGroupDestroy.  If you have an object that     */
-/*           you need to destroy and not a member of a group, you have      */
-/*           done something very wrong or against protocol.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIObjectHandleEvent                                                  */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIObjectDestroy
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIObjectDestory will finish out and destroy an object that is
+ *  no longer is needed.  Note that it passes the UI_EVENT_DESTROY event
+ *  to the object before destruction.
+ *
+ *  NOTE:
+ *  The reason that this routine is internal is that it is
+ *  ONLY called by UIGroupDestroy.  If you have an object that
+ *  you need to destroy and not a member of a group, you have
+ *  done something very wrong or against protocol.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUIObjectDestroy(T_UIObject object)
 {
     T_UIObjectStruct *p_object ;
@@ -1387,51 +882,22 @@ static T_void IUIObjectDestroy(T_UIObject object)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIObjectIsInside                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIObjectIsInside is used to determine if a passed coordinated        */
-/*  is inclusively located inside of the given object.  This is typically   */
-/*  used by a UI Group to determine which object the mouse is over.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_UIObject object           -- Object to check if inside              */
-/*                                                                          */
-/*    T_word16 x                  -- X Coordinate to check                  */
-/*                                                                          */
-/*    T_word16 y                  -- Y Coordinate to check                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE  = coordinate is inside           */
-/*                                   FALSE = coordinate is outside          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/21/94  Created                                                */
-/*    LES  11/23/94  Removed need for UIObjectGetAddOn by moving pointers.  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIObjectIsInside
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIObjectIsInside is used to determine if a passed coordinated
+ *  is inclusively located inside of the given object.  This is typically
+ *  used by a UI Group to determine which object the mouse is over.
+ *
+ *  @param object -- Object to check if inside
+ *  @param x -- X Coordinate to check
+ *  @param y -- Y Coordinate to check
+ *
+ *  @return TRUE  = coordinate is inside
+ *      FALSE = coordinate is outside
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IUIObjectIsInside(T_UIObject object, T_word16 x, T_word16 y)
 {
     E_Boolean inside ;
@@ -1456,44 +922,16 @@ static E_Boolean IUIObjectIsInside(T_UIObject object, T_word16 x, T_word16 y)
     return inside ;
 }
 
-/****************************************************************************/
-/*  Routine:  IUIGroupChangeFocus                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUIGroupChangeFocus changes the focus of the active object in the     */
-/*  currently active group.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 indexObject       -- Number of item in current group        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IUIObjectHandleEvent                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/25/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUIGroupChangeFocus
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUIGroupChangeFocus changes the focus of the active object in the
+ *  currently active group.
+ *
+ *  @param indexObject -- Number of item in current group
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUIGroupChangeFocus(T_sword16 indexObject)
 {
     T_UIGroupStruct *p_group ;
@@ -1536,6 +974,7 @@ static T_void IUIGroupChangeFocus(T_sword16 indexObject)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  UI.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  UI.C
+ *-------------------------------------------------------------------------*/

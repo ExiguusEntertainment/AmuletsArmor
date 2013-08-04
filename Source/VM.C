@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  VM.C                                                           */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  VM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Virtual Memory System -- NOT USED!
+ *
+ * @addtogroup VM
+ * @brief Virtual Memory
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "FILE.H"
 #include "MEMORY.H"
 #include "VM.H"
@@ -88,51 +97,21 @@ T_void IVMShiftBlockDown(T_vmFile file, T_vmBlock block, T_word32 *place) ;
 
 T_void IVMTruncate(T_vmFile file, T_word32 place) ;
 
-/****************************************************************************/
-/*  Routine:  VMOpen                                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMOpen opens a file for VM file access.  If the file does not exist,  */
-/*  it is created.  Minimal setup is used when first created.               */
-/*  Pass to this routine the filename WITHOUT an extension.  A .idx postfix */
-/*  is added for the index and A .rec postfix is added for the records      */
-/*  file.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_filename         -- File to open for VM access.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_vmFile file               -- File that was opened.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    strcpy                                                                */
-/*    strcat                                                                */
-/*    FileOpen                                                              */
-/*    FileLoad                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMOpen
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMOpen opens a file for VM file access.  If the file does not exist,
+ *  it is created.  Minimal setup is used when first created.
+ *  Pass to this routine the filename WITHOUT an extension.  A .idx postfix
+ *  is added for the index and A .rec postfix is added for the records
+ *  file.
+ *
+ *  @param p_filename -- File to open for VM access.
+ *
+ *  @return File that was opened.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_vmFile VMOpen(T_byte8 *p_filename)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -201,47 +180,17 @@ T_vmFile VMOpen(T_byte8 *p_filename)
     return((T_vmFile)p_fileInfo) ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMClose                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMClose closes out all of the records opened (but waiting to be       */
-/*  written).  All corresponding junk that is not needed is cleared         */
-/*  from memory.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File that is to be closed.             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IVMUpdate                                                             */
-/*    FileClose                                                             */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMClose
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMClose closes out all of the records opened (but waiting to be
+ *  written).  All corresponding junk that is not needed is cleared
+ *  from memory.
+ *
+ *  @param file -- File that is to be closed.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void VMClose(T_vmFile file)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -276,47 +225,20 @@ T_void VMClose(T_vmFile file)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMAlloc                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMAlloc does all the work of finding a block of the given size in the */
-/*  current virtual memory file.  If no space can be found, a VM_BLOCK_BAD  */
-/*  is returned.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to allocate vm block within       */
-/*                                                                          */
-/*    T_word32 size               -- Size to make the vm block              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_vmBlock                   -- block handle to block, or VM_BLOCK_BAD */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMAlloc
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMAlloc does all the work of finding a block of the given size in the
+ *  current virtual memory file.  If no space can be found, a VM_BLOCK_BAD
+ *  is returned.
+ *
+ *  @param file -- File to allocate vm block within
+ *  @param size -- Size to make the vm block
+ *
+ *  @return block handle to block, or VM_BLOCK_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 T_vmBlock VMAlloc(T_vmFile file, T_word32 size)
 {
     T_vmBlock block ;
@@ -344,48 +266,19 @@ T_vmBlock VMAlloc(T_vmFile file, T_word32 size)
     return block ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMIncRefCount                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMIncRefCount increments the count of references to this block.  This */
-/*  number is very important since it tells whether or not the block is     */
-/*  free.  Accurate reference counts is a must.  Note that newly VMAlloc'd  */
-/*  blocks start with a reference count of 1.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File containing vm block to increment  */
-/*                                                                          */
-/*    T_vmBlock block             -- Block to increment in vm file.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMIncRefCount
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMIncRefCount increments the count of references to this block.  This
+ *  number is very important since it tells whether or not the block is
+ *  free.  Accurate reference counts is a must.  Note that newly VMAlloc'd
+ *  blocks start with a reference count of 1.
+ *
+ *  @param file -- File containing vm block to increment
+ *  @param block -- Block to increment in vm file.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void VMIncRefCount(T_vmFile file, T_vmBlock block)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -412,51 +305,25 @@ T_void VMIncRefCount(T_vmFile file, T_vmBlock block)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMDecRefCount                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMDecRefCount decrements the count of references to this block.  This */
-/*  number is very important since it tells whether or not the block is     */
-/*  free.  Accurate reference counts is a must.  Note that newly VMAlloc'd  */
-/*  blocks start with a reference count of 1.  A reference count of 0 is    */
-/*  a free block.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    VMDecRefCount may destroy all data related to the block if the        */
-/*  reference count goes to zero.  Make VMDecRefCount the last action       */
-/*  performed on any block.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File containing vm block to decrement  */
-/*                                                                          */
-/*    T_vmBlock block             -- Block to decrement in vm file.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMDecRefCount
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMDecRefCount decrements the count of references to this block.  This
+ *  number is very important since it tells whether or not the block is
+ *  free.  Accurate reference counts is a must.  Note that newly VMAlloc'd
+ *  blocks start with a reference count of 1.  A reference count of 0 is
+ *  a free block.
+ *
+ *  NOTE: 
+ *  VMDecRefCount may destroy all data related to the block if the
+ *  reference count goes to zero.  Make VMDecRefCount the last action
+ *  performed on any block.
+ *
+ *  @param file -- File containing vm block to decrement
+ *  @param block -- Block to decrement in vm file.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void VMDecRefCount(T_vmFile file, T_vmBlock block)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -485,45 +352,16 @@ T_void VMDecRefCount(T_vmFile file, T_vmBlock block)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMGetRefCount                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMGetRefCount returns the number of references to this block.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File containing vm block to decrement  */
-/*                                                                          */
-/*    T_vmBlock block             -- Block to decrement in vm file.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMGetRefCount
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMGetRefCount returns the number of references to this block.
+ *
+ *  @param file -- File containing vm block to decrement
+ *  @param block -- Block to decrement in vm file.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 VMGetRefCount(T_vmFile file, T_vmBlock block)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -547,57 +385,32 @@ T_word16 VMGetRefCount(T_vmFile file, T_vmBlock block)
     return refCount ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMLock                                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMLock is used to retrieve a block from the vm file.  In addition,    */
-/*  semaphoring is done to check for read/write access priviledges.  A      */
-/*  block can be locked with a semaphore on reading or writing.  If locked  */
-/*  for writing semaphore, no other locking actions for write access are    */
-/*  allowed.  If the lock requests read priviledge, but the block is        */
-/*  locked with read semaphored, then the lock is stopped.  In addition,    */
-/*  a flag is added to allow for thread blocking.  If TRUE, the calling     */
-/*  will wait until the block is free.  If FALSE, the calling process will  */
-/*  not wait and will not return with a block pointer.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    In this current version, the routine does not make memory write       */
-/*  protected even though the semaphores may request read only.  It is up   */
-/*  to the programmer to make sure read and writes are appropriate to the   */
-/*  semaphore accesses.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File containing vm block to decrement  */
-/*                                                                          */
-/*    T_vmBlock block             -- Block to decrement in vm file.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    void *                      -- Pointer to data block, or NULL         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileRead                                                              */
-/*    VMIncRefCount                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMLock is used to retrieve a block from the vm file.  In addition,
+ *  semaphoring is done to check for read/write access priviledges.  A
+ *  block can be locked with a semaphore on reading or writing.  If locked
+ *  for writing semaphore, no other locking actions for write access are
+ *  allowed.  If the lock requests read priviledge, but the block is
+ *  locked with read semaphored, then the lock is stopped.  In addition,
+ *  a flag is added to allow for thread blocking.  If TRUE, the calling
+ *  will wait until the block is free.  If FALSE, the calling process will
+ *  not wait and will not return with a block pointer.
+ *
+ *  NOTE: 
+ *  In this current version, the routine does not make memory write
+ *  protected even though the semaphores may request read only.  It is up
+ *  to the programmer to make sure read and writes are appropriate to the
+ *  semaphore accesses.
+ *
+ *  @param file -- File containing vm block to decrement
+ *  @param block -- Block to decrement in vm file.
+ *
+ *  @return Pointer to data block, or NULL
+ *
+ *<!-----------------------------------------------------------------------*/
 void *VMLock(
          T_vmFile file,
          T_vmBlock block)
@@ -665,46 +478,17 @@ printf("Locked in at %p\n", p_block) ;
     return((T_void *)p_block->data) ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMUnlock                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMUnlock releases the vm block from memory.  If multiple locks have   */
-/*  been executed, an equal number of unlocks must be performed to remove   */
-/*  the block from memory.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *                    -- Pointer to block previously locked     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    VMDecRefCount                                                         */
-/*    IVMRelease                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMUnlock releases the vm block from memory.  If multiple locks have
+ *  been executed, an equal number of unlocks must be performed to remove
+ *  the block from memory.
+ *
+ *  @param block -- Pointer to block previously locked
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void VMUnlock(void *block)
 {
     T_vmDataBlock *p_block ;
@@ -735,50 +519,25 @@ T_void VMUnlock(void *block)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMCleanUp                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    From time to time, files will become 'pitted' with free blocks that   */
-/*  nothing will use.  When this happens, all the free spots need to be     */
-/*  compressed and expulged.  All free spots are removed and everything is  */
-/*  relocated correctly.  Major files should have this routine called       */
-/*  on them at least once a day.  Note that this routine should only be     */
-/*  called on FULLY CLOSED vm files.  If you don't the file will be         */
-/*  destroyed since two versions will exist (one in memory, one on disk).   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The VM file that is being cleaned-up should NOT be opened at this     */
-/*  time.  No checks are made to confirm this.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_filename         -- Name of file to clean-up               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  From time to time, files will become 'pitted' with free blocks that
+ *  nothing will use.  When this happens, all the free spots need to be
+ *  compressed and expulged.  All free spots are removed and everything is
+ *  relocated correctly.  Major files should have this routine called
+ *  on them at least once a day.  Note that this routine should only be
+ *  called on FULLY CLOSED vm files.  If you don't the file will be
+ *  destroyed since two versions will exist (one in memory, one on disk).
+ *
+ *  NOTE: 
+ *  The VM file that is being cleaned-up should NOT be opened at this
+ *  time.  No checks are made to confirm this.
+ *
+ *  @param p_filename -- Name of file to clean-up
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void VMCleanUp(T_byte8 *p_filename)
 {
     T_vmFile file ;
@@ -823,46 +582,17 @@ T_void VMCleanUp(T_byte8 *p_filename)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  VMDirty                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    VMDirty marks a block dirty so the block is saved to disk.            */
-/*  Otherwise, the block is never saved and any changes are lost.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File containing newly dirty block      */
-/*                                                                          */
-/*    T_vmBlock block             -- Block in file to mark dirty            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  VMDirty
+ *-------------------------------------------------------------------------*/
+/**
+ *  VMDirty marks a block dirty so the block is saved to disk.
+ *  Otherwise, the block is never saved and any changes are lost.
+ *
+ *  @param file -- File containing newly dirty block
+ *  @param block -- Block in file to mark dirty
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void VMDirty(T_vmFile file, T_vmBlock block)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -884,46 +614,17 @@ printf("Mark dirty block %d\n", block) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMCreate                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMCreate opens up a new vm file and vm records file.  Any previous   */
-/*  data is lost.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFileInfo *p_fileInfo    -- Pointer to file info structure to      */
-/*                                   create.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileOpen                                                              */
-/*    FileSeek                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMCreate opens up a new vm file and vm records file.  Any previous
+ *  data is lost.
+ *
+ *  @param p_fileInfo -- Pointer to file info structure to
+ *      create.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMCreate(T_vmFileInfo *p_fileInfo)
 {
     T_file file ;
@@ -964,45 +665,17 @@ puts("IVMCreate") ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMUpdate                                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMUpdate saves all dirty records, mark them as clean, and then saves */
-/*  the whole index.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFileInfo *p_fileInfo    -- Pointer to file info structure to      */
-/*                                   update.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMUpdate saves all dirty records, mark them as clean, and then saves
+ *  the whole index.
+ *
+ *  @param p_fileInfo -- Pointer to file info structure to
+ *      update.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMUpdate(T_vmFileInfo *p_fileInfo)
 {
     T_word32 i ;
@@ -1026,47 +699,21 @@ T_void IVMUpdate(T_vmFileInfo *p_fileInfo)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IVMFindFreeBlockOfSize                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMFindFreeBlockOfSize searches for the first block that meets the    */
-/*  given size requirement.  In addition, it splits the blocks accordingly. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Based on the way this routine works, it is fast, but causes alot      */
-/*  of fragmentation.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to search for block within        */
-/*                                                                          */
-/*    T_word32 size               -- Size to find                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IVMAppendEntry                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMFindFreeBlockOfSize
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMFindFreeBlockOfSize searches for the first block that meets the
+ *  given size requirement.  In addition, it splits the blocks accordingly.
+ *
+ *  NOTE: 
+ *  Based on the way this routine works, it is fast, but causes alot
+ *  of fragmentation.
+ *
+ *  @param file -- File to search for block within
+ *  @param size -- Size to find
+ *
+ *<!-----------------------------------------------------------------------*/
 T_vmBlock IVMFindFreeBlockOfSize(T_vmFile file, T_word32 size)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1154,47 +801,18 @@ T_vmBlock IVMFindFreeBlockOfSize(T_vmFile file, T_word32 size)
     return block ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMCreateBlockAtEnd                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMCreateBlockAtEnd assumes that the best place for a new block is    */
-/*  at the end of the records file (and at the end of the index).           */
-/*  A new block is created there.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to append block to                */
-/*                                                                          */
-/*    T_word32 size               -- Size of block                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IVMAppendEntry                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMCreateBlockAtEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMCreateBlockAtEnd assumes that the best place for a new block is
+ *  at the end of the records file (and at the end of the index).
+ *  A new block is created there.
+ *
+ *  @param file -- File to append block to
+ *  @param size -- Size of block
+ *
+ *<!-----------------------------------------------------------------------*/
 T_vmBlock IVMCreateBlockAtEnd(T_vmFile file, T_word32 size)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1229,46 +847,20 @@ T_vmBlock IVMCreateBlockAtEnd(T_vmFile file, T_word32 size)
     return newEntry ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMFree                                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMFree takes a originally reference allocated block and frees it     */
-/*  and puts it on the linked list of free blocks.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Obviously you should not call this on an already freed block.         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to free block within              */
-/*                                                                          */
-/*    T_vmBlock block             -- Block that is being freed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMFree
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMFree takes a originally reference allocated block and frees it
+ *  and puts it on the linked list of free blocks.
+ *
+ *  NOTE: 
+ *  Obviously you should not call this on an already freed block.
+ *
+ *  @param file -- File to free block within
+ *  @param block -- Block that is being freed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMFree(T_vmFile file, T_vmBlock block)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1301,47 +893,20 @@ printf("Free %p\n", (T_void *)p_fileInfo->p_index->entries[block].memoryOrNext) 
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMRelease                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMRelease makes a block that was in memory be released to disk (and  */
-/*  saves if necessary).                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Obviously you should not call this on an already freed block.         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to release block within           */
-/*                                                                          */
-/*    T_vmBlock block             -- Block that is being released           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IVMSaveIfDirty                                                        */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMRelease
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMRelease makes a block that was in memory be released to disk (and
+ *  saves if necessary).
+ *
+ *  NOTE: 
+ *  Obviously you should not call this on an already freed block.
+ *
+ *  @param file -- File to release block within
+ *  @param block -- Block that is being released
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMRelease(T_vmFile file, T_vmBlock block)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1367,46 +932,17 @@ T_void IVMRelease(T_vmFile file, T_vmBlock block)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMFindLowestBlock                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMFindLowestBlock searches the index to find the lowest block that   */
-/*  is above the given file offset.   If none is found, a zero is returned. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to release block within           */
-/*                                                                          */
-/*    T_vmBlock block             -- Block that is being released           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMFindLowestBlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMFindLowestBlock searches the index to find the lowest block that
+ *  is above the given file offset.   If none is found, a zero is returned.
+ *
+ *  @param file -- File to release block within
+ *  @param place -- Place in VM
+ *
+ *<!-----------------------------------------------------------------------*/
 T_vmBlock IVMFindLowestBlock(T_vmFile file, T_word32 place)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1445,45 +981,17 @@ T_vmBlock IVMFindLowestBlock(T_vmFile file, T_word32 place)
     return bestBlock ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMSaveIfDirty                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMSaveIfDirty checks the given block if is dirty, and if so, saves   */
-/*  it to disk.  Otherwise, nothing happens.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmEntry *p_entry          -- Pointer to entry to check to save      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    FileSeek                                                              */
-/*    FileWrite                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMSaveIfDirty
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMSaveIfDirty checks the given block if is dirty, and if so, saves
+ *  it to disk.  Otherwise, nothing happens.
+ *
+ *  @param p_fileInfo -- Pointer to the file information struct
+ *  @param p_entry -- Pointer to entry to check to save
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMSaveIfDirty(T_vmFileInfo *p_fileInfo, T_vmEntry *p_entry)
 {
     DebugRoutine("IVMSaveIfDirty") ;
@@ -1510,43 +1018,15 @@ puts("Saving block") ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMSaveIndex                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMSaveIndex saves the index file.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFileInfo *p_fileInfo    -- Pointer to the file information struct */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMSaveIndex
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMSaveIndex saves the index file.
+ *
+ *  @param p_fileInfo -- Pointer to the file information struct
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMSaveIndex(T_vmFileInfo *p_fileInfo)
 {
     DebugRoutine("IVMSaveIndex") ;
@@ -1565,46 +1045,15 @@ T_void IVMSaveIndex(T_vmFileInfo *p_fileInfo)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMAppendEntry                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMAppendEntry adds another entry at the bottom of the index.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to append an entry.               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IVMUpdate                                                             */
-/*    MemAlloc                                                              */
-/*    memcpy                                                                */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMAppendEntry
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMAppendEntry adds another entry at the bottom of the index.
+ *
+ *  @param file -- File to append an entry.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 IVMAppendEntry(T_vmFile file)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1668,53 +1117,19 @@ T_word32 IVMAppendEntry(T_vmFile file)
     return block ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMShiftBlockDown                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMShiftBlockDown moves a vm block within the records file to the     */
-/*  given place.  The byte after the block is also returned.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to shift block within             */
-/*                                                                          */
-/*    T_vmBlock block             -- Block to shift                         */
-/*                                                                          */
-/*    T_word32 *place             -- Place to shift down to (and variable   */
-/*                                   to record end of block).               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    FileSeek                                                              */
-/*    FileRead                                                              */
-/*    FileWrite                                                             */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMShiftBlockDown
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMShiftBlockDown moves a vm block within the records file to the
+ *  given place.  The byte after the block is also returned.
+ *
+ *  @param file -- File to shift block within
+ *  @param block -- Block to shift
+ *  @param place -- Place to shift down to (and variable
+ *      to record end of block).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMShiftBlockDown(T_vmFile file, T_vmBlock block, T_word32 *place)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1779,46 +1194,17 @@ T_void IVMShiftBlockDown(T_vmFile file, T_vmBlock block, T_word32 *place)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IVMTruncate                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IVMTruncate clips the end of the vm file so that the file takes up    */
-/*  less disk space.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_vmFile file               -- File to truncate                       */
-/*                                                                          */
-/*    T_word32 place              -- where to truncate the file             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IVMTruncate
+ *-------------------------------------------------------------------------*/
+/**
+ *  IVMTruncate clips the end of the vm file so that the file takes up
+ *  less disk space.
+ *
+ *  @param file -- File to truncate
+ *  @param place -- where to truncate the file
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IVMTruncate(T_vmFile file, T_word32 place)
 {
     T_vmFileInfo *p_fileInfo ;
@@ -1834,6 +1220,7 @@ T_void IVMTruncate(T_vmFile file, T_word32 place)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  VM.C                                                    */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  VM.C
+ *-------------------------------------------------------------------------*/

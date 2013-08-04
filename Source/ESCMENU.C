@@ -645,7 +645,7 @@ void EscapeMenuOpen(void)
     if (!G_escMenuIsOpen) {
         // We are now open (or will be soon)
         G_escMenuIsOpen = TRUE;
-        
+
         ConfigClose();
 
         G_iniFile = ConfigOpen(); // INIFileOpen("config.ini");

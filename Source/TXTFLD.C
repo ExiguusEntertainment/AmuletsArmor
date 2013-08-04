@@ -1,55 +1,30 @@
-/****************************************************************************/
-/*    FILE:  TXTFLD.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  TXTFLD.C
+ *-------------------------------------------------------------------------*/
+/**
+ * User interface componet for handling text field components.  This
+ * handles single line, read-only and modify fields, and
+ * scrollbars.  And also handles colors.
+ *
+ * @addtogroup TXTFLD
+ * @brief Text Field User Interface Component
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "KEYSCAN.H"
 #include "MEMORY.H"
 #include "TXTFLD.H"
 
 static T_TxtfldID G_TxtfldArray[MAX_TXTFLDS];
 static T_word16 G_currentTxtFld=0;
-/****************************************************************************/
-/*  Routine:  TxtfldCreate                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Adds a text form (field) to the screen.                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*  X and Y boundary coordinates for the field, name of the font to use,    */
-/*  the maximum length of the field (in chars), a hotkey, and a return      */
-/*  and tab callback function                                               */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_TxtfldID (id of the Txtfld created)                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtfldCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Adds a text form (field) to the screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_TxtfldID TxtfldCreate (T_word16 x1,
 								 T_word16 y1,
 								 T_word16 x2,
@@ -141,41 +116,14 @@ T_TxtfldID TxtfldCreate (T_word16 x1,
 }
 
 
-/****************************************************************************/
-/*  Routine:  TxtfldDelete / TxtfldCleanUp                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Releases memory allocated to a Txtfld                                 */
-/*    Cleanup releases memory allocated to all 'Txtflds'                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_TxtfldID TxtfldID / none                                                */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtfldDelete / TxtfldCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  Releases memory allocated to a Txtfld
+ *  Cleanup releases memory allocated to all 'Txtflds'
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtfldDelete (T_TxtfldID TxtfldID)
 {
 	T_word16 i;
@@ -226,45 +174,13 @@ T_void TxtfldCleanUp (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  TxtfldSetColor                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Changes the current fore and background colors for TxtfldID             */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    TxtfldID of the text field to be modified, and a fore and back color  */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtfldSetColor
+ *-------------------------------------------------------------------------*/
+/**
+ *  Changes the current fore and background colors for TxtfldID
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtfldSetColor (T_TxtfldID TxtfldID, T_byte8 fc, T_byte8 bc)
 {
 	T_TxtfldStruct *p_Txtfld;
@@ -317,45 +233,13 @@ T_byte8 *TxtfldGetData (T_TxtfldID txtfldID)
 	return (p_txtfld->data);
 }
 
-/****************************************************************************/
-/*  Routine:  TxtfldCursLeft/CursRight                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Moves the cursor position in the Txtfld identified by TxtfldID          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    TxtfldID of the text field to be modified                             */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtfldCursLeft/CursRight
+ *-------------------------------------------------------------------------*/
+/**
+ *  Moves the cursor position in the Txtfld identified by TxtfldID
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtfldCursLeft (T_TxtfldID TxtfldID)
 {
 	T_TxtfldStruct *p_Txtfld;
@@ -395,45 +279,13 @@ T_void TxtfldCursRight (T_TxtfldID TxtfldID)
 }
 
 
-/****************************************************************************/
-/*  Routine:  TxtfldBackSpace/Del                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  Removes a character from the data string in a text field                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    TxtfldID of the text field to be modified                             */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtfldBackSpace/Del
+ *-------------------------------------------------------------------------*/
+/**
+ *  Removes a character from the data string in a text field
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtfldBackSpace (T_TxtfldID TxtfldID)
 {
 	T_word16 i,j;
@@ -527,39 +379,14 @@ T_void TxtfldDel (T_TxtfldID TxtfldID)
 
 
 
-/****************************************************************************/
-/*  Routine:  TxtfldDrawCallBack                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    A routine that is called to draw the Txtfld (callback routine assigned  */
-/*    to p_graphicID, called from GraphicDraw)                              */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID - the graphic that called this routine                    */
-/*    T_word16 index - used to find which Txtfld string to display            */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  TxtfldDrawCallBack
+ *-------------------------------------------------------------------------*/
+/**
+ *  A routine that is called to draw the Txtfld (callback routine assigned
+ *  to p_graphicID, called from GraphicDraw)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TxtfldTextDrawCallBack (T_graphicID graphicID, T_word16 index)
 {
 	T_graphicStruct *p_graphic;
@@ -895,3 +722,8 @@ T_void  TxtfldMouseControl (E_mouseEvent event,
 
 	DebugEnd();
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  TXTFLD.C
+ *-------------------------------------------------------------------------*/

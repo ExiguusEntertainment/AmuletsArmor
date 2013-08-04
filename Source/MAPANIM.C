@@ -1,6 +1,19 @@
-/****************************************************************************/
-/*    FILE:  MAPANIM.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  MAPANIM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Because we wanted more animation effects than provided in the Deep 97
+ * editor, we created .ANI files to store additional information about
+ * a map.  Light, wall, and floor animations are provided here.
+ * It would be nice that when a text based editor is used, these are
+ * loaded as just properties on walls/sectors.
+ *
+ * @addtogroup MAPANIM
+ * @brief Animation for Maps Configuration
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_VIEW.H"
@@ -168,46 +181,20 @@ static T_void IInitAnimSectorForState(
 
 static T_void IMapAnimDoInitStates(T_mapAnimHeaderStruct *p_mapAnimHeader) ;
 
-/****************************************************************************/
-/*  Routine:  MapAnimateLoad                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateLoad loads in a map animation record for the system.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine MUST be called AFTER loading the map, NOT BEFORE.        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 number             -- Number of map animation to load        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_mapAnimation              -- Map animation handle                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    PictureExist                                                          */
-/*    PictureLockData                                                       */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateLoad loads in a map animation record for the system.
+ *
+ *  NOTE: 
+ *  This routine MUST be called AFTER loading the map, NOT BEFORE.
+ *
+ *  @param number -- Number of map animation to load
+ *
+ *  @return Map animation handle
+ *
+ *<!-----------------------------------------------------------------------*/
 T_mapAnimation MapAnimateLoad(T_word32 number)
 {
     T_byte8 name[40] ;
@@ -315,44 +302,15 @@ T_mapAnimation MapAnimateLoad(T_word32 number)
     return ((T_mapAnimation)p_mapAnimHeader) ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapAnimateUnload                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateUnload deletes all data associated with this map animation. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimation mapAnimation -- Map animation to unload                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnlockAndUnfind                                                */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateUnload
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateUnload deletes all data associated with this map animation.
+ *
+ *  @param mapAnimation -- Map animation to unload
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapAnimateUnload(T_mapAnimation mapAnimation)
 {
     T_mapAnimHeaderStruct *p_mapAnimHeader ;
@@ -418,44 +376,16 @@ T_void MapAnimateUnload(T_mapAnimation mapAnimation)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapAnimateUpdate                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateUpdate goes through its list of things to animate and does  */
-/*  them.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimation mapAnimation -- Map animation to update                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateUpdate goes through its list of things to animate and does
+ *  them.
+ *
+ *  @param mapAnimation -- Map animation to update
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapAnimateUpdate(T_mapAnimation mapAnimation)
 {
     T_mapAnimHeaderStruct *p_mapAnimHeader ;
@@ -489,48 +419,16 @@ T_void MapAnimateUpdate(T_mapAnimation mapAnimation)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMapUpdateSides                         * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMapUpdateSides goes through the list of actively changing sides      */
-/*  and updates them.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimation mapAnimation -- Map animation containing sides         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    DoubleLinkListGetFirst                                                */
-/*    DoubleLinkListElementGetNext                                          */
-/*    DoubleLinkListRemoveElement                                           */
-/*    IInitAnimSideForState                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMapUpdateSides
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMapUpdateSides goes through the list of actively changing sides
+ *  and updates them.
+ *
+ *  @param mapAnimation -- Map animation containing sides
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IMapUpdateSides(
                   T_mapAnimHeaderStruct *p_mapAnimHeader,
                   T_word32 delta)
@@ -649,51 +547,22 @@ static T_void IMapUpdateSides(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IInitAnimSideForState                   * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IInitAnimSideForState takes the given animation side and a new        */
-/*  side animation state and makes the change to that state.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that p_animSide is already created and holds the sideNum*/
-/*  and p_side variables.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Which group of animations   */
-/*                                                                          */
-/*    T_mapAnimSide *p_animSide   -- Pointer to animation side in effect    */
-/*                                                                          */
-/*    T_word16 sideStateNumber    -- State number to become.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetUpperTextureForSide                                             */
-/*    MapSetLowerTextureForSide                                             */
-/*    MapSetMainTextureForSide                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IInitAnimSideForState
+ *-------------------------------------------------------------------------*/
+/**
+ *  IInitAnimSideForState takes the given animation side and a new
+ *  side animation state and makes the change to that state.
+ *
+ *  NOTE: 
+ *  It is assumed that p_animSide is already created and holds the sideNum
+ *  and p_side variables.
+ *
+ *  @param p_mapAnimHeader -- Which group of animations
+ *  @param p_animSide -- Pointer to animation side in effect
+ *  @param sideStateNumber -- State number to become.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IInitAnimSideForState(
                   T_mapAnimHeaderStruct *p_mapAnimHeader,
                   T_mapAnimSide *p_animSide,
@@ -743,51 +612,23 @@ static T_void IInitAnimSideForState(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapAnimateStartSide                     * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateStartSide prepares a side to go into the given animation    */
-/*  state.  If the side is already animating, this routine also aborts      */
-/*  the previous state for the new given state.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You have to be careful when you have this called.  Repeat calls       */
-/*  DO reinitialize the state to zero.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Aninmationp of animations   */
-/*                                                                          */
-/*    T_mapAnimSide *p_animSide   -- Pointer to animation side in effect    */
-/*                                                                          */
-/*    T_word16 sideStateNumber    -- State number to become.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    IInitAnimSideForState                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateStartSide
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateStartSide prepares a side to go into the given animation
+ *  state.  If the side is already animating, this routine also aborts
+ *  the previous state for the new given state.
+ *
+ *  NOTE: 
+ *  You have to be careful when you have this called.  Repeat calls
+ *  DO reinitialize the state to zero.
+ *
+ *  @param mapAnimation -- Aninmationp of animations
+ *  @param sideNum -- Pointer to animation side in effect
+ *  @param stateNumber -- State number to become.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapAnimateStartSide(
            T_mapAnimation mapAnimation,
            T_word16 sideNum,
@@ -852,44 +693,16 @@ T_void MapAnimateStartSide(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMapAnimDoInitStates                    * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMapAnimDoInitStates goes through the list of initial states and      */
-/*  starts each state up.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Aninmationp of animations   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapAnimateStartSide                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/10/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMapAnimDoInitStates
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMapAnimDoInitStates goes through the list of initial states and
+ *  starts each state up.
+ *
+ *  @param p_mapAnimHeader -- Aninmationp of animations
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IMapAnimDoInitStates(T_mapAnimHeaderStruct *p_mapAnimHeader)
 {
     T_word16 numInit ;
@@ -936,48 +749,16 @@ static T_void IMapAnimDoInitStates(T_mapAnimHeaderStruct *p_mapAnimHeader)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IMapUpdateWalls                         * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMapUpdateWalls goes through the list of actively changing walls      */
-/*  and updates them.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimation mapAnimation -- Map animation containing walls         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    DoubleLinkListGetFirst                                                */
-/*    DoubleLinkListElementGetNext                                          */
-/*    DoubleLinkListRemoveElement                                           */
-/*    IInitAnimWallForState                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMapUpdateWalls
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMapUpdateWalls goes through the list of actively changing walls
+ *  and updates them.
+ *
+ *  @param mapAnimation -- Map animation containing walls
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IMapUpdateWalls(
                   T_mapAnimHeaderStruct *p_mapAnimHeader,
                   T_word32 delta)
@@ -1088,49 +869,22 @@ static T_void IMapUpdateWalls(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IInitAnimWallForState                   * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IInitAnimWallForState takes the given animation wall and a new        */
-/*  wall animation state and makes the change to that state.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that p_animWall is already created and holds the lineNum*/
-/*  and p_line variables.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Which group of animations   */
-/*                                                                          */
-/*    T_mapAnimWall *p_animWall   -- Pointer to animation wall in effect    */
-/*                                                                          */
-/*    T_word16 wallStateNumber    -- State number to become.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IInitAnimWallForState
+ *-------------------------------------------------------------------------*/
+/**
+ *  IInitAnimWallForState takes the given animation wall and a new
+ *  wall animation state and makes the change to that state.
+ *
+ *  NOTE: 
+ *  It is assumed that p_animWall is already created and holds the lineNum
+ *  and p_line variables.
+ *
+ *  @param p_mapAnimHeader -- Which group of animations
+ *  @param p_animWall -- Pointer to animation wall in effect
+ *  @param wallStateNumber -- State number to become.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IInitAnimWallForState(
                   T_mapAnimHeaderStruct *p_mapAnimHeader,
                   T_mapAnimWall *p_animWall,
@@ -1174,51 +928,23 @@ static T_void IInitAnimWallForState(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapAnimateStartWall                     * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateStartWall prepares a wall to go into the given animation    */
-/*  state.  If the wall is already animating, this routine also aborts      */
-/*  the previous state for the new given state.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You have to be careful when you have this called.  Repeat calls       */
-/*  DO reinitialize the state to zero.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Aninmationp of animations   */
-/*                                                                          */
-/*    T_mapAnimWall *p_animWall   -- Pointer to animation wall in effect    */
-/*                                                                          */
-/*    T_word16 wallStateNumber    -- State number to become.                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    IInitAnimWallForState                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateStartWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateStartWall prepares a wall to go into the given animation
+ *  state.  If the wall is already animating, this routine also aborts
+ *  the previous state for the new given state.
+ *
+ *  NOTE: 
+ *  You have to be careful when you have this called.  Repeat calls
+ *  DO reinitialize the state to zero.
+ *
+ *  @param mapAnimation -- Aninmationp of animations
+ *  @param wallNum -- Pointer to animation wall in effect
+ *  @param stateNumber -- State number to become.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapAnimateStartWall(
            T_mapAnimation mapAnimation,
            T_word16 wallNum,
@@ -1281,48 +1007,16 @@ T_void MapAnimateStartWall(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IMapUpdateSectors                         * INTERNAL *        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMapUpdateSectors goes through the list of actively changing sectors  */
-/*  and updates them.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimation mapAnimation -- Map animation containing sectors       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    DoubleLinkListGetFirst                                                */
-/*    DoubleLinkListElementGetNext                                          */
-/*    DoubleLinkListRemoveElement                                           */
-/*    IInitAnimSectorForState                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMapUpdateSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMapUpdateSectors goes through the list of actively changing sectors
+ *  and updates them.
+ *
+ *  @param mapAnimation -- Map animation containing sectors
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IMapUpdateSectors(
                   T_mapAnimHeaderStruct *p_mapAnimHeader,
                   T_word32 delta)
@@ -1443,51 +1137,23 @@ static T_void IMapUpdateSectors(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IInitAnimSectorForState                   * INTERNAL *        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IInitAnimSectorForState takes the given animation sector and a new    */
-/*  sector animation state and makes the change to that state.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    It is assumed that p_animSector is already created and holds the      */
-/*  sectorNum and p_sector variables.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Which group of animations   */
-/*                                                                          */
-/*    T_mapAnimSector *p_animSector   -- Pointer to animation sector in     */
-/*                                       effect                             */
-/*                                                                          */
-/*    T_word16 sectorStateNumber    -- State number to become.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MapSetFloorTextureForSector                                           */
-/*    MapSetCeilingTextureForSector                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IInitAnimSectorForState
+ *-------------------------------------------------------------------------*/
+/**
+ *  IInitAnimSectorForState takes the given animation sector and a new
+ *  sector animation state and makes the change to that state.
+ *
+ *  NOTE: 
+ *  It is assumed that p_animSector is already created and holds the
+ *  sectorNum and p_sector variables.
+ *
+ *  @param p_mapAnimHeader -- Which group of animations
+ *  @param p_animSector -- Pointer to animation sector in
+ *      effect
+ *  @param sectorStateNumber -- State number to become.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IInitAnimSectorForState(
                   T_mapAnimHeaderStruct *p_mapAnimHeader,
                   T_mapAnimSector *p_animSector,
@@ -1577,52 +1243,24 @@ static T_void IInitAnimSectorForState(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapAnimateStartSector                     * INTERNAL *        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateStartSector prepares a sector to go into the given animation*/
-/*  state.  If the sector is already animating, this routine also aborts    */
-/*  the previous state for the new given state.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You have to be careful when you have this called.  Repeat calls       */
-/*  DO reinitialize the state to zero.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimHeaderStruct *p_mapAnimHeader -- Aninmationp of animations   */
-/*                                                                          */
-/*    T_mapAnimSector *p_animSector   -- Pointer to animation sector in     */
-/*                                       effect                             */
-/*                                                                          */
-/*    T_word16 sectorStateNumber    -- State number to become.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    IInitAnimSectorForState                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateStartSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateStartSector prepares a sector to go into the given animation
+ *  state.  If the sector is already animating, this routine also aborts
+ *  the previous state for the new given state.
+ *
+ *  NOTE: 
+ *  You have to be careful when you have this called.  Repeat calls
+ *  DO reinitialize the state to zero.
+ *
+ *  @param mapAnimation -- Aninmationp of animations
+ *  @param sectorNum -- Pointer to animation sector in
+ *      effect
+ *  @param stateNumber -- State number to become.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void MapAnimateStartSector(
            T_mapAnimation mapAnimation,
            T_word16 sectorNum,
@@ -1690,46 +1328,25 @@ T_void MapAnimateStartSector(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  MapAnimateGetWallDamage                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    MapAnimateGetWallDamage takes an object and returns a damage type and */
-/*  damage amount.  The routine is used to determine if an object is on     */
-/*  a damage wall.  If it is, this routine returns TRUE.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The passed in object must have its area sectors correctly resolved.   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_mapAnimation mapAnimation -- MapAnimation to check                  */
-/*                                                                          */
-/*    T_3dObject *p_object        -- Pointer to object to consider          */
-/*                                                                          */
-/*    T_word16 *p_damageAmount    -- where to return found damage amount    */
-/*                                                                          */
-/*    E_effectDamageType *p_damageType -- Returned damage type              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if any type of damage here.       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  MapAnimateGetWallDamage
+ *-------------------------------------------------------------------------*/
+/**
+ *  MapAnimateGetWallDamage takes an object and returns a damage type and
+ *  damage amount.  The routine is used to determine if an object is on
+ *  a damage wall.  If it is, this routine returns TRUE.
+ *
+ *  NOTE: 
+ *  The passed in object must have its area sectors correctly resolved.
+ *
+ *  @param mapAnimation -- MapAnimation to check
+ *  @param p_obj -- Pointer to object to consider
+ *  @param p_damageAmount -- where to return found damage amount
+ *  @param p_damageType -- Returned damage type
+ *
+ *  @return TRUE if any type of damage here.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean MapAnimateGetWallDamage(
               T_mapAnimation mapAnimation,
               T_3dObject *p_obj,
@@ -1783,6 +1400,7 @@ E_Boolean MapAnimateGetWallDamage(
     return isFound ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  MAPANIM.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  MAPANIM.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  TEXT.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  TEXT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Text User Interface components for handling text on UI objects.
+ *
+ * @addtogroup TEXT
+ * @brief Text UI Component
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "GRAPHICS.H"
 #include "MEMORY.H"
 #include "MOUSEMOD.H"
@@ -11,43 +20,13 @@ static T_textID TextInit (T_word16 lx,
 						  T_word16 ly,
 						  const T_byte8 *string);
 
-/****************************************************************************/
-/*  Routine:  TextCreate                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Adds a text to the current list of texts for a form                   */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    location of text to be displayed, and a text string                   */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_textID (id of the text created)                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  TextCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Adds a text to the current list of texts for a form
+ *
+ *<!-----------------------------------------------------------------------*/
 T_textID TextCreate (T_word16 lx,
 					  T_word16 ly,
 					  const T_byte8 *string)
@@ -76,42 +55,16 @@ T_textID TextCreate (T_word16 lx,
 
 
 
-/****************************************************************************/
-/*  Routine:  TextInit (* INTERNAL *)                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Allocates memory and inits variables for a new text.                */
-/*    Basically, a text object creates a 'graphic' with a null picture      */
-/*    and attaches a callback routine that will draw the text whenever      */
-/*    the graphic is drawn.                                                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    location of text to be displayed, and a text string                   */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_textID (id of the text created)                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  TextInit (
+ *-------------------------------------------------------------------------*/
+/**
+ *  Allocates memory and inits variables for a new text.
+ *  Basically, a text object creates a 'graphic' with a null picture
+ *  and attaches a callback routine that will draw the text whenever
+ *  the graphic is drawn.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_textID TextInit (T_word16 lx,
 								  T_word16 ly,
 								  const T_byte8 *string)
@@ -147,41 +100,14 @@ static T_textID TextInit (T_word16 lx,
 }
 
 
-/****************************************************************************/
-/*  Routine:  TextDelete / TextCleanUp                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Releases memory allocated to a text                                   */
-/*    Cleanup releases memory allocated to all 'texts'                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_textID textID / none                                                */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  TextDelete / TextCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  Releases memory allocated to a text
+ *  Cleanup releases memory allocated to all 'texts'
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TextDelete (T_textID textID)
 {
 	T_word16 i;
@@ -259,39 +185,14 @@ T_void TextSetFont (T_textID textID, T_byte8 *fontname)
 }
 
 
-/****************************************************************************/
-/*  Routine:  TextDrawCallBack                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*    A routine that is called to draw the text (callback routine assigned  */
-/*    to p_graphicID, called from GraphicDraw)                              */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID - the graphic that called this routine                    */
-/*    T_word16 index - used to find which text string to display            */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  TextDrawCallBack
+ *-------------------------------------------------------------------------*/
+/**
+ *  A routine that is called to draw the text (callback routine assigned
+ *  to p_graphicID, called from GraphicDraw)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void TextDrawCallBack (T_graphicID graphicID, T_word16 index)
 {
 	T_graphicStruct *p_graphic;
@@ -429,3 +330,8 @@ T_void TextCleanString (T_byte8 *stringToClean)
 
     DebugEnd();
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  TEXT.C
+ *-------------------------------------------------------------------------*/

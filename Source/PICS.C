@@ -1,49 +1,30 @@
-/****************************************************************************/
-/*    FILE:  PICS.C                                                         */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  PICS.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All graphics are stored in the PICS resource file.  This is the accessor
+ * code to all those pictures.  Pictures can be locked as a picture or
+ * locked as just a raw data file.
+ *
+ * @addtogroup PICS
+ * @brief Picture Resource File
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "PICS.H"
 
 static T_resourceFile G_pictureResFile ;
 static E_Boolean G_picturesActive = FALSE ;
 
-/****************************************************************************/
-/*  Routine:  PicturesInitialize                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PicturesInitialize opens up the picture database in preparation for   */
-/*  all future picture locking and unlocking.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceOpen                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PicturesInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  PicturesInitialize opens up the picture database in preparation for
+ *  all future picture locking and unlocking.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PicturesInitialize(T_void)
 {
     DebugRoutine("PicturesInitialize") ;
@@ -58,45 +39,15 @@ T_void PicturesInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PicturesFinish                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PicturesFinish is called when the pictures resource file is no        */
-/*  longer needed (typically when exiting the program).  When this occurs,  */
-/*  the resource file is closed out.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceClose                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PicturesFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  PicturesFinish is called when the pictures resource file is no
+ *  longer needed (typically when exiting the program).  When this occurs,
+ *  the resource file is closed out.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PicturesFinish(T_void)
 {
     DebugRoutine("PicturesFinish") ;
@@ -111,48 +62,20 @@ T_void PicturesFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureLock                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureLock locks a picture out of the picture database into memory.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *name               -- Name of picture to load                */
-/*                                                                          */
-/*    T_resource *res             -- Pointer to resource to record where    */
-/*                                   the picture came from.  Is used        */
-/*                                   by PictureUnlock.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to picture data.               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceFind                                                          */
-/*    ResourceLock                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureLock
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureLock locks a picture out of the picture database into memory.
+ *
+ *  @param name -- Name of picture to load
+ *  @param res -- Pointer to resource to record where
+ *      the picture came from.  Is used
+ *      by PictureUnlock.
+ *
+ *  @return Pointer to picture data.
+ *
+ *<!-----------------------------------------------------------------------*/
 typedef struct {
     T_byte8 resID[4] ;         /* Should contain "ReS"+'\0' id */
     T_byte8 p_resourceName[14] ; /* Case sensitive, 13 characters + '\0' */
@@ -201,50 +124,22 @@ DebugCheck(found != RESOURCE_BAD) ;
     return (where+(2*sizeof(T_word16))) ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureLockData                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureLockData is the same as PictureLock except that it is used     */
-/*  to lock non-pictures in the picture database.  Therefore, all of the    */
-/*  data is available (pictures skip some bytes at the beginning).          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *name               -- Name of resource to load               */
-/*                                                                          */
-/*    T_resource *res             -- Pointer to resource to record where    */
-/*                                   the resource came from.  Is used       */
-/*                                   by PictureUnlock.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to picture data.               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceFind                                                          */
-/*    ResourceLock                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureLockData
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureLockData is the same as PictureLock except that it is used
+ *  to lock non-pictures in the picture database.  Therefore, all of the
+ *  data is available (pictures skip some bytes at the beginning).
+ *
+ *  @param name -- Name of resource to load
+ *  @param res -- Pointer to resource to record where
+ *      the resource came from.  Is used
+ *      by PictureUnlock.
+ *
+ *  @return Pointer to picture data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *PictureLockData(T_byte8 *name, T_resource *res)
 {
     T_resource found ;
@@ -278,43 +173,15 @@ DebugCheck(found != RESOURCE_BAD) ;
     return where ;
 }
 
-/****************************************************************************/
-/*  Routine:  PictureUnlock                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureUnlock removes a picture that was in memory.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource res              -- Resource to the picture.               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResouceUnlock                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureUnlock
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureUnlock removes a picture that was in memory.
+ *
+ *  @param res -- Resource to the picture.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PictureUnlock(T_resource res)
 {
     DebugRoutine("PictureUnlock") ;
@@ -328,44 +195,18 @@ T_void PictureUnlock(T_resource res)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureExist                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureExist determines if a the given name corresponds to a picture  */
-/*  in the picture resource file.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *name               -- Name of picture to check for existance */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = found, FALSE = not found        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceFind                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/29/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureExist
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureExist determines if a the given name corresponds to a picture
+ *  in the picture resource file.
+ *
+ *  @param name -- Name of picture to check for existance
+ *
+ *  @return TRUE = found, FALSE = not found
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean PictureExist(T_byte8 *name)
 {
     E_Boolean picExist ;
@@ -391,48 +232,18 @@ E_Boolean PictureExist(T_byte8 *name)
     return (picExist) ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureGetXYSize                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureGetXY size gets the size of the picture and returns it by      */
-/*  reference.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_picture           -- Pointer to the picture to get size of  */
-/*                                                                          */
-/*    T_word16 *sizeX             -- Get the size of the picture in the X   */
-/*                                                                          */
-/*    T_word16 *sizeY             -- Get the size of the picture in the Y   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureGetXYSize
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureGetXY size gets the size of the picture and returns it by
+ *  reference.
+ *
+ *  @param p_picture -- Pointer to the picture to get size of
+ *  @param sizeX -- Get the size of the picture in the X
+ *  @param sizeY -- Get the size of the picture in the Y
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PictureGetXYSize(T_void *p_picture, T_word16 *sizeX, T_word16 *sizeY)
 {
     T_word16 *p_data ;
@@ -452,45 +263,19 @@ T_void PictureGetXYSize(T_void *p_picture, T_word16 *sizeX, T_word16 *sizeY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureFind                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureFind finds the corresponding resource handle for the given     */
-/*  resource name.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 * name              -- Name of resource to find.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_resource                  -- Corresponding resource handle or       */
-/*                                   RESOURCE_BAD                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceFind                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureFind
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureFind finds the corresponding resource handle for the given
+ *  resource name.
+ *
+ *  @param name -- Name of resource to find.
+ *
+ *  @return Corresponding resource handle or
+ *      RESOURCE_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 T_resource PictureFind(T_byte8 *name)
 {
     T_resource res ;
@@ -506,43 +291,15 @@ T_resource PictureFind(T_byte8 *name)
     return res ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureUnfind                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureUnfind removes all references to the given resource picture.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource res              -- Resource to unfind                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceUnfind                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/12/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureUnfind
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureUnfind removes all references to the given resource picture.
+ *
+ *  @param res -- Resource to unfind
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PictureUnfind(T_resource res)
 {
     DebugRoutine("PictureUnfind") ;
@@ -554,43 +311,15 @@ T_void PictureUnfind(T_resource res)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureUnlockAndUnfind                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureUnlockAndUnfind does a PictureUnlock and then a PictureUnfind. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource res              -- Resource to unlock and unfind          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceUnfind                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/27/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureUnlockAndUnfind
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureUnlockAndUnfind does a PictureUnlock and then a PictureUnfind.
+ *
+ *  @param res -- Resource to unlock and unfind
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PictureUnlockAndUnfind(T_resource res)
 {
     DebugRoutine("PictureUnlockAndUnfind") ;
@@ -603,46 +332,23 @@ T_void PictureUnlockAndUnfind(T_resource res)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureLockQuick                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureLockQuick is a simpler lock routine for a picture since it     */
-/*  takes the resource handle of an already found picture (from             */
-/*  PictureFind).                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Do NOT call GrDrawBitmap (or similar) with the returned pointer       */
-/*  from this routine.  Use PictureToBitmap to get the correct pointer.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource res              -- Resource of picture to lock.           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to resource data.              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceLock                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureLockQuick
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureLockQuick is a simpler lock routine for a picture since it
+ *  takes the resource handle of an already found picture (from
+ *  PictureFind).
+ *
+ *  NOTE: 
+ *  Do NOT call GrDrawBitmap (or similar) with the returned pointer
+ *  from this routine.  Use PictureToBitmap to get the correct pointer.
+ *
+ *  @param res -- Resource of picture to lock.
+ *
+ *  @return Pointer to resource data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *PictureLockQuick(T_resource res)
 {
     T_byte8 *p_where ;
@@ -660,45 +366,22 @@ T_byte8 *PictureLockQuick(T_resource res)
     return (p_where+(2*sizeof(T_word16))) ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureToBitmap                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureToBitmap converts a picture pointer (from PictureLock) into    */
-/*  a corresponding bitmap pointer for use by the graphic drawing           */
-/*  routines.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure you ONLY pass a pointer from PictureLock or PictureLockQuick*/
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *pic                -- Pointer to picture                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_bitmap *                  -- Pointer to bitmap                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureToBitmap
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureToBitmap converts a picture pointer (from PictureLock) into
+ *  a corresponding bitmap pointer for use by the graphic drawing
+ *  routines.
+ *
+ *  NOTE: 
+ *  Make sure you ONLY pass a pointer from PictureLock or PictureLockQuick
+ *
+ *  @param pic -- Pointer to picture
+ *
+ *  @return Pointer to bitmap
+ *
+ *<!-----------------------------------------------------------------------*/
 T_bitmap *PictureToBitmap(T_byte8 *pic)
 {
     T_bitmap *p_bitmap ;
@@ -713,43 +396,17 @@ T_bitmap *PictureToBitmap(T_byte8 *pic)
     return(&p_bitmap[-1]) ;
 }
 
-/****************************************************************************/
-/*  Routine: PictureGetWidth                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureGetWidth returns the pictures with.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_picture           -- Pointer to the picture to get size of  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- picture width                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureGetWidth
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureGetWidth returns the pictures with.
+ *
+ *  @param p_picture -- Pointer to the picture to get size of
+ *
+ *  @return picture width
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PictureGetWidth(T_void *p_picture)
 {
     T_word16 width ;
@@ -770,43 +427,17 @@ T_word16 PictureGetWidth(T_void *p_picture)
 }
 
 
-/****************************************************************************/
-/*  Routine: PictureGetHeight                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureGetHeight returns the picture height                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_picture           -- Pointer to the picture to get size of  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- picture height                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureGetHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureGetHeight returns the picture height
+ *
+ *  @param p_picture -- Pointer to the picture to get size of
+ *
+ *  @return picture height
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PictureGetHeight(T_void *p_picture)
 {
     T_word16 height ;
@@ -827,46 +458,17 @@ T_word16 PictureGetHeight(T_void *p_picture)
 }
 
 #ifndef NDEBUG
-/****************************************************************************/
-/*  Routine:  PicturePrint                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PicturePrint prints out the structure related to the given picture    */
-/*  to the given output.                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    FILE *fp                    -- File to output picture info            */
-/*                                                                          */
-/*    T_void *p_pic               -- Picture to print                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fprintf                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PicturePrint
+ *-------------------------------------------------------------------------*/
+/**
+ *  PicturePrint prints out the structure related to the given picture
+ *  to the given output.
+ *
+ *  @param fp -- File to output picture info
+ *  @param p_pic -- Picture to print
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PicturePrint(FILE *fp, T_void *p_pic)
 {
     T_word16 *p_data ;
@@ -883,43 +485,13 @@ T_void PicturePrint(FILE *fp, T_void *p_pic)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PicturesDump                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PicturesDump outputs the picture index file.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceDumpIndex                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/24/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PicturesDump
+ *-------------------------------------------------------------------------*/
+/**
+ *  PicturesDump outputs the picture index file.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PicturesDump(T_void)
 {
     DebugRoutine("PicturesDump") ;
@@ -947,46 +519,23 @@ T_void PictureCheck(T_void *p_picture)
 
 #endif
 
-/****************************************************************************/
-/*  Routine: PictureLockDataQuick                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureLockQuick is a simpler lock routine for a picture since it     */
-/*  takes the resource handle of an already found picture (from             */
-/*  PictureFind).                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Do NOT call GrDrawBitmap (or similar) with the returned pointer       */
-/*  from this routine.  Use PictureToBitmap to get the correct pointer.     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_resource res              -- Resource of picture to lock.           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Pointer to resource data.              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceLock                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureLockDataQuick
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureLockQuick is a simpler lock routine for a picture since it
+ *  takes the resource handle of an already found picture (from
+ *  PictureFind).
+ *
+ *  NOTE: 
+ *  Do NOT call GrDrawBitmap (or similar) with the returned pointer
+ *  from this routine.  Use PictureToBitmap to get the correct pointer.
+ *
+ *  @param res -- Resource of picture to lock.
+ *
+ *  @return Pointer to resource data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *PictureLockDataQuick(T_resource res)
 {
     T_byte8 *p_where ;
@@ -1004,44 +553,18 @@ T_byte8 *PictureLockDataQuick(T_resource res)
     return (p_where) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PictureGetName                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PictureGetName returns a pointer to the picture's stub name (without  */
-/*  sub-directory info.)                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_void *p_picture           -- Pointer to the picture                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8 *                   -- Found name                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ResourceGetName                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PictureGetName
+ *-------------------------------------------------------------------------*/
+/**
+ *  PictureGetName returns a pointer to the picture's stub name (without
+ *  sub-directory info.)
+ *
+ *  @param p_picture -- Pointer to the picture
+ *
+ *  @return Found name
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *PictureGetName(T_void *p_picture)
 {
     T_byte8 *p_name ;
@@ -1058,6 +581,7 @@ T_byte8 *PictureGetName(T_void *p_picture)
     return p_name ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  PICS.C                                                  */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  PICS.C
+ *-------------------------------------------------------------------------*/

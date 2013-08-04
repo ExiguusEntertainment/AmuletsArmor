@@ -1,6 +1,23 @@
-/****************************************************************************/
-/*    FILE:  CMDQUEUE.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CMDQUEUE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The CmdQueue (or "Command Queue") is used to store up requests from
+ * the client to the server.  As the commands are sent, an ACK packet
+ * must be received before the next one is processed.  BUT, this isn't a
+ * linear list of commands, but a list per packet type allowing most
+ * commands to be handled in a mostly parallel format.  Most of this is
+ * code has been replaced by the CSYNCPCK synchronized communication code
+ * and the rest is incorrectly implemented for a peer to peer network
+ * instead of a client/server network.
+ * MORE WORK GOES HERE!
+ *
+ * @addtogroup CMDQUEUE
+ * @brief Queue of Packets and Commands for Networking
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "COMM.H"
 #include "CMDQUEUE.H"
 #include "GENERAL.H"
@@ -241,39 +258,17 @@ T_word32 G_packetsAlloc = 0 ;
 T_word32 G_packetsFree = 0 ;
 #endif
 
-/****************************************************************************/
-/*  Routine:  CmdQInitialize                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQInitialize clears out all the variables that are necessary for    */
-/*  the CmdQ module.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine needs to be called AFTER all ports are opened.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQInitialize clears out all the variables that are necessary for
+ *  the CmdQ module.
+ *
+ *  NOTE: 
+ *  This routine needs to be called AFTER all ports are opened.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQInitialize(T_void)
 {
     DebugRoutine("CmdQInitialize") ;
@@ -307,40 +302,16 @@ T_void CmdQInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routines: CmdQRegisterClientCallbacks                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    These functions each take a pointer to an array of function pointers, */
-/*  with PACKET_COMMAND_MAX entries.  ..ServerCallbacks sets this pointer   */
-/*  as the list of server packet callbacks, and ..ClientCallbacks sets this */
-/*  as the list of client packet callbacks.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  08/03/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQRegisterClientCallbacks
+ *-------------------------------------------------------------------------*/
+/**
+ *  These functions each take a pointer to an array of function pointers,
+ *  with PACKET_COMMAND_MAX entries.  ..ServerCallbacks sets this pointer
+ *  as the list of server packet callbacks, and ..ClientCallbacks sets this
+ *  as the list of client packet callbacks.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQRegisterClientCallbacks (T_cmdQActionRoutine *callbacks)
 {
    T_word16 i;
@@ -353,39 +324,14 @@ T_void CmdQRegisterClientCallbacks (T_cmdQActionRoutine *callbacks)
    DebugEnd ();
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQFinish                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQFinish unallocates any memory or structures that are no longer    */
-/*  need by the CmdQ module.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQFinish unallocates any memory or structures that are no longer
+ *  need by the CmdQ module.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQFinish(T_void)
 {
     DebugRoutine("CmdQFinish") ;
@@ -401,39 +347,16 @@ T_void CmdQFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQSetActivePortNum                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQSetActivePortNum sets up the Cmd Queue module for the given       */
-/*  port (and makes the given port the active communications port).         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 num                -- Number of port to make active.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQSetActivePortNum
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQSetActivePortNum sets up the Cmd Queue module for the given
+ *  port (and makes the given port the active communications port).
+ *
+ *  @param num -- Number of port to make active.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQSetActivePortNum(T_word16 num)
 {
     DebugRoutine("CmdQSetActivePortNum") ;
@@ -452,39 +375,16 @@ T_void CmdQSetActivePortNum(T_word16 num)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQGetActivePortNum                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQGetActivePortNum returns the number of the active port being      */
-/*  used.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of port.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQGetActivePortNum
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQGetActivePortNum returns the number of the active port being
+ *  used.
+ *
+ *  @return Number of port.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CmdQGetActivePortNum(T_void)
 {
     T_word16 portNum ;
@@ -500,47 +400,21 @@ T_word16 CmdQGetActivePortNum(T_void)
     return portNum ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQSendShortPacket                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQSendShortPacket prepares a short packet for sending and sends     */
-/*  it over to ICmdQSendPacket for processing.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetShort *p_packet     -- Packet to send                         */
-/*                                                                          */
-/*    T_word16 retryTime          -- How long to wait for acknowledgement   */
-/*                                   before trying to send again.           */
-/*                                                                          */
-/*    T_word32 extraData          -- Extra data for the callback routine.   */
-/*                                                                          */
-/*    T_cmdQPacketCallback *p_callback -- Routine to be called when either  */
-/*                                        the packet is lost or sent.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQSendShortPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQSendShortPacket prepares a short packet for sending and sends
+ *  it over to ICmdQSendPacket for processing.
+ *
+ *  @param p_packet -- Packet to send
+ *  @param retryTime -- How long to wait for acknowledgement
+ *      before trying to send again.
+ *  @param extraData -- Extra data for the callback routine.
+ *  @param p_callback -- Routine to be called when either
+ *      the packet is lost or sent.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQSendShortPacket(
             T_packetShort *p_packet,
             T_word16 retryTime,
@@ -560,47 +434,21 @@ T_void CmdQSendShortPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQSendLongPacket                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQSendLongPacket  prepares a long  packet for sending and sends     */
-/*  it over to ICmdQSendPacket for processing.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetLong  *p_packet     -- Packet to send                         */
-/*                                                                          */
-/*    T_word16 retryTime          -- How long to wait for acknowledgement   */
-/*                                   before trying to send again.           */
-/*                                                                          */
-/*    T_word32 extraData          -- Extra data for the callback routine.   */
-/*                                                                          */
-/*    T_cmdQPacketCallback *p_callback -- Routine to be called when either  */
-/*                                        the packet is lost or sent.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQSendLongPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQSendLongPacket  prepares a long  packet for sending and sends
+ *  it over to ICmdQSendPacket for processing.
+ *
+ *  @param p_packet -- Packet to send
+ *  @param retryTime -- How long to wait for acknowledgement
+ *      before trying to send again.
+ *  @param extraData -- Extra data for the callback routine.
+ *  @param p_callback -- Routine to be called when either
+ *      the packet is lost or sent.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQSendLongPacket(
             T_packetLong *p_packet,
             T_word16 retryTime,
@@ -620,47 +468,21 @@ T_void CmdQSendLongPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICmdQSendPacket                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICmdQSendPacket does all the work of placing a packet in one of the   */
-/*  active command queues and prepares it for sending out.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- Packet to send                 */
-/*                                                                          */
-/*    T_word16 retryTime          -- How long to wait for acknowledgement   */
-/*                                   before trying to send again.           */
-/*                                                                          */
-/*    T_word32 extraData          -- Extra data for the callback routine.   */
-/*                                                                          */
-/*    T_cmdQPacketCallback *p_callback -- Routine to be called when either  */
-/*                                        the packet is lost or sent.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICmdQSendPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICmdQSendPacket does all the work of placing a packet in one of the
+ *  active command queues and prepares it for sending out.
+ *
+ *  @param p_packet -- Packet to send
+ *  @param retryTime -- How long to wait for acknowledgement
+ *      before trying to send again.
+ *  @param extraData -- Extra data for the callback routine.
+ *  @param p_callback -- Routine to be called when either
+ *      the packet is lost or sent.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ICmdQSendPacket(
             T_packetEitherShortOrLong *p_packet,
             T_word16 retryTime,
@@ -725,39 +547,14 @@ T_void ICmdQSendPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQUpdateAllSends                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQUpdateAllSends goes through all the ports and determines what     */
-/*  data needs to be sent and what should wait.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQUpdateAllSends
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQUpdateAllSends goes through all the ports and determines what
+ *  data needs to be sent and what should wait.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQUpdateAllSends(T_void)
 {
     DebugRoutine("CmdQUpdateAllSends") ;
@@ -781,42 +578,15 @@ T_void CmdQUpdateAllSends(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQUpdateAllReceives                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQUpdateAllReceives goes through all the ports looking for data     */
-/*  to take in.  All data that is received is then processed and the        */
-/*  appropriate action for the command is called.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*    AMT  07/15/95  Modified so it doesn't call the callback for the same  */
-/*                   packet twice (in case the other end sent it again)     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQUpdateAllReceives
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQUpdateAllReceives goes through all the ports looking for data
+ *  to take in.  All data that is received is then processed and the
+ *  appropriate action for the command is called.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQUpdateAllReceives(T_void)
 {
     T_packetLong packet ;
@@ -964,45 +734,17 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
     INDICATOR_LIGHT(260, INDICATOR_RED) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICmdQUpdateSendForPort             * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICmdQUpdateSendForPort updates the sending of all packets for this    */
-/*  single port (the currently active port).  Packets that need to be       */
-/*  transferred are sent.  Those that don't, don't.  The amount of packets  */
-/*  sent depends on the baud rate and the last time this routine was        */
-/*  called for this port.                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*    LES  05/22/95  Fixed round robin bug.                                 */
-/*                   Tried to get speed of modem to be self modifying.      */
-/*    AMT  07/15/95  Made it take care of packet ID numbers.                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICmdQUpdateSendForPort
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICmdQUpdateSendForPort updates the sending of all packets for this
+ *  single port (the currently active port).  Packets that need to be
+ *  transferred are sent.  Those that don't, don't.  The amount of packets
+ *  sent depends on the baud rate and the last time this routine was
+ *  called for this port.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ICmdQUpdateSendForPort(T_void)
 {
     T_byte8 currentCmd ;
@@ -1126,40 +868,17 @@ fprintf(G_packetFile, "S(%d) cmd=%2d, id=%ld, time=%ld\n", CmdQGetActivePortNum 
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICmdQDiscardPacket                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICmdQDiscardPacket removes a packet from the given command queue in   */
-/*  the current command queue list.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 commandNum          -- Command in command list to do a        */
-/*                                   packet discard on.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICmdQDiscardPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICmdQDiscardPacket removes a packet from the given command queue in
+ *  the current command queue list.
+ *
+ *  @param commandNum -- Command in command list to do a
+ *      packet discard on.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ICmdQDiscardPacket(T_byte8 commandNum)
 {
     T_cmdQStruct *p_cmdQ ;
@@ -1215,48 +934,25 @@ T_void ICmdQDiscardPacket(T_byte8 commandNum)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQSendPacket                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQSendPacket sets up a short or long packet for sending (and does   */
-/*  so by calling CmdQSendShortPacket or CmdQSendLongPacket).               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    The packetLength field in the packet's header field MUST be set       */
-/*  to either short or long.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- Packet to send                 */
-/*                                                                          */
-/*    T_word16 retryTime          -- How long to wait for acknowledgement   */
-/*                                   before trying to send again.           */
-/*                                                                          */
-/*    T_word32 extraData          -- Extra data for the callback routine.   */
-/*                                                                          */
-/*    T_cmdQPacketCallback *p_callback -- Routine to be called when either  */
-/*                                        the packet is lost or sent.       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQSendPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQSendPacket sets up a short or long packet for sending (and does
+ *  so by calling CmdQSendShortPacket or CmdQSendLongPacket).
+ *
+ *  NOTE: 
+ *  The packetLength field in the packet's header field MUST be set
+ *  to either short or long.
+ *
+ *  @param p_packet -- Packet to send
+ *  @param retryTime -- How long to wait for acknowledgement
+ *      before trying to send again.
+ *  @param extraData -- Extra data for the callback routine.
+ *  @param p_callback -- Routine to be called when either
+ *      the packet is lost or sent.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQSendPacket(
             T_packetEitherShortOrLong *p_packet,
             T_word16 retryTime,
@@ -1275,41 +971,19 @@ T_void CmdQSendPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQClearAllPorts                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQClearAllPorts goes through each port and clears out any packets   */
-/*  that are waiting to be sent or are incoming.  ACK packets are left      */
-/*  alone.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure that this routine is only called when all communications    */
-/*  are finalized.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/24/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQClearAllPorts
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQClearAllPorts goes through each port and clears out any packets
+ *  that are waiting to be sent or are incoming.  ACK packets are left
+ *  alone.
+ *
+ *  NOTE: 
+ *  Make sure that this routine is only called when all communications
+ *  are finalized.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQClearAllPorts(T_void)
 {
     T_word16 numPorts ;
@@ -1331,40 +1005,18 @@ T_void CmdQClearAllPorts(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICmdQClearPort                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICmdQClearPort removes all outgoing packets for the current port      */
-/*  and all incoming packets, too.  ACK packets are left alone.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure that this routine is only called when all communications    */
-/*  are finalized.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/24/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICmdQClearPort
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICmdQClearPort removes all outgoing packets for the current port
+ *  and all incoming packets, too.  ACK packets are left alone.
+ *
+ *  NOTE: 
+ *  Make sure that this routine is only called when all communications
+ *  are finalized.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ICmdQClearPort(T_void)
 {
     T_word16 i ;
@@ -1418,42 +1070,22 @@ static T_void ICmdQClearPort(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CmdQForcedReceive                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CmdQForcedReceive makes the command queue act like it just received   */
-/*  the packet from the inport.  All processing is the same.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NEVER PASS AN ACK PACKET TO THIS ROUTINE.  It does not properly       */
-/*  work with them.                                                         */
-/*    Be sure to make a call to CmdQSetActivePortNum or else this routine   */
-/*  will be unpredictable.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- Packet being forced in         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CmdQForcedReceive
+ *-------------------------------------------------------------------------*/
+/**
+ *  CmdQForcedReceive makes the command queue act like it just received
+ *  the packet from the inport.  All processing is the same.
+ *
+ *  NOTE: 
+ *  NEVER PASS AN ACK PACKET TO THIS ROUTINE.  It does not properly
+ *  work with them.
+ *  Be sure to make a call to CmdQSetActivePortNum or else this routine
+ *  will be unpredictable.
+ *
+ *  @param p_packet -- Packet being forced in
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CmdQForcedReceive(T_packetEitherShortOrLong *p_packet)
 {
     T_word16 command ;
@@ -1472,6 +1104,7 @@ T_void CmdQForcedReceive(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  CMDQUEUE.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CMDQUEUE.C
+ *-------------------------------------------------------------------------*/

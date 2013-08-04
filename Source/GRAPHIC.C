@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  GRAPHIC.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  GRAPHIC.C
+ *-------------------------------------------------------------------------*/
+/**
+ * In the UI system, a Graphic is a single picture or graphic.
+ *
+ * @addtogroup GRAPHIC
+ * @brief Graphic User Interface Component
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "DEBUG.H"
 #include "GRAPHIC.H"
 #include "MEMORY.H"
@@ -10,43 +19,13 @@ static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, T_byte8 *bmname);
 static T_graphicID G_graphicarray[MAX_GRAPHICS];
 static E_Boolean G_drawToActualScreen=TRUE;
 
-/****************************************************************************/
-/*  Routine:  GraphicCreate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Adds a graphic to the current list of graphics for a form             */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x location, y location, and a picture                        */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_graphicID (id of the graphic created)                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Adds a graphic to the current list of graphics for a form
+ *
+ *<!-----------------------------------------------------------------------*/
 T_graphicID GraphicCreate (T_word16 lx, T_word16 ly, T_byte8 *bmname)
 {
 	T_word16 i;
@@ -67,50 +46,13 @@ T_graphicID GraphicCreate (T_word16 lx, T_word16 ly, T_byte8 *bmname)
 	return (G_graphicarray[i]);
 }
 
-/****************************************************************************/
-/*  Routine:  GraphicInit    * INTERNAL *                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Initializes a graphic as well as allocates memory for it.             */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x location, y location, and a picture                        */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_graphicID (ID of the graphic created)                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureFind                                                           */
-/*    PictureLockQuick                                                      */
-/*    PictureUnfind                                                         */
-/*    PictureGetXYSize                                                      */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  Initializes a graphic as well as allocates memory for it.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, T_byte8 *bmname)
 {
 	T_word32 size;
@@ -195,41 +137,14 @@ T_void GraphicSetPostCallBack (T_graphicID graphicID,
 	DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  GraphicDelete / GraphicCleanUp                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Releases memory allocated to a graphic                                */
-/*    Cleanup releases memory allocated to all 'graphics'                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID graphicID / none                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicDelete / GraphicCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  Releases memory allocated to a graphic
+ *  Cleanup releases memory allocated to all 'graphics'
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GraphicDelete (T_graphicID graphicID)
 {
 	T_word16 i;
@@ -283,42 +198,15 @@ T_void GraphicCleanUp (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  GraphicUpdate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Draws a graphic on the screen at the stored locx+xoff, locy+yoff      */
-/*    also will shadow if shadow is set to anything less than 255, and      */
-/*    will not draw graphic if visible or changed are set to FALSE.         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID graphicID                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Draws a graphic on the screen at the stored locx+xoff, locy+yoff
+ *  also will shadow if shadow is set to anything less than 255, and
+ *  will not draw graphic if visible or changed are set to FALSE.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GraphicUpdate (T_graphicID graphicID)
 {
 	T_byte8 *p_pic;
@@ -367,40 +255,14 @@ T_void GraphicUpdate (T_graphicID graphicID)
 
 
 
-/****************************************************************************/
-/*  Routine:  GraphicUpdateAllGraphics                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calls GraphicUpdate for all graphics currently allocated.  Note that  */
-/*    graphic will not draw if visible or changed are set to FALSE.         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicUpdateAllGraphics
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calls GraphicUpdate for all graphics currently allocated.  Note that
+ *  graphic will not draw if visible or changed are set to FALSE.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GraphicUpdateAllGraphics (T_void)
 {
 	T_word16 i;
@@ -476,39 +338,13 @@ T_void GraphicUpdateAllGraphicsBuffered (T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  GraphicDrawAt                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Draws the graphic at a specific x,y location passed in.               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID graphicID, locx, locy                                     */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicDrawAt
+ *-------------------------------------------------------------------------*/
+/**
+ *  Draws the graphic at a specific x,y location passed in.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GraphicDrawAt (T_graphicID graphicID, T_word16 lx, T_word16 ly)
 {
 	T_byte8 *p_pic;
@@ -538,40 +374,13 @@ T_void GraphicDrawAt (T_graphicID graphicID, T_word16 lx, T_word16 ly)
 
 
 
-/****************************************************************************/
-/*  Routine:  GraphicClear                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Draws a box of the specified color over the graphic location          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID graphicID, color                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicClear
+ *-------------------------------------------------------------------------*/
+/**
+ *  Draws a box of the specified color over the graphic location
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GraphicClear (T_graphicID graphicID, T_byte8 clearcolor)
 {
 	T_graphicStruct *p_graphic;
@@ -594,40 +403,13 @@ T_void GraphicClear (T_graphicID graphicID, T_byte8 clearcolor)
 
 
 
-/****************************************************************************/
-/*  Routine:  GraphicHide/GraphicShow/GraphicSetOffSet/GraphicSetShadow     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sets variables in the Graphic structure                               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID graphicID , other params                                  */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicHide/GraphicShow/GraphicSetOffSet/GraphicSetShadow
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sets variables in the Graphic structure
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void GraphicHide (T_graphicID graphicID)
 {
 	T_graphicStruct *p_graphic;
@@ -709,40 +491,13 @@ T_void GraphicSetSize (T_graphicID graphicID, T_word16 sizex, T_word16 sizey)
 }
 
 
-/****************************************************************************/
-/*  Routine:  GraphicIsVisible/GraphicIsAt/GraphicIsShadowed/GraphicIsOffset*/
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Returns E_booleans about the state of the given graphic               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_graphicID graphicID                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicIsVisible/GraphicIsAt/GraphicIsShadowed/GraphicIsOffset
+ *-------------------------------------------------------------------------*/
+/**
+ *  Returns E_booleans about the state of the given graphic
+ *
+ *<!-----------------------------------------------------------------------*/
 
 E_Boolean GraphicIsVisible (T_graphicID graphicID)
 {
@@ -866,3 +621,8 @@ T_void GraphicSetStateBlock(T_void *p_state)
 {
     memcpy(G_graphicarray, p_state, sizeof(G_graphicarray)) ;
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  GRAPHIC.C
+ *-------------------------------------------------------------------------*/

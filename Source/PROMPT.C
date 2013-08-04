@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  Prompt.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  PROMPT.C
+ *-------------------------------------------------------------------------*/
+/**
+ * User Interface for handling simple yes/no prompts.
+ *
+ * @addtogroup Prompt
+ * @brief Prompt Status Bar UI
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "COLOR.H"
 #include "PROMPT.H"
 #include "TICKER.H"
@@ -12,46 +21,12 @@ static T_screen G_tempscreen;
 static T_graphicID G_bargraphic=NULL;
 static T_byte8 G_stringIn[60];
 
-/****************************************************************************/
-/*  Routine:  PromptStatusBarInit/Update/Close                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  PromptStatusBarInit/Update/Close
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void    PromptStatusBarInit (T_byte8 *prompt, T_word16 baserange)
 {
     T_graphicID backgraphic;
@@ -197,46 +172,12 @@ T_void    PromptStatusBarClose (T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  PromptForBoolean                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  PromptForBoolean
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean PromptForBoolean (T_byte8 *prompt, E_Boolean defaultvalue)
 {
     T_TxtboxID TxtboxID;
@@ -275,46 +216,12 @@ E_Boolean PromptForBoolean (T_byte8 *prompt, E_Boolean defaultvalue)
 }
 
 
-/****************************************************************************/
-/*  Routine:  PromptNotify                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  PromptNotify
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PromptNotify (T_byte8 *prompt)
 {
     T_TxtboxID TxtboxID;
@@ -347,46 +254,12 @@ T_void PromptNotify (T_byte8 *prompt)
 
 
 
-/****************************************************************************/
-/*  Routine:  PromptForInteger                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  PromptForInteger
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PromptForInteger  (T_byte8 *prompt,
                             T_word16 defaultvalue,
                             T_word16 min,
@@ -432,46 +305,14 @@ T_word16 PromptForInteger  (T_byte8 *prompt,
 
 
 
-/****************************************************************************/
-/*  Routine:  PromptControl                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*  PromptControl is a callback assigned to the FormCallBack, it's purpose  */
-/*  is to control all prompt functions                                      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*  E_formObjectType objtype                                                */
-/*  T_word16 objstatus - corresponds to ENUM status depending on object     */
-/*  T_word32 objID - corresponds to objID assigned in form file             */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  PromptControl
+ *-------------------------------------------------------------------------*/
+/**
+ *  PromptControl is a callback assigned to the FormCallBack, it's purpose
+ *  is to control all prompt functions
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PromptControl (E_formObjectType objtype,
 					  T_word16 objstatus,
 					  T_word32 objID)
@@ -674,47 +515,16 @@ E_Boolean PromptDisplayContinue (T_byte8 *prompt)
 
 
 
-/****************************************************************************/
-/*  Routine:  PromptForString                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  Displays a prompt and requests a string of data.                        */
-/*  User has an accept/cancel option (returned in E_Boolean)                */
-/*  Note that returned data pointer is only valid until a new form          */
-/*  is loaded!!!!                                                           */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*  prompt (string to prompt with)                                          */
-/*  maxlen (maximum length of data entry)                                   */
-/*  data (string containing data to display/enter)                          */
-/*                                                                          *//*                                                                          *//*                                                                          */
-/*  Outputs:                                                                */
-/*  E_Boolean TRUE if 'accept' was entered,                                 */
-/*  E_Boolean CANCEL if 'cancel' was entered,                               */
-/*  data parameter will be filled with entered data string on return.       */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PromptForString
+ *-------------------------------------------------------------------------*/
+/**
+ *  Displays a prompt and requests a string of data.
+ *  User has an accept/cancel option (returned in E_Boolean)
+ *  Note that returned data pointer is only valid until a new form
+ *  is loaded!!!!
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean PromptForString  (T_byte8 *prompt,
                             T_word16 maxlen,
                             T_byte8 *data)
@@ -766,4 +576,7 @@ E_Boolean PromptForString  (T_byte8 *prompt,
     return (accept);
 }
 
-
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  PROMPT.C
+ *-------------------------------------------------------------------------*/

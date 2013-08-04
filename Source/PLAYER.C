@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  PLAYER.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  PLAYER.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The player is just another object in the game system.  These routines
+ * handle the movement and animation of that player object.
+ *
+ * @addtogroup PLAYER
+ * @brief Player Object
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_IO.H"
 #include "3D_TRIG.H"
@@ -69,44 +79,14 @@ static T_void IPlayerUpdateStealth(T_void) ;
 
 static E_Boolean G_playerTeleported = TRUE ;
 
-/****************************************************************************/
-/*  Routine:  PlayerInitFirst                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerInitFirst sets up the player's basic information that won't     */
-/*  change from level to level.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerInitFirst
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerInitFirst sets up the player's basic information that won't
+ *  change from level to level.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerInitFirst(T_void)
 {
     T_word16 i ;
@@ -122,43 +102,13 @@ T_void PlayerInitFirst(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerInit sets up the player's position information.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveInit                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerInit sets up the player's position information.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerInit(T_3dObject *p_obj)
 {
     DebugRoutine("PlayerInit") ;
@@ -203,44 +153,13 @@ T_void PlayerInit(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerFinish closes out anything that the player position was using.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*    AMT  07/11/95  Made it unlock the picture resources.                  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerFinish closes out anything that the player position was using.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerFinish(T_void)
 {
     DebugRoutine("PlayerFinish") ;
@@ -263,43 +182,15 @@ T_void PlayerFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetX                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetX gets the x location of the current player location.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                   -- X location of player                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetX                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetX
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetX gets the x location of the current player location.
+ *
+ *  @return X location of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 PlayerGetX(T_void)
 {
     T_sword32 x ;
@@ -309,170 +200,58 @@ T_sword32 PlayerGetX(T_void)
     return x ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetY                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetY gets the y location of the current player location.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                   -- Y location of player                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetY                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetY
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetY gets the y location of the current player location.
+ *
+ *  @return Y location of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 PlayerGetY(T_void)
 {
     return ObjMoveGetY(&G_playerMove) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetZ                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetZ gets the z location of the current player location.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32                   -- Z location of player                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetZ                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetZ
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetZ gets the z location of the current player location.
+ *
+ *  @return Z location of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword32 PlayerGetZ(T_void)
 {
     return ObjMoveGetZ(&G_playerMove) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetAngle                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetAngle gets the facing angle of the current player's location.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- facing angle of player                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetAngle                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetAngle
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetAngle gets the facing angle of the current player's location.
+ *
+ *  @return facing angle of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetAngle(T_void)
 {
     return ObjMoveGetAngle(&G_playerMove);
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetAreaSector                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetAreaSector returns the sector that the player is standing    */
-/*  on top of.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- sector being stood on.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetAreaSector                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetAreaSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetAreaSector returns the sector that the player is standing
+ *  on top of.
+ *
+ *  @return sector being stood on.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetAreaSector(T_void)
 {
     T_word16 sector ;
@@ -487,44 +266,16 @@ T_word16 PlayerGetAreaSector(T_void)
     return sector ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetCenterSector                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetCenterSector returns the sector that is under the middle     */
-/*  of the player.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- sector under center of player.         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetCenterSector                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetCenterSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetCenterSector returns the sector that is under the middle
+ *  of the player.
+ *
+ *  @return sector under center of player.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetCenterSector(T_void)
 {
     T_word16 sector ;
@@ -539,43 +290,15 @@ T_word16 PlayerGetCenterSector(T_void)
     return sector ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetX                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetX sets the x location of the current player location.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 x                 -- new X location of player               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetX                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetX
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetX sets the x location of the current player location.
+ *
+ *  @param x -- new X location of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetX(T_sword32 x)
 {
     /* Note that this is the last location. */
@@ -584,43 +307,15 @@ T_void PlayerSetX(T_sword32 x)
     ObjMoveSetX(&G_playerMove, x) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetY                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetY sets the y location of the current player location.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 y                 -- new Y location of player               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetY                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetY
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetY sets the y location of the current player location.
+ *
+ *  @param y -- new Y location of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetY(T_sword32 y)
 {
     /* Note the last player Y location. */
@@ -629,128 +324,42 @@ T_void PlayerSetY(T_sword32 y)
     ObjMoveSetY(&G_playerMove, y) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetZ                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetZ sets the z location of the current player location.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 z                 -- new Z location of player               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetZ                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetZ
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetZ sets the z location of the current player location.
+ *
+ *  @param z -- new Z location of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetZ(T_sword32 z)
 {
     ObjMoveSetZ(&G_playerMove, z) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetAngle                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetAngle changes the facing angle of the player.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 angle              -- new angle of the player                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetAngle                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetAngle
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetAngle changes the facing angle of the player.
+ *
+ *  @param angle -- new angle of the player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetAngle(T_word16 angle)
 {
     ObjMoveSetAngle(&G_playerMove, angle) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerUpdatePosInfo                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerUpdatePosInfo forces the player information to update the       */
-/*  sector and related sector information (like height).                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetAngle                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerUpdatePosInfo
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerUpdatePosInfo forces the player information to update the
+ *  sector and related sector information (like height).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerUpdatePosInfo(T_void)
 {
     DebugRoutine("PlayerUpdatePosInfo") ;
@@ -773,44 +382,14 @@ T_void PlayerUpdatePosInfo(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerIsAboveGround                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerIsAboveGround checks to see if the player is above the ground   */
-/*  (and probably falling).                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveIsAboveGround                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerIsAboveGround
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerIsAboveGround checks to see if the player is above the ground
+ *  (and probably falling).
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean PlayerIsAboveGround(T_void)
 {
     E_Boolean isAbove ;
@@ -825,46 +404,16 @@ E_Boolean PlayerIsAboveGround(T_void)
     return isAbove ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerJump                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerJump causes the player to jump by moving the player up a little */
-/*  and accelerating in the up direction.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 jumpPower          -- Jump by how much                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PlayerSetZ                                                            */
-/*    ObjMoveAccelXYZ                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*    LES  12/06/95  Flying doesn't jump as hard                            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerJump
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerJump causes the player to jump by moving the player up a little
+ *  and accelerating in the up direction.
+ *
+ *  @param jumpPower -- Jump by how much
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerJump(T_word16 jumpPower)
 {
     E_Boolean isFlying ;
@@ -929,43 +478,15 @@ T_void PlayerJump(T_word16 jumpPower)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetMaxVelocity                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetMaxVelocity sets up the player's movement maximum velocity.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 jumpPower          -- Jump by how much                       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveSetMaxVelocity                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetMaxVelocity
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetMaxVelocity sets up the player's movement maximum velocity.
+ *
+ *  @param maxVelocity -- Jump by how much
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetMaxVelocity(T_sword32 maxVelocity)
 {
     DebugRoutine("PlayerSetMaxVelocity") ;
@@ -975,45 +496,16 @@ T_void PlayerSetMaxVelocity(T_sword32 maxVelocity)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerUpdate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerUpdate updates all the movement for the player over the given   */
-/*  delta of time.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 delta              -- Number of timer ticks that have passed.*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveUpdate                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*    AMT  07/18/95  Modified to handle large deltas                        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerUpdate updates all the movement for the player over the given
+ *  delta of time.
+ *
+ *  @param delta -- Number of timer ticks that have passed.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerUpdate(T_word32 delta)
 {
     T_sword16 walkingHeight ;
@@ -1070,7 +562,7 @@ T_void PlayerUpdate(T_word32 delta)
         /* Need to clip Z velocity. */
         if (ObjectGetZVel(PlayerGetObject())<-15000)
           ObjectSetZVel (PlayerGetObject(),-15000);
-        
+
     }
 
     ObjectNormalGravity(PlayerGetObject()) ;
@@ -1240,44 +732,16 @@ for (i=0; i<numSectors; i++)  {
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetTravelDistance                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetTravelDistance determines how far the player traveled on the */
-/*  last call to PlayerUpdate.  Teleportation does not do this.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- distance traveled in unaccurate terms. */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CalculateDistance                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetTravelDistance
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetTravelDistance determines how far the player traveled on the
+ *  last call to PlayerUpdate.  Teleportation does not do this.
+ *
+ *  @return distance traveled in unaccurate terms.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetTravelDistance(T_void)
 {
     T_word16 distance ;
@@ -1295,43 +759,13 @@ T_word16 PlayerGetTravelDistance(T_void)
     return distance ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerStopMoving                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerStopMoving causes the player to come to a complete halt.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveStopMoving                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerStopMoving
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerStopMoving causes the player to come to a complete halt.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerStopMoving(T_void)
 {
     DebugRoutine("PlayerStopMoving") ;
@@ -1341,43 +775,13 @@ T_void PlayerStopMoving(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerAccelXYZ                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerAccelXYZ gives the player a push in a given direction.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveAccelXYZ                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerAccelXYZ
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerAccelXYZ gives the player a push in a given direction.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerAccelXYZ(T_sword32 accelX, T_sword32 accelY, T_sword32 accelZ)
 {
     DebugRoutine("PlayerAccelXYZ") ;
@@ -1387,44 +791,16 @@ T_void PlayerAccelXYZ(T_sword32 accelX, T_sword32 accelY, T_sword32 accelZ)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetFriction                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetFriction returns the friction of the surface under the       */
-/*  player.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Friction under player.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetFriction                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetFriction
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetFriction returns the friction of the surface under the
+ *  player.
+ *
+ *  @return Friction under player.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetFriction(T_void)
 {
     T_word16 friction ;
@@ -1445,44 +821,16 @@ T_word16 PlayerGetFriction(T_void)
     return friction ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetNumAreaSectors                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetNumAreaSectors tells how many area sectors the player is     */
-/*  standing over.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- number of area sectors                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetNumAreaSectors                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetNumAreaSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetNumAreaSectors tells how many area sectors the player is
+ *  standing over.
+ *
+ *  @return number of area sectors
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetNumAreaSectors(T_void)
 {
     T_word16 num ;
@@ -1498,44 +846,16 @@ T_word16 PlayerGetNumAreaSectors(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  PlayerGetNthAreaSector                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetNthAreaSecotr gets one of the sectors in the sector list     */
-/*  of sectors that they are over.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Sector in list                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveGetNumAreaSectors                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetNthAreaSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetNthAreaSecotr gets one of the sectors in the sector list
+ *  of sectors that they are over.
+ *
+ *  @return Sector in list
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetNthAreaSector(T_word16 n)
 {
     T_word16 sector ;
@@ -1550,46 +870,17 @@ T_word16 PlayerGetNthAreaSector(T_word16 n)
     return sector ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerAccelDirection                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerAccelDirection pushes the player in a given facing direction    */
-/*  with the given amount of acceleration.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 direction          -- Direction to move toward               */
-/*                                                                          */
-/*    T_sword16 accel             -- Acceleration amount                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PlayerAccelXYZ                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerAccelDirection
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerAccelDirection pushes the player in a given facing direction
+ *  with the given amount of acceleration.
+ *
+ *  @param direction -- Direction to move toward
+ *  @param accel -- Acceleration amount
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerAccelDirection(T_word16 direction, T_sword16 accel)
 {
     T_sword32 xAccel, yAccel ;
@@ -1606,45 +897,15 @@ T_void PlayerAccelDirection(T_word16 direction, T_sword16 accel)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetCameraView                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetCameraView does the work of transferring the player's        */
-/*  coordinates and facing direction to the actual 3d view.  Until this     */
-/*  is done, the view stays like it normally does.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dSetView                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetCameraView
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetCameraView does the work of transferring the player's
+ *  coordinates and facing direction to the actual 3d view.  Until this
+ *  is done, the view stays like it normally does.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_sword32 G_eyeBall = 0 ;
 static T_word32 G_lastEyed = 0 ;
 
@@ -1785,51 +1046,19 @@ MessagePrintf("delta: %d, diff: %d, step: %d, eye: %d\n", delta, diff>>16, step,
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerTeleport                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerTeleport is the major move all solution to moving the current   */
-/*  POV.  It moves the POV to the x, y, and angle as passed into the        */
-/*  routine.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x                 -- Accurate X coordinate on map           */
-/*                                                                          */
-/*    T_sword16 y                 -- Accurate Y coordinate on map           */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to face when moved.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  06/21/95  Changed from ViewTeleport to PlayerTeleport            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerTeleport
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerTeleport is the major move all solution to moving the current
+ *  POV.  It moves the POV to the x, y, and angle as passed into the
+ *  routine.
+ *
+ *  @param x -- Accurate X coordinate on map
+ *  @param y -- Accurate Y coordinate on map
+ *  @param angle -- Angle to face when moved.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerTeleport(T_sword16 x, T_sword16 y, T_word16 angle)
 {
     T_word16 sector ;
@@ -1860,43 +1089,13 @@ T_void PlayerTeleport(T_sword16 x, T_sword16 y, T_word16 angle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetObject                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetObject tells what the player object is.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetObject tells what the player object is.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *PlayerGetObject(T_void)
 {
 #ifdef SERVER_ONLY
@@ -1906,43 +1105,17 @@ T_3dObject *PlayerGetObject(T_void)
     return G_playerObject ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerAddExternalObject                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerAddExternalObject moves the player along the x, y, and z dir.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 dx, dy, dz        -- External velocity                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjMoveAddExternalVelocity                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/17/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerAddExternalObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerAddExternalObject moves the player along the x, y, and z dir.
+ *
+ *  @param dx -- X External velocity
+ *  @param dy -- Y External velocity
+ *  @param dz -- Z External velocity
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerAddExternalVelocity(T_sword32 dx, T_sword32 dy, T_sword32 dz)
 {
     ObjMoveAddExternalVelocity(
@@ -1952,43 +1125,15 @@ T_void PlayerAddExternalVelocity(T_sword32 dx, T_sword32 dy, T_sword32 dz)
         dz) ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetStance                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetStance returns what stance the player is at.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- stance number                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/24/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetStance
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetStance returns what stance the player is at.
+ *
+ *  @return stance number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetStance(T_void)
 {
     T_word16 stance ;
@@ -2003,45 +1148,16 @@ T_word16 PlayerGetStance(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  PlayerSetStance                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetStance puts the player in another stance.  If the player was */
-/*  hurt recently, it will time out after awhile.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16                    -- stance number                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TickerGet                                                             */
-/*    ObjectSetStance                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/24/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetStance
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetStance puts the player in another stance.  If the player was
+ *  hurt recently, it will time out after awhile.
+ *
+ *  @param stance -- stance number
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetStance(T_word16 stance)
 {
     DebugRoutine("PlayerSetStance") ;
@@ -2063,46 +1179,17 @@ T_void PlayerSetStance(T_word16 stance)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSetBodyPart                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSetBodyPart    changes a part on the body and sends it to all   */
-/*  the other machines.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bodyPartLocation location -- location of body part                  */
-/*                                                                          */
-/*    T_word16 newPart            -- Number of new part                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSendChangeBodyPart                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSetBodyPart
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSetBodyPart    changes a part on the body and sends it to all
+ *  the other machines.
+ *
+ *  @param location -- location of body part
+ *  @param newPart -- Number of new part
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSetBodyPart(
            T_bodyPartLocation location,
            T_word16 newPart)
@@ -2122,44 +1209,18 @@ T_void PlayerSetBodyPart(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetBodyPart                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerGetBodyPart reports the type of part for the given body         */
-/*  location on the player.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_bodyPartLocation location -- location of body part                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- body type                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSendChangeBodyPart                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetBodyPart
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerGetBodyPart reports the type of part for the given body
+ *  location on the player.
+ *
+ *  @param location -- location of body part
+ *
+ *  @return body type
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetBodyPart(T_bodyPartLocation location)
 {
     T_word16 part ;
@@ -2174,49 +1235,17 @@ T_word16 PlayerGetBodyPart(T_bodyPartLocation location)
     return part ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerDraw                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerDraw draws what the player looks like at the given location     */
-/*  on the current screen.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x, y               -- Location on the screen                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectCreateFake                                                      */
-/*    ObjectSetType                                                         */
-/*    ObjectGetBitmap                                                       */
-/*    GrDrawCompressedBitmapAndColor                                        */
-/*    ObjectGetColorizeTable                                                */
-/*    ObjectDestroy                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerDraw draws what the player looks like at the given location
+ *  on the current screen.
+ *
+ *  @param x -- X Location on the screen
+ *  @param y -- Y Location on the screen
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerDraw(T_word16 x, T_word16 y)
 {
     T_word16 i ;
@@ -2254,48 +1283,18 @@ T_void PlayerDraw(T_word16 x, T_word16 y)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerTeleportAlways                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerTeleportAlways is just like PlayerTeleport buts doesn't care    */
-/*  if there is something in the way.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x                 -- Accurate X coordinate on map           */
-/*                                                                          */
-/*    T_sword16 y                 -- Accurate Y coordinate on map           */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to face when moved.              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectTeleportAlways                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerTeleportAlways
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerTeleportAlways is just like PlayerTeleport buts doesn't care
+ *  if there is something in the way.
+ *
+ *  @param x -- Accurate X coordinate on map
+ *  @param y -- Accurate Y coordinate on map
+ *  @param angle -- Angle to face when moved.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerTeleportAlways(T_sword16 x, T_sword16 y, T_word16 angle)
 {
     T_word16 sector ;
@@ -2336,43 +1335,15 @@ T_void PlayerTeleportAlways(T_sword16 x, T_sword16 y, T_word16 angle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerTurnLeft                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerTurnLeft turns the player left by the given fractional amount.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 fraction           -- fractional amount allowed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerTurnLeft
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerTurnLeft turns the player left by the given fractional amount.
+ *
+ *  @param fraction -- fractional amount allowed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerTurnLeft(T_word16 fraction)
 {
     DebugRoutine("PlayerTurnLeft") ;
@@ -2385,43 +1356,15 @@ T_void PlayerTurnLeft(T_word16 fraction)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerTurnRight                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerTurnRight turns the player right the given fractional speed.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 fraction           -- fractional amount allowed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerTurnRight
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerTurnRight turns the player right the given fractional speed.
+ *
+ *  @param fraction -- fractional amount allowed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerTurnRight(T_word16 fraction)
 {
     DebugRoutine("PlayerTurnRight") ;
@@ -2434,43 +1377,15 @@ T_void PlayerTurnRight(T_word16 fraction)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSlideLeft                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSlideLeft slides the player left the given speed.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 fraction           -- fractional amount allowed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSlideLeft
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSlideLeft slides the player left the given speed.
+ *
+ *  @param fraction -- fractional amount allowed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSlideLeft(T_word16 fraction)
 {
     DebugRoutine("PlayerSlideLeft") ;
@@ -2483,43 +1398,15 @@ T_void PlayerSlideLeft(T_word16 fraction)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerSlideRight                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerSlideRight slides the player right the given speed.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 fraction           -- fractional amount allowed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerSlideRight
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerSlideRight slides the player right the given speed.
+ *
+ *  @param fraction -- fractional amount allowed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerSlideRight(T_word16 fraction)
 {
     DebugRoutine("PlayerSlideRight") ;
@@ -2532,43 +1419,15 @@ T_void PlayerSlideRight(T_word16 fraction)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerMoveForward                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerMoveForward moves the player forward the given speed.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 fraction           -- fractional amount allowed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerMoveForward
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerMoveForward moves the player forward the given speed.
+ *
+ *  @param fraction -- fractional amount allowed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerMoveForward(T_word16 fraction)
 {
     DebugRoutine("PlayerMoveForward") ;
@@ -2581,43 +1440,15 @@ T_void PlayerMoveForward(T_word16 fraction)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerMoveBackward                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerMoveBackward moves the player backward the given speed.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 fraction           -- fractional amount allowed              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerMoveBackward
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerMoveBackward moves the player backward the given speed.
+ *
+ *  @param fraction -- fractional amount allowed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerMoveBackward(T_word16 fraction)
 {
     DebugRoutine("PlayerMoveBackward") ;
@@ -2630,43 +1461,13 @@ T_void PlayerMoveBackward(T_word16 fraction)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerMoveNone                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerMoveNone cancels all declared movement for this frame.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerMoveNone
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerMoveNone cancels all declared movement for this frame.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerMoveNone(T_void)
 {
     DebugRoutine("PlayerMoveNone") ;
@@ -2688,43 +1489,13 @@ T_void PlayerMoveNone(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerGetLastSector                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerMoveNone cancels all declared movement for this frame.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerGetLastSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerMoveNone cancels all declared movement for this frame.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PlayerGetLastSector(T_void)
 {
     return G_lastSector ;
@@ -2735,29 +1506,16 @@ T_void PlayerSetLastSector(T_word16 lastSector)
     G_lastSector = lastSector ;
 }
 
-/****************************************************************************/
-/*  Routine:  PlayerJumpForward                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    PlayerJumpForward makes the player take a step forward regardless     */
-/*  of anything else except for colllisions.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 distance           -- How far to jump forward                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  PlayerJumpForward
+ *-------------------------------------------------------------------------*/
+/**
+ *  PlayerJumpForward makes the player take a step forward regardless
+ *  of anything else except for colllisions.
+ *
+ *  @param distance -- How far to jump forward
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PlayerJumpForward(T_word16 distance)
 {
     T_sword32 newX, newY, newZ ;
@@ -2937,7 +1695,7 @@ T_void PlayerTeleported(T_void)
     G_playerTeleported = TRUE ;
 }
 
-/****************************************************************************/
-/*    END OF FILE: PLAYER.C                                                 */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  PLAYER.C
+ *-------------------------------------------------------------------------*/

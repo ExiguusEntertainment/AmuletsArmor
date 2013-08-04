@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  INVENTORY.C                                                    */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  INVENTOR.C
+ *-------------------------------------------------------------------------*/
+/**
+ * User Interface management and storing routines.
+ *
+ * @addtogroup INVENTORY
+ * @brief Interface User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "BANNER.H"
 #include "BUTTON.H"
@@ -3482,9 +3491,6 @@ T_void InventoryWriteItemsList (FILE *fp)
     DebugEnd();
 }
 
-/****************************************************************************/
-/* Write out one item of the given inventory element to the given file. */
-/* LES 06/24/96 Created */
 static T_void IInventoryWriteItem(
                   FILE *fp,
                   T_doubleLinkListElement element)
@@ -5086,10 +5092,6 @@ T_void InventoryResetUse (T_void)
     G_useResetNeeded=FALSE;
 }
 
-/****************************************************************************/
-/* Goes through all the items in one's inventory and deletes items */
-/* as requested. */
-/* LES: 09/16/96 Created */
 T_void InventoryGoThroughAll(T_inventoryGoThroughAllCallback callback)
 {
     E_Boolean destroyme;
@@ -5332,8 +5334,6 @@ E_Boolean InventoryCheckClassCanUseArmor (T_inventoryItemStruct *p_inv,
 }
 
 
-/****************************************************************************/
-/* LES: 10/17/96      Routine to create object and put in mouse hand */
 E_Boolean InventoryCreateObjectInHand(T_word16 itemTypeNum)
 {
     T_inventoryItemStruct *p_inv;
@@ -5412,3 +5412,7 @@ E_Boolean InventoryWeaponIsBow (T_void)
 }
 
 
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  INVENTOR.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  EFX.C                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  EFX.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The EFX system is used to create blood splatters and chips.  It
+ * should probably be called the "Particle" system.
+ *
+ * @addtogroup EFX
+ * @brief Special Efx in the 3D World
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "AREASND.H"
 #include "EFX.H"
 #include "MEMORY.H"
@@ -681,3 +691,8 @@ static T_void EfxUpdateGeneric (T_efxID myID)
 
     DebugEnd();
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  EFX.C
+ *-------------------------------------------------------------------------*/

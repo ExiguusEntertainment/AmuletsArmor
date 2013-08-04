@@ -2,7 +2,7 @@
 *
 *  File              : profile.c
 *  Date Created      : 10/14/94
-*  Description       : 
+*  Description       :
 *
 *  Programmer(s)     : Nick Skrepetos
 *  Last Modification : 12/10/94 - 11:56:16 PM
@@ -96,7 +96,7 @@ BOOL	cdecl hmiINIOpen( _INI_INSTANCE * sInstance, PSTR szName )
       // determine size of file
       sInstance->wSize  =  lseek( hFile, 0, SEEK_END );
 
-      // set the new maximum size 
+      // set the new maximum size
       sInstance->wMaxSize  =  sInstance->wSize + _INI_EXTRA_MEMORY;
 
       // seek back to start of file
@@ -138,7 +138,7 @@ BOOL	cdecl hmiINIOpen( _INI_INSTANCE * sInstance, PSTR szName )
       sInstance->pItemPtr  =  _NULL;
       sInstance->pListPtr  =  _NULL;
 
-      // reset the modified flag to indicate that the 
+      // reset the modified flag to indicate that the
       // file is unmodified.
       sInstance->wFlags    &= ~_INI_MODIFIED;
 
@@ -176,7 +176,7 @@ BOOL	cdecl hmiINIClose( _INI_INSTANCE * sInstance )
       // determine if the .ini file has been modified
       if ( sInstance->wFlags & _INI_MODIFIED )
       {
-         // create and open file 
+         // create and open file
          if ( ( hFile =  open( (const char * )sInstance->szName, O_CREAT | O_TRUNC | O_RDWR | O_BINARY, 0 ) ) == -1 )
          {
       		// free memory
@@ -209,7 +209,7 @@ BOOL	cdecl hmiINIClose( _INI_INSTANCE * sInstance )
 *
 *  Description
 *
-*     locates a section in a file.  a section is determined by enclosing 
+*     locates a section in a file.  a section is determined by enclosing
 *     it in [].  ie.  [SECTION]
 *
 *  Parameters
@@ -241,11 +241,11 @@ BOOL  cdecl hmiINILocateSection( _INI_INSTANCE * sInstance, PSTR szName )
 
       // search data until we have found a start section character
       // and then attempt to match section string.  continue to process
-      // entire data set until the end is reached or a match is 
+      // entire data set until the end is reached or a match is
       // found.
       do
          {
-            // check if character we are pointing to is a 
+            // check if character we are pointing to is a
             // start section character
             if ( *pDataPtr == _INI_SECTION_START )
             {
@@ -273,7 +273,7 @@ BOOL  cdecl hmiINILocateSection( _INI_INSTANCE * sInstance, PSTR szName )
                   wIndex++;
                }
 
-               // determine if we are sitting on a end section 
+               // determine if we are sitting on a end section
                // character. if so then we have a complete match
                // so set the found flag to true.
                if ( *pDataPtr == _INI_SECTION_END && *szSection == _NULL )
@@ -303,7 +303,7 @@ BOOL  cdecl hmiINILocateSection( _INI_INSTANCE * sInstance, PSTR szName )
 
             }
 
-            // advance pointer 
+            // advance pointer
             pDataPtr++;
 
             // advance index
@@ -454,7 +454,7 @@ BOOL	cdecl hmiINILocateItem( _INI_INSTANCE * sInstance, PSTR szItem )
 *  Description
 *
 *     retrieves a decimal value from an item in a .ini file.  note that if
-*     the value is in hex (0x....) it will be automatically converted to 
+*     the value is in hex (0x....) it will be automatically converted to
 *     decimal.
 *
 *  Parameters
@@ -499,7 +499,7 @@ BOOL	cdecl hmiINIGetDecimal( _INI_INSTANCE * sInstance, W32 * wValue )
       wIndex   =  0;
 
       // fetch string for value
-      while( *pDataPtr != _INI_EOL && *pDataPtr != _INI_LIST_SEPERATOR 
+      while( *pDataPtr != _INI_EOL && *pDataPtr != _INI_LIST_SEPERATOR
                && *pDataPtr != _INI_SPACE )
       {
          // save character
@@ -769,7 +769,7 @@ BOOL	cdecl hmiINIWriteDecimal( _INI_INSTANCE * sInstance, W32 wValue )
       // get length of converted string
       wDecimalSize   =  strlen( ( const char * )bBuffer );
 
-      // check if we need to shrink or expand the 
+      // check if we need to shrink or expand the
       // data size.
       if ( wDecimalSize < wStringSize )
       {
@@ -871,7 +871,7 @@ BOOL	cdecl hmiINIWriteString( _INI_INSTANCE * sInstance, PSTR szString )
       // get string length of new string
       wSourceSize    =  strlen( szString );
 
-      // check if we need to shrink or expand the 
+      // check if we need to shrink or expand the
       // data size.
       if ( wSourceSize < wDestSize )
       {
@@ -960,7 +960,7 @@ BOOL	cdecl hmiINIGetQuery( _INI_INSTANCE * sInstance, PSTR szItem )
 *
 *  Syntax
 *
-*     BOOL	cdecl hmiINIGetItemDecimal( _INI_INSTANCE * sInstance, PSTR szItem, 
+*     BOOL	cdecl hmiINIGetItemDecimal( _INI_INSTANCE * sInstance, PSTR szItem,
 *                                       W32 * wValue )
 *
 *  Description
@@ -973,7 +973,7 @@ BOOL	cdecl hmiINIGetQuery( _INI_INSTANCE * sInstance, PSTR szItem )
 *        --------------------------
 *        sInstance      pointer to .ini instance
 *        szItem         pointer to item string
-*        wValue         pointer to word value 
+*        wValue         pointer to word value
 *
 *  Return
 *
@@ -981,7 +981,7 @@ BOOL	cdecl hmiINIGetQuery( _INI_INSTANCE * sInstance, PSTR szItem )
 *     _FALSE      error getting value
 *
 ****************************************************************************/
-BOOL	cdecl hmiINIGetItemDecimal( _INI_INSTANCE * sInstance, PSTR szItem, 
+BOOL	cdecl hmiINIGetItemDecimal( _INI_INSTANCE * sInstance, PSTR szItem,
                                   W32 * wValue )
 	{
       // attempt to locate item
@@ -1259,7 +1259,7 @@ BOOL	cdecl hmiINIAddSection( _INI_INSTANCE * sInstance, PSTR szSection )
 
       // copy in string end
       *pDataPtr++ =  _INI_SECTION_END;
-		
+
       // add CR/LF @ the end of the file
       *pDataPtr++ =  _INI_CR;
       *pDataPtr++ =  _INI_LF;
@@ -1285,7 +1285,7 @@ BOOL	cdecl hmiINIAddSection( _INI_INSTANCE * sInstance, PSTR szSection )
 *
 *  Syntax
 *
-*     BOOL	cdecl	hmiINIAddItemString( _INI_INSTANCE * sInstance, PSTR szItem, 
+*     BOOL	cdecl	hmiINIAddItemString( _INI_INSTANCE * sInstance, PSTR szItem,
 *                                      PSTR szString, W32 wJustify )
 *
 *  Description
@@ -1298,7 +1298,7 @@ BOOL	cdecl hmiINIAddSection( _INI_INSTANCE * sInstance, PSTR szSection )
 *        --------------------------
 *        sInstance      pointer to an .ini instance
 *        szItem         pointer to item string
-*        szString       pointer to string 
+*        szString       pointer to string
 *        wJustify       width of field
 *
 *  Return
@@ -1345,7 +1345,7 @@ BOOL	cdecl	hmiINIAddItemString( _INI_INSTANCE * sInstance, PSTR szItem, PSTR szS
          wJustify--;
       }
 
-      // fill in the rest of the white space to 
+      // fill in the rest of the white space to
       // justify item
       while( wJustify-- )
          *pDataPtr++ =  _INI_SPACE;
@@ -1377,7 +1377,7 @@ BOOL	cdecl	hmiINIAddItemString( _INI_INSTANCE * sInstance, PSTR szItem, PSTR szS
 *
 *  Syntax
 *
-*     BOOL	cdecl	hmiINIAddItemDecimal( _INI_INSTANCE * sInstance, PSTR szItem, 
+*     BOOL	cdecl	hmiINIAddItemDecimal( _INI_INSTANCE * sInstance, PSTR szItem,
 *                                      W32 wValue, W32 wJustify, W32 wRadix )
 *
 *  Description
@@ -1401,8 +1401,8 @@ BOOL	cdecl	hmiINIAddItemString( _INI_INSTANCE * sInstance, PSTR szItem, PSTR szS
 *
 ****************************************************************************/
 BOOL	cdecl	hmiINIAddItemDecimal(   _INI_INSTANCE * sInstance,
-                                    PSTR  szItem, 
-                                    W32  wValue, 
+                                    PSTR  szItem,
+                                    W32  wValue,
                                     W32  wJustify,
                                     W32  wRadix )
 	{
@@ -1457,7 +1457,7 @@ BOOL	cdecl	hmiINIAddItemDecimal(   _INI_INSTANCE * sInstance,
          wJustify--;
       }
 
-      // fill in the rest of the white space to 
+      // fill in the rest of the white space to
       // justify item
       while( wJustify-- )
          *pDataPtr++ =  _INI_SPACE;

@@ -1,7 +1,15 @@
-/****************************************************************************/
-/*    FILE:  3D_VIEW.C                                                      */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * File:  3D_VIEW.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All 3D rendering is done through this section of code.
+ *
+ * @addtogroup _3D_VIEW
+ * @brief 3D Rendering
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 //#define NDEBUG
 #include <math.h>
 #define M_PI        3.14159265358979323846
@@ -735,10 +743,7 @@ T_byte8 View3dOnRightByNodeWithXY(
 #define MAX_OBJECTS       500
 #define MAX_OBJECT_COLUMNS 50
 
-//#define ZMIN            ((T_sword32) 10)
 #define ZMIN            ((T_sword32) 10 << 16)
-///#define ZMIN            ((T_sword32) 20)
-///#define ZMIN            ((T_sword32) 1)
 
 #define UPPER_TYPE      0
 #define WALL_TYPE       1
@@ -1070,50 +1075,19 @@ T_void ISortObjectQuick(T_sword16 p, T_sword16 q) ;
 /** BEGIN GRAPHICS-MODE (i.e. not req'd by server) FUNCTION DEFS **/
 #ifndef SERVER_ONLY
 
-/****************************************************************************/
-/*  Routine:  View3dSetView                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dSetView moves the current point of view to the new location     */
-/*  and prepares the appropriate calculations.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x                 -- X position to move to.                 */
-/*                                                                          */
-/*    T_sword16 y                 -- Y position to move to.                 */
-/*                                                                          */
-/*    T_sword32 height            -- Height to move to.                     */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to face.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dSetView
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dSetView moves the current point of view to the new location
+ *  and prepares the appropriate calculations.
+ *
+ *  @param x -- X position to move to.
+ *  @param y -- Y position to move to.
+ *  @param height -- Height to move to.
+ *  @param angle -- Angle to face.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dSetView(
            T_sword16 x,
            T_sword16 y,
@@ -1138,93 +1112,34 @@ T_void View3dSetView(
     G_fromSector = View3dFindSectorNum(x, y) ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dSetHeight                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dSetHeight sets the current point of view to the new location    */
-/*  and prepares the appropriate calculations.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 height            -- Height to move to.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dSetHeight
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dSetHeight sets the current point of view to the new location
+ *  and prepares the appropriate calculations.
+ *
+ *  @param height -- Height to move to.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dSetHeight(T_sword32 height)
 {
     G_3dPlayerHeight = height ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetView                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dGetView returns the position, angle, and height of the          */
-/*  current point of view.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 *p_x              -- X position                             */
-/*                                                                          */
-/*    T_sword16 *p_y              -- Y position                             */
-/*                                                                          */
-/*    T_sword32 *p_height         -- Height of position                     */
-/*                                                                          */
-/*    T_sword16 *p_angle          -- Angle being faced                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetView
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dGetView returns the position, angle, and height of the
+ *  current point of view.
+ *
+ *  @param p_x -- X position
+ *  @param p_y -- Y position
+ *  @param p_height -- Height of position
+ *  @param p_angle -- Angle being faced
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dGetView(
            T_sword16 *p_x,
            T_sword16 *p_y,
@@ -1237,44 +1152,18 @@ T_void View3dGetView(
     *p_angle = G_3dPlayerAngle ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dRightSideInCone                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dRightSideInCone checks to see if the given node (a right        */
-/*  child node) is in the current viewing cone.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 nodeIndex          -- Number of node to check                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if on right, FALSE if not         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dRightSideInCone
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dRightSideInCone checks to see if the given node (a right
+ *  child node) is in the current viewing cone.
+ *
+ *  @param nodeIndex -- Number of node to check
+ *
+ *  @return TRUE if on right, FALSE if not
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 View3dRightSideInCone(T_word16 nodeIndex)
 {
     /* Determine what quadrant the player is facing.  This is far */
@@ -1296,44 +1185,18 @@ T_byte8 View3dRightSideInCone(T_word16 nodeIndex)
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dLeftSideInCone                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dLeftSideInCone checks to see if the given node (a left          */
-/*  child node) is in the current viewing cone.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 nodeIndex          -- Number of node to check                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if on right, FALSE if not         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dLeftSideInCone
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dLeftSideInCone checks to see if the given node (a left
+ *  child node) is in the current viewing cone.
+ *
+ *  @param nodeIndex -- Number of node to check
+ *
+ *  @return TRUE if on right, FALSE if not
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 View3dLeftSideInCone(T_word16 nodeIndex)
 {
     /* Determine what quadrant the player is facing.  This is far */
@@ -1355,49 +1218,21 @@ T_byte8 View3dLeftSideInCone(T_word16 nodeIndex)
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dOnRightByVertices                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dOnRightByVertices checks to see if the player is on the right   */
-/*  of a line segment (given by their vertice indexes) and returns TRUE     */
-/*  if so (otherwise, FALSE).                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 from               -- From vertex                            */
-/*                                                                          */
-/*    T_word16 to                 -- To vertex                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if player on right of segment,    */
-/*                                   FALSE if not.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  02/02/95  Changed T_word32's to T_sword32's to fix bug           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dOnRightByVertices
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dOnRightByVertices checks to see if the player is on the right
+ *  of a line segment (given by their vertice indexes) and returns TRUE
+ *  if so (otherwise, FALSE).
+ *
+ *  @param from -- From vertex
+ *  @param to -- To vertex
+ *
+ *  @return TRUE if player on right of segment,
+ *      FALSE if not.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 View3dOnRightByVertices(T_word16 from, T_word16 to)
 {
     T_3dVertex *p_vertex ;
@@ -1444,47 +1279,20 @@ T_byte8 View3dOnRightByVerticesXY(
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dOnRightByNode                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dOnRightByNode checks to see if the player is on the right       */
-/*  of a line segment (given by line's node number) and returns TRUE        */
-/*  if so (otherwise, FALSE).                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 nodeIndex          -- Node index to check                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE if player on right of segment,    */
-/*                                   FALSE if not.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  02/02/95  Changed T_word32's to T_sword32's to fix bug           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dOnRightByNode
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dOnRightByNode checks to see if the player is on the right
+ *  of a line segment (given by line's node number) and returns TRUE
+ *  if so (otherwise, FALSE).
+ *
+ *  @param nodeIndex -- Node index to check
+ *
+ *  @return TRUE if player on right of segment,
+ *      FALSE if not.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 View3dOnRightByNode(T_word16 nodeIndex)
 {
     T_3dNode *p_node ;
@@ -1505,7 +1313,6 @@ T_byte8 View3dOnRightByNode(T_word16 nodeIndex)
     return 0 ;
 }
 
-/****************************************************************************/
 T_byte8 View3dOnRightByNodeWithXY(
             T_word16 nodeIndex,
             T_sword16 x,
@@ -1529,41 +1336,13 @@ T_byte8 View3dOnRightByNodeWithXY(
     return 0 ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dUpdateSectorLightAnimation                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Updates all sector light animations.                                  */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/23/95  Created                                                */
-/*    AMT  01/07/96  Changed to a global routine.                           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dUpdateSectorLightAnimation
+ *-------------------------------------------------------------------------*/
+/**
+ *  Updates all sector light animations.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dUpdateSectorLightAnimation(T_void)
 {
    T_word16 i;
@@ -1605,12 +1384,12 @@ T_void View3dUpdateSectorLightAnimation(T_void)
                G_3dSectorInfoArray[i].lightAnimationState;
 
             /** Did I exceed my limit? **/
-            if (G_3dSectorArray[i].light > 
+            if (G_3dSectorArray[i].light >
                    G_3dSectorInfoArray[i].lightAnimationCenter +
                    G_3dSectorInfoArray[i].lightAnimationRadius)
             {
                /** Yes.  Set my value to the minimum. **/
-               G_3dSectorArray[i].light = 
+               G_3dSectorArray[i].light =
                    G_3dSectorInfoArray[i].lightAnimationCenter -
                    G_3dSectorInfoArray[i].lightAnimationRadius;
             }
@@ -1641,53 +1420,14 @@ T_void View3dUpdateSectorLightAnimation(T_void)
    DebugEnd ();
 }
 
-/****************************************************************************/
-/*  Routine:  View3dDrawView                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dDrawView is the main routine to call when you wish to draw      */
-/*  the whole view.  This routine calls all the other routines necessary.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memset                                                                */
-/*    IDrawNode                                                             */
-/*    IFindObjects                                                          */
-/*    IDrawRuns                                                             */
-/*    IDrawObjectAndWallRuns                                                       */
-/*    GrScreenSet                                                           */
-/*    PlayerGetZ16                                                          */
-/*    StatsGetTallness                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    AMT  07/23/95  Added support for UpdateSectorLightAnimation           */
-/*    LES  08/22/95  Added eye level computation for optimization           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dDrawView
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dDrawView is the main routine to call when you wish to draw
+ *  the whole view.  This routine calls all the other routines necessary.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dDrawView(T_void)
 {
     T_word16 i ;
@@ -1784,44 +1524,13 @@ INDICATOR_LIGHT(114, INDICATOR_GREEN) ;
     TICKER_TIME_ROUTINE_ENDM("View3dDrawView", 500) ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dDisplayView                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dDisplayView actually draws/flips to the actual screen to use.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GrScreenSet                                                           */
-/*    GrTransferRectangle                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dDisplayView
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dDisplayView actually draws/flips to the actual screen to use.
+ *
+ *<!-----------------------------------------------------------------------*/
 //typedef T_void (*voidfunc)() ;
 //extern T_byte8 ClearVar1 ;
 
@@ -1907,45 +1616,17 @@ if (didit==FALSE)  {
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawNode                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawNode is a self-calling recursive routine that travels through    */
-/*  the BSP tree and determines the order that walls (and floors) should    */
-/*  be drawn.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 nodeIndex          -- Index to head node of sub-BSP tree     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawNode
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawNode is a self-calling recursive routine that travels through
+ *  the BSP tree and determines the order that walls (and floors) should
+ *  be drawn.
+ *
+ *  @param nodeIndex -- Index to head node of sub-BSP tree
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawNode(T_word16 nodeIndex)
 {
     T_word16 count ;
@@ -2003,43 +1684,15 @@ T_void IDrawNode(T_word16 nodeIndex)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawSSector                       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawSSector draws all the facing sectors in a segment sector.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 ssectorIndex       -- Index to segment sector                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDrawSegment                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawSSector
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawSSector draws all the facing sectors in a segment sector.
+ *
+ *  @param ssectorIndex -- Index to segment sector
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawSSector(T_word16 ssectorIndex)
 {
     T_sword16 lineSide ;
@@ -2107,46 +1760,17 @@ INDICATOR_LIGHT(160+(segCount<<2), INDICATOR_RED) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawSegment                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawSegment does all the work to determine if the given segment      */
-/*  can be drawn on the screen and if so, calls the appropriate routines    */
-/*  to add the wall and floor runs.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 segmentIndex       -- Segment to draw                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  02/02/95  Added calculations to allow texture mapping for walls. */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawSegment
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawSegment does all the work to determine if the given segment
+ *  can be drawn on the screen and if so, calls the appropriate routines
+ *  to add the wall and floor runs.
+ *
+ *  @param segmentIndex -- Segment to draw
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawSegment(T_word16 segmentIndex)
 {
     T_sword16 side ;
@@ -2255,45 +1879,16 @@ if (G_didDrawWall)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  IIsSegmentGood                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IIsSegmentGood determines if a segment is in the view and if it       */
-/*  will be drawn on the screen.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 segmentIndex       -- Segment to check if need to draw.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MathInvDistanceLookup                                                 */
-/*    MathTangentLookup                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IIsSegmentGood
+ *-------------------------------------------------------------------------*/
+/**
+ *  IIsSegmentGood determines if a segment is in the view and if it
+ *  will be drawn on the screen.
+ *
+ *  @param segmentIndex -- Segment to check if need to draw.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean IIsSegmentGood(T_word16 segmentIndex)
 {
 /*LES2
@@ -2562,46 +2157,18 @@ DebugCheck(G_xRight <= VIEW3D_WIDTH) ;
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICalculateWallMatrix               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICalculateWallMatrix determines the matrix for a wall segment         */
-/*  given that it has already been determined to be on the screen.          */
-/*    Directly changes the matrix values in G_wall                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Must call IIsSegmentGood any time before this routine.                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MathSineLookup                                                        */
-/*    MathCosineLookup                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICalculateWallMatrix
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICalculateWallMatrix determines the matrix for a wall segment
+ *  given that it has already been determined to be on the screen.
+ *  Directly changes the matrix values in G_wall
+ *
+ *  NOTE: 
+ *  Must call IIsSegmentGood any time before this routine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ICalculateWallMatrix(T_void)
 {
     T_sword32 Bx, By, Bz ;
@@ -2704,45 +2271,15 @@ G_wall.By = By ;
 */
 }
 
-/****************************************************************************/
-/*  Routine:  IMarkOffWall                       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IMarkOffWall goes through all the columns in a wall and marks off     */
-/*  any empty slots.  This signifies that the column is done and is         */
-/*  no longer going to have anything drawn onto it.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IMarkOffWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  IMarkOffWall goes through all the columns in a wall and marks off
+ *  any empty slots.  This signifies that the column is done and is
+ *  no longer going to have anything drawn onto it.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IMarkOffWall(T_void)
 {
     T_word16 x ;
@@ -2790,45 +2327,13 @@ ITestMinMax(2000+x) ;
 */
 }
 
-/****************************************************************************/
-/*  Routine:  IAddMainWall                       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAddMainWall sets up a main wall to be draw by the 3d engine.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StatsGetTallness                                                      */
-/*    IMarkOffWall                                                          */
-/*    IAddWall                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddMainWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAddMainWall sets up a main wall to be draw by the 3d engine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IAddMainWall(T_void)
 {
     T_sword16 backTop, backBottom ;
@@ -2893,43 +2398,13 @@ ITestMinMax(1007) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IAddLowerWall                       * INTERNAL *              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAddLowerWall sets up a lower wall to be draw by the 3d engine.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IAddWall                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddLowerWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAddLowerWall sets up a lower wall to be draw by the 3d engine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IAddLowerWall(T_void)
 {
 double calc, dVx, dVz ;
@@ -3039,43 +2514,13 @@ ITestMinMax(1006) ;
 }
 
 
-/****************************************************************************/
-/*  Routine:  IAddUpperWall                       * INTERNAL *              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAddUpperWall sets up a upper wall to be draw by the 3d engine.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IAddWall                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddUpperWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAddUpperWall sets up a upper wall to be draw by the 3d engine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IAddUpperWall(T_void)
 {
 double calc, dVx, dVz ;
@@ -3193,55 +2638,22 @@ ITestMinMax(1005) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IAddWall                           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAddWall is called once a wall has been found to be on the screen,    */
-/*  has been clipped, and the full coordinates have been located.  This     */
-/*  routine "draws" the wall into the run lists.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 sx1               -- Screen X1 coordinate                   */
-/*                                                                          */
-/*    T_sword16 sx2               -- Screen X2 coordinate                   */
-/*                                                                          */
-/*    T_sword16 relativeBottom    -- Height of the wall at base             */
-/*                                                                          */
-/*    T_sword16 relativeTop       -- Height of the wall at top              */
-/*                                                                          */
-/*    T_sword32 relativeFromZ     -- Distance to first coordinate along Z   */
-/*                                                                          */
-/*    T_sword32 relativeToZ       -- Distance to second coordinate along Z  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddWall
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAddWall is called once a wall has been found to be on the screen,
+ *  has been clipped, and the full coordinates have been located.  This
+ *  routine "draws" the wall into the run lists.
+ *
+ *  @param sx1 -- Screen X1 coordinate
+ *  @param sx2 -- Screen X2 coordinate
+ *  @param relativeBottom -- Height of the wall at base
+ *  @param relativeTop -- Height of the wall at top
+ *  @param relativeFromZ -- Distance to first coordinate along Z
+ *  @param relativeToZ -- Distance to second coordinate along Z
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IAddWall(
            T_sword16 sx1,
            T_sword16 sx2,
@@ -3985,93 +3397,31 @@ DebugCheck(maxY <= VIEW3D_HEIGHT) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawRuns                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawRuns does the actual work of drawing all the different parts     */
-/*  onto the screen.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    IDrawColumn                                                           */
-/*    IDrawRow                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawRuns
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawRuns does the actual work of drawing all the different parts
+ *  onto the screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawRuns(T_void)
 {
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawColumn                        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawColumn draws a vertical line at the given x position from        */
-/*  the given top and bottom pixels.  The color is also passed in.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- X position on screen                   */
-/*                                                                          */
-/*    T_word16 top                -- Top Y position                         */
-/*                                                                          */
-/*    T_word16 bottom             -- Bottom Y position                      */
-/*                                                                          */
-/*    T_byte8 color               -- Color to draw line in                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawColumn
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawColumn draws a vertical line at the given x position from
+ *  the given top and bottom pixels.  The color is also passed in.
+ *
+ *  @param x -- X position on screen
+ *  @param top -- Top Y position
+ *  @param bottom -- Bottom Y position
+ *  @param color -- Color to draw line in
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawColumn(
            T_word16 x,
            T_word16 top,
@@ -4092,50 +3442,19 @@ T_void IDrawColumn(
         *p_pixel = color ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawRow                           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawColumn draws a vertical line at the given x position from        */
-/*  the given top and bottom pixels.  The color is also passed in.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 y                  -- Y position on screen                   */
-/*                                                                          */
-/*    T_word16 left               -- Left X position                        */
-/*                                                                          */
-/*    T_word16 right              -- Right Y position                       */
-/*                                                                          */
-/*    T_byte8 color               -- Color to draw line in                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawRow
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawColumn draws a vertical line at the given x position from
+ *  the given top and bottom pixels.  The color is also passed in.
+ *
+ *  @param y -- Y position on screen
+ *  @param left -- Left X position
+ *  @param right -- Right Y position
+ *  @param color -- Color to draw line in
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawRow(
            T_word16 y,
            T_word16 left,
@@ -4155,46 +3474,17 @@ T_void IDrawRow(
 }
 
 
-/****************************************************************************/
-/*  Routine:  IDrawTextureColumn                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawTextureColumn draws a vertical line using a given run length     */
-/*  and column.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- X position on screen                   */
-/*                                                                          */
-/*    T_3dWallRun *p_run          -- Wall run length to draw                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawTextureColumn
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawTextureColumn draws a vertical line using a given run length
+ *  and column.
+ *
+ *  @param x -- X position on screen
+ *  @param p_run -- Wall run length to draw
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawTextureColumn(
            T_word16 x,
            T_3dWallRun *p_run)
@@ -4337,56 +3627,23 @@ T_void IDrawTextureColumn(
     }
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawTextureColumnNew              * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawTextureColumnNew is the new version of IDrawTextureColumn.  The  */
-/*  difference is that this routine JUST dispatches the data to the correct */
-/*  texture drawing routine.  No calculations are done on this level any    */
-/*  more.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_shade            -- Pointer into shade table               */
-/*                                                                          */
-/*    T_word16 numPixels          -- How many pixels high to draw           */
-/*                                                                          */
-/*    T_word32 textureStep        -- How fast to step through the texture   */
-/*                                                                          */
-/*    T_word32 textureOffset      -- Start position in texture              */
-/*                                                                          */
-/*    T_byte8 *p_pixel            -- First position on the screen           */
-/*                                                                          */
-/*    T_byte8 shift               -- Texture power of 2 factor up and down  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawTextureColumnNew
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawTextureColumnNew is the new version of IDrawTextureColumn.  The
+ *  difference is that this routine JUST dispatches the data to the correct
+ *  texture drawing routine.  No calculations are done on this level any
+ *  more.
+ *
+ *  @param p_shade -- Pointer into shade table
+ *  @param numPixels -- How many pixels high to draw
+ *  @param textureStep -- How fast to step through the texture
+ *  @param textureOffset -- Start position in texture
+ *  @param p_pixel -- First position on the screen
+ *  @param shift -- Texture power of 2 factor up and down
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IDrawTextureColumnNew(
            T_byte8 *p_shade,
            T_word16 numPixels,
@@ -4471,44 +3728,14 @@ T_void IDrawTextureColumnNew(
     }
 }
 
-/****************************************************************************/
-/*  Routine:  IFindObjects                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFindObjects locates all objects in the view and add them to the      */
-/*  wall runs.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/07/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFindObjects
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFindObjects locates all objects in the view and add them to the
+ *  wall runs.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IFindObjects(T_void)
 {
     T_word16 i ;
@@ -5117,45 +4344,20 @@ T_void View3dSetSize(T_word16 width, T_word16 height)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dClipCenter                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dClipCenter sets up the clipping left and right egdes based on   */
-/*  the given view size already.  Just pass in how wide you want the final  */
-/*  view to be.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Do not try to clip a width bigger than the width of the view.         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 centerWidth        -- How width is the clipped view.         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dClipCenter
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dClipCenter sets up the clipping left and right egdes based on
+ *  the given view size already.  Just pass in how wide you want the final
+ *  view to be.
+ *
+ *  NOTE: 
+ *  Do not try to clip a width bigger than the width of the view.
+ *
+ *  @param centerWidth -- How width is the clipped view.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dClipCenter(T_word16 centerWidth)
 {
     T_byte8 *p_where ;
@@ -5805,62 +5007,25 @@ DebugCheck(start < 320) ;
     }
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawTextureColumnLater            * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawTextureColumnLater puts the requested draw on a waiting list     */
-/*  to be drawn.  Later, the items will be drawn in order of distance.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- X location on the screen               */
-/*                                                                          */
-/*    T_byte8 *p_shade            -- Pointer into shade table               */
-/*                                                                          */
-/*    T_word16 numPixels          -- How many pixels high to draw           */
-/*                                                                          */
-/*    T_word32 textureStep        -- How fast to step through the texture   */
-/*                                                                          */
-/*    T_word32 textureOffset      -- Start position in texture              */
-/*                                                                          */
-/*    T_byte8 *p_pixel            -- First position on the screen           */
-/*                                                                          */
-/*    T_byte8 shift               -- Texture power of 2 factor up and down  */
-/*                                                                          */
-/*    T_byte8 type                -- Transparent (2) or translucent (3)     */
-/*                                                                          */
-/*    T_sword32 distance          -- Distance to slice                      */
-/*                                                                          */
-/*    T_byte8 *p_texture          -- Texture slice to use                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawTextureColumnLater
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawTextureColumnLater puts the requested draw on a waiting list
+ *  to be drawn.  Later, the items will be drawn in order of distance.
+ *
+ *  @param x -- X location on the screen
+ *  @param p_shade -- Pointer into shade table
+ *  @param numPixels -- How many pixels high to draw
+ *  @param textureStep -- How fast to step through the texture
+ *  @param textureOffset -- Start position in texture
+ *  @param p_pixel -- First position on the screen
+ *  @param shift -- Texture power of 2 factor up and down
+ *  @param type -- Transparent (2) or translucent (3)
+ *  @param distance -- Distance to slice
+ *  @param p_texture -- Texture slice to use
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDrawTextureColumnLater(
                   T_word16 x,
                   T_byte8 *p_shade,
@@ -5891,44 +5056,16 @@ static T_void IDrawTextureColumnLater(
     p_slice->p_texture = p_texture ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawWallSliceColumn               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawWallSliceColumn draws a previously stored wall column.  The      */
-/*  wall slice can either be transparent or translucent.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dWallSlice *p_slice      -- Slice to draw                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawWallSliceColumn
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawWallSliceColumn draws a previously stored wall column.  The
+ *  wall slice can either be transparent or translucent.
+ *
+ *  @param p_slice -- Slice to draw
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDrawWallSliceColumn(T_3dWallSlice *p_slice)
 {
     T_byte8 *p_shade ;
@@ -6120,44 +5257,13 @@ T_void IDumpVertFloor(T_void)
 
 #endif /** SERVER_ONLY **/
 
-/****************************************************************************/
-/*  Routine:  View3dInitialize                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dInitialize starts up anything that relates to the 3d view.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*    LES  08/22/95  Added double buffer lookup table                       */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dInitialize starts up anything that relates to the 3d view.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dInitialize(T_void)
 {
     T_byte8 *p_where ;
@@ -6203,43 +5309,13 @@ P_doubleBuffer = GRAPHICS_ACTUAL_SCREEN+3*320+4 ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dFinish closes out all information that is stored in memory.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dFinish closes out all information that is stored in memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dFinish(T_void)
 {
     DebugRoutine("View3dFinish") ;
@@ -6249,44 +5325,18 @@ T_void View3dFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IQuickSquareRoot                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IQuickSquareRoot uses an approximation method to calculate the        */
-/*  square root of a 32 bit number (into a 16 bit number).                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 value              -- 32 bit number to take square root of   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- square root calculated                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IQuickSquareRoot
+ *-------------------------------------------------------------------------*/
+/**
+ *  IQuickSquareRoot uses an approximation method to calculate the
+ *  square root of a 32 bit number (into a 16 bit number).
+ *
+ *  @param value -- 32 bit number to take square root of
+ *
+ *  @return square root calculated
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 IQuickSquareRoot(T_word32 value)
 {
     T_sword16 i;
@@ -6315,50 +5365,21 @@ T_word16 IQuickSquareRoot(T_word32 value)
     return(result);
 }
 
-/****************************************************************************/
-/*  Routine:  CalculateDistance                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CalculateDistance determines the approximate distance between         */
-/*  two coordinates.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 x1                -- First X coordinate                     */
-/*                                                                          */
-/*    T_sword32 y1                -- First Y coordinate                     */
-/*                                                                          */
-/*    T_sword32 x2                -- Second X coordinate                    */
-/*                                                                          */
-/*    T_sword32 y2                -- Second Y coordinate                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Approx. distance between too points.   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IQuickSquareRoot                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CalculateDistance
+ *-------------------------------------------------------------------------*/
+/**
+ *  CalculateDistance determines the approximate distance between
+ *  two coordinates.
+ *
+ *  @param x1 -- First X coordinate
+ *  @param y1 -- First Y coordinate
+ *  @param x2 -- Second X coordinate
+ *  @param y2 -- Second Y coordinate
+ *
+ *  @return Approx. distance between too points.
+ *
+ *<!-----------------------------------------------------------------------*/
 extern T_byte8 G_squareRootTable[16384] ;
 
 T_word16 CalculateDistanceOld2(
@@ -7015,40 +6036,12 @@ if (sector >= G_Num3dSectors)  {
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  View3dOnRightOfLine                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dOnRightOfLine
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 IOnRightOfLine(T_sword16 x, T_sword16 y, T_word16 line)
 {
     T_3dVertex *p_vertex ;
@@ -7122,47 +6115,21 @@ T_sword32 IFindIntersectX(T_word16 line, T_sword16 y)
     return xInter ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dAllocateObject                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dAllocateObject either finds an old object slot that is no       */
-/*  longer being used or allocates a fresh one.  The number to the object   */
-/*  is returned.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None of the fields are initialized, the object is just allocated.     */
-/*  The fields need to be setup before another frame is drawn.              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Pointer to the newly created object.   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/95  Created                                                */
-/*    LES  06/21/95  Changed to use a linked list of objects instead array  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dAllocateObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dAllocateObject either finds an old object slot that is no
+ *  longer being used or allocates a fresh one.  The number to the object
+ *  is returned.
+ *
+ *  NOTE: 
+ *  None of the fields are initialized, the object is just allocated.
+ *  The fields need to be setup before another frame is drawn.
+ *
+ *  @return Pointer to the newly created object.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *View3dAllocateObject(T_void)
 {
     T_3dObject *p_obj ;
@@ -7194,46 +6161,16 @@ T_3dObject *View3dAllocateObject(T_void)
     return p_obj ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dFreeObject                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dFreeObject deletes an object and updates the links assocaited   */
-/*  with it.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *                -- pointer to object to free              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/21/95  Created                                                */
-/*    LES  05/23/95  Put in check to make sure object is not already free.  */
-/*    LES  06/21/95  Changed to use a linked list of objects instead array  */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dFreeObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dFreeObject deletes an object and updates the links assocaited
+ *  with it.
+ *
+ *  @param p_obj -- pointer to object to free
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dFreeObject(T_3dObject *p_obj)
 {
     DebugRoutine("View3dFreeObject") ;
@@ -7256,53 +6193,24 @@ T_void View3dCheckObjectListEmpty(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetObjectAtColumn                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dGetObjectAtColumn is a utility routine that checks the sorted   */
-/*  list of objects to see if there is an object at the given row.  The     */
-/*  routine takes in the an integer of where in the list it is, a place     */
-/*  to store the found object, and the column of where it is to search.     */
-/*  It returns where in the list is the next object, or 0xFFFF if at end.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objPos             -- Position in list to search.            */
-/*                                                                          */
-/*    T_3dObect *p_obj            -- Object found (NULL if none)            */
-/*                                                                          */
-/*    T_word16 column             -- Column on screen to search.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Next position to be searched, or       */
-/*                                   0xFFFF if at end.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetObjectAtColumn
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dGetObjectAtColumn is a utility routine that checks the sorted
+ *  list of objects to see if there is an object at the given row.  The
+ *  routine takes in the an integer of where in the list it is, a place
+ *  to store the found object, and the column of where it is to search.
+ *  It returns where in the list is the next object, or 0xFFFF if at end.
+ *
+ *  @param objPos -- Position in list to search.
+ *  @param p_obj -- Object found (NULL if none)
+ *  @param column -- Column on screen to search.
+ *
+ *  @return Next position to be searched, or
+ *      0xFFFF if at end.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 View3dGetObjectAtColumn(
              T_word16 objPos,
              T_3dObject **p_obj,
@@ -7367,55 +6275,25 @@ T_word16 View3dGetObjectAtColumn(
     return nextObjPos ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dGetObjectAtXY                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dGetObjectAtXY     is a utility routine that checks the sorted   */
-/*  list of objects to see if there is an object at the given X&Y.  The     */
-/*  routine takes in the an integer of where in the list it is, a place     */
-/*  to store the found object, and the X & Y  of where it is to search.     */
-/*  It returns where in the list is the next object, or 0xFFFF if at end.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objPos             -- Position in list to search.            */
-/*                                                                          */
-/*    T_3dObect *p_obj            -- Object found (NULL if none)            */
-/*                                                                          */
-/*    T_word16 x                  -- X (column) on screen to search         */
-/*                                                                          */
-/*    T_word16 y                  -- Y (row)    on screen to search         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Next position to be searched, or       */
-/*                                   0xFFFF if at end.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dGetObjectAtXY
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dGetObjectAtXY     is a utility routine that checks the sorted
+ *  list of objects to see if there is an object at the given X&Y.  The
+ *  routine takes in the an integer of where in the list it is, a place
+ *  to store the found object, and the X & Y  of where it is to search.
+ *  It returns where in the list is the next object, or 0xFFFF if at end.
+ *
+ *  @param objPos -- Position in list to search.
+ *  @param p_obj -- Object found (NULL if none)
+ *  @param x -- X (column) on screen to search
+ *  @param y -- Y (row)    on screen to search
+ *
+ *  @return Next position to be searched, or
+ *      0xFFFF if at end.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 View3dGetObjectAtXY(
              T_word16 objPos,
              T_3dObject **p_obj,
@@ -7512,50 +6390,21 @@ T_word16 View3dGetObjectAtXY(
     return nextObjPos ;
 }
 
-/****************************************************************************/
-/*  Routine:  CalculateEstimateDistance                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CalculateEstimateDistance determines the quick and approximate        */
-/*  distance between two points.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 x1                -- First X coordinate                     */
-/*                                                                          */
-/*    T_sword32 y1                -- First Y coordinate                     */
-/*                                                                          */
-/*    T_sword32 x2                -- Second X coordinate                    */
-/*                                                                          */
-/*    T_sword32 y2                -- Second Y coordinate                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Approx. distance between too points.   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/15/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CalculateEstimateDistance
+ *-------------------------------------------------------------------------*/
+/**
+ *  CalculateEstimateDistance determines the quick and approximate
+ *  distance between two points.
+ *
+ *  @param x1 -- First X coordinate
+ *  @param y1 -- First Y coordinate
+ *  @param x2 -- Second X coordinate
+ *  @param y2 -- Second Y coordinate
+ *
+ *  @return Approx. distance between too points.
+ *
+ *<!-----------------------------------------------------------------------*/
 extern T_byte8 G_squareRootTable[16384] ;
 
 T_word16 CalculateEstimateDistance(
@@ -7602,44 +6451,16 @@ T_word16 CalculateEstimateDistance(
 */
 }
 
-/****************************************************************************/
-/*  Routine:  View3dAddObject                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dAddObject  attaches a new object to the list of objects in      */
-/*  the 3d world.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to bring into world.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dAddObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dAddObject  attaches a new object to the list of objects in
+ *  the 3d world.
+ *
+ *  @param p_obj -- Object to bring into world.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dAddObject(T_3dObject *p_obj)
 {
     DebugRoutine("View3dAddObject") ;
@@ -7661,44 +6482,16 @@ T_void View3dAddObject(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dRemoveObject                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dRemoveObject detaches an object from the list of objects in     */
-/*  the 3d world.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to bring into world.            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dRemoveObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dRemoveObject detaches an object from the list of objects in
+ *  the 3d world.
+ *
+ *  @param p_obj -- Object to bring into world.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dRemoveObject(T_3dObject *p_obj)
 {
     DebugRoutine("View3dRemoveObject") ;
@@ -7722,47 +6515,20 @@ T_void View3dRemoveObject(T_3dObject *p_obj)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dRemapSectors                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dRemapSectors is called after a map is loaded.  This routine     */
-/*  sets up optimization for floor and ceiling drawing by finding similar   */
-/*  ceilings and floors and declares them to be the "same" ceiling and      */
-/*  pattern.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine MUST be called before the wall textures are locked       */
-/*  into memory.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/13/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dRemapSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dRemapSectors is called after a map is loaded.  This routine
+ *  sets up optimization for floor and ceiling drawing by finding similar
+ *  ceilings and floors and declares them to be the "same" ceiling and
+ *  pattern.
+ *
+ *  NOTE: 
+ *  This routine MUST be called before the wall textures are locked
+ *  into memory.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dRemapSectors(T_void)
 {
     T_word16 i, j ;
@@ -7811,44 +6577,14 @@ T_void View3dRemapSectors(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  View3dUnmapSectors                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dUnmapSectors frees memory used by View3dRemapSectors.           */
-/*  It is usually called when a map ends.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/13/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dUnmapSectors
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dUnmapSectors frees memory used by View3dRemapSectors.
+ *  It is usually called when a map ends.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dUnmapSectors(T_void)
 {
     DebugRoutine("View3dUnmapSectors") ;
@@ -7859,47 +6595,15 @@ T_void View3dUnmapSectors(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IAddChainedObjects                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAddChainedObjects goes through the list of objects to be considered  */
-/*  for drawing and adds to the list the any chained objects that may be    */
-/*  a part of the original object.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetChainedObjects                                               */
-/*    ObjectGetAttributes                                                   */
-/*    IFindObject                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddChainedObjects
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAddChainedObjects goes through the list of objects to be considered
+ *  for drawing and adds to the list the any chained objects that may be
+ *  a part of the original object.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IAddChainedObjects(T_void)
 {
     T_word16 i ;
@@ -8027,45 +6731,17 @@ static T_void ITestMinMax(T_word16 where)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  View3dSetDarknessAdjustment                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    View3dSetDarknessAdjustment sets how much light to add to all         */
-/*  floors and ceilings.  If negative, makes darker.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sbyte8 darkAdjust         -- 0 = Normal, 63=perfect night vision,   */
-/*                                   -63=Blind.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  View3dSetDarknessAdjustment
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dSetDarknessAdjustment sets how much light to add to all
+ *  floors and ceilings.  If negative, makes darker.
+ *
+ *  @param darkAdjust -- 0 = Normal, 63=perfect night vision,
+ *      -63=Blind.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void View3dSetDarknessAdjustment(T_sbyte8 darkAdjust)
 {
     DebugRoutine("View3dSetDarknessAdjustment") ;
@@ -8098,46 +6774,12 @@ T_word16 View3dFindClosestLine(T_sword16 x, T_sword16 y)
     return closest ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDetermineDistToLine                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/09/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDetermineDistToLine
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 IDetermineDistToLine(T_sword16 x, T_sword16 y, T_word16 lineNum)
 {
     T_3dVertex *p_vertex ;
@@ -8317,7 +6959,7 @@ T_void DrawTranslucentObjectColumnAsm(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_word32 x;
     T_byte8 c;
@@ -8348,7 +6990,7 @@ T_void DrawTextureColumnAsm1(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
     c = p_shade[G_CurrentTexturePos[0]];
@@ -8363,7 +7005,7 @@ T_void DrawTextureColumnAsm2(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x01]];
@@ -8377,7 +7019,7 @@ T_void DrawTextureColumnAsm4(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x03]];
@@ -8391,7 +7033,7 @@ T_void DrawTextureColumnAsm8(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x07]];
@@ -8405,7 +7047,7 @@ T_void DrawTextureColumnAsm16(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x0F]];
@@ -8419,7 +7061,7 @@ T_void DrawTextureColumnAsm32(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x1F]];
@@ -8433,7 +7075,7 @@ T_void DrawTextureColumnAsm64(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x3F]];
@@ -8447,7 +7089,7 @@ T_void DrawTextureColumnAsm128(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x7F]];
@@ -8461,7 +7103,7 @@ T_void DrawTextureColumnAsm256(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0xFF]];
@@ -8475,7 +7117,7 @@ T_void DrawTransparentColumnAsm1(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c = G_CurrentTexturePos[0];
 
@@ -8494,7 +7136,7 @@ T_void DrawTransparentColumnAsm2(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8512,7 +7154,7 @@ T_void DrawTransparentColumnAsm4(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8530,7 +7172,7 @@ T_void DrawTransparentColumnAsm8(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8548,7 +7190,7 @@ T_void DrawTransparentColumnAsm16(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8566,7 +7208,7 @@ T_void DrawTransparentColumnAsm32(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8584,7 +7226,7 @@ T_void DrawTransparentColumnAsm64(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8602,7 +7244,7 @@ T_void DrawTransparentColumnAsm128(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8620,7 +7262,7 @@ T_void DrawTransparentColumnAsm256(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8638,7 +7280,7 @@ T_void DrawTranslucentColumnAsm1(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8657,7 +7299,7 @@ T_void DrawTranslucentColumnAsm2(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8675,7 +7317,7 @@ T_void DrawTranslucentColumnAsm4(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8693,7 +7335,7 @@ T_void DrawTranslucentColumnAsm8(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8711,7 +7353,7 @@ T_void DrawTranslucentColumnAsm16(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8729,7 +7371,7 @@ T_void DrawTranslucentColumnAsm32(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8747,7 +7389,7 @@ T_void DrawTranslucentColumnAsm64(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8765,7 +7407,7 @@ T_void DrawTranslucentColumnAsm128(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8783,7 +7425,7 @@ T_void DrawTranslucentColumnAsm256(
            T_word32 count,
            T_sword32 textureStep,
            T_sword32 textureOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8801,7 +7443,7 @@ T_void DrawTextureRowAsm1(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(xOffset >> 16) & G_textureAndX]];
@@ -8815,7 +7457,7 @@ T_void DrawTextureRowAsm2(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 1) | ((yOffset >> 16) & 0x01)]];
@@ -8829,7 +7471,7 @@ T_void DrawTextureRowAsm4(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 2) | ((yOffset >> 16) & 0x03)]];
@@ -8843,7 +7485,7 @@ T_void DrawTextureRowAsm8(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 3) | ((yOffset >> 16) & 0x07)]];
@@ -8857,7 +7499,7 @@ T_void DrawTextureRowAsm16(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 4) | ((yOffset >> 16) & 0x0F)]];
@@ -8871,7 +7513,7 @@ T_void DrawTextureRowAsm32(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 5) | ((yOffset >> 16) & 0x1F)]];
@@ -8885,7 +7527,7 @@ T_void DrawTextureRowAsm64(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 6) | ((yOffset >> 16) & 0x3F)]];
@@ -8899,7 +7541,7 @@ T_void DrawTextureRowAsm128(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 7) | ((yOffset >> 16) & 0x7F)]];
@@ -8913,7 +7555,7 @@ T_void DrawTextureRowAsm256(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     while (count--) {
         *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 8) | ((yOffset >> 16) & 0xFF)]];
@@ -8927,7 +7569,7 @@ T_void DrawTransRowAsm1(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8946,7 +7588,7 @@ T_void DrawTransRowAsm2(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8965,7 +7607,7 @@ T_void DrawTransRowAsm4(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -8984,7 +7626,7 @@ T_void DrawTransRowAsm8(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -9003,7 +7645,7 @@ T_void DrawTransRowAsm16(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -9022,7 +7664,7 @@ T_void DrawTransRowAsm32(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -9041,7 +7683,7 @@ T_void DrawTransRowAsm64(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -9060,7 +7702,7 @@ T_void DrawTransRowAsm128(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -9079,7 +7721,7 @@ T_void DrawTransRowAsm256(
            T_word32 count,
            T_sword32 xOffset,
            T_sword32 yOffset,
-           T_byte8 *p_pixel) 
+           T_byte8 *p_pixel)
 {
     T_byte8 c;
 
@@ -9094,6 +7736,7 @@ T_void DrawTransRowAsm256(
 }
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  3D_VIEW.C                                               */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  3D_VIEW.C
+ *-------------------------------------------------------------------------*/

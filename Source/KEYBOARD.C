@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  UIBUTTON.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  KEYBOARD.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Routines for tracking which keys are being pressed.  In DOS, we even
+ * tried to make so we could tell how long a key was pressed.  This is
+ * less of an issue these days.
+ *
+ * @addtogroup KEYBOARD
+ * @brief Keyboad Controls
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "OPTIONS.H"
 #if WIN32
 #include <SDL.h>
@@ -161,51 +172,18 @@ static char G_asciiBuffer[32] ;
 static T_word16 G_asciiStart = 0 ;
 static T_word16 G_asciiEnd = 0 ;
 
-/****************************************************************************/
-/*  Routine:  KeyboardOn                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardOn installs the keyboard functions of the following commands. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine can not be called twice in a row and must be called      */
-/*  once for the rest of the routines to work correctly (Except the         */
-/*  keyboard buffer commands).                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _disable                                                              */
-/*    _enable                                                               */
-/*    _dos_getvect                                                          */
-/*    _dos_setvect                                                          */
-/*    IKeyboardClear                                                        */
-/*    DoubleLinkListCreate                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*    LES  02/28/96  Added construction of G_eventStack                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardOn installs the keyboard functions of the following commands.
+ *
+ *  NOTE: 
+ *  This routine can not be called twice in a row and must be called
+ *  once for the rest of the routines to work correctly (Except the
+ *  keyboard buffer commands).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardOn(T_void)
 {
     DebugRoutine("KeyboardOn") ;
@@ -239,45 +217,17 @@ T_void KeyboardOn(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardOff                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    When you are done with the keyboard, you can turn it off by calling   */
-/*  KeyboardOff.  This will remove the keyboard driver from memory.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine MUST be called before exiting or DOS will crash.         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListDestroy                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*    LES  02/28/96  Added deconstruction of G_eventStack                   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  When you are done with the keyboard, you can turn it off by calling
+ *  KeyboardOff.  This will remove the keyboard driver from memory.
+ *
+ *  NOTE: 
+ *  This routine MUST be called before exiting or DOS will crash.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardOff(T_void)
 {
     DebugRoutine("KeyboardOff") ;
@@ -303,47 +253,20 @@ T_void KeyboardOff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardGetScanCode                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardGetScanCode is used to check if the key for the corresponding */
-/*  scan code is being pressed.  If it is, a TRUE is returned, or else      */
-/*  false is returned.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 scanCode            -- Scan code to check                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE  = Key is pressed                 */
-/*                                   FALSE = Key is not pressed             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*    LES  06/06/94  Modified to handle dual key requests                   */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardGetScanCode
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardGetScanCode is used to check if the key for the corresponding
+ *  scan code is being pressed.  If it is, a TRUE is returned, or else
+ *  false is returned.
+ *
+ *  @param scanCode -- Scan code to check
+ *
+ *  @return TRUE  = Key is pressed
+ *      FALSE = Key is not pressed
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IGetAdjustedKey(T_word16 scanCode)
 {
     switch (scanCode)
@@ -421,45 +344,15 @@ E_Boolean KeyboardGetScanCode(T_word16 scanCodes)
     return isPressed ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardDebounce                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sometimes it is useful to wait for all keys to be released.           */
-/*  KeyboardDebounce is a simple routine that just waits until the user     */
-/*  has released all pressed keys.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardDebounce
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sometimes it is useful to wait for all keys to be released.
+ *  KeyboardDebounce is a simple routine that just waits until the user
+ *  has released all pressed keys.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardDebounce(T_void)
 {
     DebugRoutine("KeyboardDebounce") ;
@@ -485,48 +378,19 @@ T_void KeyboardDebounce(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardSetEventHandler                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardSetEventHandler declares the function to be called for        */
-/*  each keyboard event as dispatched by the KeyboardUpdateEvents routine.  */
-/*  If you no longer need a keyboard handler, give this routine an          */
-/*  input parameter of NULL.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_keyboardEventHandler keyboardEventHandler                           */
-/*                                -- function to call on events, or NULL    */
-/*                                   for none.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardSetEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardSetEventHandler declares the function to be called for
+ *  each keyboard event as dispatched by the KeyboardUpdateEvents routine.
+ *  If you no longer need a keyboard handler, give this routine an
+ *  input parameter of NULL.
+ *
+ *  @param keyboardEventHandler -- function to call on events, or NULL
+ *      for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardSetEventHandler(T_keyboardEventHandler keyboardEventHandler)
 {
     DebugRoutine("KeyboardSetEventHandler") ;
@@ -546,47 +410,15 @@ T_keyboardEventHandler KeyboardGetEventHandler (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  KeyboardUpdateEvents                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardUpdateEvents should be called often for it to work correctly  */
-/*  with a keyboard event handler.  Events are sent by this routine to      */
-/*  tell what keys are being pressed and released.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Whatever is the current G_keyboardEventHandler (if it exists)         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*    LES  12/12/94  Added buffer mode checking to buffered keystroke       */
-/*                   events.                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardUpdateEvents
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardUpdateEvents should be called often for it to work correctly
+ *  with a keyboard event handler.  Events are sent by this routine to
+ *  tell what keys are being pressed and released.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardUpdateEvents(T_void)
 {
     T_word16 scanCode ;
@@ -646,47 +478,19 @@ T_void KeyboardUpdateEvents(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardBufferOn                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardBufferOn will allow keys to be buffered up for use later.     */
-/*  Although useful in word processors, when the buffer gets full it        */
-/*  causes a beeping noise that is not wonderful in games.  Depending on    */
-/*  your need, you may wnat the buffer on.                                  */
-/*    Note: KeyboardBufferOn CAN be called even if KeyboardOn is not.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardBufferOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardBufferOn will allow keys to be buffered up for use later.
+ *  Although useful in word processors, when the buffer gets full it
+ *  causes a beeping noise that is not wonderful in games.  Depending on
+ *  your need, you may wnat the buffer on.
+ *
+ *  NOTE:
+ *  KeyboardBufferOn CAN be called even if KeyboardOn is not.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardBufferOn(T_void)
 {
     DebugRoutine("KeyboardBufferOn") ;
@@ -696,48 +500,20 @@ T_void KeyboardBufferOn(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardBufferOff                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardBufferOff will not allow keys to be buffered up for use later.*/
-/*  Although useful in word processors, when the buffer gets full it        */
-/*  causes a beeping noise that is not wonderful in games.  Depending on    */
-/*  your need, you may wnat the buffer off.                                 */
-/*    Note: KeyboardBufferOff CAN be called even if KeyboardOn is not.      */
-/*    The default is for the buffer to be on.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardBufferOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardBufferOff will not allow keys to be buffered up for use later.
+ *  Although useful in word processors, when the buffer gets full it
+ *  causes a beeping noise that is not wonderful in games.  Depending on
+ *  your need, you may wnat the buffer off.
+ *
+ *  NOTE:
+ *  KeyboardBufferOff CAN be called even if KeyboardOn is not.
+ *  The default is for the buffer to be on.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardBufferOff(T_void)
 {
     DebugRoutine("KeyboardBufferOff") ;
@@ -747,46 +523,17 @@ T_void KeyboardBufferOff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardBufferGet                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    If you are using a buffer, you can get keystrokes from the buffer     */
-/*  by using this routine.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_byte8                     -- ASCII character of gained character    */
-/*                                   or 0 for none.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    getch                                                                 */
-/*    kbhit                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardBufferGet
+ *-------------------------------------------------------------------------*/
+/**
+ *  If you are using a buffer, you can get keystrokes from the buffer
+ *  by using this routine.
+ *
+ *  @return ASCII character of gained character
+ *      or 0 for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 KeyboardBufferGet(T_void)
 {
     T_byte8 key ;
@@ -823,48 +570,15 @@ T_byte8 KeyboardBufferGet(T_void)
     return key ;
 }
 
-/****************************************************************************/
-/*  Routine:  IKeyboardInterrupt                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IKeyboardInterrupt is the routine that is called every time a key     */
-/*  on the keyboard is either pressed or released.  If keyboard buffering   */
-/*  is on, the regular BIOS routines are also called.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*    LES  01/05/95  Added CTRL-F12 break out function in debug only.       */
-/*    LES  07/05/95  Added CTRL-F11 to break out using the debug stop       */
-/*                   routine.                                               */
-/*    AMT  07/23/95  Made right and left equivalent for CTRL, ALT, & SHIFT  */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  IKeyboardInterrupt
+ *-------------------------------------------------------------------------*/
+/**
+ *  IKeyboardInterrupt is the routine that is called every time a key
+ *  on the keyboard is either pressed or released.  If keyboard buffering
+ *  is on, the regular BIOS routines are also called.
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifdef ALLOW_KEYBOARD_INTERRUPT
 static T_void __interrupt __far IKeyboardInterrupt(T_void)
 {
@@ -1053,44 +767,17 @@ static T_void __interrupt __far IKeyboardInterrupt(T_void)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  IKeyboardSendCommand               * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IKeyboardSendCommand is used by IKeyboardInterrupt to tell the        */
-/*  keyboard that certain events are taking place (most likely turning      */
-/*  on and off the keyboard interrupts).                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *keyboardCommand    -- command to send keyboard               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  IKeyboardSendCommand
+ *-------------------------------------------------------------------------*/
+/**
+ *  IKeyboardSendCommand is used by IKeyboardInterrupt to tell the
+ *  keyboard that certain events are taking place (most likely turning
+ *  on and off the keyboard interrupts).
+ *
+ *  @param keyboardCommand -- command to send keyboard
+ *
+ *<!-----------------------------------------------------------------------*/
 #ifdef ALLOW_KEYBOARD_INTERRUPT
 static T_void IKeyboardSendCommand(T_byte8 keyboardCommand)
 {
@@ -1114,47 +801,20 @@ static T_void IKeyboardSendCommand(T_byte8 keyboardCommand)
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  IKeyboardClear                     * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IKeyboardClear is a routine that is called to clear the whole         */
-/*  key tables of their state and assume that all keys are NOT being        */
-/*  pressed (even if they are).                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If this routine is called and a key IS being pressed, it will be      */
-/*  ignored until the key is released and then pressed again.  In other     */
-/*  words, you should only call this routine on startup.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IKeyboardClear
+ *-------------------------------------------------------------------------*/
+/**
+ *  IKeyboardClear is a routine that is called to clear the whole
+ *  key tables of their state and assume that all keys are NOT being
+ *  pressed (even if they are).
+ *
+ *  NOTE: 
+ *  If this routine is called and a key IS being pressed, it will be
+ *  ignored until the key is released and then pressed again.  In other
+ *  words, you should only call this routine on startup.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IKeyboardClear(T_void)
 {
     T_word16 scanCode ;
@@ -1184,48 +844,21 @@ static T_void IKeyboardClear(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardGetHeldTimeAndClear        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardGetHeldTimeAndClear tells how long a key has been held        */
-/*  down since the key was last cleared.  This capability is useful         */
-/*  for getting accurate readings of how long the user desired the key      */
-/*  to be pressed, and not based on when calls were able to be made.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Calling this routine can be a problem if it has been a long time      */
-/*  since it was previously called on a key.  If you are unsure, be sure    */
-/*  to make a call to KeyboardDebounce which clears the timing values.      */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardGetHeldTimeAndClear
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardGetHeldTimeAndClear tells how long a key has been held
+ *  down since the key was last cleared.  This capability is useful
+ *  for getting accurate readings of how long the user desired the key
+ *  to be pressed, and not based on when calls were able to be made.
+ *
+ *  NOTE: 
+ *  Calling this routine can be a problem if it has been a long time
+ *  since it was previously called on a key.  If you are unsure, be sure
+ *  to make a call to KeyboardDebounce which clears the timing values.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 KeyboardGetHeldTimeAndClear(T_word16 scanCode)
 {
     T_word32 timeHeld ;
@@ -1264,48 +897,18 @@ T_word32 KeyboardGetHeldTimeAndClear(T_word16 scanCode)
     return timeHeld ;
 }
 
-/****************************************************************************/
-/*  Routine:  KeyboardPushEventHandler                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardPushEventHandler removes the old handler by placing it on     */
-/*  a stack and sets up the new event handler.  The old event handler       */
-/*  will be restored when a call to KeyboardPopEventHandler is called.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_keyboardEventHandler keyboardEventHandler                           */
-/*                                -- function to call on events, or NULL    */
-/*                                   for none.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListAddElementAtFront                                       */
-/*    KeyboardSetEventHandler                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardPushEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardPushEventHandler removes the old handler by placing it on
+ *  a stack and sets up the new event handler.  The old event handler
+ *  will be restored when a call to KeyboardPopEventHandler is called.
+ *
+ *  @param keyboardEventHandler -- function to call on events, or NULL
+ *      for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardPushEventHandler(T_keyboardEventHandler keyboardEventHandler)
 {
     DebugRoutine("KeyboardPushEventHandler") ;
@@ -1322,46 +925,14 @@ T_void KeyboardPushEventHandler(T_keyboardEventHandler keyboardEventHandler)
 }
 
 
-/****************************************************************************/
-/*  Routine:  KeyboardPopEventHandler                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    KeyboardPopEventHandler restores the last handler on the stack        */
-/*  (if there is one).                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DoubleLinkListGetFirst                                                */
-/*    DoubleLinkListElementGetData                                          */
-/*    KeyboardSetEventHandler                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  KeyboardPopEventHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  KeyboardPopEventHandler restores the last handler on the stack
+ *  (if there is one).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void KeyboardPopEventHandler(T_void)
 {
     T_doubleLinkListElement first ;
@@ -1498,7 +1069,7 @@ const uint8_t G_sdlToScancode[] = {
         0, // 88
         0, // 89
         0, // 90
-	/* 
+	/*
 	   Skip uppercase letters
 	 */
         KEY_SCAN_CODE_SB_OPEN, // SDLK_LEFTBRACKET	= 91,
@@ -1814,7 +1385,7 @@ printf("scancode %d = %d\n", scanCode, newValue);
 
                 /* If a press and an ascii character, store that in the */
                 /* keyboard buffer. */
-                if ((G_keyTable[scanCode] == TRUE) && 
+                if ((G_keyTable[scanCode] == TRUE) &&
                     (IGetAdjustedKey(KEY_SCAN_CODE_ALT) == FALSE) &&
                     (G_keyTable[KEY_SCAN_CODE_RIGHT_CTRL]==FALSE) &&
                     (G_keyTable[KEY_SCAN_CODE_LEFT_CTRL]==FALSE))  {
@@ -1863,6 +1434,7 @@ printf("  buffer key %d, %d (%c), i=%d\n", scanCode, c, c, i);
 #endif
 
 
-/****************************************************************************/
-/*    END OF FILE:  UIBUTTON.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  KEYBOARD.C
+ *-------------------------------------------------------------------------*/

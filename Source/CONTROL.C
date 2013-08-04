@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  CONTROL.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CONTROL.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All the neat features of the mouse control is handled here.
+ *
+ * @addtogroup CONTROL
+ * @brief Mouse Control in Game
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ * Use this code to control what the mouse cursor looks like and what
+ * the mouse actions do.
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "BUTTON.H"
 #include "CLI_SEND.H"
@@ -75,37 +86,14 @@ static T_void ControlMouseControlForGame(
         T_word16 y,
         T_buttonClick button);
 
-/****************************************************************************/
-/*  Routine:  ControlInitForGamePlay                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sets up the mouse (& keyboard?) for control in the game.              */
-/*    Initializes all necessary variables and default mouse bitmap, ect.    */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/30/95  Created                                                */
-/*    LES  03/06/96  Renamed to ControlInitForGamePlay and copied.          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ControlInitForGamePlay
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sets up the mouse (& keyboard?) for control in the game.
+ *  Initializes all necessary variables and default mouse bitmap, ect.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ControlInitForGamePlay(T_void)
 {
     DebugRoutine("ControlInitForGamePlay");
@@ -130,36 +118,14 @@ T_void ControlInitForGamePlay(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ControlInitForJustUI                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Sets up the mouse (& keyboard?) for control in ui situations.         */
-/*    Initializes all necessary variables and default mouse bitmap, ect.    */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Copied from old ControlInit                            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ControlInitForJustUI
+ *-------------------------------------------------------------------------*/
+/**
+ *  Sets up the mouse (& keyboard?) for control in ui situations.
+ *  Initializes all necessary variables and default mouse bitmap, ect.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ControlInitForJustUI(T_void)
 {
     DebugRoutine("ControlInitForJustUI");
@@ -184,35 +150,13 @@ T_void ControlInitForJustUI(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ControlMouseControlForUI                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine does the standard mouse update for the ui.               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ControlMouseControlForUI
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine does the standard mouse update for the ui.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ControlMouseControlForUI(
         E_mouseEvent event,
         T_word16 x,
@@ -232,37 +176,14 @@ static T_void ControlMouseControlForUI(
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ControlMouseControlForGame                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This is the default (main) control loop for the mouse.                */
-/*    It is set as the mouse control loop by ControlInit.                   */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/30/95  Created                                                */
-/*    LES  03/06/96  Removed and put code into ControlMouseControlForUI     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ControlMouseControlForGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  This is the default (main) control loop for the mouse.
+ *  It is set as the mouse control loop by ControlInit.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ControlMouseControlForGame(
         E_mouseEvent event,
         T_word16 x,
@@ -549,36 +470,14 @@ static T_void ControlMouseControlForGame(
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ControlFinish                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Shuts down and cleans up control things.                              */
-/*    Restores the mouse to the default bitmap.                             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ControlFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  Shuts down and cleans up control things.
+ *  Restores the mouse to the default bitmap.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ControlFinish(T_void)
 {
     DebugRoutine("ControlFinish");
@@ -1063,3 +962,7 @@ T_void ControlDisplayControlPage(T_void)
     DebugEnd();
 }
 
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CONTROL.C
+ *-------------------------------------------------------------------------*/

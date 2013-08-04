@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  SERVER.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SERVER.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Server code responds to requests from the players to perform
+ * actions.  This top level code handles those requests usually passing
+ * off the requests to others.
+ *
+ * @addtogroup SERVER
+ * @brief Server/World Code
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_COLLI.H"
 #include "3D_TRIG.H"
 #include "AREASND.H"
@@ -50,46 +61,17 @@ static T_void IServerDataBlockSentNowFree(
 static T_void IServerCheckSectorSounds(T_void) ;
 
 
-/****************************************************************************/
-/*  Routine:  ServerInit                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerInit starts up the server and gets everything in order before   */
-/*  any other actions can occur.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Must be called before all other ServerXXX commands.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*    AMT  09/??/95  Added support for master/slave callback sets, and for  */
-/*                   re-initializing this module after a fork().            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerInit starts up the server and gets everything in order before
+ *  any other actions can occur.
+ *
+ *  NOTE: 
+ *  Must be called before all other ServerXXX commands.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerInit(T_void)
 {
     DebugRoutine("ServerInit") ;
@@ -100,43 +82,13 @@ T_void ServerInit(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerFinish cleans up the server.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ServerPacketLogFinish                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerFinish cleans up the server.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerFinish(T_void)
 {
     DebugRoutine("ServerFinish") ;
@@ -157,47 +109,22 @@ T_void ServerPlayerLeft(T_player player)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveProjectileAddPacket                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    A PROJECTILE_CREATE packet is used as an alternative to an            */
-/*  OBJECT_CREATE when the new object is thrown, fired, or otherwise        */
-/*  projected from a known origin object.  This allows the packet to be     */
-/*  SHORT rather than LONG, since a good deal of positional information is  */
-/*  implicit and doesn't need to be sent.  This routine handles these       */
-/*  packets.                                                                */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- objectAdd packet               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *              -- Created object                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  08/01/95  Created                                                */
-/*    LES  08/02/95  Corrected problem with fireballs and angles            */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveProjectileAddPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  A PROJECTILE_CREATE packet is used as an alternative to an
+ *  OBJECT_CREATE when the new object is thrown, fired, or otherwise
+ *  projected from a known origin object.  This allows the packet to be
+ *  SHORT rather than LONG, since a good deal of positional information is
+ *  implicit and doesn't need to be sent.  This routine handles these
+ *  packets.
+ *
+ *  @param p_packet -- objectAdd packet
+ *
+ *  @return Created object
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ServerReceiveProjectileAddPacket (T_packetEitherShortOrLong *p_packet)
 {
     T_projectileAddPacket *p_addPacket;
@@ -257,50 +184,24 @@ T_3dObject *ServerReceiveProjectileAddPacket (T_packetEitherShortOrLong *p_packe
     return p_obj ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerShootProjectile                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerShootProjectile is a routine that will create a projectile      */
-/*  by setting up a projectile packet and then sending it to itself.        */
-/*  This will cause the packet to be sent to all the clients and the object */
-/*  to be created (with an appropriate server id).                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_objSource     -- Object doing the shooting              */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to shoot the projectile          */
-/*                                                                          */
-/*    T_word16 typeObj            -- Object type (fireball?)                */
-/*                                                                          */
-/*    T_byte8 initSpeed           -- How fast.  Note this is a small value  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Created projectile, NULL for none      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ServerReceiveProjectileAddPacket                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  08/02/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerShootProjectile
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerShootProjectile is a routine that will create a projectile
+ *  by setting up a projectile packet and then sending it to itself.
+ *  This will cause the packet to be sent to all the clients and the object
+ *  to be created (with an appropriate server id).
+ *
+ *  @param p_objSource -- Object doing the shooting
+ *  @param angle -- Angle to shoot the projectile
+ *  @param typeObj -- Object type (fireball?)
+ *  @param initSpeed -- How fast.  Note this is a small value
+ *  @param p_target -- Target to shoot at (or NULL for none)
+ *
+ *  @return Created projectile, NULL for none
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ServerShootProjectile(
           T_3dObject *p_objSource,
           T_word16 angle,
@@ -414,44 +315,14 @@ T_3dObject *ServerShootProjectile(
     return p_obj ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerUpdate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerUpdate goes through all the code execution necessary to update  */
-/*  the server actions in one time slice.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerUpdate goes through all the code execution necessary to update
+ *  the server actions in one time slice.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerUpdate(T_void)
 {
     static T_word32 lastCount = 0 ;
@@ -503,45 +374,19 @@ T_void ServerUpdate(T_void)
     TICKER_TIME_ROUTINE_END(stdout, "ServerUpdate", 500) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerGetNextPlayer                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerGetNextPlayer is used to traverse through all the players in    */
-/*  the game.  Use -1 to get the first player and then continue.  When a    */
-/*  -1 is returned, you know that you are at the end of the list.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 lastPlayer        -- Player to start from or -1 for first   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword16                   -- next player.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerGetNextPlayer
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerGetNextPlayer is used to traverse through all the players in
+ *  the game.  Use -1 to get the first player and then continue.  When a
+ *  -1 is returned, you know that you are at the end of the list.
+ *
+ *  @param lastPlayer -- Player to start from or -1 for first
+ *
+ *  @return next player.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sword16 ServerGetNextPlayer(T_player lastPlayer)
 {
     T_player nextPlayer ;
@@ -611,44 +456,18 @@ if (nextPlayer == 0)  {
     return nextPlayer ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerGetPlayerObject                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerGetPlayerObject finds a player and returns its object.  If none */
-/*  is found, NULL is returned.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 playerId           -- Player's Id                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Player's object, or NULL if not found  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerGetPlayerObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerGetPlayerObject finds a player and returns its object.  If none
+ *  is found, NULL is returned.
+ *
+ *  @param playerId -- Player's Id
+ *
+ *  @return Player's object, or NULL if not found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ServerGetPlayerObject(T_word16 playerId)
 {
     T_3dObject *p_obj ;
@@ -664,47 +483,20 @@ T_3dObject *ServerGetPlayerObject(T_word16 playerId)
     return p_obj ;
 }
 
-/****************************************************************************/
-/*  Routine:  IServerCheckSectorSounds                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IServerCheckSectorSounds sees if all the objects have caused any      */
-/*  sounds to occur.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This routine is to be immediately called after the ObjectsUpdateMove  */
-/*  routine is called.  Don't send packets until this routine is called.    */
-/*  The IsMoved flag on the objects is used to determine if a check is      */
-/*  needed or not.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectsDoToAll                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IServerCheckSectorSounds
+ *-------------------------------------------------------------------------*/
+/**
+ *  IServerCheckSectorSounds sees if all the objects have caused any
+ *  sounds to occur.
+ *
+ *  NOTE: 
+ *  This routine is to be immediately called after the ObjectsUpdateMove
+ *  routine is called.  Don't send packets until this routine is called.
+ *  The IsMoved flag on the objects is used to determine if a check is
+ *  needed or not.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IServerCheckSectorSounds(T_void)
 {
     DebugRoutine("IServerCheckSectorSounds") ;
@@ -717,48 +509,19 @@ static T_void IServerCheckSectorSounds(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IServerCheckSectorSoundsForObject                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IServerCheckSectorSoundsForObject sees if an object is on a group     */
-/*  of sectors with the same "entry sound."  If it is, the sound is produced*/
-/*  given that the object has not recently created the sound.  This is      */
-/*  used for making splashing sounds.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Player object to identify              */
-/*                                                                          */
-/*    T_word32 data               -- This is currently always zero          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dGetSectorEnterSound                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IServerCheckSectorSoundsForObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  IServerCheckSectorSoundsForObject sees if an object is on a group
+ *  of sectors with the same "entry sound."  If it is, the sound is produced
+ *  given that the object has not recently created the sound.  This is
+ *  used for making splashing sounds.
+ *
+ *  @param p_obj -- Player object to identify
+ *  @param data -- This is currently always zero
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean IServerCheckSectorSoundsForObject(T_3dObject *p_obj, T_word32 data)
 {
     T_word16 i, sound1=0, sound2 ;
@@ -821,59 +584,32 @@ E_Boolean IServerCheckSectorSoundsForObject(T_3dObject *p_obj, T_word32 data)
     return FALSE;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerGotoPlace                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerGotoPlace is called to force all logged-in clients to go to     */
-/*  a map or form.  It has the same effect as receiving a goto-place packet */
-/*  from a client.                                                          */
-/*                                                                          */
-/*     New behavior (AMT, 9/13/95):  Place numbers fit into the following   */
-/*  groups, specified by their high 2 bytes:                                */
-/*     0000 - 00FF   Levels.  This allows for an absurd number of levels.   */
-/*                   Whenever a master receives one, a new slave server     */
-/*                   is forked off and begins an adventure.                 */
-/*                   Whenever a slave receives one, it just advances to that*/
-/*                   level.                                                 */
-/*     0100 - 01FF   Forms.  Mail rooms, inns, etc.  Whenever one of these  */
-/*                   is received by a slave, it terminates and returns      */
-/*                   control to the master.  Masters handle normally.       */
-/*     0200          Currently-running adventures.  I.e. currently active   */
-/*                   slaves which the client wishes to join.                */
-/*                   Slave receives and ignores.  Master receives and tells */
-/*                   the appropriate slave.                                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 placeNumber          -- the place to go to.                  */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  08/09/95  Created                                                */
-/*    AMT  09/13/95  Changed the face of forever.                           */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerGotoPlace
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerGotoPlace is called to force all logged-in clients to go to
+ *  a map or form.  It has the same effect as receiving a goto-place packet
+ *  from a client.
+ *  New behavior (AMT, 9/13/95)  Place numbers fit into the following
+ *  groups, specified by their high 2 bytes.
+ *  0000 - 00FF   Levels.  This allows for an absurd number of levels.
+ *  Whenever a master receives one, a new slave server
+ *  is forked off and begins an adventure.
+ *  Whenever a slave receives one, it just advances to that
+ *  level.
+ *  0100 - 01FF   Forms.  Mail rooms, inns, etc.  Whenever one of these
+ *  is received by a slave, it terminates and returns
+ *  control to the master.  Masters handle normally.
+ *  0200          Currently-running adventures.  I.e. currently active
+ *  slaves which the client wishes to join.
+ *  Slave receives and ignores.  Master receives and tells
+ *  the appropriate slave.
+ *
+ *  @param placeNumber -- the place to go to.
+ *  @param startLocation -- Numerical start location.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerGotoPlace(T_word32 placeNumber, T_word16 startLocation)
 {
     T_packetShort packet ;
@@ -909,44 +645,17 @@ T_void ServerGotoPlace(T_word32 placeNumber, T_word16 startLocation)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveGotoPlacePacket                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveGotoPlacePacket is called when a client reqests a map    */
-/*  or form change.  It basically loads in the new map and sends a copy     */
-/*  of the request to all the other clients.                                */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_gotoPacket -- the goto place packet.     */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/21/95  Created                                                */
-/*    AMT  09/13/95  Made it just call ServerGotoPlace                      */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveGotoPlacePacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveGotoPlacePacket is called when a client reqests a map
+ *  or form change.  It basically loads in the new map and sends a copy
+ *  of the request to all the other clients.
+ *
+ *  @param p_gotoPacket -- the goto place packet.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket)
 {
     T_gotoPlacePacket *p_packet ;
@@ -965,47 +674,17 @@ T_void ServerReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveGotoSucceededPacket                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveGotoSucceededPacket is called when a client has success- */
-/*  fully complied with a GotoPlace packet.  This lets me know when every-  */
-/*  body is ready.                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- the goto success packet.       */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    AMT  07/21/95  Created                                                */
-/*    LES  07/21/95  Finished creating by handling object creation          */
-/*                   correctly.  Most of the code was taken from            */
-/*                   ServerAckLoginPacket.                                  */
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveGotoSucceededPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveGotoSucceededPacket is called when a client has success-
+ *  fully complied with a GotoPlace packet.  This lets me know when every-
+ *  body is ready.
+ *
+ *  @param p_packet -- the goto success packet.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet)
 {
     T_word16 player ;
@@ -1087,128 +766,44 @@ T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerGetServerID                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerGetServerID returns the server id of this server.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Server id                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerGetServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerGetServerID returns the server id of this server.
+ *
+ *  @return Server id
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 ServerGetServerID(T_void)
 {
     return G_serverID ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerSetServerID                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerSetServerID sets    the server id of this server.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32                    -- Server id                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerSetServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerSetServerID sets    the server id of this server.
+ *
+ *  @param newID -- Server id
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerSetServerID(T_word32 newID)
 {
     G_serverID = newID ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveRequestEnterPacket                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveRequestEnterPacket is called when a client is wanting    */
-/*  to receive info about if he can enter.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- request enter packet           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CmdQSendShortPacket                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveRequestEnterPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveRequestEnterPacket is called when a client is wanting
+ *  to receive info about if he can enter.
+ *
+ *  @param p_packet -- request enter packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveRequestEnterPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1225,45 +820,20 @@ T_void ServerReceiveRequestEnterPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveRequestCharacterListPacket                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveRequestCharacterListPacket is called when the client     */
-/*  wishes to know what characters are available for this account.          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This code is intended for the Self Server mode ONLY.  It just  */
-/*  makes a call to StatsGetSavedCharacterList and starts a memory transfer.*/
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- request enter packet           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StatsGetSavedCharacterList                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveRequestCharacterListPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveRequestCharacterListPacket is called when the client
+ *  wishes to know what characters are available for this account.
+ *
+ *  NOTE:
+ *  This code is intended for the Self Server mode ONLY.  It just
+ *  makes a call to StatsGetSavedCharacterList and starts a memory transfer.
+ *
+ *  @param p_packet -- request enter packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveRequestCharacterListPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1282,40 +852,20 @@ T_void ServerReceiveRequestCharacterListPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveLoadCharacterPacket                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveLoadCharacterPacket is called when the client            */
-/*  wishes to either see if a character needs to be downloaded or if        */
-/*  the checksums are correct, noted.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This code is intended for the Self Server mode ONLY.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- load char     packet           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveLoadCharacterPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveLoadCharacterPacket is called when the client
+ *  wishes to either see if a character needs to be downloaded or if
+ *  the checksums are correct, noted.
+ *
+ *  NOTE:
+ *  This code is intended for the Self Server mode ONLY.
+ *
+ *  @param p_packet -- load char     packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveLoadCharacterPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1340,40 +890,20 @@ T_void ServerReceiveLoadCharacterPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveCreateCharacterPacket                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveCreateCharacterPacket is called when the client          */
-/*  wishes to create a new character in the given slot.  At the same time   */
-/*  the character will be uploaded.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This code is intended for the Self Server mode ONLY.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- craete char   packet           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveCreateCharacterPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveCreateCharacterPacket is called when the client
+ *  wishes to create a new character in the given slot.  At the same time
+ *  the character will be uploaded.
+ *
+ *  NOTE:
+ *  This code is intended for the Self Server mode ONLY.
+ *
+ *  @param p_packet -- craete char   packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveCreateCharacterPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1402,40 +932,20 @@ T_void ServerReceiveCreateCharacterPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveDeleteCharacterPacket                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveDeleteCharacterPacket is called when the client          */
-/*  wishes to delete a new character in the given slot.  At the same time   */
-/*  the character will be uploaded.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This code is intended for the Self Server mode ONLY.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- delete char   packet           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Deleted                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveDeleteCharacterPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveDeleteCharacterPacket is called when the client
+ *  wishes to delete a new character in the given slot.  At the same time
+ *  the character will be uploaded.
+ *
+ *  NOTE:
+ *  This code is intended for the Self Server mode ONLY.
+ *
+ *  @param p_packet -- delete char   packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveDeleteCharacterPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1467,39 +977,19 @@ deleteOk = DeleteCharacterForAccount(???, p_delete->slot) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveCheckPasswordPacket                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveCheckPasswordPacket is called when the client            */
-/*  wishes to check the password on a character of a given slot.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This code is intended for the Self Server mode ONLY.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- check passwordpacket           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Deleted                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveCheckPasswordPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveCheckPasswordPacket is called when the client
+ *  wishes to check the password on a character of a given slot.
+ *
+ *  NOTE:
+ *  This code is intended for the Self Server mode ONLY.
+ *
+ *  @param p_packet -- check passwordpacket
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveCheckPasswordPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1534,39 +1024,19 @@ T_byte8 password[MAX_SIZE_PASSWORD] ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerReceiveChangePasswordPacket                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerReceiveChangePasswordPacket is called when the client           */
-/*  wishes to change her password on the system.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    NOTE:  This code is intended for the Self Server mode ONLY.           */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- change password packet         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Deleted                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerReceiveChangePasswordPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerReceiveChangePasswordPacket is called when the client
+ *  wishes to change her password on the system.
+ *
+ *  NOTE:
+ *  This code is intended for the Self Server mode ONLY.
+ *
+ *  @param p_packet -- change password packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveChangePasswordPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -1605,32 +1075,18 @@ T_void ServerReceiveChangePasswordPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IServerDataBlockSentNowFree                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*      Called after a memory transfer, it frees the memory block just      */
-/*    sent.                                                                 */
-/*                                                                          */
-/*  Problems:                                                               */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*    T_void *p_data              -- data block sent.                       */
-/*    T_word32 size               -- Size of block (not used)               */
-/*    T_word32 extraData          -- acc. data (not used)                   */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IServerDataBlockSentNowFree
+ *-------------------------------------------------------------------------*/
+/**
+ *  Called after a memory transfer, it frees the memory block just
+ *  sent.
+ *
+ *  @param p_data -- data block sent.
+ *  @param size -- Size of block (not used)
+ *  @param extraData -- acc. data (not used)
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IServerDataBlockSentNowFree(
                   T_void *p_data,
                   T_word32 size,
@@ -1720,49 +1176,23 @@ T_3dObject * ServerCreateFakeObjectGlobal(
     return p_obj ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerShootBasicProjectile                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerShootBasicProjectile is called to create an object at a         */
-/*  specific location and with specific velocities.                         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objectType         -- Type of object projectile              */
-/*                                                                          */
-/*    T_sword32 x, y, z           -- Position to start projectile           */
-/*                                                                          */
-/*    T_sword32 targetX, Y, Z     -- Target position for missile            */
-/*                                                                          */
-/*    T_word16 initialSpeed       -- How fast to shoot the missile          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ServerReceiveProjectileAddPacket                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  05/13/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerShootBasicProjectile
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerShootBasicProjectile is called to create an object at a
+ *  specific location and with specific velocities.
+ *
+ *  @param objectType -- Type of object projectile
+ *  @param x -- X Position to start projectile
+ *  @param y -- Y Position to start projectile
+ *  @param z -- Z Position to start projectile
+ *  @param targetX -- X Target position for missile
+ *  @param targetY -- Y Target position for missile
+ *  @param targetZ -- Z Target position for missile
+ *  @param initialSpeed -- How fast to shoot the missile
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerShootBasicProjectile(
            T_word16 objectType,
            T_sword32 x,
@@ -1847,49 +1277,15 @@ T_void ServerShootBasicProjectile(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerDestroyDestroyObjects                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerDestroyDestroyObjects goes through the list of objects and      */
-/*  checks if there any objects that are requesting self-destruction.  If   */
-/*  there is, an appropriate packet is sent and the object is eliminated.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectsGetFirst                                                       */
-/*    ObjectGetNext                                                         */
-/*    ServerDestroyObjectGlobal                                             */
-/*    ObjectIsMarkedForDestroy                                              */
-/*    ObjectsGetNumMarkedForDestroy                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/26/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerDestroyDestroyObjects
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerDestroyDestroyObjects goes through the list of objects and
+ *  checks if there any objects that are requesting self-destruction.  If
+ *  there is, an appropriate packet is sent and the object is eliminated.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerDestroyDestroyObjects(T_void)
 {
     T_3dObject *p_obj ;
@@ -1913,53 +1309,23 @@ T_void ServerDestroyDestroyObjects(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ServerDamageAtWithType                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ServerDamageAtWithType does damage to a given location.               */
-/*  If the given radius is nonzero, does damage to anything within the      */
-/*  radius.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x, y, z           -- Exact location                         */
-/*                                                                          */
-/*    T_word16 radius             -- Sphereical radius                      */
-/*                                                                          */
-/*    T_word16 damage             -- Amount of damage to do                 */
-/*                                                                          */
-/*    T_word16 ownerID            -- Owner of damage being done             */
-/*                                                                          */
-/*    E_effectDamageType type     -- Type of damage to do                   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectDoToAllAtXYZRadius                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/16/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ServerDamageAtWithType
+ *-------------------------------------------------------------------------*/
+/**
+ *  ServerDamageAtWithType does damage to a given location.
+ *  If the given radius is nonzero, does damage to anything within the
+ *  radius.
+ *
+ *  @param x -- X Exact location
+ *  @param y -- Y Exact location
+ *  @param z -- Z Exact location
+ *  @param radius -- Sphereical radius
+ *  @param damage -- Amount of damage to do
+ *  @param ownerID -- Owner of damage being done
+ *  @param type -- Type of damage to do
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ServerDamageAtWithType(
            T_sword16 x,
            T_sword16 y,
@@ -2024,6 +1390,7 @@ T_void ServerDamageAtWithType(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SERVER.C                                                */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SERVER.C
+ *-------------------------------------------------------------------------*/

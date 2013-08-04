@@ -1,6 +1,19 @@
-/****************************************************************************/
-/*    FILE:  CLI_RECV.C             Client Receive Packet Module            */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  CLI_RECV.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The client/server interface is broken into a send and receive side.
+ * This is the receive/process side.  Responses from the server/world will
+ * come back on the here and be fully processed.  It implies that the
+ * actions have been synchronized with all the other players and is really
+ * going to happen.
+ *
+ * @addtogroup CLI_RECV
+ * @brief Client Receive Packet Communications
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLI_RECV.H"
 #include "CLI_SEND.H"
 #include "CLIENT.H"
@@ -20,45 +33,14 @@
 #include "STATS.H"
 #include "TOWNUI.H"
 
-/****************************************************************************/
-/*  Routine:  ClientReceivePlaceStartPacket                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveLoginPacket tells the client that the server has just    */
-/*  allowed the client to login.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*    AMT  07/12/95  Modified so it works when we aren't on the same machine*/
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceivePlaceStartPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveLoginPacket tells the client that the server has just
+ *  allowed the client to login.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceivePlaceStartPacket(T_packetEitherShortOrLong *p_packet)
 {
     T_placeStartPacket *p_start ;
@@ -74,44 +56,16 @@ T_void ClientReceivePlaceStartPacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceivePlayerLogoffPacket                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceivePlayerLogoffPacket tells the client that one of the      */
-/*  players have left this group.  Remove all the associated information.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- logoff packet                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memmove                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceivePlayerLogoffPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceivePlayerLogoffPacket tells the client that one of the
+ *  players have left this group.  Remove all the associated information.
+ *
+ *  @param p_packet -- logoff packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceivePlayerLogoffPacket(T_packetEitherShortOrLong *p_packet)
 {
     T_logoffPacket *p_logoff ;
@@ -136,44 +90,14 @@ T_void ClientReceivePlayerLogoffPacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveMessagePacket                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveMessagePacket is called when someone sends a message     */
-/*  about someone saying something.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveMessagePacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveMessagePacket is called when someone sends a message
+ *  about someone saying something.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveMessagePacket(T_packetEitherShortOrLong *p_packet)
 {
     T_messagePacket *p_msg ;
@@ -197,43 +121,14 @@ T_void ClientReceiveMessagePacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveGotoPlacePacket                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveGotoPlacePacket is the routine that stops the current    */
-/*  map and goes to another.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/21/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveGotoPlacePacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveGotoPlacePacket is the routine that stops the current
+ *  map and goes to another.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket)
 {
     T_gotoPlacePacket *p_packet ;
@@ -251,44 +146,16 @@ puts("ClientReceiveGotoPlacePacket");
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveServerdIDPacket                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveServerIDPacket receives a server id packet that tells    */
-/*  what the unique server identifier is.                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- server id packet               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetCurrentServerID                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveServerdIDPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveServerIDPacket receives a server id packet that tells
+ *  what the unique server identifier is.
+ *
+ *  @param p_packet -- server id packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveServerIDPacket(T_packetEitherShortOrLong *p_packet)
 {
     T_serverIDPacket *p_serverID ;
@@ -303,44 +170,16 @@ T_void ClientReceiveServerIDPacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveRequestEnterStatusPacket                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveRequestEnterStatusPacket is called when the server is    */
-/*  responding to a ClientRequestEnterStatusPacket.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- request enter status packet    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetServerEnterStatus                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveRequestEnterStatusPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveRequestEnterStatusPacket is called when the server is
+ *  responding to a ClientRequestEnterStatusPacket.
+ *
+ *  @param p_packet -- request enter status packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveRequestEnterStatusPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -357,44 +196,16 @@ T_void ClientReceiveRequestEnterStatusPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveLoadCharStatusPacket                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveLoadCharStatusPacket is called when the server is ready  */
-/*  to tell if the character needs to be downloaded or not.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- load character status packet   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetServerEnterStatus                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/01/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveLoadCharStatusPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveLoadCharStatusPacket is called when the server is ready
+ *  to tell if the character needs to be downloaded or not.
+ *
+ *  @param p_packet -- load character status packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveLoadCharStatusPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -410,44 +221,16 @@ T_void ClientReceiveLoadCharStatusPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveCreateCharStatusPacket                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveCreateCharStatusPacket is called when the server is ready*/
-/*  to tell if the character needs to be downloaded or not.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- load character status packet   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetServerEnterStatus                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveCreateCharStatusPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveCreateCharStatusPacket is called when the server is ready
+ *  to tell if the character needs to be downloaded or not.
+ *
+ *  @param p_packet -- load character status packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveCreateCharStatusPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -463,44 +246,16 @@ T_void ClientReceiveCreateCharStatusPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveDeleteCharStatusPacket                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveDeleteCharStatusPacket is called when the server is ready*/
-/*  to tell if the character needs to be downloaded or not.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- load character status packet   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetServerDeleteCharacterStatus                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/07/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveDeleteCharStatusPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveDeleteCharStatusPacket is called when the server is ready
+ *  to tell if the character needs to be downloaded or not.
+ *
+ *  @param p_packet -- load character status packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveDeleteCharStatusPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -517,44 +272,16 @@ T_void ClientReceiveDeleteCharStatusPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveCheckPasswordStatusPacket                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveCheckPasswordStatusPacket is received when the client    */
-/*  previously made a request to check a password.  This is the result.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- load character status packet   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetCheckPasswordStatus                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveCheckPasswordStatusPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveCheckPasswordStatusPacket is received when the client
+ *  previously made a request to check a password.  This is the result.
+ *
+ *  @param p_packet -- load character status packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveCheckPasswordStatusPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -570,44 +297,16 @@ T_void ClientReceiveCheckPasswordStatusPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ClientReceiveChangePasswordStatusPacket                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ClientReceiveChangePasswordStatusPacket is received when the client   */
-/*  previously made a request to change a password.  This is the result.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_packetEitherShortOrLong *p_packet -- load character status packet   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetChangePasswordStatus                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/08/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceiveChangePasswordStatusPacket
+ *-------------------------------------------------------------------------*/
+/**
+ *  ClientReceiveChangePasswordStatusPacket is received when the client
+ *  previously made a request to change a password.  This is the result.
+ *
+ *  @param p_packet -- load character status packet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveChangePasswordStatusPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -686,7 +385,6 @@ T_void ClientReceiveSyncPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientReceiveTownUIMessagePacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -707,7 +405,6 @@ T_void ClientReceiveTownUIMessagePacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientReceivePlayerIDSelf(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -723,7 +420,6 @@ T_void ClientReceivePlayerIDSelf(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientReceiveRequestPlayerIDPacket(T_packetEitherShortOrLong *p_packet)
 {
     DebugRoutine("ClientReceiveRequestPlayerIDPacket") ;
@@ -734,7 +430,6 @@ T_void ClientReceiveRequestPlayerIDPacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientReceiveGameRequestJoinPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -755,7 +450,6 @@ T_void ClientReceiveGameRequestJoinPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientReceiveGameRespondJoinPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -781,7 +475,6 @@ T_void ClientReceiveGameRespondJoinPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
 T_void ClientReceiveGameStartPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -846,6 +539,7 @@ T_void ClientReceiveGameStartPacket(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE: CLI_RECV.C       Client Receive Packet Module            */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  CLI_RECV.C
+ *-------------------------------------------------------------------------*/

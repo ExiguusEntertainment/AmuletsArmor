@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  SCHEDULE.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SCHEDULE.C
+ *-------------------------------------------------------------------------*/
+/**
+ * In support of scripts with delayed timing, events are put on a
+ * scheduler.
+ *
+ * @addtogroup SCHEDULE
+ * @brief Scheduler of Events
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "MEMORY.H"
 #include "SCHEDULE.H"
 #include "SYNCTIME.H"
@@ -22,52 +32,21 @@ typedef struct {
 /* Internal prototypes: */
 T_void IScheduleInsertSortEvent(T_scheduleEvent *p_newEvent, T_word32 when) ;
 
-/****************************************************************************/
-/*  Routine:  ScheduleAddEvent                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScheduleAddEvent adds an event to the schedule list based on the      */
-/*  ticker clock.  When this event goes off, the handler is called and      */
-/*  the passed in data is passed to the handler.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 when               -- Ticker time for event to occur         */
-/*                                                                          */
-/*    T_scheduleEventHandler handler -- Callback routine for event          */
-/*                                                                          */
-/*    T_word32 data               -- Data to store with event (note that    */
-/*                                   this could be a pointer cast as a      */
-/*                                   32 bit value).                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    IScheduleInsertSortEvent                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScheduleAddEvent
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScheduleAddEvent adds an event to the schedule list based on the
+ *  ticker clock.  When this event goes off, the handler is called and
+ *  the passed in data is passed to the handler.
+ *
+ *  @param when -- Ticker time for event to occur
+ *  @param handler -- Callback routine for event
+ *  @param data -- Data to store with event (note that
+ *      this could be a pointer cast as a
+ *      32 bit value).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScheduleAddEvent(
            T_word32 when,
            T_scheduleEventHandler handler,
@@ -95,44 +74,14 @@ T_void ScheduleAddEvent(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScheduleClearEvents                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScheduleClearEvents removes all events from the schedule.  This is    */
-/*  useful when you need to quit processing those events.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScheduleClearEvents
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScheduleClearEvents removes all events from the schedule.  This is
+ *  useful when you need to quit processing those events.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ScheduleClearEvents(T_void)
 {
     T_scheduleEvent *p_event ;
@@ -148,48 +97,18 @@ T_void ScheduleClearEvents(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ScheduleUpdateEvents                                          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ScheduleUpdateEvents looks at the beginning of the schedule list      */
-/*  and sees if there is an action it needs to perform.  If there is, that  */
-/*  action is taken and the appropriate callback routine is called.         */
-/*  The event is then discarded and another attempt is made.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- Flag that tells if an event occured    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    SyncTimeGet                                                             */
-/*    Handler of schedule events                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ScheduleUpdateEvents
+ *-------------------------------------------------------------------------*/
+/**
+ *  ScheduleUpdateEvents looks at the beginning of the schedule list
+ *  and sees if there is an action it needs to perform.  If there is, that
+ *  action is taken and the appropriate callback routine is called.
+ *  The event is then discarded and another attempt is made.
+ *
+ *  @return Flag that tells if an event occured
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ScheduleUpdateEvents(T_void)
 {
     T_scheduleEvent *p_event ;
@@ -224,47 +143,18 @@ E_Boolean ScheduleUpdateEvents(T_void)
     return f_eventOccured ;
 }
 
-/****************************************************************************/
-/*  Routine:  IScheduleInsertSortEvent           * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IScheduleInsertSortEvent adds a new event to the event list and       */
-/*  tries to find a position where the event is in order from earliest to   */
-/*  latest.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_scheduleEvent *p_event    -- Event to add                           */
-/*                                                                          */
-/*    T_word32 when               -- When the event is to occur             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IScheduleInsertSortEvent
+ *-------------------------------------------------------------------------*/
+/**
+ *  IScheduleInsertSortEvent adds a new event to the event list and
+ *  tries to find a position where the event is in order from earliest to
+ *  latest.
+ *
+ *  @param p_newEvent -- Event to add
+ *  @param when -- When the event is to occur
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void IScheduleInsertSortEvent(T_scheduleEvent *p_newEvent, T_word32 when)
 {
     T_scheduleEvent *p_prev = NULL ;
@@ -302,6 +192,7 @@ T_void IScheduleInsertSortEvent(T_scheduleEvent *p_newEvent, T_word32 when)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SCHEDULE.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SCHEDULE.C
+ *-------------------------------------------------------------------------*/

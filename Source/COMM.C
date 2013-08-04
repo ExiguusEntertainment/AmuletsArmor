@@ -1,7 +1,13 @@
-/****************************************************************************/
-/*    FILE:  COMM.C                                                         */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * File:  COMM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * @addtogroup COMM
+ * @brief Modem Driver
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "standard.h"
 #include "ll_comm.h"
 
@@ -91,63 +97,26 @@ static T_void SelfClientWriteByte(T_byte8) ;
 static T_word16 SelfClientGetReadBufferLength(T_void) ;
 static T_word16 SelfClientGetWriteBufferLength(T_void) ;
 
-/****************************************************************************/
-/*  Routine:  CommOpenPort                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommOpenPort creates a port and initializes it to the given           */
-/*  parameters.  Pass in the type of connection (null modem, standard       */
-/*  modem, or irq based modem), COM number or base address, baud rate,      */
-/*  and irq (if an irq is needed).                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_commType type             -- type of connection being used          */
-/*                                                                          */
-/*    T_word16 addressOrComNum    -- base communication address if irq      */
-/*                                   modem, or COM port number if           */
-/*                                   null or standard modem (NOTE: 1 = COM1)*/
-/*                                                                          */
-/*    T_word16 irq                -- Interrupt # for irq modem.  Ignored    */
-/*                                   for other modem types (just pass 0)    */
-/*                                                                          */
-/*    E_commBaudRate              -- Communications rate                    */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_commPort                  -- Handle to comm port or COMM_PORT_BAD   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    int386                                                                */
-/*    ioOpenPort                                                            */
-/*    ioSetBaud                                                             */
-/*    ioSetHandshake                                                        */
-/*    ioSetControl                                                          */
-/*    ioSetMode                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/30/94  Created                                                */
-/*    LES  01/19/94  Added Self and Self Client comm port types.            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommOpenPort
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommOpenPort creates a port and initializes it to the given
+ *  parameters.  Pass in the type of connection (null modem, standard
+ *  modem, or irq based modem), COM number or base address, baud rate,
+ *  and irq (if an irq is needed).
+ *
+ *  @param type -- type of connection being used
+ *  @param addressOrComNum -- base communication address if irq
+ *      modem, or COM port number if
+ *      null or standard modem (1 = COM1)
+ *  @param irq -- Interrupt # for irq modem.  Ignored
+ *      for other modem types (just pass 0)
+ *  @param baud -- Communications rate
+ *
+ *  @return Handle to comm port or COMM_PORT_BAD
+ *
+ *<!-----------------------------------------------------------------------*/
 T_commPort CommOpenPort(
                E_commType type,
                T_word16 addressOrComNum,
@@ -252,48 +221,18 @@ T_commPort CommOpenPort(
     return newPort ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommClosePort                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommClosePort finalizes the port's existence by removing it from      */
-/*  memory and removing any interrupts tied to that port.  It does not      */
-/*  worry about hanging up the phone or sending last messages -- this       */
-/*  is up to the calling routines.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_commPort port             -- Port to close                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*    ioClosePort                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*    LES  01/19/94  Added Self and Self Client comm port types.            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommClosePort
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommClosePort finalizes the port's existence by removing it from
+ *  memory and removing any interrupts tied to that port.  It does not
+ *  worry about hanging up the phone or sending last messages -- this
+ *  is up to the calling routines.
+ *
+ *  @param port -- Port to close
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommClosePort(T_commPort port)
 {
     DebugRoutine("CommClosePort") ;
@@ -330,46 +269,17 @@ T_void CommClosePort(T_commPort port)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommSetActivePort                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommSetActivePort declares what port is to be used in all the next    */
-/*  Comm port routine calls.  This also sets up faster ways to call the     */
-/*  comm port routines.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_commPort port             -- Port to make the active port           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*    LES  01/19/94  Added Self and Self Client comm port types.            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommSetActivePort
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommSetActivePort declares what port is to be used in all the next
+ *  Comm port routine calls.  This also sets up faster ways to call the
+ *  comm port routines.
+ *
+ *  @param port -- Port to make the active port
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommSetActivePort(T_commPort port)
 {
 char buffer[80] ;
@@ -415,46 +325,21 @@ char buffer[80] ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommScanByte                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommScanByte looks ahead into the buffer and returns characters as    */
-/*  they are found.  If no more characters are found, a zero is returned.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No more than MAX_SIZE_LOOK_AHEAD characters can be scanned ahead.     */
-/*  If there are, this problem bombs since there is no more space           */
-/*  to store the look ahead characters.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character found (or 0xFFFF if none)    */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    LowLevelCommReadByte                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommScanByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommScanByte looks ahead into the buffer and returns characters as
+ *  they are found.  If no more characters are found, a zero is returned.
+ *
+ *  NOTE: 
+ *  No more than MAX_SIZE_LOOK_AHEAD characters can be scanned ahead.
+ *  If there are, this problem bombs since there is no more space
+ *  to store the look ahead characters.
+ *
+ *  @return Character found (or 0xFFFF if none)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommScanByte(T_void)
 {
     T_word16 c ;
@@ -503,45 +388,17 @@ T_word16 CommScanByte(T_void)
     return c ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommReadByte                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommReadByte reads in one character in from the appropriate low       */
-/*  level driver.  However, if characters are in the look ahead buffer,     */
-/*  they are taken out of there first.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character found or 0xFFFF if none.     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    LowLevelCommReadByte                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommReadByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommReadByte reads in one character in from the appropriate low
+ *  level driver.  However, if characters are in the look ahead buffer,
+ *  they are taken out of there first.
+ *
+ *  @return Character found or 0xFFFF if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommReadByte(T_void)
 {
     T_word16 c ;
@@ -577,43 +434,18 @@ T_word16 CommReadByte(T_void)
     return c ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommSendByte                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommSendByte puts a character on the output buffer for sending.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If the output buffer is full, the character sent is discarded.        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 byte                -- Data to send                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    LowLevelCommSendByte                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommSendByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommSendByte puts a character on the output buffer for sending.
+ *
+ *  NOTE: 
+ *  If the output buffer is full, the character sent is discarded.
+ *
+ *  @param byte -- Data to send
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommSendByte(T_byte8 byte)
 {
     DebugRoutine("CommSendByte") ;
@@ -624,52 +456,29 @@ T_void CommSendByte(T_byte8 byte)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommScanData                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommScanData scans a number of bytes ahead into the read stream       */
-/*  and stores the bytes into the given pointer.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No more than MAX_SIZE_LOOK_AHEAD characters can be scanned ahead.     */
-/*  If there are, this problem bombs since there is no more space           */
-/*  to store the look ahead characters.                                     */
-/*    Make sure to only call this routine if there is already that many     */
-/*  characters in the receive buffer.                                       */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_data             -- Pointer to where to store data         */
-/*                                                                          */
-/*    T_word16 numberBytes        -- Number of bytes to scan                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of bytes actually scanned.      */
-/*                                   Sometimes this is less than            */
-/*                                   numberBytes when there are no more     */
-/*                                   characters in the input buffer.        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommScanByte                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommScanData
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommScanData scans a number of bytes ahead into the read stream
+ *  and stores the bytes into the given pointer.
+ *
+ *  NOTE: 
+ *  No more than MAX_SIZE_LOOK_AHEAD characters can be scanned ahead.
+ *  If there are, this problem bombs since there is no more space
+ *  to store the look ahead characters.
+ *  Make sure to only call this routine if there is already that many
+ *  characters in the receive buffer.
+ *
+ *  @param p_data -- Pointer to where to store data
+ *  @param numberBytes -- Number of bytes to scan
+ *
+ *  @return Number of bytes actually scanned.
+ *      Sometimes this is less than
+ *      numberBytes when there are no more
+ *      characters in the input buffer.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommScanData(T_byte8 *p_data, T_word16 numberBytes)
 {
     T_word16 i ;
@@ -731,50 +540,26 @@ T_word16 CommScanData(T_byte8 *p_data, T_word16 numberBytes)
     return i ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommReadData                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommReadData is used to read n number of bytes from the input stream  */
-/*  (taking from the look ahead buffer as needed).                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure to only call this routine if there is already that many     */
-/*  characters in the receive buffer.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_data             -- Pointer to where to store data         */
-/*                                                                          */
-/*    T_word16 numberBytes        -- Number of bytes to read                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of bytes actually read.         */
-/*                                   Sometimes this is less than            */
-/*                                   numberBytes when there are no more     */
-/*                                   characters in the input buffer.        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommReadByte                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommReadData
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommReadData is used to read n number of bytes from the input stream
+ *  (taking from the look ahead buffer as needed).
+ *
+ *  NOTE: 
+ *  Make sure to only call this routine if there is already that many
+ *  characters in the receive buffer.
+ *
+ *  @param p_data -- Pointer to where to store data
+ *  @param numberBytes -- Number of bytes to read
+ *
+ *  @return Number of bytes actually read.
+ *      Sometimes this is less than
+ *      numberBytes when there are no more
+ *      characters in the input buffer.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommReadData(T_byte8 *p_data, T_word16 numberBytes)
 {
     T_word16 i ;
@@ -802,45 +587,16 @@ T_word16 CommReadData(T_byte8 *p_data, T_word16 numberBytes)
     return i ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommSendData                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommSendData sends n number of bytes out the output port.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *p_data             -- Pointer to where to get data           */
-/*                                                                          */
-/*    T_word16 numberBytes        -- Number of bytes to send                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommSendByte                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommSendData
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommSendData sends n number of bytes out the output port.
+ *
+ *  @param p_data -- Pointer to where to get data
+ *  @param numberBytes -- Number of bytes to send
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommSendData(T_byte8 *p_data, T_word16 numberBytes)
 {
     T_word16 i ;
@@ -858,44 +614,16 @@ T_void CommSendData(T_byte8 *p_data, T_word16 numberBytes)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommGetReadBufferLength                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommGetReadBufferLength returns the number of characters in the       */
-/*  read buffer.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of waiting characters.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    LowLevelCommGetReadBufferLength                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommGetReadBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommGetReadBufferLength returns the number of characters in the
+ *  read buffer.
+ *
+ *  @return Number of waiting characters.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommGetReadBufferLength(T_void)
 {
     T_word16 length = 0 ;
@@ -912,44 +640,16 @@ T_word16 CommGetReadBufferLength(T_void)
     return length ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommGetSendBufferLength                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommGetSendBufferLength returns the number of USED locations (number  */
-/*  of characters that can be sent) in the output buffer.                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of free character spots.        */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    LowLevelCommGetWriteBufferLength                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommGetSendBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommGetSendBufferLength returns the number of USED locations (number
+ *  of characters that can be sent) in the output buffer.
+ *
+ *  @return Number of free character spots.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommGetSendBufferLength(T_void)
 {
     T_word16 length = 0 ;
@@ -965,44 +665,16 @@ T_word16 CommGetSendBufferLength(T_void)
     return length ;
 }
 
-/****************************************************************************/
-/*  Routine:  ModemReadByte                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ModemReadByte reads a character from the BIOS buffered receive        */
-/*  buffers.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character read or 0xFFFF for none.     */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ModemReadByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  ModemReadByte reads a character from the BIOS buffered receive
+ *  buffers.
+ *
+ *  @return Character read or 0xFFFF for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ModemReadByte(T_void)
 {
     union REGS r ;
@@ -1039,44 +711,16 @@ static T_word16 ModemReadByte(T_void)
     return c ;
 }
 
-/****************************************************************************/
-/*  Routine:  ModemWriteByte                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     ModemWriteByte sends a character to the output buffer using          */
-/*  BIOS calls.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 c                   -- character to send                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ModemWriteByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  ModemWriteByte sends a character to the output buffer using
+ *  BIOS calls.
+ *
+ *  @param c -- character to send
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ModemWriteByte(T_byte8 c)
 {
     union REGS r ;
@@ -1103,44 +747,16 @@ static T_void ModemWriteByte(T_byte8 c)
 //    DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ModemGetReadBufferLength                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ModemGetReadBufferLength tells how many characters are in the         */
-/*  read buffer.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters that can be read. */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ModemGetReadBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  ModemGetReadBufferLength tells how many characters are in the
+ *  read buffer.
+ *
+ *  @return Number of characters that can be read.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ModemGetReadBufferLength(T_void)
 {
     union REGS r ;
@@ -1171,44 +787,16 @@ static T_word16 ModemGetReadBufferLength(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  ModemGetWriteBufferLength                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ModemGetWriteBufferLength returns the number of bytes that can        */
-/*  be sent out the port using the BIOS commands.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters that can be sent. */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    int386                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ModemGetWriteBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  ModemGetWriteBufferLength returns the number of bytes that can
+ *  be sent out the port using the BIOS commands.
+ *
+ *  @return Number of characters that can be sent.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 ModemGetWriteBufferLength(T_void)
 {
     union REGS r ;
@@ -1261,45 +849,16 @@ static T_word16 ModemGetWriteBufferLength(T_void)
 #endif
 }
 
-/****************************************************************************/
-/*  Routine:  IrqReadByte                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IrqReadByte uses the LLCOM routines to read a byte from the irq       */
-/*  buffer that it has.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character or 0xFFFF for none.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ioReadByte                                                            */
-/*    ioReadStatus                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IrqReadByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  IrqReadByte uses the LLCOM routines to read a byte from the irq
+ *  buffer that it has.
+ *
+ *  @return Character or 0xFFFF for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IrqReadByte(T_void)
 {
     T_word16 c ;
@@ -1318,43 +877,15 @@ static T_word16 IrqReadByte(T_void)
     return c ;
 }
 
-/****************************************************************************/
-/*  Routine:  IrqWriteByte                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IrqWriteByte sends out a character out the irq buffer and irq write.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 c                   -- Character to send                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ioWriteByte                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IrqWriteByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  IrqWriteByte sends out a character out the irq buffer and irq write.
+ *
+ *  @param c -- Character to send
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IrqWriteByte(T_byte8 c)
 {
 //    DebugRoutine("IrqWriteByte") ;
@@ -1363,44 +894,16 @@ static T_void IrqWriteByte(T_byte8 c)
 //    DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IrqGetReadBufferLength                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IrqGetReadBufferLength determines how many characters are waiting     */
-/*  in the irq read buffer.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters waiting.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ioReadStatus                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IrqGetReadBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  IrqGetReadBufferLength determines how many characters are waiting
+ *  in the irq read buffer.
+ *
+ *  @return Number of characters waiting.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IrqGetReadBufferLength(T_void)
 {
     T_word16 len ;
@@ -1414,44 +917,16 @@ static T_word16 IrqGetReadBufferLength(T_void)
     return len ;
 }
 
-/****************************************************************************/
-/*  Routine:  IrqGetWriteBufferLength                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IrqGetWriteBufferLength determines how many more characters can       */
-/*  be sent to the output irq buffer before being full.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters until full.       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ioWriteStatus                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/02/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IrqGetWriteBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  IrqGetWriteBufferLength determines how many more characters can
+ *  be sent to the output irq buffer before being full.
+ *
+ *  @return Number of characters until full.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 IrqGetWriteBufferLength(T_void)
 {
     T_word16 len ;
@@ -1467,48 +942,23 @@ static T_word16 IrqGetWriteBufferLength(T_void)
     return len ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommRewindScan                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommRewindScan moves the current position of the scanned data back    */
-/*  the given number of bytes.  This, in effect, allows the system          */
-/*  to go to previous characters that were already scanned from the         */
-/*  data stream (since they have not been "read" they are still in the      */
-/*  scan buffer).                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure that you don't rewind more than you have scanned MINUS      */
-/*  what you have read.  If you do, this will bomb.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 numChar            -- Number of characters to rewind         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommRewindScan
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommRewindScan moves the current position of the scanned data back
+ *  the given number of bytes.  This, in effect, allows the system
+ *  to go to previous characters that were already scanned from the
+ *  data stream (since they have not been "read" they are still in the
+ *  scan buffer).
+ *
+ *  NOTE: 
+ *  Make sure that you don't rewind more than you have scanned MINUS
+ *  what you have read.  If you do, this will bomb.
+ *
+ *  @param numChar -- Number of characters to rewind
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommRewindScan(T_word16 numChar)
 {
     DebugRoutine("CommRewindScan") ;
@@ -1523,46 +973,20 @@ T_void CommRewindScan(T_word16 numChar)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommReadConfigFile                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommReadConfigFile reads in the "PORT.CFG" file and opens all the     */
-/*  ports counting the number of actually opened ports.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    No real errors are detected by this routine and ports that could      */
-/*  not be opened are ignored.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of ports opened                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommOpenPort                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/94  Created                                                */
-/*    LES  01/19/94  Added Self and Self Client comm port types.            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommReadConfigFile
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommReadConfigFile reads in the "PORT.CFG" file and opens all the
+ *  ports counting the number of actually opened ports.
+ *
+ *  NOTE: 
+ *  No real errors are detected by this routine and ports that could
+ *  not be opened are ignored.
+ *
+ *  @return Number of ports opened
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommReadConfigFile(T_byte8 *p_mode, T_byte8 *p_otherData)
 {
     E_commType type ;
@@ -1696,44 +1120,17 @@ T_word16 CommReadConfigFile(T_byte8 *p_mode, T_byte8 *p_otherData)
     return G_numPorts ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommCloseAll                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommCloseAll closes all the ports opened by CommReadConfigFile.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You should not close any of the ports that were opened by CommRead... */
-/*  except by calling this routine.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommClosePort                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommCloseAll
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommCloseAll closes all the ports opened by CommReadConfigFile.
+ *
+ *  NOTE: 
+ *  You should not close any of the ports that were opened by CommRead...
+ *  except by calling this routine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommCloseAll(T_void)
 {
     T_word16 i ;
@@ -1750,45 +1147,18 @@ T_void CommCloseAll(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommSetActivePortN                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommSetActivePortN sets the active port to be one of the already      */
-/*  opened ports by CommReadConfigFile.                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Make sure you pass in a numOfPort that is less than the number of     */
-/*  ports open (the first is 0, ..., number of ports-1).                    */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 numOfPort                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    CommSetActivePort                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommSetActivePortN
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommSetActivePortN sets the active port to be one of the already
+ *  opened ports by CommReadConfigFile.
+ *
+ *  NOTE: 
+ *  Make sure you pass in a numOfPort that is less than the number of
+ *  ports open (the first is 0, ..., number of ports-1).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommSetActivePortN(T_word16 numOfPort)
 {
     DebugRoutine("CommSetActivePortN") ;
@@ -1802,45 +1172,20 @@ T_void CommSetActivePortN(T_word16 numOfPort)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommGetNumberPorts                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommGetNumberPorts tells the number of ports previously opened by     */
-/*  CommReadConfigFile.  This routine is usually used with                  */
-/*  CommSetActivePortN.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    You should of called CommReadConfigFile before calling this routine.  */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of opened ports.                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/03/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommGetNumberPorts
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommGetNumberPorts tells the number of ports previously opened by
+ *  CommReadConfigFile.  This routine is usually used with
+ *  CommSetActivePortN.
+ *
+ *  NOTE: 
+ *  You should of called CommReadConfigFile before calling this routine.
+ *
+ *  @return Number of opened ports.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 CommGetNumberPorts(T_void)
 {
     T_word16 num ;
@@ -1854,44 +1199,16 @@ T_word16 CommGetNumberPorts(T_void)
     return num ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfReadByte                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfReadByte is used by the server to read data from the buffer that  */
-/*  receives information from the SelfClientWriteByte calls.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character or 0xFFFF for none.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfReadByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfReadByte is used by the server to read data from the buffer that
+ *  receives information from the SelfClientWriteByte calls.
+ *
+ *  @return Character or 0xFFFF for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 SelfReadByte(T_void)
 {
     T_word16 c ;
@@ -1912,43 +1229,15 @@ static T_word16 SelfReadByte(T_void)
     return c ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfWriteByte                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfWriteByte sends a byte out to the current self client.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 c                   -- Character to send                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfWriteByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfWriteByte sends a byte out to the current self client.
+ *
+ *  @param c -- Character to send
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void SelfWriteByte(T_byte8 c)
 {
 
@@ -1964,44 +1253,16 @@ static T_void SelfWriteByte(T_byte8 c)
 //    DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfGetReadBufferLength                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfGetReadBufferLength determines how many characters are waiting    */
-/*  in the self read buffer.                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters waiting.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfGetReadBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfGetReadBufferLength determines how many characters are waiting
+ *  in the self read buffer.
+ *
+ *  @return Number of characters waiting.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 SelfGetReadBufferLength(T_void)
 {
     T_word16 len ;
@@ -2015,44 +1276,16 @@ static T_word16 SelfGetReadBufferLength(T_void)
     return len ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfGetWriteBufferLength                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfGetWriteBufferLength determines how many more characters can      */
-/*  be sent to the output self buffer before being full.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters until full.       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfGetWriteBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfGetWriteBufferLength determines how many more characters can
+ *  be sent to the output self buffer before being full.
+ *
+ *  @return Number of characters until full.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 SelfGetWriteBufferLength(T_void)
 {
     T_word16 len ;
@@ -2067,44 +1300,16 @@ static T_word16 SelfGetWriteBufferLength(T_void)
     return len ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfClientReadByte                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfClientReadByte is used by the server to read data from the buffer */
-/*  that receives information from the SelfClientWriteByte calls.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Character or 0xFFFF for none.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfClientReadByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfClientReadByte is used by the server to read data from the buffer
+ *  that receives information from the SelfClientWriteByte calls.
+ *
+ *  @return Character or 0xFFFF for none.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 SelfClientReadByte(T_void)
 {
     T_word16 c ;
@@ -2125,43 +1330,15 @@ static T_word16 SelfClientReadByte(T_void)
     return c ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfClientWriteByte                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfClientWriteByte sends a byte out to the current self server.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 c                   -- Character to send                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfClientWriteByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfClientWriteByte sends a byte out to the current self server.
+ *
+ *  @param c -- Character to send
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void SelfClientWriteByte(T_byte8 c)
 {
 
@@ -2177,44 +1354,16 @@ static T_void SelfClientWriteByte(T_byte8 c)
 //    DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfClientGetReadBufferLength                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfClientGetReadBufferLength determines how many characters are      */
-/*  waiting in the self read buffer.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters waiting.          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfClientGetReadBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfClientGetReadBufferLength determines how many characters are
+ *  waiting in the self read buffer.
+ *
+ *  @return Number of characters waiting.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 SelfClientGetReadBufferLength(T_void)
 {
     T_word16 len ;
@@ -2228,44 +1377,16 @@ static T_word16 SelfClientGetReadBufferLength(T_void)
     return len ;
 }
 
-/****************************************************************************/
-/*  Routine:  SelfClientGetWriteBufferLength                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SelfClientGetWriteBufferLength determines how many more characters can*/
-/*  be sent to the output self buffer before being full.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of characters until full.       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/19/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SelfClientGetWriteBufferLength
+ *-------------------------------------------------------------------------*/
+/**
+ *  SelfClientGetWriteBufferLength determines how many more characters can
+ *  be sent to the output self buffer before being full.
+ *
+ *  @return Number of characters until full.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_word16 SelfClientGetWriteBufferLength(T_void)
 {
     T_word16 len ;
@@ -2280,43 +1401,15 @@ static T_word16 SelfClientGetWriteBufferLength(T_void)
     return len ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommGetBaudRate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommGetBaudRate tells what the active port's baud rate is.            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_commBaudRate              -- Enumerated value of baud rate.         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommGetBaudRate
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommGetBaudRate tells what the active port's baud rate is.
+ *
+ *  @return Enumerated value of baud rate.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_commBaudRate CommGetBaudRate(T_void)
 {
     E_commBaudRate baud ;
@@ -2332,44 +1425,18 @@ E_commBaudRate CommGetBaudRate(T_void)
     return baud ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommConvertBaudTo32                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    CommConvertBaudTo32 converts given enumerated baud type to a 32 bit   */
-/*  integer.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_commBaudRate baud         -- Rate of baud as enumeration            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word32                    -- Rate of baud as 32 bit integer         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommConvertBaudTo32
+ *-------------------------------------------------------------------------*/
+/**
+ *  CommConvertBaudTo32 converts given enumerated baud type to a 32 bit
+ *  integer.
+ *
+ *  @param baud -- Rate of baud as enumeration
+ *
+ *  @return Rate of baud as 32 bit integer
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 CommConvertBaudTo32(E_commBaudRate baud)
 {
     T_word32 baud32 ;
@@ -2384,43 +1451,15 @@ T_word32 CommConvertBaudTo32(E_commBaudRate baud)
     return baud32 ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommGetPortType                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Tells what type of port is attached (modem, null modem, server, ...)  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_commType                  -- Comm type of active port.              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommGetPortType
+ *-------------------------------------------------------------------------*/
+/**
+ *  Tells what type of port is attached (modem, null modem, server, ...)
+ *
+ *  @return Comm type of active port.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_commType CommGetPortType()
 {
     E_commType type ;
@@ -2436,43 +1475,13 @@ E_commType CommGetPortType()
     return type ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommClearPort                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Clears out the incoming data.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommClearPort
+ *-------------------------------------------------------------------------*/
+/**
+ *  Clears out the incoming data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void CommClearPort()
 {
     DebugRoutine("CommClearPort") ;
@@ -2484,44 +1493,14 @@ T_void CommClearPort()
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  CommCheckClientAndServerExist                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine checks to see if this is a machine that has both a       */
-/*  client and a server on the same machine/process.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/25/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  CommCheckClientAndServerExist
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine checks to see if this is a machine that has both a
+ *  client and a server on the same machine/process.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean CommCheckClientAndServerExist(T_void)
 {
     E_Boolean status ;
@@ -2549,6 +1528,7 @@ T_word16 CommGetLinkSubType(T_void)
     return G_subtype ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  COMM.C                                                  */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  COMM.C
+ *-------------------------------------------------------------------------*/

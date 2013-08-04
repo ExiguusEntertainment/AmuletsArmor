@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  SYNCMEM.C                                                      */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SYNCMEM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * When working on synchronized networking, this utility helps to track
+ * various items in the synchronized system.  A dump on two computers are
+ * then compared to see what changed.
+ *
+ * @addtogroup SYNCMEM
+ * @brief Synchronization Memory Debug Utility
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "SYNCMEM.H"
 
 #ifndef NDEBUG
@@ -35,7 +46,7 @@ T_void SyncMemDump()
     for (i=G_syncEnd; i<SYNCMEM_SIZE; i++)  {
         if (G_syncMem[i].p_name)
             fprintf(fp,
-                G_syncMem[i].p_name, 
+                G_syncMem[i].p_name,
                 G_syncMem[i].d1,
                 G_syncMem[i].d2,
                 G_syncMem[i].d3) ;
@@ -43,7 +54,7 @@ T_void SyncMemDump()
     for (i=0; i<G_syncEnd; i++)  {
         if (G_syncMem[i].p_name)
             fprintf(fp,
-                G_syncMem[i].p_name, 
+                G_syncMem[i].p_name,
                 G_syncMem[i].d1,
                 G_syncMem[i].d2,
                 G_syncMem[i].d3) ;
@@ -73,6 +84,7 @@ T_word16 SyncMemGetChecksum(T_void)
 
 #endif
 
-/****************************************************************************/
-/*    END OF FILE:  ACTIVITY.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SYNCMEM.C
+ *-------------------------------------------------------------------------*/

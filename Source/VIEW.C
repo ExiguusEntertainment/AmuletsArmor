@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  VIEW.C                                                         */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  VIEW.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Top level control for drawing the current 3D view.
+ *
+ * @addtogroup VIEW
+ * @brief View Drawing
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_IO.H"
 #include "3D_TRIG.H"
 #include "3D_VIEW.H"
@@ -61,55 +70,14 @@ static T_word16 G_viewOffsetView = 0 ;
 
 static E_Boolean G_updateFormOverView = FALSE;
 
-/****************************************************************************/
-/*  Routine:  ViewInitialize                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewInitialize sets up all the variables necessary for the current    */
-/*  3D view.  Calls are made appropriately to the 3D engine.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    AckInitialize                                                         */
-/*    AckRegisterStructure                                                  */
-/*    MapSetBackdrop                                                        */
-/*    PictureLock                                                           */
-/*    PictureUnlock                                                         */
-/*    memset                                                                */
-/*    ObjectsInitialize                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/20/94  Created                                                */
-/*    LES  12/21/94  Added back drop                                        */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  04/20/95  Intializes door module as well.                        */
-/*    LES  04/26/95  Initializes area sound module                          */
-/*    LES  12/26/95  Added call to ObjectsInitialize                        */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewInitialize sets up all the variables necessary for the current
+ *  3D view.  Calls are made appropriately to the 3D engine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewInitialize(T_void)
 {
     DebugRoutine("ViewInitialize") ;
@@ -134,48 +102,14 @@ T_void ViewInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewFinish                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewFinish is called to remove all items used by View that was not    */
-/*  used by the map.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MathFinish                                                            */
-/*    ObjectsFinish                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/12/95  Created                                                */
-/*    LES  04/20/95  Finializes door module as well.                        */
-/*    LES  04/26/95  Finializes area sound module                           */
-/*    LES  12/26/95  Added call to ObjectsFinish                            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewFinish is called to remove all items used by View that was not
+ *  used by the map.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewFinish(T_void)
 {
     DebugRoutine("ViewFinish") ;
@@ -192,49 +126,13 @@ T_void ViewFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewDraw                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewDraw builds and draws the current view on the screen.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dDrawView                                                        */
-/*    View3dDisplayView                                                     */
-/*    ViewIsEarthquakeOn                                                    */
-/*    IViewUpdateEarthquake                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/21/94  Created                                                */
-/*    LES  02/21/95  Modified for new 3D engine                             */
-/*    LES  09/26/95  Added calls to draw overhead view of map               */
-/*    LES  01/11/96  Added calls to update earthquake feature.              */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewDraw builds and draws the current view on the screen.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewDraw(T_void)
 {
     T_sword16 x, y ;
@@ -310,46 +208,18 @@ INDICATOR_LIGHT(109, INDICATOR_RED) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewSetOverlayHandler                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewSetOverlayHandler declares a pointer to a function that is to     */
-/*  be called each time the view is drawn but not shown.  This allows the   */
-/*  system to draw objects and images on top of the view as the view is     */
-/*  moving.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_viewOverlayHandler handler -- Function to draw overlay              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/22/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewSetOverlayHandler
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewSetOverlayHandler declares a pointer to a function that is to
+ *  be called each time the view is drawn but not shown.  This allows the
+ *  system to draw objects and images on top of the view as the view is
+ *  moving.
+ *
+ *  @param handler -- Function to draw overlay
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewSetOverlayHandler(T_viewOverlayHandler handler)
 {
     DebugRoutine("ViewSetOverlayHandler") ;
@@ -360,49 +230,14 @@ T_void ViewSetOverlayHandler(T_viewOverlayHandler handler)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewUpdatePlayer                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewUpdatePlayer is the routine called to update all the exterior     */
-/*  events that happen, even when a player is standing still.               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objNum                     -- object requested for taking    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientTakeDamage                                                      */
-/*    ClientIsOver                                                          */
-/*    View3dMoveTo                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/11/95  Created                                                */
-/*    LES  04/26/95  Added updating of area sound                           */
-/*    JDA  05/12/95  Added updating of POV position                         */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewUpdatePlayer
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewUpdatePlayer is the routine called to update all the exterior
+ *  events that happen, even when a player is standing still.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewUpdatePlayer(T_void)
 {
     static T_word32 lowerBit = 0;
@@ -577,46 +412,17 @@ T_void ViewUpdatePlayer(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewGetMiddleTarget                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewGetMiddleTarget finds the first non-passable target in front      */
-/*  of the player.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- Middle target object pointer or        */
-/*                                   NULL if none.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dGetObjectAtColumn                                               */
-/*    ObjectGetType                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  04/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewGetMiddleTarget
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewGetMiddleTarget finds the first non-passable target in front
+ *  of the player.
+ *
+ *  @return Middle target object pointer or
+ *      NULL if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ViewGetMiddleTarget(T_void)
 {
     T_3dObject *p_object ;
@@ -690,48 +496,21 @@ T_3dObject *ViewGetMiddleTarget(T_void)
     return p_object ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewGetXYTarget                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewGetXYTarget finds the first passable or non-passable object       */
-/*  under the given x & y pixel location on the screen (relative to the     */
-/*  upper left hand corner of the screen)..                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- x location from the view 's upperleft  */
-/*                                                                          */
-/*    T_word16 y                  -- y location from the view 's upperleft  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_3dObject *                -- XY target object pointer or            */
-/*                                   NULL if none.                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dGetObjectAtXY                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewGetXYTarget
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewGetXYTarget finds the first passable or non-passable object
+ *  under the given x & y pixel location on the screen (relative to the
+ *  upper left hand corner of the screen)..
+ *
+ *  @param x -- x location from the view 's upperleft
+ *  @param y -- y location from the view 's upperleft
+ *
+ *  @return XY target object pointer or
+ *      NULL if none.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_3dObject *ViewGetXYTarget(T_word16 x, T_word16 y)
 {
     T_3dObject *p_object ;
@@ -770,45 +549,18 @@ T_3dObject *ViewGetXYTarget(T_word16 x, T_word16 y)
     return p_object ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewIsAt                                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewIsAt checks to see if mouse based XY is over the 3d view.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x                  -- x location of mouse X                  */
-/*                                                                          */
-/*    T_word16 y                  -- y location of mouse Y                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = over, FALSE = else              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dGetObjectAtXY                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/26/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewIsAt
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewIsAt checks to see if mouse based XY is over the 3d view.
+ *
+ *  @param x -- x location of mouse X
+ *  @param y -- y location of mouse Y
+ *
+ *  @return TRUE = over, FALSE = else
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ViewIsAt(T_word16 x, T_word16 y)
 {
     E_Boolean at = FALSE ;
@@ -826,43 +578,15 @@ E_Boolean ViewIsAt(T_word16 x, T_word16 y)
     return at ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewEarthquakeOn                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewEarthquakeOn makes the view shake randomly.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 duration           -- How long the earthquake should occur   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TickerGet                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewEarthquakeOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewEarthquakeOn makes the view shake randomly.
+ *
+ *  @param duration -- How long the earthquake should occur
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewEarthquakeOn(T_word32 duration)
 {
     DebugRoutine("ViewEarthquakeOn") ;
@@ -879,43 +603,13 @@ T_void ViewEarthquakeOn(T_word32 duration)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewEarthquakeOff                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewEarthquakeOff stops the view shake randomly.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewEarthquakeOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewEarthquakeOff stops the view shake randomly.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewEarthquakeOff(T_void)
 {
     DebugRoutine("ViewEarthquakeOff") ;
@@ -933,87 +627,26 @@ T_void ViewEarthquakeOff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewIsEarthquakeOn                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewIsEarthquakeOn tells if the earthquake is happening.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewIsEarthquakeOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewIsEarthquakeOn tells if the earthquake is happening.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ViewIsEarthquakeOn(T_void)
 {
     return G_earthquake ;
 }
 
-/****************************************************************************/
-/*  Routine:  IViewUpdateEarthquake                   * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IViewUpdateEarthquake updates whatever activity is occuring during    */
-/*  an earthquake.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    TickerGet                                                             */
-/*    ViewEarthquakeOff                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IViewUpdateEarthquake
+ *-------------------------------------------------------------------------*/
+/**
+ *  IViewUpdateEarthquake updates whatever activity is occuring during
+ *  an earthquake.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IViewUpdateEarthquake(T_void)
 {
     T_word32 time ;
@@ -1039,46 +672,15 @@ static T_void IViewUpdateEarthquake(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewSetPalette                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewSetPalette changes the palette used in the view.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_viewPalette viewPalette   -- Palette to use in view                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLockData                                                       */
-/*    GrSetPalette                                                          */
-/*    ColorInit                                                             */
-/*    PictureUnlockAndUnfind                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewSetPalette
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewSetPalette changes the palette used in the view.
+ *
+ *  @param viewPalette -- Palette to use in view
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewSetPalette(T_viewPalette viewPalette)
 {
     T_resource res ;
@@ -1110,43 +712,13 @@ T_void ViewSetPalette(T_viewPalette viewPalette)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewUnderwaterOn                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewUnderwaterOn changes the view to look like it is underwater.      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ViewSetPalette                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewUnderwaterOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewUnderwaterOn changes the view to look like it is underwater.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewUnderwaterOn(T_void)
 {
     DebugRoutine("ViewUnderwaterOn") ;
@@ -1159,43 +731,13 @@ T_void ViewUnderwaterOn(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewUnderwaterOff                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewUnderwaterOff changes the view back into the regular palette.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ViewSetPalette                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewUnderwaterOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewUnderwaterOff changes the view back into the regular palette.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewUnderwaterOff(T_void)
 {
     DebugRoutine("ViewUnderwaterOff") ;
@@ -1208,43 +750,13 @@ T_void ViewUnderwaterOff(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewIsUnderwater                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewIsUnderwater tells if the view is under the water.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ViewIsUnderwater                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewIsUnderwater
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewIsUnderwater tells if the view is under the water.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean ViewIsUnderwater(T_void)
 {
     DebugRoutine("ViewIsUnderwater") ;
@@ -1253,44 +765,16 @@ E_Boolean ViewIsUnderwater(T_void)
     return G_underwater ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewSetDarkSight                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewSetDarkSight sets how well the player sees in the dark.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sbyte8 darkSightValue     -- 0 = Normal, 127=perfect night vision,  */
-/*                                   -127=Blind.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    View3dSetDarknessAdjustment                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewSetDarkSight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewSetDarkSight sets how well the player sees in the dark.
+ *
+ *  @param darkSightValue -- 0 = Normal, 127=perfect night vision,
+ *      -127=Blind.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ViewSetDarkSight(T_sbyte8 darkSightValue)
 {
     DebugRoutine("ViewSetDarkSight") ;
@@ -1301,44 +785,16 @@ T_void ViewSetDarkSight(T_sbyte8 darkSightValue)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ViewSetDarkSight                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ViewSetDarkSight returns how well the player sees in the dark.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sbyte8                    -- 0 = Normal, 127=perfect night vision,  */
-/*                                   -127=Blind.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/12/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ViewSetDarkSight
+ *-------------------------------------------------------------------------*/
+/**
+ *  ViewSetDarkSight returns how well the player sees in the dark.
+ *
+ *  @return 0 = Normal, 127=perfect night vision,
+ *      -127=Blind.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sbyte8 ViewGetDarkSight(T_void)
 {
     DebugRoutine("ViewGetDarkSight") ;
@@ -1361,6 +817,7 @@ T_void ViewUpdateFormsOverViewDisable(void)
     G_updateFormOverView = FALSE;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  VIEW.C                                                  */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  VIEW.C
+ *-------------------------------------------------------------------------*/

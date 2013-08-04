@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  OBJGEN.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  OBJGEN.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The object generator is a special place on a map that generates one
+ * or more items or creatures when activated.  It uses the tell tale
+ * teleporter sound as it generates objects.
+ *
+ * @addtogroup OBJGEN
+ * @brief Object Generator
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "EFX.H"
 #include "MAP.H"
 #include "MEMORY.H"
@@ -73,50 +84,16 @@ static T_void IGeneratorGenerate(T_objectGenerator *p_generator) ;
 
 static T_objectGenerator *IFindGenerator(T_word16 genID) ;
 
-/****************************************************************************/
-/*  Routine:  ObjectGeneratorLoad                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGeneratorLoad loads up and starts the object generators for the */
-/*  given level.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 mapNumber          -- Number of the map to load obj gens for.*/
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    fopen                                                                 */
-/*    fclose                                                                */
-/*    fgets                                                                 */
-/*    sscanf                                                                */
-/*    printf                                                                */
-/*    IAddObjectGenerator                                                   */
-/*    IStartUpGenerators                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGeneratorLoad
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGeneratorLoad loads up and starts the object generators for the
+ *  given level.
+ *
+ *  @param mapNumber -- Number of the map to load obj gens for.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectGeneratorLoad(T_word32 mapNumber)
 {
     FILE *fp ;
@@ -191,43 +168,13 @@ DebugCheck(SyncTimeGet() == 1) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGeneratorUnload                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGeneratorUnload gets rid of all generators for this object.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IDestroyGenerator                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGeneratorUnload
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGeneratorUnload gets rid of all generators for this object.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectGeneratorUnload(T_void)
 {
     DebugRoutine("ObjectGeneratorUnload") ;
@@ -245,59 +192,24 @@ T_void ObjectGeneratorUnload(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IAddGenerator                           * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAddGenerator creates a new generator and adds to the list.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 objectType         -- Type of object generated               */
-/*                                                                          */
-/*    T_sword16 x, y              -- Where to place the new object          */
-/*                                                                          */
-/*    T_word16 angle              -- Angle to face when created             */
-/*                                                                          */
-/*    T_word16 timeBetween        -- Seconds between creation               */
-/*                                                                          */
-/*    T_word16 randomTimeBetween  -- Addition random time between creation  */
-/*                                                                          */
-/*    T_word16 maxObjects         -- Maximum number of objects in the map   */
-/*                                                                          */
-/*    T_word16 maxLikeObjects     -- Maximum number of objects with the     */
-/*                                   same basic type.                       */
-/*                                                                          */
-/*    T_word16 specialEffect      -- Special effect to occur when gen       */
-/*                                   (0 = none)                             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAddGenerator
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAddGenerator creates a new generator and adds to the list.
+ *
+ *  @param objectType -- Type of object generated
+ *  @param y -- Where to place the new object
+ *  @param angle -- Angle to face when created
+ *  @param timeBetween -- Seconds between creation
+ *  @param randomTimeBetween -- Addition random time between creation
+ *  @param maxObjects -- Maximum number of objects in the map
+ *  @param maxLikeObjects -- Maximum number of objects with the
+ *      same basic type.
+ *  @param specialEffect -- Special effect to occur when gen
+ *      (0 = none)
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_objectGenerator *IAddGenerator(
                               T_word16 objectType,
                               T_sword16 x,
@@ -352,43 +264,13 @@ static T_objectGenerator *IAddGenerator(
     return p_generator ;
 }
 
-/****************************************************************************/
-/*  Routine:  IStartUpGenerators                      * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IStartUpGenerators goes through all generatores and starts them up.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IStartUpGenerator                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IStartUpGenerators
+ *-------------------------------------------------------------------------*/
+/**
+ *  IStartUpGenerators goes through all generatores and starts them up.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IStartUpGenerators()
 {
     T_objectGenerator *p_generator ;
@@ -404,43 +286,15 @@ static T_void IStartUpGenerators()
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IStartUpGenerator                       * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IStartUpGenerator reinitializes a generator to start creating.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectGenerator *p_generator -- Generator to start up               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IStartUpGenerator
+ *-------------------------------------------------------------------------*/
+/**
+ *  IStartUpGenerator reinitializes a generator to start creating.
+ *
+ *  @param p_generator -- Generator to start up
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IStartUpGenerator(T_objectGenerator *p_generator)
 {
     DebugRoutine("IStartUpGenerator") ;
@@ -456,43 +310,15 @@ static T_void IStartUpGenerator(T_objectGenerator *p_generator)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IStartUpGenerator                       * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IStartUpGenerator reinitializes a generator to start creating.        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_objectGenerator *p_generator -- Generator to start up               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IStartUpGenerator
+ *-------------------------------------------------------------------------*/
+/**
+ *  IStartUpGenerator reinitializes a generator to start creating.
+ *
+ *  @param p_generator -- Generator to start up
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDestroyGenerator(T_objectGenerator *p_generator)
 {
     DebugRoutine("IDestroyGenerator") ;
@@ -522,48 +348,16 @@ static T_void IDestroyGenerator(T_objectGenerator *p_generator)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ObjectGeneratorUpdate                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ObjectGeneratorUpdate checks to see if a second has gone by.  If one  */
-/*  has, all the generators are updated.  Those generators that have had    */
-/*  enough time go by will attempt to generate.  The process then           */
-/*  starts over.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SyncTimeGet                                                             */
-/*    IGeneratorGenerate                                                    */
-/*    IStartUpGenerator                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ObjectGeneratorUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ObjectGeneratorUpdate checks to see if a second has gone by.  If one
+ *  has, all the generators are updated.  Those generators that have had
+ *  enough time go by will attempt to generate.  The process then
+ *  starts over.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ObjectGeneratorUpdate(T_void)
 {
     T_word16 seconds ;
@@ -609,52 +403,16 @@ T_void ObjectGeneratorUpdate(T_void)
     TICKER_TIME_ROUTINE_END(stdout, "ObjectGeneratorUpdate", 500) ;
 }
 
-/****************************************************************************/
-/*  Routine:  IGeneratorGenerate                 * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IGeneratorGenerate is called when it is time for a generator to       */
-/*  generate a new object.  This routine does all the work for that object. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_obejctGenerator *p_generator -- Generator to generate object        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectCreate                                                          */
-/*    ObjectSetType                                                         */
-/*    ObjectSetAngle                                                        */
-/*    ObjectSetUpSectors                                                    */
-/*    ObjectCheckCollide                                                    */
-/*    ObjectGetZ16                                                          */
-/*    ObjectDestroy                                                         */
-/*    ObjectAdd                                                             */
-/*    ServerAddObjectGlobal                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IGeneratorGenerate
+ *-------------------------------------------------------------------------*/
+/**
+ *  IGeneratorGenerate is called when it is time for a generator to
+ *  generate a new object.  This routine does all the work for that object.
+ *
+ *  @param p_generator -- Generator to generate object
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IGeneratorGenerate(T_objectGenerator *p_generator)
 {
     T_3dObject *p_obj ;
@@ -1000,7 +758,7 @@ T_void ObjectGeneratorGetHandle(T_objectGeneratorHandle handle)
 }
 
 
-/****************************************************************************/
-/*    END OF FILE:  OBJGEN.C                                                */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  OBJGEN.C
+ *-------------------------------------------------------------------------*/

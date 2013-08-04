@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  COLOR.C                                                        */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  COLOR.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Many of the graphical effects in the game is created with color
+ * shifting effects.  Either the whole palette is changed (go red for
+ * major damage) or a small subset of the palette (last 32 colors) are
+ * given specific animations to make magic items more magical and glow.
+ *
+ * @addtogroup COLOR
+ * @brief Color Palette Control
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "COLOR.H"
 #include "CONFIG.H"
 #include "GENERAL.H"
@@ -15,39 +27,13 @@ static T_byte8 G_colorvals[768];
 
 static T_word16 G_gamma ;
 
-/****************************************************************************/
-/*  Routine:  ColorInit                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorInit inits variables used by routines in color.c                  */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*  ColorStoreDefaultPalette                                                                        */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorInit inits variables used by routines in color.c
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorInit (T_void)
 {
     T_iniFile iniFile ;
@@ -74,40 +60,14 @@ T_void ColorInit (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  ColorStoreDefaultPalette                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorStoreDefaultPalette stores the current palette for use with other  */
-/*  routines in color.c                                                     */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorStoreDefaultPalette
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorStoreDefaultPalette stores the current palette for use with other
+ *  routines in color.c
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorStoreDefaultPalette (T_void)
 {
     T_byte8 p[256][3];
@@ -122,40 +82,14 @@ T_void ColorStoreDefaultPalette (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ColorAddGlobal                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorAddGlobal adds an amount of R,G,B to all values in the palette.    */
-/*  Used to indicate damage or effects in the game.                         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorAddGlobal
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorAddGlobal adds an amount of R,G,B to all values in the palette.
+ *  Used to indicate damage or effects in the game.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorAddGlobal (T_sword16 red, T_sword16 green, T_sword16 blue)
 {
 	DebugRoutine ("ColorAddGlobal");
@@ -175,40 +109,14 @@ T_void ColorAddGlobal (T_sword16 red, T_sword16 green, T_sword16 blue)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ColorSetGlobal                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorAddGlobal sets an amount of R,G,B to all values in the palette.    */
-/*  Used to indicate damage or effects in the game.                         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorSetGlobal
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorAddGlobal sets an amount of R,G,B to all values in the palette.
+ *  Used to indicate damage or effects in the game.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorSetGlobal (T_sbyte8 red, T_sbyte8 green, T_sbyte8 blue)
 {
 	DebugRoutine ("ColorSetGlobal");
@@ -227,40 +135,14 @@ T_void ColorSetGlobal (T_sbyte8 red, T_sbyte8 green, T_sbyte8 blue)
 	DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ColorAddFilt                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorAddFilt adds an amount of r,g,b to a 'filter' value that affects   */
-/*  all colors in the palette.                                              */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorAddFilt
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorAddFilt adds an amount of r,g,b to a 'filter' value that affects
+ *  all colors in the palette.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorAddFilt (T_sbyte8 red, T_sbyte8 green, T_sbyte8 blue)
 {
 	DebugRoutine ("ColorAddGlobal");
@@ -281,39 +163,14 @@ T_void ColorAddFilt (T_sbyte8 red, T_sbyte8 green, T_sbyte8 blue)
 
 
 
-/****************************************************************************/
-/*  Routine:  ColorAddFilt                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorAddFilt sets the filter to an amount of r,g,b - filter affects     */
-/*  all colors in the palette.                                              */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorAddFilt
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorAddFilt sets the filter to an amount of r,g,b - filter affects
+ *  all colors in the palette.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorSetFilt (T_sbyte8 red, T_sbyte8 green, T_sbyte8 blue)
 {
 	DebugRoutine ("ColorSetFilt");
@@ -333,39 +190,13 @@ T_void ColorSetFilt (T_sbyte8 red, T_sbyte8 green, T_sbyte8 blue)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ColorResetFilt                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorResetFilt resets the value of the filter to 0,0,0                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorResetFilt
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorResetFilt resets the value of the filter to 0,0,0
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorResetFilt (T_void)
 {
 	DebugRoutine ("ColorResetFilt");
@@ -376,40 +207,14 @@ T_void ColorResetFilt (T_void)
 	DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  ColorUpdate                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorUpdate moves the entire palette spectrum from current colors       */
-/*  towards colors stored in ColorStoreDefaultPalette.                      */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorUpdate moves the entire palette spectrum from current colors
+ *  towards colors stored in ColorStoreDefaultPalette.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorUpdate (T_word16 delta)
 {
 	T_byte8 tempcolors[768];
@@ -505,40 +310,13 @@ T_void ColorUpdate (T_word16 delta)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ColorGlowUpdate                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorGlowUpdate updates the 'glow colors' defined in the palette        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/13/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorGlowUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorGlowUpdate updates the 'glow colors' defined in the palette
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorGlowUpdate (T_void)
 {
 	static int glows[3]={20,20,20};
@@ -646,40 +424,13 @@ T_void ColorGlowUpdate (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  ColorSetColor                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorSetColor permanently sets a color palette value to r,g,b           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/23/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorSetColor
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorSetColor permanently sets a color palette value to r,g,b
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorSetColor (T_byte8 colornum, T_byte8 red, T_byte8 green, T_byte8 blue)
 {
 	static T_byte8 rgb[3]={0,0,0};
@@ -720,40 +471,13 @@ T_byte8 ColorGetBlue (T_byte8 colornum)
 
 
 
-/****************************************************************************/
-/*  Routine:  ColorRestore                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  ColorRestore restores the default palette.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/26/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ColorRestore
+ *-------------------------------------------------------------------------*/
+/**
+ *  ColorRestore restores the default palette.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ColorRestore (T_void)
 {
     DebugRoutine ("ColorRestore");
@@ -811,3 +535,8 @@ T_word16 ColorGammaAdjust(T_void)
 
     return G_gamma/2 ;
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  COLOR.C
+ *-------------------------------------------------------------------------*/

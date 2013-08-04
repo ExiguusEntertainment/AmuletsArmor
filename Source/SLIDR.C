@@ -1,49 +1,28 @@
-/****************************************************************************/
-/*    FILE:  SLIDER.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SLIDR.C
+ *-------------------------------------------------------------------------*/
+/**
+ * User Interface sliders/scrollbars.
+ *
+ * @addtogroup SLIDR
+ * @brief Scroll bars for UI
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "MEMORY.H"
 #include "SLIDR.H"
 
 static T_sliderID G_sliderArray[MAX_SLIDERS];
 static T_void SliderDraw (T_sliderID sliderID);
 
-/****************************************************************************/
-/*  Routine:  SliderCreate                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Adds a slider to the current list of sliders for a form               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 x location, y location, secondary x location                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sliderID (id of the slider created)                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderCreate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Adds a slider to the current list of sliders for a form
+ *
+ *<!-----------------------------------------------------------------------*/
 T_sliderID SliderCreate (T_word16 lx1, T_word16 ly1, T_word16 lx2)
 {
 	T_word16 i;
@@ -94,41 +73,14 @@ T_void SliderSetCallBack (T_sliderID sliderID, T_sliderHandler sliderhandler)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SliderDelete / SliderCleanUp                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Releases memory allocated to a slider                                */
-/*    Cleanup releases memory allocated to all 'sliders'                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sliderID sliderID / none                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderDelete / SliderCleanUp
+ *-------------------------------------------------------------------------*/
+/**
+ *  Releases memory allocated to a slider
+ *  Cleanup releases memory allocated to all 'sliders'
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderDelete (T_sliderID sliderID)
 {
 	T_word16 i;
@@ -176,42 +128,15 @@ T_void SliderCleanUp (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  SliderUpdate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Draws a slider on the screen at the stored locx+xoff, locy+yoff      */
-/*    also will shadow if shadow is set to anything less than 255, and      */
-/*    will not draw slider if visible or changed are set to FALSE.         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sliderID sliderID                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revulsion History:                                                      */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  10/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Draws a slider on the screen at the stored locx+xoff, locy+yoff
+ *  also will shadow if shadow is set to anything less than 255, and
+ *  will not draw slider if visible or changed are set to FALSE.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderUpdate (T_sliderID sliderID)
 {
    T_sliderStruct *p_slider;
@@ -280,40 +205,14 @@ static T_void SliderDraw (T_sliderID sliderID)
 
 
 
-/****************************************************************************/
-/*  Routine:  SliderUpdateAllSliders                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Calls SliderUpdate for all sliders currently allocated.  Note that  */
-/*    slider will not draw if visible or changed are set to FALSE.         */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  07/05/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SliderUpdateAllSliders
+ *-------------------------------------------------------------------------*/
+/**
+ *  Calls SliderUpdate for all sliders currently allocated.  Note that
+ *  slider will not draw if visible or changed are set to FALSE.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SliderUpdateAllSliders (T_void)
 {
 	T_word16 i;
@@ -460,3 +359,8 @@ T_void SliderSetStateBlock(T_void *p_state)
 {
     memcpy(G_sliderArray, p_state, sizeof(G_sliderArray)) ;
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SLIDR.C
+ *-------------------------------------------------------------------------*/

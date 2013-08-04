@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SPELLS.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SPELLS.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All spell casting goes through here.
+ *
+ * @addtogroup SPELLS
+ * @brief Spells System
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "CLIENT.H"
 #include "COLOR.H"
@@ -26,42 +35,14 @@ static T_word16  G_facing=0;
 static E_Boolean G_clearSpells=FALSE;
 static E_Boolean G_isInit = FALSE ;
 
-/****************************************************************************/
-/*  Routine:  SpellsInitSpells                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  Initializes variables associated with spell casting.                    */
-/*  Must be called prior to client login.                                   */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsInitSpells
+ *-------------------------------------------------------------------------*/
+/**
+ *  Initializes variables associated with spell casting.
+ *  Must be called prior to client login.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsInitSpells (T_void)
 {
 	T_word16 count=0;
@@ -186,45 +167,14 @@ T_void SpellsInitSpells (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  SpellsFinish                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      SpellsFinish gets rid of any memory or resources associated with    */
-/*  all the spells, either in effect, or able to be used.                   */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnfind                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  06/28/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SpellsFinish gets rid of any memory or resources associated with
+ *  all the spells, either in effect, or able to be used.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsFinish(T_void)
 {
 	T_word16 i ;
@@ -262,44 +212,13 @@ T_void SpellsFinish(T_void)
 
 }
 
-/****************************************************************************/
-/*  Routine:  SpellsAddRune                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  Callback routine assigned to a rune button, adds rune to spell box      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID (button ID which called this routine)                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SpellsDrawRuneBox                                                     */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsAddRune
+ *-------------------------------------------------------------------------*/
+/**
+ *  Callback routine assigned to a rune button, adds rune to spell box
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsAddRune (T_buttonID buttonID)
 {
 	T_buttonStruct *p_button;
@@ -342,43 +261,14 @@ T_void SpellsAddRune (T_buttonID buttonID)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsClearRunes                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  Callback routine assigned to the rune clearbox button, clears runes     */
-/*  in spell box                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID (button ID which called this routine)                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsClearRunes
+ *-------------------------------------------------------------------------*/
+/**
+ *  Callback routine assigned to the rune clearbox button, clears runes
+ *  in spell box
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsClearRunes (T_buttonID buttonID)
 {
 	T_word16 i;
@@ -406,43 +296,17 @@ T_void SpellsClearRunes (T_buttonID buttonID)
 
 
 
-/****************************************************************************/
-/*  Routine:  SpellsBackSpace                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  Callback routine assigned to the rune backspace button, removes last    */
-/*  tune entered.                                                           */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Currently same as SpellsClear                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID (button ID which called this routine)                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Not Yet Functional                                     */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsBackSpace
+ *-------------------------------------------------------------------------*/
+/**
+ *  Callback routine assigned to the rune backspace button, removes last
+ *  tune entered.
+ *
+ *  NOTE: 
+ *  Currently same as SpellsClear
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsBackspace (T_buttonID buttonID)
 {
 	T_word16 i;
@@ -468,45 +332,14 @@ T_void SpellsBackspace (T_buttonID buttonID)
 
 
 
-/****************************************************************************/
-/*  Routine:  SpellsDrawRuneBox                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This routine draws the selected icons for the current spell in the      */
-/*  spell box                                                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID (button ID which called this routine)                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    GRDrawRectangle                                                       */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsDrawRuneBox
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine draws the selected icons for the current spell in the
+ *  spell box
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsDrawRuneBox (T_void)
 {
 	T_word16 i;
@@ -544,45 +377,13 @@ T_void SpellsDrawRuneBox (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsCastSpell                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This routine attempts to cast the currently selected spell              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_buttonID (button ID which called this routine)                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    GRDrawRectangle                                                       */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  05/30/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsCastSpell
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine attempts to cast the currently selected spell
+ *
+ *<!-----------------------------------------------------------------------*/
 #if 0
 T_void SpellsCastSpell (T_buttonID buttonID)
 {
@@ -804,43 +605,13 @@ T_void SpellsCastSpell (T_buttonID buttonID)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsStopAll                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*     SpellsStopAll turns off all the spells that are in effect.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SpellsStop                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsStopAll
+ *-------------------------------------------------------------------------*/
+/**
+ *  SpellsStopAll turns off all the spells that are in effect.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsStopAll (T_void)
 {
     DebugRoutine("SpellsStopAll") ;
@@ -865,45 +636,13 @@ T_void SpellsDrawInEffectRunes (T_word16 left,
 }
 
 #ifdef shit
-/****************************************************************************/
-/*  Routine:  SpellsLeap                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell causes the player to jump up in the air with 2x jump power   */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    StatsSetJumpPower                                                     */
-/*    StatsGetJumpPower                                                     */
-/*    PlayerJump                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsLeap
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell causes the player to jump up in the air with 2x jump power
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsLeap (T_spellID spell)
 {
 	DebugRoutine ("SpellsLeap");
@@ -916,44 +655,14 @@ T_void SpellsLeap (T_spellID spell)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsFast                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell doubles the movement rate of the player for a duration       */
-/*  (duration is defined in spell structure)                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    StatsSetMaxVRunning, StatsSetMaxVWalking                              */
-/*    StatsGetMaxVRunning, StatsGetMaxVWalking                              */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsFast
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell doubles the movement rate of the player for a duration
+ *  (duration is defined in spell structure)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsFast (T_spellID spell)
 {
 	static E_Boolean firstin=TRUE;
@@ -989,44 +698,14 @@ T_void SpellsFast (T_spellID spell)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsShockAbsorb                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell doubles the max velocity allowed before impact damage is     */
-/*  taken. This effect lasts for a duration defined in the spell struct     */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    StatsSetMaxFallV                                                      */
-/*    StatsGetMaxFallV                                                      */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsShockAbsorb
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell doubles the max velocity allowed before impact damage is
+ *  taken. This effect lasts for a duration defined in the spell struct
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsShockAbsorb (T_spellID spell)
 {
 	static E_Boolean firstin=TRUE;
@@ -1058,45 +737,13 @@ T_void SpellsShockAbsorb (T_spellID spell)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsHeal                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell Heals the player 200 life points                             */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    StatsHealPlayer                                                      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsHeal
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell Heals the player 200 life points
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsHeal (T_spellID spell)
 {
 	DebugRoutine ("SpellsHeal");
@@ -1106,45 +753,13 @@ T_void SpellsHeal (T_spellID spell)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsFireBall                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell creates a fireball                                           */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    ClientShootFireball                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsFireBall
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell creates a fireball
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsFireball (T_spellID spell)
 {
 	DebugRoutine ("SpellsFireball");
@@ -1154,44 +769,14 @@ T_void SpellsFireball (T_spellID spell)
 	DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  SpellsDuration                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell doubles the effective duration of all spells casted during   */
-/*  the duration of this one.                                              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                         */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsDuration
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell doubles the effective duration of all spells casted during
+ *  the duration of this one.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsDuration (T_spellID spell)
 {
 	static E_Boolean firstin=TRUE;
@@ -1230,44 +815,14 @@ T_void SpellsDuration (T_spellID spell)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsRegenerate                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell regenerates character 50pts/sec over the duration of the     */
-/*  spell.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                         */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsRegenerate
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell regenerates character 50pts/sec over the duration of the
+ *  spell.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsRegenerate (T_spellID spell)
 {
 	static E_Boolean firstin=TRUE;
@@ -1306,44 +861,14 @@ T_void SpellsRegenerate (T_spellID spell)
 
 
 
-/****************************************************************************/
-/*  Routine:  SpellsToggle                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This is a general spell function that will toggle a stats attribute     */
-/*  in stats.c for a duration defined in the spell structure.               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    StatsSetAttribute                                                    */
-/*    ScheduleAddEvent                                                      */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/06/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsToggle
+ *-------------------------------------------------------------------------*/
+/**
+ *  This is a general spell function that will toggle a stats attribute
+ *  in stats.c for a duration defined in the spell structure.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsToggle (T_spellID spell)
 {
 	T_spellStruct *p_spell ;
@@ -1376,45 +901,14 @@ T_void SpellsToggle (T_spellID spell)
 
 
 
-/****************************************************************************/
-/*  Routine:  SpellsBeaconSet                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell will set a 'beacon' at the current player location.          */
-/*  If BeaconReturn is cast, the player will return to the location.        */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    PlayerGetX                                                            */
-/*    PlayerGetY                                                            */
-/*    PlayerGetAngle                                                        */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsBeaconSet
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell will set a 'beacon' at the current player location.
+ *  If BeaconReturn is cast, the player will return to the location.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsBeaconSet (T_spellID spell)
 {
 	T_spellStruct *p_spell ;
@@ -1435,44 +929,13 @@ T_void SpellsBeaconSet (T_spellID spell)
 }
 
 
-/****************************************************************************/
-/*  Routine:  SpellsBeaconReturn                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*  This spell will return to the beacon set by SpellBeaconSet              */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_spellID - spell structure which was cast                            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                         */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  06/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  SpellsBeaconReturn
+ *-------------------------------------------------------------------------*/
+/**
+ *  This spell will return to the beacon set by SpellBeaconSet
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SpellsBeaconReturn (T_spellID spell)
 {
 	T_spellStruct *p_spell ;
@@ -1568,3 +1031,7 @@ T_void SpellsClearRune (E_spellsRuneType type)
     DebugEnd();
 }
 
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SPELLS.C
+ *-------------------------------------------------------------------------*/

@@ -1,6 +1,17 @@
-/****************************************************************************/
-/*    FILE:  OVERLAY .C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  OVERLAY.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The player's weapon and hands are shown using the Overlay system.
+ * It also handles the animation as an attack sequence is performed.
+ * There is one animation per weapon type.
+ *
+ * @addtogroup OVERLAY 
+ * @brief Overlay Animation
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "OVERLAY.H"
 #include "RESOURCE.H"
 #include "PICS.H"
@@ -61,43 +72,13 @@ static T_void IDrawLayer(
 
 static E_Boolean G_translucencyMode = FALSE ;
 
-/****************************************************************************/
-/*  Routine:  OverlayInitialize                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlayInitialize sets up the basics for the overlay manager.         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlayInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlayInitialize sets up the basics for the overlay manager.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlayInitialize(T_void)
 {
     DebugRoutine("OverlayInitialize") ;
@@ -112,43 +93,13 @@ T_void OverlayInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverlayFinish                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlayFinish cleans up the overlay module afterwards.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlayFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlayFinish cleans up the overlay module afterwards.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlayFinish(T_void)
 {
     DebugRoutine("OverlayFinish") ;
@@ -161,44 +112,16 @@ T_void OverlayFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverlaySetCallback                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlaySetCallback declares the function to call when the overlay     */
-/*  has completed the animation.                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_overlayCallback p_callback -- Callback to call when done            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlaySetCallback
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlaySetCallback declares the function to call when the overlay
+ *  has completed the animation.
+ *
+ *  @param p_callback -- Callback to call when done
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlaySetCallback(T_overlayCallback p_callback)
 {
     DebugRoutine("OverlaySetCallback") ;
@@ -208,48 +131,16 @@ T_void OverlaySetCallback(T_overlayCallback p_callback)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverlaySetAnimation                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlaySetAnimation declares the animation to be used for the         */
-/*  next overlay cycle and the overlay at the beginning.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 animationNumber     -- Number of the animation to use        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    sprintf                                                               */
-/*    PictureExist                                                          */
-/*    IUnlockAnimation                                                      */
-/*    PictureLockData                                                       */
-/*    ILockAnimation                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlaySetAnimation
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlaySetAnimation declares the animation to be used for the
+ *  next overlay cycle and the overlay at the beginning.
+ *
+ *  @param animationNumber -- Number of the animation to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlaySetAnimation(T_word16 animationNumber)
 {
     static char *names[ANIMATION_NUMBER_UNKNOWN] = {
@@ -297,45 +188,17 @@ T_void OverlaySetAnimation(T_word16 animationNumber)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverlayAnimate                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlayAnimate starts an animation cycle.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 speed              -- Speed of animation where 65536 is      */
-/*                                   normal speed, 32768 is half, and       */
-/*                                   131072 is double.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlayAnimate
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlayAnimate starts an animation cycle.
+ *
+ *  @param speed -- Speed of animation where 65536 is
+ *      normal speed, 32768 is half, and
+ *      131072 is double.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlayAnimate(T_word32 speed)
 {
     DebugRoutine("OverlayAnimate") ;
@@ -354,43 +217,13 @@ T_void OverlayAnimate(T_word32 speed)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverlayUpdate                                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlayUpdate updates the animation of the overlay (if there is one). */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlayUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlayUpdate updates the animation of the overlay (if there is one).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlayUpdate(E_Boolean isPaused)
 {
     T_sword32 delta ;
@@ -466,43 +299,13 @@ E_Boolean OverlayIsDone(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  IUnlockAnimation                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUnlockAnimation releases all the graphics needed for an animation.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureUnfindAndUnlock                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IUnlockAnimation
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUnlockAnimation releases all the graphics needed for an animation.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IUnlockAnimation(T_void)
 {
     T_word16 i ;
@@ -528,43 +331,15 @@ static T_void IUnlockAnimation(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ILockAnimation                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IUnlockAnimation brings in all the graphics needed for an animation.  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 *prefix             -- Prefix directory to find resources     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLockData                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ILockAnimation
+ *-------------------------------------------------------------------------*/
+/**
+ *  IUnlockAnimation brings in all the graphics needed for an animation.
+ *
+ *  @param prefix -- Prefix directory to find resources
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ILockAnimation(T_byte8 *prefix)
 {
     T_word16 i ;
@@ -594,48 +369,21 @@ static T_void ILockAnimation(T_byte8 *prefix)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverlayDraw                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverlayDraw is called to draw the current frame on the screen at the  */
-/*  given offset and with the give bounds.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left, top          -- Upper left of bounding view            */
-/*                                                                          */
-/*    T_word16 right, bottom      -- Lower right of bounding view           */
-/*                                                                          */
-/*    T_word16 xOffset, yOffset   -- Offset of picture                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    PictureLockData                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  12/08/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverlayDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverlayDraw is called to draw the current frame on the screen at the
+ *  given offset and with the give bounds.
+ *
+ *  @param left -- Upper left of bounding view
+ *  @param top -- Upper left of bounding view
+ *  @param right -- Lower right of bounding view
+ *  @param bottom -- Lower right of bounding view
+ *  @param xOffset -- X Offset of picture
+ *  @param yOffset -- Y Offset of picture
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverlayDraw(
            T_word16 left,
            T_word16 top,
@@ -759,6 +507,7 @@ T_void OverlaySetTranslucencyMode(E_Boolean mode)
 }
 
 
-/****************************************************************************/
-/*    END OF FILE:  OVERLAY .C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  OVERLAY.C
+ *-------------------------------------------------------------------------*/

@@ -1,7 +1,13 @@
-/****************************************************************************/
-/*    FILE:  COMIO.C                                                        */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * File:  COMIO.C
+ *-------------------------------------------------------------------------*/
+/**
+ * @addtogroup COMIO
+ * @brief Serial IO Driver
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "standard.h"
 
 /* Definition of a port's buffer for either receiveing or writing buffering. */
@@ -109,44 +115,17 @@ static TP_Interrupt G_ListInterrupts[8] = {
 #endif
 
 
-/****************************************************************************/
-/*  Routine:  COMIO_Initialize                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      Initialize all the important global variables used by the           */
-/*    COMIO package.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*      I don't think there are any.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*      None.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    me   dd/mm/yy  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_Initialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  Initialize all the important global variables used by the
+ *  COMIO package.
+ *
+ *  NOTE: 
+ *  I don't think there are any.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_Initialize(T_void)
 {
     T_word16 i ;
@@ -182,60 +161,34 @@ T_void COMIO_Initialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_Open                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    COMIO_Open is the routine that opens up a communication port on the   */
-/*  PC computer given the PC I/O address (e.g. 0x03E8) and the interrupt    */
-/*  tied to that port (e.g. interrupt level 3).  A communications port      */
-/*  identifier used by the rest of these routines is returned.              */
-/*    Also, the returned port is in disable mode and needs a call to        */
-/*  COMIO_EnablePort to active it.                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    COMIO_Open does not check if the given address and interrupt is       */
-/*  valid (except for the allowable ranges).  Should a invalid numbers      */
-/*  be used, no error may be returned.                                      */
-/*    Also, COMIO_Open does not currently check to see if it is has already */
-/*  created a port with the same address and interrupt.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 io_address    -- I/O address for port to allocate            */
-/*                                                                          */
-/*    T_byte8  io_interrupt  -- Interrupt level for port                    */
-/*                                                                          */
-/*    Assumptions:                                                          */
-/*        io_address is in the range of 0x200 - 0x400                       */
-/*        io_interrupt is in the range of 0-7                               */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_COMPort              -- Returns a com port identifier               */
-/*                                                                          */
-/*    Assumptions:                                                          */
-/*        T_COMPort is a value of 0-(COM_MAX_PORTS-1)                       */
-/*        Also, the initial port has not been enabled.                      */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*    COMIO_ClearReceiveBuffer                                                 */
-/*    COMIO_ClearSendBuffer                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_Open
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_Open is the routine that opens up a communication port on the
+ *  PC computer given the PC I/O address (e.g. 0x03E8) and the interrupt
+ *  tied to that port (e.g. interrupt level 3).  A communications port
+ *  identifier used by the rest of these routines is returned.
+ *  Also, the returned port is in disable mode and needs a call to
+ *  COMIO_EnablePort to active it.
+ *
+ *  NOTE: 
+ *  COMIO_Open does not check if the given address and interrupt is
+ *  valid (except for the allowable ranges).  Should a invalid numbers
+ *  be used, no error may be returned.
+ *  Also, COMIO_Open does not currently check to see if it is has already
+ *  created a port with the same address and interrupt.
+ *
+ *  @param io_address -- I/O address for port to allocate
+ *  @param io_interrupt -- Interrupt level for port
+ *      io_address is in the range of 0x200 - 0x400
+ *      io_interrupt is in the range of 0-7
+ *
+ *  @return Returns a com port identifier
+ *      T_COMPort is a value of 0-(COM_MAX_PORTS-1)
+ *      Also, the initial port has not been enabled.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_COMPort COMIO_Open(T_word16 io_address, T_byte8 io_interrupt)
 {
     T_COMPort port ;
@@ -304,48 +257,23 @@ T_COMPort COMIO_Open(T_word16 io_address, T_byte8 io_interrupt)
     return port ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_Close                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      COMIO_Close does the shutting down of a port.  It will make sure    */
-/*   that the interrupt list is updated and buffers in memory are removed.  */
-/*   You should make a call to COMIO_DisablePort before you call this       */
-/*   routine.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*      This routine assumes you are done with the port, but it does not    */
-/*    actually stop the interrupts from occuring.                           */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*      T_COMPort port            -- Port needing to be closed.             */
-/*                                                                          */
-/*      Assumptions:                                                        */
-/*          The port must be in use to be closed (as well as valid).        */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*      None.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_Close
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_Close does the shutting down of a port.  It will make sure
+ *  that the interrupt list is updated and buffers in memory are removed.
+ *  You should make a call to COMIO_DisablePort before you call this
+ *  routine.
+ *
+ *  NOTE: 
+ *  This routine assumes you are done with the port, but it does not
+ *  actually stop the interrupts from occuring.
+ *
+ *  @param port -- Port needing to be closed.
+ *      The port must be in use to be closed (as well as valid).
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_Close(T_COMPort port)
 {
     T_PortInfo *p_port ;
@@ -388,52 +316,20 @@ T_void COMIO_Close(T_COMPort port)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_SetBaudRate                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Before a port can be used effectively, it needs the correct baud      */
-/*  rate to be set.  COMIO_SetBaudRate sets the baud to one of the          */
-/*  specified enumerated baud rates.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Valid port to change baud rate         */
-/*                                                                          */
-/*    E_COMBaudRate baud          -- Baud rate to go to.                    */
-/*                                                                          */
-/*    Assumptions:                                                          */
-/*        baud ranges from 300 to 38400 (any bigger and we can't handle it) */
-/*        port is a valid port                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    inp                                                                   */
-/*    outp                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_SetBaudRate
+ *-------------------------------------------------------------------------*/
+/**
+ *  Before a port can be used effectively, it needs the correct baud
+ *  rate to be set.  COMIO_SetBaudRate sets the baud to one of the
+ *  specified enumerated baud rates.
+ *
+ *  @param port -- Valid port to change baud rate
+ *  @param baud -- Baud rate to go to.
+ *      baud ranges from 300 to 38400 (any bigger and we can't handle it)
+ *      port is a valid port
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_SetBaudRate(T_COMPort port, T_COMBaudRate baud)
 {
     T_word16 divider ;
@@ -481,47 +377,18 @@ printf("New high: %02X\n", inp(ioAddress+COM_REG_BAUD_DIV_HIGH_BYTE)) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_SetTypePort                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Set the type of modem that we will be using.  Currently only a        */
-/*  couple types are used.  The default modem is the 8250.  This routine    */
-/*  should only be called before the modem is enabled.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to change type of                 */
-/*                                                                          */
-/*    E_COMPortType type          -- Type to change port to                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_SetTypePort
+ *-------------------------------------------------------------------------*/
+/**
+ *  Set the type of modem that we will be using.  Currently only a
+ *  couple types are used.  The default modem is the 8250.  This routine
+ *  should only be called before the modem is enabled.
+ *
+ *  @param port -- Port to change type of
+ *  @param type -- Type to change port to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_SetTypePort(T_COMPort port, E_COMPortType type)
 {
     DebugRoutine("COMIO_SetTypePort") ;
@@ -535,52 +402,23 @@ T_void COMIO_SetTypePort(T_COMPort port, E_COMPortType type)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_SetControl                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    COMIO_SetControl sets the bit length, stop bits, and parity of the    */
-/*  port given.                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    This had not be called while the port is active.  Unpredictable       */
-/*  results will occur.                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*    T_COMPort port              -- Port to change control                 */
-/*                                                                          */
-/*    E_COMBitLength bit_length   -- Number of bits per transfer            */
-/*                                                                          */
-/*    E_COMStopBit                -- Number of stop bits at end             */
-/*                                                                          */
-/*    E_COMParity                 -- Type of parity checking (if any)       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_SetControl
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_SetControl sets the bit length, stop bits, and parity of the
+ *  port given.
+ *
+ *  NOTE: 
+ *  This had not be called while the port is active.  Unpredictable
+ *  results will occur.
+ *
+ *  @param port -- Port to change control
+ *  @param bit_length -- Number of bits per transfer
+ *  @param stop_bit -- Number of stop bits at end
+ *  @param parity -- Type of parity checking (if any)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_SetControl(
                T_COMPort port,
                E_COMBitLength bit_length,
@@ -631,46 +469,20 @@ T_void COMIO_SetControl(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_CheckCarrier                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    You can check for if a modem is connected by checking the carrier     */
-/*  signal of the modem.  This routine will return TRUE if the given        */
-/*  port has a carrier signal, or else it will return FALSE.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Valid communications port.             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = Carrier found                   */
-/*                                   FALSE = Carrier not found              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nobody.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_CheckCarrier
+ *-------------------------------------------------------------------------*/
+/**
+ *  You can check for if a modem is connected by checking the carrier
+ *  signal of the modem.  This routine will return TRUE if the given
+ *  port has a carrier signal, or else it will return FALSE.
+ *
+ *  @param port -- Valid communications port.
+ *
+ *  @return TRUE = Carrier found
+ *      FALSE = Carrier not found
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean COMIO_CheckCarrier(T_COMPort port)
 {
     E_Boolean status ;
@@ -700,47 +512,21 @@ E_Boolean COMIO_CheckCarrier(T_COMPort port)
     return status ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_EnablePort                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      Turn on a port that has already been opened (and perhaps previously */
-/*    was disabled).  Enabling a port allows it to send and receive data.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Hmmm ... let me think about that one.                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to enable                         */
-/*                                                                          */
-/*    Assumptions:                                                          */
-/*        Would it be too much to assume that the port is valid?  Probably  */
-/*        so.                                                               */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ActivateInterrupt                                                     */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_EnablePort
+ *-------------------------------------------------------------------------*/
+/**
+ *  Turn on a port that has already been opened (and perhaps previously
+ *  was disabled).  Enabling a port allows it to send and receive data.
+ *
+ *  NOTE: 
+ *  Hmmm ... let me think about that one.
+ *
+ *  @param port -- Port to enable
+ *      Would it be too much to assume that the port is valid?  Probably
+ *      so.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_EnablePort(T_COMPort port)
 {
     T_word16 ioInterrupt ;
@@ -764,46 +550,20 @@ T_void COMIO_EnablePort(T_COMPort port)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_DisablePort                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      Turn on a port that has already been opened (and perhaps previously */
-/*    was disabled).  Enabling a port allows it to send and receive data.   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    I'm not really sure if there are any problems.                        */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to enable                         */
-/*                                                                          */
-/*    Assumptions:                                                          */
-/*        The port I'm getting should be a valid number.                    */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    DeactivateInterrupt                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_DisablePort
+ *-------------------------------------------------------------------------*/
+/**
+ *  Turn on a port that has already been opened (and perhaps previously
+ *  was disabled).  Enabling a port allows it to send and receive data.
+ *
+ *  NOTE: 
+ *  I'm not really sure if there are any problems.
+ *
+ *  @param port -- Port to enable
+ *      The port I'm getting should be a valid number.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_DisablePort(T_COMPort port)
 {
     T_word16 ioInterrupt ;
@@ -827,46 +587,20 @@ T_void COMIO_DisablePort(T_COMPort port)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_GetEnableStatus                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Should you forget, you may wish to sometimes find out if a port       */
-/*  is active or inactive.  A call to this routine will return a TRUE       */
-/*  if the port is active or a FALSE if it is inactive.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to check enable status            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- TRUE = port is enabled                 */
-/*                                   FALSE = port is disabled               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_GetEnableStatus
+ *-------------------------------------------------------------------------*/
+/**
+ *  Should you forget, you may wish to sometimes find out if a port
+ *  is active or inactive.  A call to this routine will return a TRUE
+ *  if the port is active or a FALSE if it is inactive.
+ *
+ *  @param port -- Port to check enable status
+ *
+ *  @return TRUE = port is enabled
+ *      FALSE = port is disabled
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean COMIO_GetEnableStatus(T_COMPort port)
 {
     E_Boolean result ;
@@ -886,48 +620,25 @@ E_Boolean COMIO_GetEnableStatus(T_COMPort port)
 }
 
 
-/****************************************************************************/
-/*  Routine:  COMIO_ReceiveByte                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    When you need one byte from a port, call this routine.  It will       */
-/*  check to see if there is a byte in the buffer, and if there is, will    */
-/*  return it.  If there is not, it will return with COM_ERROR_EMPTY_BUFFER.*/
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Note that this routine does not sit and wait for a byte to appear     */
-/*  in the read buffer.  Therefore, the calling routine must always take    */
-/*  the responsibility of considering a time out condition.                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to read from receive buffer.      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- if 0-255, byte read                    */
-/*                                -- otherwise, COM_ERROR_EMPTY_BUFFER      */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    No one.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_ReceiveByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  When you need one byte from a port, call this routine.  It will
+ *  check to see if there is a byte in the buffer, and if there is, will
+ *  return it.  If there is not, it will return with COM_ERROR_EMPTY_BUFFER.
+ *
+ *  NOTE: 
+ *  Note that this routine does not sit and wait for a byte to appear
+ *  in the read buffer.  Therefore, the calling routine must always take
+ *  the responsibility of considering a time out condition.
+ *
+ *  @param port -- Port to read from receive buffer.
+ *
+ *  @return if 0-255, byte read
+ *  @return otherwise, COM_ERROR_EMPTY_BUFFER
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 COMIO_ReceiveByte(T_COMPort port)
 {
     T_PortBuffer *p_buffer ;
@@ -968,45 +679,22 @@ T_word16 COMIO_ReceiveByte(T_COMPort port)
     return value ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_GetReceiveCount                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    To help determine if you want to read from the receive buffer,        */
-/*  you can use this function to tell you how many bytes are there.  If     */
-/*  it is zero, then the buffer is empty.                                   */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.  Just make sure we keep those _disable and _enable lines.       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to check receive buffer           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of bytes in buffer              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _disable                                                              */
-/*    _enable                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_GetReceiveCount
+ *-------------------------------------------------------------------------*/
+/**
+ *  To help determine if you want to read from the receive buffer,
+ *  you can use this function to tell you how many bytes are there.  If
+ *  it is zero, then the buffer is empty.
+ *
+ *  NOTE: 
+ *  None.  Just make sure we keep those _disable and _enable lines.
+ *
+ *  @param port -- Port to check receive buffer
+ *
+ *  @return Number of bytes in buffer
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 COMIO_GetReceiveCount(T_COMPort port)
 {
     T_word16 count ;
@@ -1026,89 +714,34 @@ T_word16 COMIO_GetReceiveCount(T_COMPort port)
     return count ;
 }
 
-/****************************************************************************/
-/*  Routine:                                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    me   dd/mm/yy  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_ReceiveData
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 COMIO_ReceiveData(T_COMPort port, T_word16 count, T_byte8 *buffer) ;
 
-/****************************************************************************/
-/*  Routine:  COMIO_SendByte                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    COMIO_SendByte is the basic routine to send one byte over the com     */
-/*  port that you give.  If the buffer is full, you will get an error       */
-/*  of COM_ERROR_FULL_BUFFER.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If the buffer is full when you try to send it, the routine does       */
-/*  not wait until it is empty.  It is up to the calling routine to consider*/
-/*  this case.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to send byte out through          */
-/*                                                                          */
-/*    T_byte8 data                -- character to send                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Returns either COM_ERROR_NO_ERROR      */
-/*                                   or COM_ERROR_EMPTY_BUFFER              */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/14/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_SendByte
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_SendByte is the basic routine to send one byte over the com
+ *  port that you give.  If the buffer is full, you will get an error
+ *  of COM_ERROR_FULL_BUFFER.
+ *
+ *  NOTE: 
+ *  If the buffer is full when you try to send it, the routine does
+ *  not wait until it is empty.  It is up to the calling routine to consider
+ *  this case.
+ *
+ *  @param port -- Port to send byte out through
+ *  @param data -- character to send
+ *
+ *  @return Returns either COM_ERROR_NO_ERROR
+ *      or COM_ERROR_EMPTY_BUFFER
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 COMIO_SendByte(T_COMPort port, T_byte8 data)
 {
     T_PortBuffer *p_buffer ;
@@ -1158,45 +791,22 @@ T_word16 COMIO_SendByte(T_COMPort port, T_byte8 data)
     return value ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_GetSendCount                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    GetSendCount    is mainly to see how full the input  buffer is        */
-/*  for a single port.  Use this routine to determine how many bytes are    */
-/*  still needing to be sent out by the port.                               */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.  Just make sure we keep those _disable and _enable lines.       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_COMPort port              -- Port to check send buffer              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number of bytes in buffer              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _disable                                                              */
-/*    _enable                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_GetSendCount
+ *-------------------------------------------------------------------------*/
+/**
+ *  GetSendCount    is mainly to see how full the input  buffer is
+ *  for a single port.  Use this routine to determine how many bytes are
+ *  still needing to be sent out by the port.
+ *
+ *  NOTE: 
+ *  None.  Just make sure we keep those _disable and _enable lines.
+ *
+ *  @param port -- Port to check send buffer
+ *
+ *  @return Number of bytes in buffer
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 COMIO_GetSendCount(T_COMPort port)
 {
     T_word16 count ;
@@ -1216,90 +826,31 @@ T_word16 COMIO_GetSendCount(T_COMPort port)
     return count ;
 }
 
-/****************************************************************************/
-/*  Routine:                                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    me   dd/mm/yy  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_SendData
+ *-------------------------------------------------------------------------*/
+/**
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 COMIO_SendData(T_COMPort port, T_word16 count, T_byte8 *buffer) ;
 
-/****************************************************************************/
-/*  Routine:  COMIO_ClearReceiveBuffer                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      COMIO_ClearReceiveBuffer initializes the read buffer of a port to be   */
-/*    that of an empty buffer.  It does not actually zero out the buffer,   */
-/*    but all indexes are zeroed.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*      Using this routine should only be done when the port is not         */
-/*    enabled.  If it is, no telling what will happen.  I've included       */
-/*    a DebugCheck to make sure this is not the case.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*      T_COMPort port            -- Port to have its receive buffer zeroed.   */
-/*                                                                          */
-/*      Assumptions:                                                        */
-/*          The port must be in use and disabled.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_ClearReceiveBuffer
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_ClearReceiveBuffer initializes the read buffer of a port to be
+ *  that of an empty buffer.  It does not actually zero out the buffer,
+ *  but all indexes are zeroed.
+ *
+ *  NOTE: 
+ *  Using this routine should only be done when the port is not
+ *  enabled.  If it is, no telling what will happen.  I've included
+ *  a DebugCheck to make sure this is not the case.
+ *
+ *  @param port -- Port to have its receive buffer zeroed.
+ *      The port must be in use and disabled.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_ClearReceiveBuffer(T_COMPort port)
 {
     T_PortBuffer *p_buffer ;
@@ -1317,50 +868,23 @@ T_void COMIO_ClearReceiveBuffer(T_COMPort port)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_ClearSendBuffer                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      COMIO_ClearSendBuffer initializes the send buffer of a port to be */
-/*    that of an empty buffer.  It does not actually zero out the buffer,   */
-/*    but all indexes are zeroed.                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*      Using this routine should only be done when the port is not         */
-/*    enabled.  If it is, no telling what will happen.  I've included       */
-/*    a DebugCheck to make sure this is not the case.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*      T_COMPort port            -- Port to have its receive buffer zeroed.   */
-/*                                                                          */
-/*      Assumptions:                                                        */
-/*          The port must be in use and disabled.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_ClearSendBuffer
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_ClearSendBuffer initializes the send buffer of a port to be
+ *  that of an empty buffer.  It does not actually zero out the buffer,
+ *  but all indexes are zeroed.
+ *
+ *  NOTE: 
+ *  Using this routine should only be done when the port is not
+ *  enabled.  If it is, no telling what will happen.  I've included
+ *  a DebugCheck to make sure this is not the case.
+ *
+ *  @param port -- Port to have its receive buffer zeroed.
+ *      The port must be in use and disabled.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void COMIO_ClearSendBuffer(T_COMPort port)
 {
     T_PortBuffer *p_buffer ;
@@ -1378,52 +902,24 @@ T_void COMIO_ClearSendBuffer(T_COMPort port)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  COMIO_Interrupt0 - COMIO_Interrupt7                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      COMIO_InterruptXXX are the 8 interrupts for the different interrupt */
-/*    levels that can be received by the PC.  I don't think commenting each */
-/*    interrupt would be useful since they all do the same thing.           */
-/*      When active, each interrupt calls the interrupt handler with        */
-/*    the number of the interrupt level.  When done, it returns by          */
-/*    chaining to the standard interrupt handler.                           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If several modems/devices are on the same interrupt level, the        */
-/*    handler is going to get called and this might slow down operations    */
-/*    more than we would like.  However, it will take specialized hardware  */
-/*    to do it differently.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*      None.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*      Nothing.                                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*      HandleInterrupt                                                     */
-/*      _chain_intr                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  COMIO_Interrupt0 - COMIO_Interrupt7
+ *-------------------------------------------------------------------------*/
+/**
+ *  COMIO_InterruptXXX are the 8 interrupts for the different interrupt
+ *  levels that can be received by the PC.  I don't think commenting each
+ *  interrupt would be useful since they all do the same thing.
+ *  When active, each interrupt calls the interrupt handler with
+ *  the number of the interrupt level.  When done, it returns by
+ *  chaining to the standard interrupt handler.
+ *
+ *  NOTE: 
+ *  If several modems/devices are on the same interrupt level, the
+ *  handler is going to get called and this might slow down operations
+ *  more than we would like.  However, it will take specialized hardware
+ *  to do it differently.
+ *
+ *<!-----------------------------------------------------------------------*/
 #if defined(WATCOM)
 T_void __interrupt __far COMIO_Interrupt0()
 {
@@ -1474,51 +970,26 @@ T_void __interrupt __far COMIO_Interrupt7()
 }
 #endif
 
-/****************************************************************************/
-/*  Routine:  HandleInterrupt                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      HandleInterrupt is the main routine that does ALL of the byte       */
-/*    transactions for input and output of the ports.  When called, it      */
-/*    is given an interrupt level that was called.  Using this interrupt    */
-/*    level, HandleInterrupt will go through a list of devices and          */
-/*    check if those devices are interrupting.  It will do whatever         */
-/*    service(s) are being asked for in order of the list.                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    If two devices ask for an interrupt simultaneously, the first         */
-/*    interrupt will do both, the second interrupt will do neither.         */
-/*    But this is not really a fallacy since the alternative is to have     */
-/*    two interrupts with one device (out of the two) being served.         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 ioInterrupt         -- Level of interrupt to handle           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ???                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  HandleInterrupt
+ *-------------------------------------------------------------------------*/
+/**
+ *  HandleInterrupt is the main routine that does ALL of the byte
+ *  transactions for input and output of the ports.  When called, it
+ *  is given an interrupt level that was called.  Using this interrupt
+ *  level, HandleInterrupt will go through a list of devices and
+ *  check if those devices are interrupting.  It will do whatever
+ *  service(s) are being asked for in order of the list.
+ *
+ *  NOTE: 
+ *  If two devices ask for an interrupt simultaneously, the first
+ *  interrupt will do both, the second interrupt will do neither.
+ *  But this is not really a fallacy since the alternative is to have
+ *  two interrupts with one device (out of the two) being served.
+ *
+ *  @param ioInterrupt -- Level of interrupt to handle
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void HandleInterrupt(T_byte8 ioInterrupt)
 {
     T_COMPort port ;
@@ -1626,46 +1097,21 @@ hit_count = inp(ioAddress+COM_REG_LINE_STATUS) ;
     outp(PIC_CONTROL_REG, END_OF_INTERRUPT) ;
 }
 
-/****************************************************************************/
-/*  Routine:  ActivateInterrupt                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      ActivateInterrupt is used to turn on an interrupt that was          */
-/*    originally inactive.  This routine MUST NOT be called when an         */
-/*    interrupt handler is already active.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None really.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 ioInterrupt         -- Level of interrupt to activate         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _dos_getvect                                                          */
-/*    _dos_setvect                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ActivateInterrupt
+ *-------------------------------------------------------------------------*/
+/**
+ *  ActivateInterrupt is used to turn on an interrupt that was
+ *  originally inactive.  This routine MUST NOT be called when an
+ *  interrupt handler is already active.
+ *
+ *  NOTE: 
+ *  None really.
+ *
+ *  @param ioInterrupt -- Level of interrupt to activate
+ *  @param ioAddress -- Hardware IO address
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void ActivateInterrupt(T_byte8 ioInterrupt, T_word16 ioAddress)
 {
     T_byte8 data ;
@@ -1723,45 +1169,18 @@ printf("new IER: %02X\n", data=inp(ioAddress+COM_REG_INTERRUPT_ENABLE)) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  DeactivateInterrupt                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*      DeactivateInterrupt is used to turn off an interrupt that was       */
-/*    originally active.  This routine MUST NOT be called when an           */
-/*    interrupt handler is already inactive.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*      None really                                                         */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 ioInterrupt         -- Level of interrupt to deactivate       */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    _dos_getvect                                                          */
-/*    _dos_setvect                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  11/12/94  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  DeactivateInterrupt
+ *-------------------------------------------------------------------------*/
+/**
+ *  DeactivateInterrupt is used to turn off an interrupt that was
+ *  originally active.  This routine MUST NOT be called when an
+ *  interrupt handler is already inactive.
+ *
+ *  @param ioInterrupt -- Level of interrupt to deactivate
+ *  @param ioAddress -- IO address
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void DeactivateInterrupt(T_byte8 ioInterrupt, T_word16 ioAddress)
 {
     T_byte8 data ;
@@ -1811,10 +1230,12 @@ printf("new Modem con: %02X\n", data=inp(ioAddress+COM_REG_MODEM_CONTROL)) ;
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  COMIO.C                                                 */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  COMIO.C
+ *-------------------------------------------------------------------------*/
+ *
+ *<!-----------------------------------------------------------------------*/
 /* Just an idea: */
 T_void COMIO_ForceSendByte(T_COMPort port, T_byte8 data)
 {

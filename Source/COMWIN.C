@@ -1,6 +1,18 @@
-/****************************************************************************/
-/*    FILE:  COMWIN.C                                                       */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  COMWIN.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Communications Window is the UI for sending fun sound clips or
+ * text to other players in the area.  We originally thought it might be
+ * good to make it so only players nearby can hear these sayings, but
+ * later gave up on that.
+ *
+ * @addtogroup COMWIN
+ * @brief Communications Window User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLI_SEND.H"
 #include "COMWIN.H"
 #include "GENERAL.H"
@@ -258,3 +270,7 @@ T_void ComwinSayNth(T_word16 saynum)
    DebugEnd();
 }
 
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  COMWIN.C
+ *-------------------------------------------------------------------------*/

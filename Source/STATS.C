@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  STATS.C                                                        */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  STATS.C
+ *-------------------------------------------------------------------------*/
+/**
+ * All stat information about a player and updating what they effect
+ * goes in this code.
+ *
+ * @addtogroup STATS
+ * @brief Player Stats
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "BANNER.H"
 #include "CLIENT.H"
 #include "COLOR.H"
@@ -578,43 +588,14 @@ T_void StatsSetPlayerMana (T_word16 amount)
 }
 
 
-/****************************************************************************/
-/*  Routine:  StatsChange .................                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Modifies a statistics value.  These functions replace macros for      */
-/*    purposes of error checking, displaying messages, clipping, ect.       */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsChange .................
+ *-------------------------------------------------------------------------*/
+/**
+ *  Modifies a statistics value.  These functions replace macros for
+ *  purposes of error checking, displaying messages, clipping, ect.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsChangePlayerMana (T_sword16 amt)
 {
     DebugRoutine ("StatsChangePlayerMana");
@@ -1475,42 +1456,14 @@ T_void StatsChangePlayerPoisonLevel (T_sword16 amt)
 }
 
 
-/****************************************************************************/
-/*  Routine:  StatsUpdatePlayerStatistics                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    This routine is responsible for changes to health, mana, food, and    */
-/*    water due to time passing or spell effects such as poison             */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  01/11/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsUpdatePlayerStatistics
+ *-------------------------------------------------------------------------*/
+/**
+ *  This routine is responsible for changes to health, mana, food, and
+ *  water due to time passing or spell effects such as poison
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsUpdatePlayerStatistics (T_void)
 {
     T_word32 delta,time;
@@ -1616,43 +1569,15 @@ T_void StatsUpdatePlayerStatistics (T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  StatsSetActive                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StatsSetActive declares the active player stats.                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_playerStats *p_stats      -- What player stats to use               */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  07/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsSetActive
+ *-------------------------------------------------------------------------*/
+/**
+ *  StatsSetActive declares the active player stats.
+ *
+ *  @param p_stats -- What player stats to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsSetActive(T_playerStats *p_stats)
 {
     DebugRoutine("StatsSetActive") ;
@@ -1677,43 +1602,13 @@ T_void StatsSetName (T_byte8 *newname)
 
 
 
-/****************************************************************************/
-/*  Routine:  StatsCreateCharacterUI                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    UI screen to create a new character                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean TRUE if character successfully created                      */
-/*              FALSE otherwise                                             */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  08/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsCreateCharacterUI
+ *-------------------------------------------------------------------------*/
+/**
+ *  UI screen to create a new character
+ *
+ *<!-----------------------------------------------------------------------*/
 
 E_Boolean StatsCreateCharacterUI (T_void)
 {
@@ -1730,43 +1625,13 @@ E_Boolean StatsCreateCharacterUI (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  StatsUpdateCreateCharacterUI                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Redraws the character creation UI screen                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  08/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsUpdateCreateCharacterUI
+ *-------------------------------------------------------------------------*/
+/**
+ *  Redraws the character creation UI screen
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsUpdateCreateCharacterUI (T_void)
 {
     T_byte8 stmp[64];
@@ -1827,42 +1692,16 @@ T_void StatsUpdateCreateCharacterUI (T_void)
 
 
 
-/****************************************************************************/
-/*  Routine:  StatsGetCharacterList                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Downloads a list of characters from the server                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Doesn't do anything yet.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    *data [list of characters]                                            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  08/11/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsGetCharacterList
+ *-------------------------------------------------------------------------*/
+/**
+ *  Downloads a list of characters from the server
+ *
+ *  NOTE: 
+ *  Doesn't do anything yet.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *StatsGetCharacterList (T_void)
 {
     static char data[256];
@@ -1901,43 +1740,13 @@ T_void StatsCreateCharacterUIInit(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  StatsDisplayStatisticsPage                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Fills out the fields for the banner show statistics option            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  11/18/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsDisplayStatisticsPage
+ *-------------------------------------------------------------------------*/
+/**
+ *  Fills out the fields for the banner show statistics option
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsDisplayStatisticsPage (T_void)
 {
    T_byte8 stmp[64];
@@ -2279,43 +2088,13 @@ T_byte8 StatsGetArmorValue (T_byte8 location)
 }
 
 
-/****************************************************************************/
-/*  Routine:  StatsCalcWeaponAttackSpeed / AttackDamage                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    Performs calculations for attack speed and damage.                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sbyte8 weaponmod - weapon modifier                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None (sets the statistics AttackSpeed and AttackDamage)               */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  12/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-/* routine sets base weapon damage */
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsCalcWeaponAttackSpeed / AttackDamage
+ *-------------------------------------------------------------------------*/
+/**
+ *  Performs calculations for attack speed and damage.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsSetWeaponBaseDamage (T_byte8 value)
 {
     DebugRoutine ("StatsSetWeaponBaseDamage");
@@ -2875,44 +2654,14 @@ T_byte8 StatsGetActive (T_void)
     return (G_activeCharacter);
 }
 
-/****************************************************************************/
-/*  Routine:  StatsClearSavedCharacterList                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StatsClearSavedCharacterList initializes the list of saved characters */
-/*  to null.                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    strcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsClearSavedCharacterList
+ *-------------------------------------------------------------------------*/
+/**
+ *  StatsClearSavedCharacterList initializes the list of saved characters
+ *  to null.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsClearSavedCharacterList(T_void)
 {
     T_word16 i ;
@@ -2930,50 +2679,17 @@ T_void StatsClearSavedCharacterList(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  StatsGetSavedCharacterList                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StatsGetSavedCharacterList lokos at the character files in the        */
-/*  character directory (current server directory) and fills out the names  */
-/*  and passwords of those characters.                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_statsSavedCharArray *     -- Pointer to character array             */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    mkdir                                                                 */
-/*    sprintf                                                               */
-/*    strcpy                                                                */
-/*    fopen                                                                 */
-/*    fclose                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    JDA  ??/??/??  Created                                                */
-/*    LES  03/06/96  Returns pointer to statsSavedCharArray now.            */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsGetSavedCharacterList
+ *-------------------------------------------------------------------------*/
+/**
+ *  StatsGetSavedCharacterList lokos at the character files in the
+ *  character directory (current server directory) and fills out the names
+ *  and passwords of those characters.
+ *
+ *  @return Pointer to character array
+ *
+ *<!-----------------------------------------------------------------------*/
 T_statsSavedCharArray *StatsGetSavedCharacterList(T_void)
 {
     T_word16 i;
@@ -3017,45 +2733,17 @@ T_statsSavedCharArray *StatsGetSavedCharacterList(T_void)
     return ((T_statsSavedCharArray *)(G_savedCharacters)) ;
 }
 
-/****************************************************************************/
-/*  Routine:  StatsSetSavedCharacterList                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    StatsSetSavedCharacterList is called when the client receives a new   */
-/*  list of characters.  The list of characters are replaced with this new  */
-/*  block.                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_statsSavedCharArray *p_chars -- Pointer to block of characters      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  03/06/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  StatsSetSavedCharacterList
+ *-------------------------------------------------------------------------*/
+/**
+ *  StatsSetSavedCharacterList is called when the client receives a new
+ *  list of characters.  The list of characters are replaced with this new
+ *  block.
+ *
+ *  @param p_chars -- Pointer to block of characters
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void StatsSetSavedCharacterList(T_statsSavedCharArray *p_chars)
 {
     DebugRoutine("StatsSetSavedCharacterList") ;
@@ -3956,3 +3644,8 @@ E_Boolean StatsSaveCharacter (T_byte8 selected)
 
     return (success);
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  STATS.C
+ *-------------------------------------------------------------------------*/

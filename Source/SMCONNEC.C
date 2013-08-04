@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  SMCONNEC.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  SMCONNEC.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Connect to server state machine.  Deprecated?
+ *
+ * @addtogroup SMCONNEC
+ * @brief State Machine for connecting to server
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "CLI_SEND.H"
 #include "CLIENT.H"
 #include "COLOR.H"
@@ -412,48 +421,18 @@ static T_stateMachine SMClientConnectStateMachine = {
     SMClientConnectStates           /* State list */
 } ;
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectSelectServer                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectSelectServer is called at the beginning of the         */
-/*  SELECT_SERVER state.  This routine brings up the UI for choosing        */
-/*  a server.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*    ConnMainUIStart                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectSelectServer
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectSelectServer is called at the beginning of the
+ *  SELECT_SERVER state.  This routine brings up the UI for choosing
+ *  a server.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectSelectServer(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -487,47 +466,17 @@ T_void SMClientConnectSelectServer(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectSelectServerIdle                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectSelectServerIdle is called while in the state of       */
-/*  SELECT_SERVER.                                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*    ConnMainUIUpdate() ;                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectSelectServerIdle
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectSelectServerIdle is called while in the state of
+ *  SELECT_SERVER.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectSelectServerIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -545,47 +494,18 @@ T_void SMClientConnectSelectServerIdle(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectServerSelected                                 */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectServerSelected is called after the conn ui screen      */
-/*  has been shown and is now done.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*    ConnMainUIEnd                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectServerSelected
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectServerSelected is called after the conn ui screen
+ *  has been shown and is now done.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- End flag
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectServerSelected(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -608,45 +528,16 @@ T_void SMClientConnectServerSelected(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnect                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnect                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnect
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnect
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectConnectToServer(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -720,45 +611,17 @@ T_void SMClientConnectConnectToServer(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnect                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnect                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnect
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnect
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *  @param isDestroyed -- Flag if state machine destroyed
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectConnectionResolved(
            T_stateMachineHandle handle,
            T_word32 extraData,
@@ -789,46 +652,17 @@ T_void SMClientConnectConnectionResolved(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectBusyMessage                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectBusyMessage states that the connection failed because  */
-/*  the line was busy.                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectBusyMessage
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectBusyMessage states that the connection failed because
+ *  the line was busy.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectBusyMessage(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -851,46 +685,17 @@ T_void SMClientConnectBusyMessage(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectNoConnectMessage                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectNoConnectMessage states that a time out occured        */
-/*  and a connection could not be established.                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectNoConnectMessage
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectNoConnectMessage states that a time out occured
+ *  and a connection could not be established.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectNoConnectMessage(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -913,50 +718,18 @@ T_void SMClientConnectNoConnectMessage(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectSendLogin                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectSendLogin starts up the actual login process with the  */
-/*  server.  A login packet is sent and the state will wait until it times  */
-/*  out or receives login acknowledgement.                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMClientConnectSetFlag                                                */
-/*    StateMachineGetExtraData                                              */
-/*    PromptDisplayMessage                                                          */
-/*    ClientLogin                                                           */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectSendLogin
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectSendLogin starts up the actual login process with the
+ *  server.  A login packet is sent and the state will wait until it times
+ *  out or receives login acknowledgement.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectSendLogin(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -985,47 +758,18 @@ T_void SMClientConnectSendLogin(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectWaitForLogin                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectWaitForLogin is the idle routine for the state of      */
-/*  SEND_LOGIN_AND_WAIT.  This routine checks to see if the client is       */
-/*  logged in or times out.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectWaitForLogin
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectWaitForLogin is the idle routine for the state of
+ *  SEND_LOGIN_AND_WAIT.  This routine checks to see if the client is
+ *  logged in or times out.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectWaitForLogin(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1060,45 +804,16 @@ T_void SMClientConnectWaitForLogin(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectServerNotAckLogin                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnect                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectServerNotAckLogin
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnect
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectServerNotAckLogin(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1126,46 +841,17 @@ T_void SMClientConnectServerNotAckLogin(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectGetServerID                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectGetServerID starts a request to the server for its     */
-/*  unique server id.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectGetServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectGetServerID starts a request to the server for its
+ *  unique server id.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectGetServerID(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1191,48 +877,18 @@ T_void SMClientConnectGetServerID(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectLookForServerID                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectLookForServerID sits and constantly checks to see      */
-/*  if the client has gotten a server id.  When it gets it, it compares     */
-/*  to see if this is what was supposed to be gotten.                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientGetCurrentServerID                                              */
-/*    SMClientConnectSetFlag                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectLookForServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectLookForServerID sits and constantly checks to see
+ *  if the client has gotten a server id.  When it gets it, it compares
+ *  to see if this is what was supposed to be gotten.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectLookForServerID(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1268,47 +924,18 @@ T_void SMClientConnectLookForServerID(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectIncorrectServerID                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectIncorrectServerID is called when the server responds   */
-/*  with a different server ID than what is expected.  The client then      */
-/*  logs off with an error message.                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMClientConnectSetFlag                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectIncorrectServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectIncorrectServerID is called when the server responds
+ *  with a different server ID than what is expected.  The client then
+ *  logs off with an error message.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectIncorrectServerID(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1331,49 +958,16 @@ T_void SMClientConnectIncorrectServerID(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectGotoStart                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectGotoStart requests to enter the server.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ClientSetCurrentPlace                                                 */
-/*    SMClientConnectSetFlag                                                */
-/*    ClientSetServerEnterStatus                                            */
-/*    ClientSendRequestEnterPacket                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*    LES  03/13/96  Added timeout check and status bar                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectGotoStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectGotoStart requests to enter the server.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectGotoStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1396,49 +990,17 @@ T_void SMClientConnectGotoStart(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectDisplayExitMessage                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectDisplayExitMessage displays the exit message that      */
-/*  the server sent down when it exited.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMClientConnectSetFlag                                                */
-/*    FileLoad                                                              */
-/*    PromptDisplayBulletin                                                 */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectDisplayExitMessage
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectDisplayExitMessage displays the exit message that
+ *  the server sent down when it exited.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectDisplayExitMessage(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1467,45 +1029,16 @@ T_void SMClientConnectDisplayExitMessage(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectAbortConnection                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectAbortConnection                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectAbortConnection
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectAbortConnection
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectAbortConnection(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1526,47 +1059,18 @@ T_void SMClientConnectAbortConnection(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectNoServerID                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectNoServerID is called when the request for the server   */
-/*  ID times out and doesn't get a response.  This routine politely hangs   */
-/*  up the phone and returns to the main screen.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    SMClientConnectSetFlag                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectNoServerID
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectNoServerID is called when the request for the server
+ *  ID times out and doesn't get a response.  This routine politely hangs
+ *  up the phone and returns to the main screen.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectNoServerID(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1589,45 +1093,16 @@ T_void SMClientConnectNoServerID(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnect                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnect                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnect
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnect
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectReady(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1644,45 +1119,16 @@ T_void SMClientConnectReady(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnect                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnect                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnect
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnect
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectLogoutAndHangup(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -1699,44 +1145,19 @@ T_void SMClientConnectLogoutAndHangup(
 }
 
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectCheckFlag                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectCheckFlag checks to see if one of the state flags      */
-/*  of the client connect state machine is set.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to get value of                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                    -- State of flag                         */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectCheckFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectCheckFlag checks to see if one of the state flags
+ *  of the client connect state machine is set.
+ *
+ *  @param handle -- State machine
+ *  @param flag -- Flag to get value of
+ *
+ *  @return State of flag
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMClientConnectCheckFlag(
               T_stateMachineHandle handle,
               T_word32 flag)
@@ -1761,46 +1182,17 @@ E_Boolean SMClientConnectCheckFlag(
     return stateFlag ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectSetFlag                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectSetFlag sets a flag for the client connect state       */
-/*  machine to process as part of its states.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word32 flag                -- Flag to set                           */
-/*                                                                          */
-/*    E_Boolean state              -- State to set flag to                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectSetFlag
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectSetFlag sets a flag for the client connect state
+ *  machine to process as part of its states.
+ *
+ *  @param flag -- Flag to set
+ *  @param state -- State to set flag to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectSetFlag(
               T_word32 flag,
               E_Boolean state)
@@ -1821,43 +1213,13 @@ T_void SMClientConnectSetFlag(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectInit                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectInit sets up the state machine and its data.           */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineCreate                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectInit
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectInit sets up the state machine and its data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_stateMachineHandle SMClientConnectInit(T_void)
 {
     DebugRoutine("SMClientConnectInit") ;
@@ -1873,44 +1235,14 @@ T_stateMachineHandle SMClientConnectInit(T_void)
     return G_smClientHandle ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectFinish                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectFinish cleans up the client connect state machine's    */
-/*  data.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineDestroy                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectFinish cleans up the client connect state machine's
+ *  data.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectFinish(T_void)
 {
     DebugRoutine("SMClientConnectFinish") ;
@@ -1925,43 +1257,13 @@ T_void SMClientConnectFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectUpdate                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectUpdate updates the client connect state machine.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineUpdate                                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectUpdate updates the client connect state machine.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectUpdate(T_void)
 {
     DebugRoutine("SMClientConnectUpdate") ;
@@ -1971,44 +1273,16 @@ T_void SMClientConnectUpdate(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectIsDone                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectIsDone checks if the client connect state machine      */
-/*  has reached its end and is done.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_Boolean                   -- Done if TRUE                           */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetState                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectIsDone
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectIsDone checks if the client connect state machine
+ *  has reached its end and is done.
+ *
+ *  @return Done if TRUE
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean SMClientConnectIsDone(T_void)
 {
     T_word16 state;
@@ -2033,46 +1307,16 @@ E_Boolean SMClientConnectIsDone(T_void)
     return isDone ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectInitData                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectInitData creates the data necessary to be associated   */
-/*  to the client connect state machine.                                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle -- state machine                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*    memset                                                                */
-/*    StateMachineSetData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectInitData
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectInitData creates the data necessary to be associated
+ *  to the client connect state machine.
+ *
+ *  @param handle -- state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectInitData(T_stateMachineHandle handle)
 {
     T_smClientData *p_data ;
@@ -2088,46 +1332,16 @@ T_void SMClientConnectInitData(T_stateMachineHandle handle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectFinishData                                     */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectFinishData destroys the data attached to the client    */
-/*  connect state machine.                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle -- state machine                          */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetData                                                   */
-/*    MemFree                                                               */
-/*    StateMachineSetData                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectFinishData
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectFinishData destroys the data attached to the client
+ *  connect state machine.
+ *
+ *  @param handle -- state machine
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectFinishData(T_stateMachineHandle handle)
 {
     T_smClientData *p_data ;
@@ -2143,44 +1357,16 @@ T_void SMClientConnectFinishData(T_stateMachineHandle handle)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectSetServerInfo                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectSetServerInfo declares which server the connection     */
-/*  will occur with.                                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_connUIStruct *p_server    -- Server info to use                     */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMClientConnectGetExtraData                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectSetServerInfo
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectSetServerInfo declares which server the connection
+ *  will occur with.
+ *
+ *  @param p_server -- Server info to use
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectSetServerInfo(T_connUIStruct *p_server)
 {
     T_smClientData *p_data ;
@@ -2196,44 +1382,16 @@ T_void SMClientConnectSetServerInfo(T_connUIStruct *p_server)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectGetServerInfo                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectGetServerInfo returns a pointer to the connection ui   */
-/*  server structure.                                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_connUIStruct *            -- POinter to structure                   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ISMClientConnectGetExtraData                                          */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectGetServerInfo
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectGetServerInfo returns a pointer to the connection ui
+ *  server structure.
+ *
+ *  @return POinter to structure
+ *
+ *<!-----------------------------------------------------------------------*/
 T_connUIStruct *SMClientConnectGetServerInfo(T_void)
 {
     T_connUIStruct *p_server = NULL ;
@@ -2250,44 +1408,16 @@ T_connUIStruct *SMClientConnectGetServerInfo(T_void)
     return p_server ;
 }
 
-/****************************************************************************/
-/*  Routine:  ISMClientConnectGetExtraData            * INTERNAL *          */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ISMClientConnectGetExtraData returns a pointer to the current SM      */
-/*  Client's global data area.                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_smClientData *            -- SM Client's data                       */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/29/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ISMClientConnectGetExtraData
+ *-------------------------------------------------------------------------*/
+/**
+ *  ISMClientConnectGetExtraData returns a pointer to the current SM
+ *  Client's global data area.
+ *
+ *  @return SM Client's data
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_smClientData *ISMClientConnectGetExtraData(T_void)
 {
     T_smClientData *p_data = NULL ;
@@ -2305,47 +1435,17 @@ static T_smClientData *ISMClientConnectGetExtraData(T_void)
     return p_data ;
 }
 
-/****************************************************************************/
-/*  Routine:  SMClientConnectWaitForStart                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    SMClientConnectWaitForState waits until it is decided where the       */
-/*  player will start the game.                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_stateMachineHandle handle  -- Handle to PHASE A client state machine*/
-/*                                                                          */
-/*    T_word32 extraData           -- Not used                              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    StateMachineGetExtraData                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*    LES  03/13/96  Added timeout check and status bar                     */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  SMClientConnectWaitForStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  SMClientConnectWaitForState waits until it is decided where the
+ *  player will start the game.
+ *
+ *  @param handle -- Handle to PHASE A client state machine
+ *  @param extraData -- Not used
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void SMClientConnectWaitForStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
@@ -2391,6 +1491,7 @@ T_void SMClientConnectWaitForStart(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  SMCONNEC.C                                              */
-/****************************************************************************/
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  SMCONNEC.C
+ *-------------------------------------------------------------------------*/

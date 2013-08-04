@@ -1,6 +1,5 @@
 
 /*    FILE:  PACKETPR.C                                                     */
-/****************************************************************************/
 // Packet print utilities
 #include <stdio.h>
 #include "PACKET.H"
@@ -16,7 +15,7 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDCS_PLAYER_ATTACK",         /*  4  not used */
         "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  5 */
         "PACKET_COMMAND_PLAYER_ID_SELF",          /*  6 */
-        "PACKET_COMMAND_REQUEST_PLAYER_ID",       /*  7 */           
+        "PACKET_COMMAND_REQUEST_PLAYER_ID",       /*  7 */
         "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  8 */
         "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  9 */
         "PACKET_COMMAND_GAME_START",              /* 10 */
@@ -155,7 +154,7 @@ void PacketPrint(void *aData, unsigned int aSize)
 	}
 	printf("#%d: %s", p_header->id, PacketName(p_packet->data[0]));
 	switch (p_packet->data[0]) {
-		case PACKET_COMMAND_ACK: 
+		case PACKET_COMMAND_ACK:
 			{
 				T_ackPacket *p = (T_ackPacket *)p_packet->data;
 				printf("(%s #%d)", PacketName(p->commandBeingAcked), p->packetIDBeingAcked);
@@ -213,7 +212,7 @@ void PacketPrint(void *aData, unsigned int aSize)
 	printf("\n");
 }
 
-/****************************************************************************/
-/*    END OF FILE:  PACKETPR.C                                              */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  PACKETPR.C
+ *-------------------------------------------------------------------------*/

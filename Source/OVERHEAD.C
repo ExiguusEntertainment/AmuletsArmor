@@ -1,6 +1,16 @@
-/****************************************************************************/
-/*    FILE:  OVERHEAD.C                                                     */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  OVERHEAD.C
+ *-------------------------------------------------------------------------*/
+/**
+ * The Overhead or "Magic" map is rendered here.  Various options turn
+ * on features to show secret areas or even objects.
+ *
+ * @addtogroup OVERHEAD
+ * @brief Overhead Map
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "3D_IO.H"
 #include "3D_TRIG.H"
 #include "GENERAL.H"
@@ -64,45 +74,14 @@ static T_void IActuallyDrawObject(
                      T_3dObject *p_obj,
                      T_word32 color) ;
 
-/****************************************************************************/
-/*  Routine:  OverheadInitialize                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadInitialize clears out all the memory that is needed for the   */
-/*  first use of this module.                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IAllocatePage                                                         */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadInitialize
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadInitialize clears out all the memory that is needed for the
+ *  first use of this module.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadInitialize(T_void)
 {
     T_word16 i ;
@@ -132,45 +111,14 @@ T_void OverheadInitialize(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadFinish                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadFinish undo's all the bad things remainging with the          */
-/*  overhead.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFreePage                                                             */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  01/23/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadFinish
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadFinish undo's all the bad things remainging with the
+ *  overhead.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadFinish(T_void)
 {
     T_word16 i ;
@@ -189,45 +137,17 @@ T_void OverheadFinish(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadSetNumPages                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadSetNumPages changes the number of pages that are "smeared"    */
-/*  together when drawing the overhead view.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Changing the number of pages clears all the old pages.                */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_byte8 numPages                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    IFreePage                                                             */
-/*    IAllocatePage                                                         */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadSetNumPages
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadSetNumPages changes the number of pages that are "smeared"
+ *  together when drawing the overhead view.
+ *
+ *  NOTE: 
+ *  Changing the number of pages clears all the old pages.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetNumPages(void)
 {
     T_word16 i ;
@@ -248,45 +168,19 @@ T_void OverheadSetNumPages(void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadSetSize                                               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadSetSize changes the height and width of the overhead view.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Setting a new size clears any previous pages.                         */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 sizeX              -- Width of overhead view                 */
-/*                                                                          */
-/*    T_word16 sizeY              -- Height of the overhead view            */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    OverheadSetNumPages                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadSetSize
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadSetSize changes the height and width of the overhead view.
+ *
+ *  NOTE: 
+ *  Setting a new size clears any previous pages.
+ *
+ *  @param sizeX -- Width of overhead view
+ *  @param sizeY -- Height of the overhead view
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetSize(T_word16 sizeX, T_word16 sizeY)
 {
     DebugRoutine("OverheadSetSize") ;
@@ -303,43 +197,15 @@ T_void OverheadSetSize(T_word16 sizeX, T_word16 sizeY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetSizeY                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetSizeY returns the height of the overhead view.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Height of the overhead view            */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetSizeY
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetSizeY returns the height of the overhead view.
+ *
+ *  @return Height of the overhead view
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 OverheadGetSizeY(T_void)
 {
     T_word16 sizeY ;
@@ -354,43 +220,15 @@ T_word16 OverheadGetSizeY(T_void)
     return sizeY ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetSizeX                                              */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetSizeX returns the width of the overhead view.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Width of the overhead view             */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetSizeX
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetSizeX returns the width of the overhead view.
+ *
+ *  @return Width of the overhead view
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 OverheadGetSizeX(T_void)
 {
     T_word16 sizeX ;
@@ -405,48 +243,19 @@ T_word16 OverheadGetSizeX(T_void)
     return sizeX ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadSetOffset                                             */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadSetOffset tells the overhead module how many pixels off the   */
-/*  left or right (x) edge and how many pixels off the top or bottom (y)    */
-/*  edge.  The offset depends on the position of the view (see              */
-/*  OverheadSetPosition).                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 offsetX            -- Pixels off the left or right           */
-/*                                                                          */
-/*    T_word16 offsetY            -- Pixels off the top or bottom           */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadSetOffset
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadSetOffset tells the overhead module how many pixels off the
+ *  left or right (x) edge and how many pixels off the top or bottom (y)
+ *  edge.  The offset depends on the position of the view (see
+ *  OverheadSetPosition).
+ *
+ *  @param offsetX -- Pixels off the left or right
+ *  @param offsetY -- Pixels off the top or bottom
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetOffset(T_word16 offsetX, T_word16 offsetY)
 {
     DebugRoutine("OverheadSetOffset") ;
@@ -459,44 +268,16 @@ T_void OverheadSetOffset(T_word16 offsetX, T_word16 offsetY)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetOffsetX                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetOffsetX returns the number of pixels to place overhead     */
-/*  away from the left or right edge.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number pixels from left or right edge  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetOffsetX
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetOffsetX returns the number of pixels to place overhead
+ *  away from the left or right edge.
+ *
+ *  @return Number pixels from left or right edge
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 OverheadGetOffsetX(T_void)
 {
     T_word16 offsetX ;
@@ -511,44 +292,16 @@ T_word16 OverheadGetOffsetX(T_void)
     return offsetX ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetOffsetY                                            */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetOffsetY returns the number of pixels to place overhead     */
-/*  away from the top or bottom edge.                                       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None                                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_word16                    -- Number pixels from top or bottom edge  */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetOffsetY
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetOffsetY returns the number of pixels to place overhead
+ *  away from the top or bottom edge.
+ *
+ *  @return Number pixels from top or bottom edge
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 OverheadGetOffsetY(T_void)
 {
     T_word16 offsetY ;
@@ -563,44 +316,16 @@ T_word16 OverheadGetOffsetY(T_void)
     return offsetY ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadSetPosition                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadSetPosition tells where to place the overhead relative to the */
-/*  view.                                                                   */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    E_overheadPosition position -- What location the overhead should be   */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadSetPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadSetPosition tells where to place the overhead relative to the
+ *  view.
+ *
+ *  @param position -- What location the overhead should be
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetPosition(E_overheadPosition position)
 {
     DebugRoutine("OverheadSetPosition") ;
@@ -611,44 +336,16 @@ T_void OverheadSetPosition(E_overheadPosition position)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetPosition                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetPosition tells where the overhead is placed relative to    */
-/*  the view.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    E_overheadPosition          -- What location the overhead should be   */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetPosition
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetPosition tells where the overhead is placed relative to
+ *  the view.
+ *
+ *  @return What location the overhead should be
+ *
+ *<!-----------------------------------------------------------------------*/
 E_overheadPosition OverheadGetPosition(T_void)
 {
     E_overheadPosition position ;
@@ -663,43 +360,15 @@ E_overheadPosition OverheadGetPosition(T_void)
     return position ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadAddFeatures                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadAddFeatures sets all the features to be used by the overhead. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    F_overheadFeature flags     -- Flags to be on                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadAddFeatures
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadAddFeatures sets all the features to be used by the overhead.
+ *
+ *  @param flags -- Flags to be on
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetFeatures(F_overheadFeature flags)
 {
     DebugRoutine("OverheadAddFeatures") ;
@@ -710,43 +379,15 @@ T_void OverheadSetFeatures(F_overheadFeature flags)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetFeatures                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetFeatures gets all the features used by the overhead.       */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    F_overheadFeature flags     -- Flags to be on                         */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetFeatures
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetFeatures gets all the features used by the overhead.
+ *
+ *  @return Current overhead flags.
+ *
+ *<!-----------------------------------------------------------------------*/
 F_overheadFeature OverheadGetFeatures(T_void)
 {
     F_overheadFeature flags ;
@@ -761,43 +402,15 @@ F_overheadFeature OverheadGetFeatures(T_void)
     return flags ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadAddFeatures                                           */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadAddFeatures turns on     some of the features being used.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    F_overheadFeature flags     -- Flags to be added                      */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadAddFeatures
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadAddFeatures turns on     some of the features being used.
+ *
+ *  @param flags -- Flags to be added
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadAddFeatures(F_overheadFeature flags)
 {
     DebugRoutine("OverheadAddFeatures") ;
@@ -808,43 +421,15 @@ T_void OverheadAddFeatures(F_overheadFeature flags)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadRemoveFeatures                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadRemoveFeatures turns off some of the features being used.     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    F_overheadFeature flags     -- Flags to be cleared                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadRemoveFeatures
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadRemoveFeatures turns off some of the features being used.
+ *
+ *  @param flags -- Flags to be cleared
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadRemoveFeatures(F_overheadFeature flags)
 {
     DebugRoutine("OverheadRemoveFeatures") ;
@@ -855,44 +440,17 @@ T_void OverheadRemoveFeatures(F_overheadFeature flags)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadSetCenterPoint                                        */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadSetCenterPoint declares where the view should be centered     */
-/*  over.  This routine should be called before every call to OverheadDraw. */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 x, y              -- Point to center view over              */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadSetCenterPoint
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadSetCenterPoint declares where the view should be centered
+ *  over.  This routine should be called before every call to OverheadDraw.
+ *
+ *  @param x -- X Point to center view over
+ *  @param y -- Y Point to center view over
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetCenterPoint(T_sword32 x, T_sword32 y)
 {
     DebugRoutine("OverheadSetCenterPoint") ;
@@ -903,45 +461,17 @@ T_void OverheadSetCenterPoint(T_sword32 x, T_sword32 y)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadSetZoomFactor                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadSetZoomFactor sets the scaling factor used when drawing the   */
-/*  the view.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword32 zoom              -- Zoom factor, smaller value is more     */
-/*                                   detail.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadSetZoomFactor
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadSetZoomFactor sets the scaling factor used when drawing the
+ *  the view.
+ *
+ *  @param zoom -- Zoom factor, smaller value is more
+ *      detail.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadSetZoomFactor(T_word32 zoom)
 {
     DebugRoutine("OverheadSetZoomFactor") ;
@@ -953,45 +483,17 @@ T_void OverheadSetZoomFactor(T_word32 zoom)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadGetZoomFactor                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadGetZoomFactor gets the scaling factor used when drawing the   */
-/*  the view.                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    T_sword32 zoom              -- Zoom factor, smaller value is more     */
-/*                                   detail.                                */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/20/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadGetZoomFactor
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadGetZoomFactor gets the scaling factor used when drawing the
+ *  the view.
+ *
+ *  @return Zoom factor, smaller value is more
+ *      detail.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word32 OverheadGetZoomFactor(T_void)
 {
     T_sword32 zoom ;
@@ -1006,43 +508,13 @@ T_word32 OverheadGetZoomFactor(T_void)
     return zoom ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadToggle                                                */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadToggle turns on the overview if it is off, and visa-versa.    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadToggle
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadToggle turns on the overview if it is off, and visa-versa.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadToggle(T_void)
 {
     DebugRoutine("OverheadToggle") ;
@@ -1053,43 +525,13 @@ T_void OverheadToggle(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadOn                                                    */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadOn  turns on the overhead view.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadOn  turns on the overhead view.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadOn(T_void)
 {
     DebugRoutine("OverheadOn") ;
@@ -1100,43 +542,13 @@ T_void OverheadOn(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadOff                                                   */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadOff turns of the overhead view.                               */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadOff
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadOff turns of the overhead view.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadOff(T_void)
 {
     DebugRoutine("OverheadOff") ;
@@ -1148,86 +560,31 @@ T_void OverheadOff(T_void)
 }
 
 
-/****************************************************************************/
-/*  Routine:  OverheadIsOn                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadIsOn tells if overhead view is on.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  10/09/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadIsOn
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadIsOn tells if overhead view is on.
+ *
+ *<!-----------------------------------------------------------------------*/
 E_Boolean OverheadIsOn(T_void)
 {
     return G_on ;
 }
 
-/****************************************************************************/
-/*  Routine:  IAllocatePage                      * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IAllocatePage sets up a page of memory for the overhead drawing and   */
-/*  animation.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Will bomb if you try to allocate a non-free page.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 num                -- Page number to allocate                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemAlloc                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IAllocatePage
+ *-------------------------------------------------------------------------*/
+/**
+ *  IAllocatePage sets up a page of memory for the overhead drawing and
+ *  animation.
+ *
+ *  NOTE: 
+ *  Will bomb if you try to allocate a non-free page.
+ *
+ *  @param num -- Page number to allocate
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IAllocatePage(T_word16 num)
 {
     T_byte8 *p_page ;
@@ -1247,43 +604,18 @@ static T_void IAllocatePage(T_word16 num)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IFreePage                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IFreePage removes a page of the animation from memory.                */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    Will bomb if you try to free a free page.                             */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 num                -- Page number to remove                  */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    MemFree                                                               */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IFreePage
+ *-------------------------------------------------------------------------*/
+/**
+ *  IFreePage removes a page of the animation from memory.
+ *
+ *  NOTE: 
+ *  Will bomb if you try to free a free page.
+ *
+ *  @param num -- Page number to remove
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IFreePage(T_word16 num)
 {
     DebugRoutine("IFreePage") ;
@@ -1297,51 +629,20 @@ static T_void IFreePage(T_word16 num)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  ICalculateUpperLeft                * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadDraw is the heart of the overhead drawing.  This routine is   */
-/*  should be part of the 3d view callback routine and have the correct     */
-/*  boundaries of the view.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left               -- Left of allowed view                   */
-/*                                                                          */
-/*    T_word16 top                -- Top of allowed  view                   */
-/*                                                                          */
-/*    T_word16 right              -- Right of allowed view                  */
-/*                                                                          */
-/*    T_word16 bottom             -- Bottom of allowed view                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICalculateUpperLeft
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadDraw is the heart of the overhead drawing.  This routine is
+ *  should be part of the 3d view callback routine and have the correct
+ *  boundaries of the view.
+ *
+ *  @param left -- Left of allowed view
+ *  @param top -- Top of allowed  view
+ *  @param right -- Right of allowed view
+ *  @param bottom -- Bottom of allowed view
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ICalculateUpperLeft(
                   T_word16 left,
                   T_word16 top,
@@ -1396,54 +697,20 @@ static T_void ICalculateUpperLeft(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  OverheadDraw                                                  */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    OverheadDraw is the heart of the overhead drawing.  This routine is   */
-/*  should be part of the 3d view callback routine and have the correct     */
-/*  boundaries of the view.                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left               -- Left of allowed view                   */
-/*                                                                          */
-/*    T_word16 top                -- Top of allowed  view                   */
-/*                                                                          */
-/*    T_word16 right              -- Right of allowed view                  */
-/*                                                                          */
-/*    T_word16 bottom             -- Bottom of allowed view                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ICalculateUpperLeft                                                   */
-/*    IDrawSinglePage                                                       */
-/*    ICompileView                                                          */
-/*    IOverheadDisplay                                                      */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  OverheadDraw
+ *-------------------------------------------------------------------------*/
+/**
+ *  OverheadDraw is the heart of the overhead drawing.  This routine is
+ *  should be part of the 3d view callback routine and have the correct
+ *  boundaries of the view.
+ *
+ *  @param left -- Left of allowed view
+ *  @param top -- Top of allowed  view
+ *  @param right -- Right of allowed view
+ *  @param bottom -- Bottom of allowed view
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void OverheadDraw(
            T_word16 left,
            T_word16 top,
@@ -1477,46 +744,17 @@ T_void OverheadDraw(
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IOverheadDisplay                   * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IOverheadDisplay places the overhead view in the 3d view as required  */
-/*  by the feature list (transparent, perspective, etc.)                    */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_word16 left               -- Top left corner                        */
-/*                                                                          */
-/*    T_word16 top                -- Top left corner                        */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    memcpy                                                                */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IOverheadDisplay
+ *-------------------------------------------------------------------------*/
+/**
+ *  IOverheadDisplay places the overhead view in the 3d view as required
+ *  by the feature list (transparent, perspective, etc.)
+ *
+ *  @param left -- Top left corner
+ *  @param top -- Top left corner
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IOverheadDisplay(T_word16 left, T_word16 top)
 {
     T_byte8 *p_screen ;
@@ -1556,43 +794,13 @@ static T_void IOverheadDisplay(T_word16 left, T_word16 top)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawSinglePage                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawSinglePage creates the display for one page.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawSinglePage
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawSinglePage creates the display for one page.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDrawSinglePage(T_word16 page)
 {
     T_word16 i ;
@@ -1612,43 +820,13 @@ static T_void IDrawSinglePage(T_word16 page)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawSinglePage                    * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawSinglePage creates the display for one page.                     */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawSinglePage
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawSinglePage creates the display for one page.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDrawWall(T_word16 numWall)
 {
     T_sword32 fromX, fromY, toX, toY ;
@@ -1726,48 +904,18 @@ static T_void IDrawWall(T_word16 numWall)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawLine                          * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawLine draw a straight line on the current page given the two      */
-/*  end points.  (If the line is on the page).                              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_sword16 x1, y1             -- First point                           */
-/*                                                                          */
-/*    T_sword16 x2, y2             -- Second point                          */
-/*                                                                          */
-/*    T_byte8 coor                 -- Color to draw with                    */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawLine
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawLine draw a straight line on the current page given the two
+ *  end points.  (If the line is on the page).
+ *
+ *  @param y1 -- First point
+ *  @param y2 -- Second point
+ *  @param coor -- Color to draw with
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void IDrawLine(
                   T_sword32 x1,
                   T_sword32 y1,
@@ -1961,43 +1109,13 @@ if ((fract>>16) >= G_sizeX)
 }
 
 
-/****************************************************************************/
-/*  Routine:  ICompileView                       * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    ICompileView merges or blurs the pages together into one.             */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    Nothing.                                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/19/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  ICompileView
+ *-------------------------------------------------------------------------*/
+/**
+ *  ICompileView merges or blurs the pages together into one.
+ *
+ *<!-----------------------------------------------------------------------*/
 static T_void ICompileView(T_void)
 {
     DebugRoutine("ICompileView") ;
@@ -2007,51 +1125,16 @@ static T_void ICompileView(T_void)
     DebugEnd() ;
 }
 
-/****************************************************************************/
-/*  Routine:  IDrawObject                        * INTERNAL *               */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    IDrawObject draws an object onto the view.                            */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    T_3dObject *p_obj           -- Object to draw                         */
-/*                                                                          */
-/*    T_word32 color              -- Color to draw object in                */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    ObjectGetX16                                                          */
-/*    ObjectGetY16                                                          */
-/*    OverheadGetFeatures                                                   */
-/*    PlayerGetAngle                                                        */
-/*    MathSineLookup                                                        */
-/*    MathCosineLookup                                                      */
-/*    IDrawLine                                                             */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  09/22/95  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  IDrawObject
+ *-------------------------------------------------------------------------*/
+/**
+ *  IDrawObject draws an object onto the view.
+ *
+ *  @param p_obj -- Object to draw
+ *  @param color -- Color to draw object in
+ *
+ *<!-----------------------------------------------------------------------*/
 static E_Boolean IDrawObject(
                      T_3dObject *p_obj,
                      T_word32 color)
@@ -2127,7 +1210,7 @@ static T_void IActuallyDrawObject(
     IDrawLine(x+radius, y-radius, x+radius, y+radius, 31) ;
 }
 
-/****************************************************************************/
-/*    END OF FILE:  OVERHEAD.C                                              */
-/****************************************************************************/
-
+/** @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  OVERHEAD.C
+ *-------------------------------------------------------------------------*/

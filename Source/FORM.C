@@ -1,6 +1,15 @@
-/****************************************************************************/
-/*    FILE:  FORM.C                                                         */
-/****************************************************************************/
+/*-------------------------------------------------------------------------*
+ * File:  FORM.C
+ *-------------------------------------------------------------------------*/
+/**
+ * Groups of User Interface components come together into a single Form.
+ *
+ * @addtogroup FORM
+ * @brief Form User Interface
+ * @see http://www.amuletsandarmor.com/AALicense.txt
+ * @{
+ *
+ *<!-----------------------------------------------------------------------*/
 #include "COLOR.H"
 #include "DBLLINK.H"
 #include "FILE.H"
@@ -566,15 +575,15 @@ T_void FormLoadFromFile(T_byte8 *filename)
                     maxlength--;
 
                 objID = FormAddTextBox(
-							x1, 
-							y1, 
-							x2, 
-							y2, 
-							fontname, 
+							x1,
+							y1,
+							x2,
+							y2,
+							fontname,
 							maxlength,
-							(T_byte8)hotkey, 
-							(T_byte8)numericonly, 
-							justify, 
+							(T_byte8)hotkey,
+							(T_byte8)numericonly,
+							justify,
 							(E_TxtboxMode)fieldtype,
 							objid);
 
@@ -844,46 +853,14 @@ T_void FormGenericControl(E_Boolean *exitflag)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  FormGenericControlStart                                       */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    FormGenericControlStart sets up the form module for another form      */
-/*  user interface by pushing the mouse and keyboard handlers.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    KeyboardDebounce                                                      */
-/*    MousePushEventHandler                                                 */
-/*    KeyboardPushEventHandler                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  FormGenericControlStart
+ *-------------------------------------------------------------------------*/
+/**
+ *  FormGenericControlStart sets up the form module for another form
+ *  user interface by pushing the mouse and keyboard handlers.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void FormGenericControlStart(T_void)
 {
     DebugRoutine("FormGenericControlStart");
@@ -896,46 +873,14 @@ T_void FormGenericControlStart(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  FormGenericControlEnd                                         */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    FormGenericControlEnd cleans up the form module from the last         */
-/*  user interface by popping the mouse and keyboard handlers.              */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    KeyboardDebounce                                                      */
-/*    MousePushEventHandler                                                 */
-/*    KeyboardPushEventHandler                                              */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  FormGenericControlEnd
+ *-------------------------------------------------------------------------*/
+/**
+ *  FormGenericControlEnd cleans up the form module from the last
+ *  user interface by popping the mouse and keyboard handlers.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void FormGenericControlEnd(T_void)
 {
     DebugRoutine("FormGenericControlEnd");
@@ -951,46 +896,14 @@ T_void FormGenericControlEnd(T_void)
     DebugEnd();
 }
 
-/****************************************************************************/
-/*  Routine:  FormGenericControlUpdate                                      */
-/****************************************************************************/
-/*                                                                          */
-/*  Description:                                                            */
-/*                                                                          */
-/*    FormGenericControlUpdates updates anything that is being processed    */
-/*  with the current user interface.                                        */
-/*                                                                          */
-/*                                                                          */
-/*  Problems:                                                               */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Inputs:                                                                 */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Outputs:                                                                */
-/*                                                                          */
-/*    None.                                                                 */
-/*                                                                          */
-/*                                                                          */
-/*  Calls:                                                                  */
-/*                                                                          */
-/*    GraphicUpdateAllGraphics                                              */
-/*    MouseUpdateEvents                                                     */
-/*    KeyboardUpdateEvents                                                  */
-/*                                                                          */
-/*                                                                          */
-/*  Revision History:                                                       */
-/*                                                                          */
-/*    Who  Date:     Comments:                                              */
-/*    ---  --------  ---------                                              */
-/*    LES  02/28/96  Created                                                */
-/*                                                                          */
-/****************************************************************************/
-
+/*-------------------------------------------------------------------------*
+ * Routine:  FormGenericControlUpdate
+ *-------------------------------------------------------------------------*/
+/**
+ *  FormGenericControlUpdates updates anything that is being processed
+ *  with the current user interface.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void FormGenericControlUpdate(T_void)
 {
     DebugRoutine("FormGenericControlUpdate");
@@ -1120,3 +1033,8 @@ T_void FormPop(T_void)
 
     DebugEnd();
 }
+
+/* @} */
+/*-------------------------------------------------------------------------*
+ * End of File:  FORM.C
+ *-------------------------------------------------------------------------*/
