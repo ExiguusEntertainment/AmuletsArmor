@@ -1,0 +1,11 @@
+var searchData=
+[
+  ['noteschangejournalpage',['NotesChangeJournalPage',['../group___n_o_t_e_s.html#ga3f3dca36870fd6257dc5e1c050f16089',1,'NotesChangeJournalPage(T_buttonID buttonID):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga3f3dca36870fd6257dc5e1c050f16089',1,'NotesChangeJournalPage(T_buttonID buttonID):&#160;NOTES.C']]],
+  ['notesclosenotespage',['NotesCloseNotesPage',['../group___n_o_t_e_s.html#ga02791986901e86f27f0a4596a950fb51',1,'NotesCloseNotesPage(T_void):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga02791986901e86f27f0a4596a950fb51',1,'NotesCloseNotesPage(T_void):&#160;NOTES.C']]],
+  ['notesgotopageid',['NotesGotoPageID',['../group___n_o_t_e_s.html#ga0d1ff647ac4b7395e91811f874b6d82b',1,'NotesGotoPageID(T_word16 notePageID):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga0d1ff647ac4b7395e91811f874b6d82b',1,'NotesGotoPageID(T_word16 notePage):&#160;NOTES.C']]],
+  ['notesjournalwindowisat',['NotesJournalWindowIsAt',['../group___n_o_t_e_s.html#ga694e7e65d43a1c1826ff5372d88e5d2c',1,'NotesJournalWindowIsAt(T_word16 x, T_word16 y):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga694e7e65d43a1c1826ff5372d88e5d2c',1,'NotesJournalWindowIsAt(T_word16 x, T_word16 y):&#160;NOTES.C']]],
+  ['notesopenjournalpage',['NotesOpenJournalPage',['../group___n_o_t_e_s.html#ga85a903dc89335e869771d6c860e294dc',1,'NotesOpenJournalPage(T_void):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga85a903dc89335e869771d6c860e294dc',1,'NotesOpenJournalPage(T_void):&#160;NOTES.C']]],
+  ['notesopennotespage',['NotesOpenNotesPage',['../group___n_o_t_e_s.html#ga9df6be3328f49b0e595ff73747149dbe',1,'NotesOpenNotesPage(T_void):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga9df6be3328f49b0e595ff73747149dbe',1,'NotesOpenNotesPage(T_void):&#160;NOTES.C']]],
+  ['notestransferjournalpage',['NotesTransferJournalPage',['../group___n_o_t_e_s.html#ga52e23787015c64239fcef0d690124b26',1,'NotesTransferJournalPage(T_void):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga52e23787015c64239fcef0d690124b26',1,'NotesTransferJournalPage(T_void):&#160;NOTES.C']]],
+  ['notesupdatejournalpage',['NotesUpdateJournalPage',['../group___n_o_t_e_s.html#ga631092364120ba04a2147262d14e0b1e',1,'NotesUpdateJournalPage(T_void):&#160;NOTES.C'],['../group___n_o_t_e_s.html#ga631092364120ba04a2147262d14e0b1e',1,'NotesUpdateJournalPage(T_void):&#160;NOTES.C']]]
+];
