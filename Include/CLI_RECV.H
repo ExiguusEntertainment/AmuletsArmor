@@ -26,18 +26,6 @@ T_void ClientReceiveLoadCharStatusPacket(
 T_void ClientReceiveCreateCharStatusPacket(
            T_packetEitherShortOrLong *p_packet) ;
 
-T_void ClientReceiveDeleteCharStatusPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
-T_void ClientReceiveCheckPasswordStatusPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
-T_void ClientReceiveChangePasswordStatusPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
-T_void ClientReceiveRequestPiecewiseListPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
 T_void ClientReceiveSyncPacket(
            T_packetEitherShortOrLong *p_packet) ;
 

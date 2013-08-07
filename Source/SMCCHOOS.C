@@ -1392,12 +1392,6 @@ T_void SMCChooseChangePasswordEnter(
                 StatsSetPassword(StatsGetActive(), newPassword) ;
                 StatsSaveCharacter(StatsGetActive()) ;
                 ClientSetChangePasswordStatus(CHANGE_PASSWORD_STATUS_OK) ;
-/*
-                ClientSendChangePassword(
-                    StatsGetActive(),
-                    password,
-                    newPassword) ;
-*/
             } else {
                 ClientSetChangePasswordStatus(CHANGE_PASSWORD_STATUS_ABORT) ;
             }
@@ -1609,8 +1603,6 @@ T_void SMCChooseDeleteCharacterEnter(
         SMCCHOOSE_FLAG_DELETE_COMPLETE,
         FALSE) ;
 
-    ClientSendDeleteCharacter(StatsGetActive()) ;
-
     DebugEnd() ;
 }
 
@@ -1629,7 +1621,6 @@ T_void SMCChooseDeleteCharacterIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
 {
-    E_deleteCharStatus status ;
     T_SMCChooseData *p_data ;
 
     DebugRoutine("SMCChooseDeleteCharacterIdle") ;
@@ -1637,22 +1628,16 @@ T_void SMCChooseDeleteCharacterIdle(
     p_data = (T_SMCChooseData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    status = ClientGetDeleteCharacterStatus() ;
-    if (status == DELETE_CHARACTER_STATUS_OK)  {
-        /* OK, we can delete the character. */
-        if (PromptForBoolean("Are you sure you want to delete?", FALSE) == TRUE)  {
-            StatsDeleteCharacter(StatsGetActive());
+    /* OK, we can delete the character. */
+    if (PromptForBoolean("Are you sure you want to delete?", FALSE) == TRUE)  {
+        StatsDeleteCharacter(StatsGetActive());
 
-            /* inform user of deletion */
-            PromptDisplayMessage ("Character deleted.");
-        } else {
-            PromptDisplayMessage ("Character NOT deleted.");
-        }
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_DELETE_COMPLETE, TRUE) ;
-    } else if (status == DELETE_CHARACTER_STATUS_ERROR)  {
-        PromptDisplayMessage("Delete error.");
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_DELETE_COMPLETE, TRUE) ;
+        /* inform user of deletion */
+        PromptDisplayMessage ("Character deleted.");
+    } else {
+        PromptDisplayMessage ("Character NOT deleted.");
     }
+    SMCChooseSetFlag(SMCCHOOSE_FLAG_DELETE_COMPLETE, TRUE) ;
 
     DebugEnd() ;
 }

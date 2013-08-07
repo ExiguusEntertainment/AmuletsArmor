@@ -421,16 +421,6 @@ typedef struct {
     T_byte8 slot                  PACK ;
 } T_deleteCharacterPacket ;
 
-typedef T_byte8 E_deleteCharStatus ;
-#define DELETE_CHARACTER_STATUS_OK             0
-#define DELETE_CHARACTER_STATUS_ERROR          1
-#define DELETE_CHARACTER_STATUS_UNKNOWN        2
-
-typedef struct {
-    T_byte8 command               PACK ;
-    E_deleteCharStatus status     PACK ;
-} T_deleteCharStatusPacket ;
-
 /* ------------------------------------------------------------------------ */
 /* The T_checkPasswordPacket and T_checkPasswordStatusPacket are used */
 /* together to check a character's password and then to return a status */
@@ -495,16 +485,7 @@ typedef struct {
 
 /* ------------------------------------------------------------------------ */
 
-typedef struct {
-    T_byte8 command               PACK ;
-} T_requestPiecewiseListPacket ;
-
 /* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 parts[MAX_BODY_PARTS] PACK ;
-} T_piecewiseListPacket ;
 
 /* ------------------------------------------------------------------------ */
 

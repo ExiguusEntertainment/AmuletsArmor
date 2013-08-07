@@ -107,8 +107,6 @@ static E_loadCharStatus G_loadCharacterStatus =
                              LOAD_CHARACTER_STATUS_UNKNOWN ;
 static E_createCharStatus G_createCharacterStatus =
                              CREATE_CHARACTER_STATUS_UNKNOWN ;
-static E_deleteCharStatus G_deleteCharacterStatus =
-                             DELETE_CHARACTER_STATUS_UNKNOWN ;
 static E_checkPasswordStatus G_checkPasswordStatus =
                              CHECK_PASSWORD_STATUS_UNKNOWN ;
 static E_changePasswordStatus G_changePasswordStatus =
@@ -362,21 +360,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* 58 CS_CREATE_CHARACTER */
       ClientReceiveCreateCharStatusPacket,        /* 59 SC_CREATE_CHARACTER_STATUS */
       NULL,                                       /* 60 CS_DELETE_CHARACTER */
-      ClientReceiveDeleteCharStatusPacket,        /* 61 SC_DELETE_CHARACTER_STATUS */
-      NULL,                                       /* 62 CS_CHECK_PASSWORD */
-      ClientReceiveCheckPasswordStatusPacket,     /* 63 SC_CHECK_PASSWORD_STATUS */
-      NULL,                                       /* 64 CS_CHANGE_PASSWORD */
-      ClientReceiveChangePasswordStatusPacket,    /* 65 SC_CHANGE_PASSWORD_STATUS */
-      NULL,        								  /* 66 CSC_REQEUST_DATA_BLOCK */
-      NULL,                                       /* 67 CSC_DAMAGE_OBJECT */
-      ClientReceiveRequestPiecewiseListPacket,    /* 68 SC_REQUEST_PIECEWISE_LIST */
-      NULL,                                       /* 69 CS_PIECEWISE_LIST */
-
-      /* Store related packet types: */
-      NULL,                                       /* 70 CSC_STORE_ADD_ITEM */
-      NULL,                                       /* 71 CSC_STORE_REMOVE_ITEM */
-      NULL,                                       /* 72 SC_STORE_ADD_RESULT */
-      NULL,                                       /* 73 SC_STORE_REMOVE_RESULT */
    };
 
     DebugRoutine("ClientInit") ;
@@ -3014,18 +2997,6 @@ E_createCharStatus ClientGetCreateCharacterStatus(T_void)
 T_void ClientSetCreateCharacterStatus(E_createCharStatus status)
 {
     G_createCharacterStatus = status ;
-}
-
-/* LES: 03/07/96 */
-E_deleteCharStatus ClientGetDeleteCharacterStatus(T_void)
-{
-    return G_deleteCharacterStatus ;
-}
-
-/* LES: 03/07/96 */
-T_void ClientSetDeleteCharacterStatus(E_deleteCharStatus status)
-{
-    G_deleteCharacterStatus = status ;
 }
 
 /* LES: 03/08/96 */

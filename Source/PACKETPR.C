@@ -74,23 +74,8 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDCS_CREATE_CHARACTER",       /* 58 */
         "PACKET_COMMANDSC_CREATE_CHARACTER_STATUS",/* 59 */
         "PACKET_COMMANDCS_DELETE_CHARACTER",       /* 60 */
-        "PACKET_COMMANDSC_DELETE_CHARACTER_STATUS",/* 61 */
-        "PACKET_COMMANDCS_CHECK_PASSWORD",         /* 62 */
-        "PACKET_COMMANDSC_CHECK_PASSWORD_STATUS",  /* 63 */
-        "PACKET_COMMANDCS_CHANGE_PASSWORD",        /* 64 */
-        "PACKET_COMMANDSC_CHANGE_PASSWORD_STATUS", /* 65 */
-        "PACKET_COMMANDCSC_REQUEST_DATA_BLOCK",    /* 66 */
-        "PACKET_COMMANDCSC_DAMAGE_OBJECT",         /* 67  not used */
-        "PACKET_COMMANDSC_REQUEST_PIECEWISE_LIST", /* 68 */
-        "PACKET_COMMANDCS_PIECEWISE_LIST",         /* 69 */
 
-    /* Store related packet types: */
-        "PACKET_COMMANDCSC_STORE_ADD_ITEM",        /* 70 */
-        "PACKET_COMMANDCSC_STORE_REMOVE_ITEM",     /* 71 */
-        "PACKET_COMMANDSC_STORE_ADD_RESULT",       /* 72 */
-        "PACKET_COMMANDSC_STORE_REMOVE_RESULT",    /* 73 */
-
-        "PACKET_COMMAND_UNKNOWN"                   /* 74 */
+        "PACKET_COMMAND_UNKNOWN"
 	};
 	if (command > 74)
 		command = 74;

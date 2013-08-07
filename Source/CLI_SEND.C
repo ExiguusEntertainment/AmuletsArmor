@@ -204,26 +204,6 @@ T_void ClientSendCreateCharacter(
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendDeleteCharacter
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendDeleteCharacter sends a packet to tell the server to delete
- *  the given character slot.
- *
- *  @param slot -- Slot of character password to delete
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendDeleteCharacter(T_byte8 slot)
-{
-    DebugRoutine("ClientSendDeleteCharacter") ;
-
-    /* It is always OK to delete a character. */
-    ClientSetDeleteCharacterStatus(DELETE_CHARACTER_STATUS_OK) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientSendCheckPassword
  *-------------------------------------------------------------------------*/
 /**
@@ -242,30 +222,6 @@ T_void ClientSendCheckPassword(
 
     /* Password is always ok for now. */
     ClientSetCheckPasswordStatus(CHECK_PASSWORD_STATUS_OK) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSendChangePassword
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendChangePassword tells the server to change the password
- *  of the given character slot.
- *
- *  @param slot -- Slot of character password to change
- *  @param password -- Old password
- *  @param newPassword -- New password
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendChangePassword(
-           T_byte8 slot,
-           T_byte8 password[MAX_SIZE_PASSWORD],
-           T_byte8 newPassword[MAX_SIZE_PASSWORD])
-{
-    DebugRoutine("ClientSendChangePassword") ;
-
-    ClientSetChangePasswordStatus(CHANGE_PASSWORD_STATUS_OK) ;
 
     DebugEnd() ;
 }
@@ -450,21 +406,21 @@ T_void ClientSendTownUIAddMessage(T_byte8 *p_msg)
  *<!-----------------------------------------------------------------------*/
 T_void ClientSendPlayerIDSelf(T_void)
 {
-    T_packetLong packet ;
-    T_playerIDSelfPacket *p_self ;
+    T_packetLong packet;
+    T_playerIDSelfPacket *p_self;
 
-    DebugRoutine("ClientSendPlayerIDSelf") ;
+    DebugRoutine("ClientSendPlayerIDSelf");
 
-	memset(&packet, 0, sizeof(packet));
-    p_self = (T_playerIDSelfPacket *)(packet.data) ;
-    PeopleHereGetPlayerIDSelfStruct(&p_self->id) ;
-    p_self->command = PACKET_COMMAND_PLAYER_ID_SELF ;
+    memset(&packet, 0, sizeof(packet));
+    p_self = (T_playerIDSelfPacket *)(packet.data);
+    PeopleHereGetPlayerIDSelfStruct(&p_self->id);
+    p_self->command = PACKET_COMMAND_PLAYER_ID_SELF;
 
-    CmdQSendLongPacket(&packet, 600, 0, NULL) ;
+    CmdQSendLongPacket(&packet, 600, 0, NULL);
 
-    ClientReceivePlayerIDSelf((T_packetEitherShortOrLong *)&packet) ;
+    ClientReceivePlayerIDSelf((T_packetEitherShortOrLong *)&packet);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*

@@ -24,16 +24,9 @@ T_void ClientSendCreateCharacter(
         T_word32 checksum,
         T_byte8 *p_password);
 
-T_void ClientSendDeleteCharacter(T_byte8 slot);
-
 T_void ClientSendCheckPassword(
         T_byte8 slot,
         T_byte8 password[MAX_SIZE_PASSWORD]);
-
-T_void ClientSendChangePassword(
-        T_byte8 slot,
-        T_byte8 password[MAX_SIZE_PASSWORD],
-        T_byte8 newPassword[MAX_SIZE_PASSWORD]);
 
 T_void ClientRequestDataBlock(T_word16 dataBlockType, T_word32 extraData);
 

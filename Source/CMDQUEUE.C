@@ -125,21 +125,6 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* 58 CS_CREATE_CHARACTER */
     NULL,                  /* 59 SC_CREATE_CHARACTER_STATUS */
     NULL,                  /* 60 CS_DELETE_CHARACTER */
-    NULL,                  /* 61 SC_DELETE_CHARACTER_STATUS */
-
-    NULL,                  /* 62 CS_CHECK_PASSWORD */
-    NULL,                  /* 63 SC_CHECK_PASSWORD_STATUS */
-    NULL,                  /* 64 CS_CHANGE_PASSWORD */
-    NULL,                  /* 65 SC_CHANGE_PASSWORD_STATUS */
-    NULL,                  /* 66 CSC_REQUEST_DATA_BLOCK */
-    NULL,                  /* 67 CSC_DAMAGE_OBJECT */
-    NULL,                  /* 68 SC_REQUEST_PIECEWISE_LIST */
-    NULL,                  /* 69 CS_PIECEWISE_LIST */
-
-    NULL,                  /* 70 CSC_STORE_ADD_ITEM */
-    NULL,                  /* 71 CSC_STORE_REMOVE_ITEM */
-    NULL,                  /* 72 SC_STORE_ADD_RESULT */
-    NULL,                  /* 73 SC_STORE_REMOVE_RESULT */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
@@ -208,21 +193,6 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 58 CS_CREATE_CHARACTER */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 59 SC_CREATE_CHARACTER_STATUS */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 60 CS_DELETE_CHARACTER */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 61 SC_DELETE_CHARACTER_STATUS */
-
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 62 CS_CHECK_PASSWORD */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 63 SC_CHECK_PASSWORD_STATUS */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 64 CS_CHANGE_PASSWORD */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 65 SC_CHANGE_PASSWORD_STATUS */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 66 CSC_REQUEST_DATA_BLOCK */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 67 CSC_DAMAGE_OBJECT */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 68 SC_REQUEST_PIECEWISE_LIST */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 69 CS_PIECEWISE_LIST */
-
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 70 CSC_STORE_ADD_ITEM */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 71 CSC_STORE_REMOVE_ITEM */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 72 SC_STORE_ADD_RESULT */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 73 SC_STORE_REMOVE_RESULT */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];
@@ -747,125 +717,126 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
  *<!-----------------------------------------------------------------------*/
 T_void ICmdQUpdateSendForPort(T_void)
 {
-    T_byte8 currentCmd ;
-    T_cmdQPacketStruct *p_packet ;
-    T_byte8 packetLength ;
-    T_word32 time ;
-    T_sword16 status ;
-    E_Boolean sentOne ;
-    T_word16 bytesused ;
-    T_word32 maxOutput ;
-    E_Boolean onceFlag = FALSE ;
-    E_Boolean sentAny ;
+    T_byte8 currentCmd;
+    T_cmdQPacketStruct *p_packet;
+    T_byte8 packetLength;
+    T_word32 time;
+    T_sword16 status;
+    E_Boolean sentOne;
+    T_word16 bytesused;
+    T_word32 maxOutput;
+    E_Boolean onceFlag = FALSE;
+    E_Boolean sentAny;
 
-    DebugRoutine("ICmdQUpdateSendForPort") ;
+    DebugRoutine("ICmdQUpdateSendForPort");
 
     /* Get the current time. */
-    time = TickerGet() ;
+    time = TickerGet();
 
-    bytesused = 0 ;
-    maxOutput = 100 ;
-    currentCmd = 0 ;
-    if (bytesused < maxOutput)  {
+    bytesused = 0;
+    maxOutput = 100;
+    currentCmd = 0;
+    if (bytesused < maxOutput) {
         do {
-            sentAny = FALSE ;
+            sentAny = FALSE;
             do {
-                sentOne = FALSE ;
+                sentOne = FALSE;
                 /* Try sending the command at currentCmd. */
                 /* See if there is anything that needs to be sent. */
-                while ((G_activeCmdQList[currentCmd].last != NULL) &&
-                       (bytesused < maxOutput))  {
-                    DebugCheck(currentCmd < PACKET_COMMAND_UNKNOWN) ;
+                while ((G_activeCmdQList[currentCmd].last != NULL)
+                        && (bytesused < maxOutput)) {
+                    DebugCheck(currentCmd < PACKET_COMMAND_UNKNOWN);
                     /* Yes, there appears to be a packet at the end of the list. */
                     /* Get a hold on that packet struct. */
-                    p_packet = G_activeCmdQList[currentCmd].last ;
+                    p_packet = G_activeCmdQList[currentCmd].last;
 #ifndef NDEBUG
-                    if (strcmp(p_packet->tag, "CmQ") != 0)  {
-                        printf("Bad packet %p\n", p_packet) ;
-                        DebugCheck(FALSE) ;
+                    if (strcmp(p_packet->tag, "CmQ") != 0) {
+                        printf("Bad packet %p\n", p_packet);
+                        DebugCheck(FALSE);
                     }
 #endif
 
                     /* See if it is time to send it. */
                     /** (It's always time to send an ACK.) **/
-                    if ((currentCmd == PACKET_COMMAND_ACK) ||
-                        (p_packet->timeToRetry < time))  {
-                         /* Yes, it is time to send it. */
-                         packetLength = p_packet->packet.header.packetLength ;
-                         /* Add the count to the output. */
-                         bytesused += packetLength+sizeof(T_packetHeader) ;
+                    if ((currentCmd == PACKET_COMMAND_ACK)
+                            || (p_packet->timeToRetry < time)) {
+                        /* Yes, it is time to send it. */
+                        packetLength = p_packet->packet.header.packetLength;
+                        /* Add the count to the output. */
+                        bytesused += packetLength + sizeof(T_packetHeader);
 
-                         /* Make sure this didn't go over the threshold. */
-                         if (bytesused >= maxOutput)
-                             break ;
+                        /* Make sure this didn't go over the threshold. */
+                        if (bytesused >= maxOutput)
+                            break;
 
-                         /* Let's send that packet. */
-                         DirectTalkSetDestinationAll() ;  //TODO: ?? All??
-                         status = PacketSend((T_packetEitherShortOrLong *)
-                                                (&p_packet->packet)) ;
-                         sentAny = TRUE ;
+                        /* Let's send that packet. */
+                        DirectTalkSetDestinationAll();  //TODO: ?? All??
+                        status =
+                                PacketSend(
+                                        (T_packetEitherShortOrLong *)(&p_packet->packet));
+                        sentAny = TRUE;
 
 #ifdef COMPILE_OPTION_CREATE_PACKET_DATA_FILE
-fprintf(G_packetFile, "S(%d) cmd=%2d, id=%ld, time=%ld\n", CmdQGetActivePortNum (), p_packet->packet.data[0], p_packet->packet.header.id, SyncTimeGet()) ; fflush(G_packetFile) ;
+                        fprintf(G_packetFile, "S(%d) cmd=%2d, id=%ld, time=%ld\n", CmdQGetActivePortNum (), p_packet->packet.data[0], p_packet->packet.header.id, SyncTimeGet()); fflush(G_packetFile);
 #endif
-                         /* Was the packet actually sent? */
-                         if (status == 0)  {
-                             /* Packet was sent correctly (as far as we know). */
-                             /* Is this a lossful or lossless command queue? */
-                             if (G_CmdQTypeCommand[currentCmd] ==
-                                    PACKET_COMMAND_TYPE_LOSSFUL)  {
-                                 /* Lossful.  Means we can go ahead and */
-                                 /* discard this packet. */
-                                 ICmdQDiscardPacket(currentCmd) ;
-                             } else {
-                                 /* Lossless.  Means we must wait for an ACK */
-                                 /* packet to confirm that we were sent. */
-                                 /* Until then, we can't discard the packet. */
-                                 /* But we might have to resend latter. */
-                                 /* Set up the retry time. */
-                                 p_packet->timeToRetry = time +
-                                                          p_packet->retryTime ;
-                             }
+                        /* Was the packet actually sent? */
+                        if (status == 0) {
+                            /* Packet was sent correctly (as far as we know). */
+                            /* Is this a lossful or lossless command queue? */
+                            if (G_CmdQTypeCommand[currentCmd]
+                                    == PACKET_COMMAND_TYPE_LOSSFUL) {
+                                /* Lossful.  Means we can go ahead and */
+                                /* discard this packet. */
+                                ICmdQDiscardPacket(currentCmd);
+                            } else {
+                                /* Lossless.  Means we must wait for an ACK */
+                                /* packet to confirm that we were sent. */
+                                /* Until then, we can't discard the packet. */
+                                /* But we might have to resend latter. */
+                                /* Set up the retry time. */
+                                p_packet->timeToRetry = time
+                                        + p_packet->retryTime;
+                            }
 
-                             /* Note that we sent the packet (or at least) */
-                             /* gave a good try. */
-                             sentOne = TRUE ;
-                         } else {
-                             /* Packet was NOT sent correctly. */
-                             /** -- IFF the packet is lossless... **/
-                             /* We'll have to retry later.  Change the time, */
-                             /* but don't remove it from the linked list. */
-                             if (G_CmdQTypeCommand[currentCmd] ==
-                                 PACKET_COMMAND_TYPE_LOSSLESS)  {
-                                 p_packet->timeToRetry = time +
-                                                        p_packet->retryTime ;
-                             } else {
-                                 /* Waste it!  We can't wait around */
-                                 ICmdQDiscardPacket(currentCmd) ;
-                             }
-                         }
+                            /* Note that we sent the packet (or at least) */
+                            /* gave a good try. */
+                            sentOne = TRUE;
+                        } else {
+                            /* Packet was NOT sent correctly. */
+                            /** -- IFF the packet is lossless... **/
+                            /* We'll have to retry later.  Change the time, */
+                            /* but don't remove it from the linked list. */
+                            if (G_CmdQTypeCommand[currentCmd]
+                                    == PACKET_COMMAND_TYPE_LOSSLESS) {
+                                p_packet->timeToRetry = time
+                                        + p_packet->retryTime;
+                            } else {
+                                /* Waste it!  We can't wait around */
+                                ICmdQDiscardPacket(currentCmd);
+                            }
+                        }
                     } else {
-                         /* Don't loop if it is not time to send. */
-                         break ;
+                        /* Don't loop if it is not time to send. */
+                        break;
                     }
 
-		            /** Now, if we aren't checking the ACK queue, we need **/
-		            /** to break after the first send.  If we are, we **/
-		            /** want to dump everything in the queue. **/
+                    /** Now, if we aren't checking the ACK queue, we need **/
+                    /** to break after the first send.  If we are, we **/
+                    /** want to dump everything in the queue. **/
                     if (currentCmd != PACKET_COMMAND_ACK)
-                        break ;
+                        break;
                 }
 
                 /* Update to the next command. */
-                currentCmd++ ;
-            } while (currentCmd < PACKET_COMMAND_MAX) ;
+                currentCmd++;
+            } while (currentCmd < PACKET_COMMAND_MAX);
 
-        } while ((bytesused < maxOutput) && (sentAny == TRUE)) ;
+        } while ((bytesused < maxOutput) && (sentAny == TRUE));
     }
 
-    P_activeQueueInfo->commandPos = currentCmd ;
+    P_activeQueueInfo->commandPos = currentCmd;
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*

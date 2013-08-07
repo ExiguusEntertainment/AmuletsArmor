@@ -53,15 +53,6 @@ T_void ServerReceiveLoadCharacterPacket(
 T_void ServerReceiveCreateCharacterPacket(
            T_packetEitherShortOrLong *p_packet) ;
 
-T_void ServerReceiveDeleteCharacterPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
-T_void ServerReceiveCheckPasswordPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
-T_void ServerReceiveChangePasswordPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
 #define MESSAGE_RANGE_WHISPER 200
 #define MESSAGE_RANGE_TALK    1500
 #define MESSAGE_RANGE_SHOUT   5000

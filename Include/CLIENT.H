@@ -158,10 +158,6 @@ E_createCharStatus ClientGetCreateCharacterStatus(T_void);
 
 T_void ClientSetCreateCharacterStatus(E_createCharStatus status);
 
-E_deleteCharStatus ClientGetDeleteCharacterStatus(T_void);
-
-T_void ClientSetDeleteCharacterStatus(E_deleteCharStatus status);
-
 E_checkPasswordStatus ClientGetCheckPasswordStatus(T_void);
 
 T_void ClientSetCheckPasswordStatus(E_checkPasswordStatus status);
