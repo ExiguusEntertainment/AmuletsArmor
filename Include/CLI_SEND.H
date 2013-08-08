@@ -19,11 +19,6 @@ T_void ClientSendRequestCharacterListing(T_void);
 
 T_void ClientSendLoadCharacter(T_byte8 slot, T_word32 checksum);
 
-T_void ClientSendCreateCharacter(
-        T_byte8 slot,
-        T_word32 checksum,
-        T_byte8 *p_password);
-
 T_void ClientSendCheckPassword(
         T_byte8 slot,
         T_byte8 password[MAX_SIZE_PASSWORD]);

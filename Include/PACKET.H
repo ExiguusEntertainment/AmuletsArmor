@@ -404,16 +404,6 @@ typedef struct {
     T_byte8 password[MAX_SIZE_PASSWORD] PACK ;
 } T_createCharacterPacket ;
 
-typedef T_byte8 E_createCharStatus ;
-#define CREATE_CHARACTER_STATUS_OK             0
-#define CREATE_CHARACTER_STATUS_ERROR          1
-#define CREATE_CHARACTER_STATUS_UNKNOWN        2
-
-typedef struct {
-    T_byte8 command               PACK ;
-    E_createCharStatus status     PACK ;
-} T_createCharStatusPacket ;
-
 /* ------------------------------------------------------------------------ */
 /* The T_checkPasswordPacket and T_checkPasswordStatusPacket are used */
 /* together to check a character's password and then to return a status */

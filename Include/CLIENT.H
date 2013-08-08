@@ -154,10 +154,6 @@ E_loadCharStatus ClientGetLoadCharacterStatus(T_void);
 
 T_void ClientSetLoadCharacterStatus(E_loadCharStatus status);
 
-E_createCharStatus ClientGetCreateCharacterStatus(T_void);
-
-T_void ClientSetCreateCharacterStatus(E_createCharStatus status);
-
 E_checkPasswordStatus ClientGetCheckPasswordStatus(T_void);
 
 T_void ClientSetCheckPasswordStatus(E_checkPasswordStatus status);

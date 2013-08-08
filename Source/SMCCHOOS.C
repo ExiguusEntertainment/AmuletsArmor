@@ -983,13 +983,6 @@ T_void SMCChooseRequestCreateEnter(
 
     if (doAbort)  {
         SMCChooseSetFlag(SMCCHOOSE_FLAG_CREATE_ABORT, TRUE) ;
-    } else {
-        /* Send out the fact that we are about to upload a character. */
-        ClientSetCreateCharacterStatus(CREATE_CHARACTER_STATUS_UNKNOWN) ;
-        ClientSendCreateCharacter(
-            StatsGetActive(),
-            0,
-            password) ;
     }
 
     DebugEnd() ;
@@ -1011,23 +1004,14 @@ T_void SMCChooseRequestCreateIdle(
            T_word32 extraData)
 {
     T_SMCChooseData *p_data ;
-    E_createCharStatus status ;
 
     DebugRoutine("SMCChooseRequestCreateIdle") ;
 
     p_data = (T_SMCChooseData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    status = ClientGetCreateCharacterStatus() ;
-    if (status == CREATE_CHARACTER_STATUS_OK)  {
-        /* Everything is cool. */
-        /* save this character */
-        StatsSaveCharacter(StatsGetActive());
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_CREATE_STATUS_OK, TRUE) ;
-    } else if (status == CREATE_CHARACTER_STATUS_ERROR)  {
-        PromptDisplayMessage("Server create error.  Contact adminstrator.");
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_CREATE_STATUS_ERROR, TRUE) ;
-    }
+    StatsSaveCharacter(StatsGetActive());
+    SMCChooseSetFlag(SMCCHOOSE_FLAG_CREATE_STATUS_OK, TRUE) ;
 
     DebugEnd() ;
 }

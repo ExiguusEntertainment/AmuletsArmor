@@ -885,48 +885,6 @@ T_void ServerReceiveLoadCharacterPacket(
     DebugEnd() ;
 }
 
-/*-------------------------------------------------------------------------*
- * Routine:  ServerReceiveCreateCharacterPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ServerReceiveCreateCharacterPacket is called when the client
- *  wishes to create a new character in the given slot.  At the same time
- *  the character will be uploaded.
- *
- *  NOTE:
- *  This code is intended for the Self Server mode ONLY.
- *
- *  @param p_packet -- craete char   packet
- *
- *<!-----------------------------------------------------------------------*/
-T_void ServerReceiveCreateCharacterPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_packetShort packet ;
-    T_createCharStatusPacket *p_status ;
-    T_createCharacterPacket *p_create ;
-    T_word32 checksum = 0 ;
-    E_Boolean createOk = TRUE ;
-
-    DebugRoutine("ServerReceiveCreateCharacterPacket") ;
-
-    p_create = (T_createCharacterPacket *)(p_packet->data) ;
-    checksum = p_create->checksum ;
-
-    p_status = (T_createCharStatusPacket *)packet.data ;
-    p_status->command = PACKET_COMMANDSC_CREATE_CHARACTER_STATUS ;
-
-    if (createOk)  {
-        p_status->status = CREATE_CHARACTER_STATUS_OK ;
-    } else {
-        p_status->status = CREATE_CHARACTER_STATUS_ERROR ;
-    }
-
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
 T_void ServerReceiveSyncPacket(T_packetEitherShortOrLong *p_packet)
 {
     DebugRoutine("ServerReceiveSyncPacket") ;

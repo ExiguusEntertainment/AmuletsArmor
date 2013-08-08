@@ -178,32 +178,6 @@ T_void ClientSendLoadCharacter(T_byte8 slot, T_word32 checksum)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendCreateCharacter
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendCreateCharacter sends a packet to tell the server to create
- *  a character with the given checksum.  A transfer of the character is
- *  then started.
- *
- *  @param slot -- Slot of character password to create
- *  @param checksum -- Checksum to use.
- *  @param p_password -- Password to attach to character
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendCreateCharacter(
-           T_byte8 slot,
-           T_word32 checksum,
-           T_byte8 *p_password)
-{
-    DebugRoutine("ClientSendCreateCharacter") ;
-
-    /* Always make it ok to create a character. */
-    ClientSetCreateCharacterStatus(CREATE_CHARACTER_STATUS_OK) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientSendCheckPassword
  *-------------------------------------------------------------------------*/
 /**

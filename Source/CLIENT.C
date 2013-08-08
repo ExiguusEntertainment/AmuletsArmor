@@ -105,8 +105,6 @@ static E_clientSaveCharStatus G_clientSaveCharStatus =
                                   CLIENT_SAVE_CHAR_STATUS_UNKNOWN ;
 static E_loadCharStatus G_loadCharacterStatus =
                              LOAD_CHARACTER_STATUS_UNKNOWN ;
-static E_createCharStatus G_createCharacterStatus =
-                             CREATE_CHARACTER_STATUS_UNKNOWN ;
 static E_checkPasswordStatus G_checkPasswordStatus =
                              CHECK_PASSWORD_STATUS_UNKNOWN ;
 static E_changePasswordStatus G_changePasswordStatus =
@@ -358,7 +356,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* 56 CS_LOAD_CHARACTER */
       ClientReceiveLoadCharStatusPacket,          /* 57 SC_LOAD_CHARACTER_STATUS */
       NULL,                                       /* 58 CS_CREATE_CHARACTER */
-      ClientReceiveCreateCharStatusPacket,        /* 59 SC_CREATE_CHARACTER_STATUS */
    };
 
     DebugRoutine("ClientInit") ;
@@ -2984,18 +2981,6 @@ E_loadCharStatus ClientGetLoadCharacterStatus(T_void)
 T_void ClientSetLoadCharacterStatus(E_loadCharStatus status)
 {
     G_loadCharacterStatus = status ;
-}
-
-/* LES: 03/07/96 */
-E_createCharStatus ClientGetCreateCharacterStatus(T_void)
-{
-    return G_createCharacterStatus ;
-}
-
-/* LES: 03/07/96 */
-T_void ClientSetCreateCharacterStatus(E_createCharStatus status)
-{
-    G_createCharacterStatus = status ;
 }
 
 /* LES: 03/08/96 */

@@ -72,7 +72,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDCS_LOAD_CHARACTER",         /* 56 */
         "PACKET_COMMANDSC_LOAD_CHARACTER_STATUS",  /* 57 */
         "PACKET_COMMANDCS_CREATE_CHARACTER",       /* 58 */
-        "PACKET_COMMANDSC_CREATE_CHARACTER_STATUS",/* 59 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};
