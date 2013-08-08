@@ -359,7 +359,6 @@ T_void ClientInit(T_void)
       ClientReceiveLoadCharStatusPacket,          /* 57 SC_LOAD_CHARACTER_STATUS */
       NULL,                                       /* 58 CS_CREATE_CHARACTER */
       ClientReceiveCreateCharStatusPacket,        /* 59 SC_CREATE_CHARACTER_STATUS */
-      NULL,                                       /* 60 CS_DELETE_CHARACTER */
    };
 
     DebugRoutine("ClientInit") ;

@@ -415,13 +415,6 @@ typedef struct {
 } T_createCharStatusPacket ;
 
 /* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_byte8 slot                  PACK ;
-} T_deleteCharacterPacket ;
-
-/* ------------------------------------------------------------------------ */
 /* The T_checkPasswordPacket and T_checkPasswordStatusPacket are used */
 /* together to check a character's password and then to return a status */
 /* telling if the password matches the character. */
