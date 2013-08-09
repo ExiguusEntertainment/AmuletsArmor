@@ -68,7 +68,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDSC_SERVER_ID",              /* 52 */
         "PACKET_COMMANDCS_REQUEST_ENTER",          /* 53 */
         "PACKET_COMMANDSC_REQUEST_ENTER_STATUS",   /* 54 */
-        "PACKET_COMMANDCS_REQUEST_CHAR_LIST",      /* 55 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};

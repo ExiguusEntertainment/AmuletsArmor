@@ -350,7 +350,6 @@ T_void ClientInit(T_void)
       ClientReceiveServerIDPacket,                /* SC_SERVER_ID */
       NULL,                                       /* CS_REQUEST_ENTER */
       ClientReceiveRequestEnterStatusPacket,      /* SC_REQUEST_ENTER_STATUS */
-      NULL,                                       /* CS_REQUEST_CHAR_LIST */
    };
 
     DebugRoutine("ClientInit") ;

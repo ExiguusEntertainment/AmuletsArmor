@@ -704,6 +704,7 @@ T_void SMCChooseWaitForListEnter(
            T_word32 extraData)
 {
     T_SMCChooseData *p_data ;
+    T_statsSavedCharArray *p_charArray ;
 
     DebugRoutine("SMCChooseWaitForListEnter") ;
 
@@ -718,8 +719,16 @@ T_void SMCChooseWaitForListEnter(
         SMCCHOOSE_FLAG_ENTER_COMPLETE,
         FALSE) ;
 
-    /* Request for a list of characters. */
-    ClientSendRequestCharacterListing() ;
+    /* Get the saved character listing. */
+    p_charArray = StatsGetSavedCharacterList() ;
+
+    /* Make this listing active. */
+    StatsSetSavedCharacterList(p_charArray) ;
+
+    /* Note that we are done "entering" the character list. */
+    SMCChooseSetFlag(
+        SMCCHOOSE_FLAG_ENTER_COMPLETE,
+        TRUE) ;
 
     DebugEnd() ;
 }

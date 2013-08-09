@@ -373,10 +373,6 @@ typedef struct {
     E_requestEnterStatus status   PACK ;
 } T_requestEnterStatusPacket ;
 
-typedef struct {
-    T_byte8 command               PACK ;
-} T_requestCharacterListPacket ;
-
 /* ------------------------------------------------------------------------ */
 /* The T_checkPasswordPacket and T_checkPasswordStatusPacket are used */
 /* together to check a character's password and then to return a status */

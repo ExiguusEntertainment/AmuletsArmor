@@ -124,39 +124,6 @@ T_void ClientSendRequestEnterPacket(T_void)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendRequestCharacterListing
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendRequestCharacterListing sends out a request char listing
- *  packet to the server.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendRequestCharacterListing(T_void)
-{
-    T_packetLong packet ;
-    T_requestCharacterListPacket *p_request ;
-    T_statsSavedCharArray *p_charArray ;
-
-    DebugRoutine("ClientSendRequestCharacterListing") ;
-
-    /* Get a quick pointer to the true action data. */
-    p_request = (T_requestCharacterListPacket *)packet.data ;
-
-    /* Get the saved character listing. */
-    p_charArray = StatsGetSavedCharacterList() ;
-
-    /* Make this listing active. */
-    StatsSetSavedCharacterList(p_charArray) ;
-
-    /* Note that we are done "entering" the character list. */
-    SMCChooseSetFlag(
-        SMCCHOOSE_FLAG_ENTER_COMPLETE,
-        TRUE) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientSendCheckPassword
  *-------------------------------------------------------------------------*/
 /**
