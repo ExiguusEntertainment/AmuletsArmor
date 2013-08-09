@@ -157,27 +157,6 @@ T_void ClientSendRequestCharacterListing(T_void)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendLoadCharacter
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendLoadCharacter tells the server to load the given character
- *  and to start a transfer if necessary.
- *
- *  @param slot -- Slot of character to load
- *  @param checksum -- Checksum to check against
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendLoadCharacter(T_byte8 slot, T_word32 checksum)
-{
-    DebugRoutine("ClientSendLoadCharacter") ;
-
-    /* Always make it OK to load the character. */
-    ClientSetLoadCharacterStatus(LOAD_CHARACTER_STATUS_CORRECT) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientSendCheckPassword
  *-------------------------------------------------------------------------*/
 /**

@@ -119,10 +119,6 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* 53 CS_REQUEST_ENTER */
     NULL,                  /* 54 SC_REQUEST_ENTER_STATUS */
     NULL,                  /* 55 CS_REQUEST_CHAR_LIST */
-
-    NULL,                  /* 56 CS_LOAD_CHARACTER */
-    NULL,                  /* 57 SC_LOAD_CHARACTER_STATUS */
-    NULL,                  /* 58 CS_CREATE_CHARACTER */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
@@ -185,10 +181,6 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 53 CS_REQUEST_ENTER */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 54 SC_REQUEST_ENTER_STATUS */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 55 CS_REQUEST_CHAR_LIST */
-
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 56 CS_LOAD_CHARACTER */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 57 SC_LOAD_CHARACTER_STATUS */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 58 CS_CREATE_CHARACTER */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];

@@ -1048,14 +1048,6 @@ T_void SMCChooseLoadEnter(
         SMCCHOOSE_FLAG_DOWNLOAD_COMPLETE,
         FALSE) ;
 
-    /* Note that we don't have a loaded character status. */
-    ClientSetLoadCharacterStatus(LOAD_CHARACTER_STATUS_UNKNOWN) ;
-
-    /* Send out a request to load the character. */
-    ClientSendLoadCharacter(
-        StatsGetActive(),
-        0) ;
-
     /* Reset the time of day to 6:00 am. */
     MapSetDayOffset(0) ;
 
@@ -1077,7 +1069,6 @@ T_void SMCChooseLoadIdle(
            T_stateMachineHandle handle,
            T_word32 extraData)
 {
-    E_loadCharStatus status ;
     T_SMCChooseData *p_data ;
 
     DebugRoutine("SMCChooseLoadIdle") ;
@@ -1085,12 +1076,7 @@ T_void SMCChooseLoadIdle(
     p_data = (T_SMCChooseData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    status = ClientGetLoadCharacterStatus() ;
-    if (status == LOAD_CHARACTER_STATUS_CORRECT)    {
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_LOAD_STATUS_OK, TRUE) ;
-    } else if (status == LOAD_CHARACTER_STATUS_INCORRECT)  {
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_LOAD_STATUS_INCORRECT, TRUE) ;
-    }
+    SMCChooseSetFlag(SMCCHOOSE_FLAG_LOAD_STATUS_OK, TRUE) ;
 
     DebugEnd() ;
 }

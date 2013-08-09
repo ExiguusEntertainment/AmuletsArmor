@@ -847,44 +847,6 @@ T_void ServerReceiveRequestCharacterListPacket(
     DebugEnd() ;
 }
 
-/*-------------------------------------------------------------------------*
- * Routine:  ServerReceiveLoadCharacterPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ServerReceiveLoadCharacterPacket is called when the client
- *  wishes to either see if a character needs to be downloaded or if
- *  the checksums are correct, noted.
- *
- *  NOTE:
- *  This code is intended for the Self Server mode ONLY.
- *
- *  @param p_packet -- load char     packet
- *
- *<!-----------------------------------------------------------------------*/
-T_void ServerReceiveLoadCharacterPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_packetShort packet ;
-    T_loadCharacterStatusPacket *p_status ;
-    T_loadCharacterPacket *p_load ;
-    T_word32 checksum = 0 ;
-    T_word32 serverChecksum = 0 ;
-
-    DebugRoutine("ServerReceiveLoadCharacterPacket") ;
-
-    p_load = (T_loadCharacterPacket *)(p_packet->data) ;
-    checksum = p_load->checksum ;
-
-    p_status = (T_loadCharacterStatusPacket *)packet.data ;
-    p_status->command = PACKET_COMMANDSC_LOAD_CHARACTER_STATUS ;
-
-    p_status->status = LOAD_CHARACTER_STATUS_CORRECT ;
-
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
 T_void ServerReceiveSyncPacket(T_packetEitherShortOrLong *p_packet)
 {
     DebugRoutine("ServerReceiveSyncPacket") ;

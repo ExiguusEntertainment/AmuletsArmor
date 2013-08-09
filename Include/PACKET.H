@@ -378,33 +378,6 @@ typedef struct {
 } T_requestCharacterListPacket ;
 
 /* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word32 checksum             PACK ;
-    T_byte8 slot                  PACK ;
-} T_loadCharacterPacket ;
-
-typedef T_byte8 E_loadCharStatus ;
-#define LOAD_CHARACTER_STATUS_INCORRECT      0
-#define LOAD_CHARACTER_STATUS_CORRECT        1
-#define LOAD_CHARACTER_STATUS_UNKNOWN        2
-
-typedef struct {
-    T_byte8 command               PACK ;
-    E_loadCharStatus status       PACK ;
-} T_loadCharacterStatusPacket ;
-
-/* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_byte8 slot                  PACK ;
-    T_word32 checksum             PACK ;
-    T_byte8 password[MAX_SIZE_PASSWORD] PACK ;
-} T_createCharacterPacket ;
-
-/* ------------------------------------------------------------------------ */
 /* The T_checkPasswordPacket and T_checkPasswordStatusPacket are used */
 /* together to check a character's password and then to return a status */
 /* telling if the password matches the character. */

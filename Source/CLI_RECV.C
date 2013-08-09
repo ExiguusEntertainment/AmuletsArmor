@@ -196,31 +196,6 @@ T_void ClientReceiveRequestEnterStatusPacket(
     DebugEnd() ;
 }
 
-/*-------------------------------------------------------------------------*
- * Routine:  ClientReceiveLoadCharStatusPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ClientReceiveLoadCharStatusPacket is called when the server is ready
- *  to tell if the character needs to be downloaded or not.
- *
- *  @param p_packet -- load character status packet
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientReceiveLoadCharStatusPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_loadCharacterStatusPacket *p_status ;
-
-    DebugRoutine("ClientReceiveLoadCharStatusPacket") ;
-
-    /* get a quick pointer. */
-    p_status = (T_loadCharacterStatusPacket *)(p_packet->data) ;
-
-    ClientSetLoadCharacterStatus(p_status->status) ;
-
-    DebugEnd() ;
-}
-
 /* LES: 06/12/96 */
 T_void ClientReceiveSyncPacket(
            T_packetEitherShortOrLong *p_packet)

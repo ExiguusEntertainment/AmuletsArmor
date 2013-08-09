@@ -103,8 +103,6 @@ static E_requestEnterStatus G_enterServerStatus =
 /* Various client stati */
 static E_clientSaveCharStatus G_clientSaveCharStatus =
                                   CLIENT_SAVE_CHAR_STATUS_UNKNOWN ;
-static E_loadCharStatus G_loadCharacterStatus =
-                             LOAD_CHARACTER_STATUS_UNKNOWN ;
 static E_checkPasswordStatus G_checkPasswordStatus =
                              CHECK_PASSWORD_STATUS_UNKNOWN ;
 static E_changePasswordStatus G_changePasswordStatus =
@@ -353,9 +351,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* CS_REQUEST_ENTER */
       ClientReceiveRequestEnterStatusPacket,      /* SC_REQUEST_ENTER_STATUS */
       NULL,                                       /* CS_REQUEST_CHAR_LIST */
-      NULL,                                       /* 56 CS_LOAD_CHARACTER */
-      ClientReceiveLoadCharStatusPacket,          /* 57 SC_LOAD_CHARACTER_STATUS */
-      NULL,                                       /* 58 CS_CREATE_CHARACTER */
    };
 
     DebugRoutine("ClientInit") ;
@@ -2969,18 +2964,6 @@ E_clientSaveCharStatus ClientGetSaveCharStatus(T_void)
 T_void ClientSetSaveCharStatus(E_clientSaveCharStatus status)
 {
     G_clientSaveCharStatus = status ;
-}
-
-/* LES: 03/06/96 */
-E_loadCharStatus ClientGetLoadCharacterStatus(T_void)
-{
-    return G_loadCharacterStatus ;
-}
-
-/* LES: 03/06/96 */
-T_void ClientSetLoadCharacterStatus(E_loadCharStatus status)
-{
-    G_loadCharacterStatus = status ;
 }
 
 /* LES: 03/08/96 */

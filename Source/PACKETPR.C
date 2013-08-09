@@ -69,9 +69,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDCS_REQUEST_ENTER",          /* 53 */
         "PACKET_COMMANDSC_REQUEST_ENTER_STATUS",   /* 54 */
         "PACKET_COMMANDCS_REQUEST_CHAR_LIST",      /* 55 */
-        "PACKET_COMMANDCS_LOAD_CHARACTER",         /* 56 */
-        "PACKET_COMMANDSC_LOAD_CHARACTER_STATUS",  /* 57 */
-        "PACKET_COMMANDCS_CREATE_CHARACTER",       /* 58 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};
