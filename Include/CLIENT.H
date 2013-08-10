@@ -138,10 +138,6 @@ T_word16 ClientGetCurrentStartLocation(T_void);
 
 T_void ClientSetCurrentStartLocation(T_word16 newStartLocation);
 
-T_word32 ClientGetCurrentServerID(T_void);
-
-T_void ClientSetCurrentServerID(T_word32 newServerID);
-
 E_clientSaveCharStatus ClientGetSaveCharStatus(T_void);
 
 T_void ClientSetSaveCharStatus(E_clientSaveCharStatus status);

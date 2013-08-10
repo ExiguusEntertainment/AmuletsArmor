@@ -67,35 +67,6 @@ T_void ClientSendMessage(T_byte8 *message)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendRequestServerIDPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendRequestServerIDPacket sends to the server a packet
- *  requesting for the server's unique id.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendRequestServerIDPacket(T_void)
-{
-    T_packetLong packet ;
-    T_requestServerIDPacket *p_requestServerID ;
-
-    DebugRoutine("ClientSendRequestServerIDPacket") ;
-
-    /* Get a quick pointer to the true action data. */
-    p_requestServerID = (T_requestServerIDPacket *)packet.data ;
-
-    p_requestServerID->command = PACKET_COMMANDCS_REQUEST_SERVER_ID ;
-    packet.header.packetLength = sizeof(T_requestServerIDPacket) ;
-
-    /* Send the packet. */
-    CmdQSetActivePortNum(0) ;
-    CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientRequestTake
  *-------------------------------------------------------------------------*/
 /**

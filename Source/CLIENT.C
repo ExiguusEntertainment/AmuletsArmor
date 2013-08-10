@@ -96,7 +96,6 @@ static T_word16 G_adventureNumber = 0 ;
 static T_word32 G_currentPlace = PLACE_NOWHERE ;
 static T_word16 G_currentStartLocation = 0 ;
 static T_word16 G_lastSector = 0xFFFF ;
-static T_word32 G_currentServerID = SERVER_ID_NONE ;
 
 /* Various client stati */
 static E_clientSaveCharStatus G_clientSaveCharStatus =
@@ -344,8 +343,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* SC_SECTOR_STATE_CHANGE */
       NULL,                                       /* SC_GROUP_STATE_CHANGE */
       NULL,                                       /* SC_EXPERIENCE */
-      NULL,                                       /* CS_REQUEST_SERVER_ID */
-      ClientReceiveServerIDPacket,                /* SC_SERVER_ID */
    };
 
     DebugRoutine("ClientInit") ;
@@ -2871,34 +2868,6 @@ T_word16 ClientGetCurrentStartLocation(T_void)
 T_void ClientSetCurrentStartLocation(T_word16 newStartLocation)
 {
     G_currentStartLocation = newStartLocation ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientGetCurrentServerID
- *-------------------------------------------------------------------------*/
-/**
- *  ClientGetCurrentServerID returns the id of the current server.
- *
- *  @return Server ID
- *
- *<!-----------------------------------------------------------------------*/
-T_word32 ClientGetCurrentServerID(T_void)
-{
-    return G_currentServerID ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSetCurrentServerID
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSetCurrentServerID sets    the id of the current server.
- *
- *  @param newServerID -- Server ID
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSetCurrentServerID(T_word32 newServerID)
-{
-    G_currentServerID = newServerID ;
 }
 
 /*-------------------------------------------------------------------------*

@@ -64,8 +64,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDSC_SECTOR_STATE_CHANGE",    /* 48  not used */
         "PACKET_COMMANDSC_GROUP_STATE_CHANGE",     /* 49  not used */
         "PACKET_COMMANDSC_EXPERIENCE",             /* 50  not used */
-        "PACKET_COMMANDCS_REQUEST_SERVER_ID",      /* 51 */
-        "PACKET_COMMANDSC_SERVER_ID",              /* 52 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};

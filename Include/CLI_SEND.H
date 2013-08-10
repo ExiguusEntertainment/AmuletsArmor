@@ -9,12 +9,6 @@
 
 T_void ClientSendMessage(T_byte8 *message);
 
-T_void ClientSendRequestServerIDPacket(T_void);
-
-T_void ClientSendRequestCharacterList(T_void);
-
-T_void ClientRequestDataBlock(T_word16 dataBlockType, T_word32 extraData);
-
 T_void ClientRequestTake(T_3dObject *p_obj, E_Boolean autoStore);
 
 T_void ClientRequestRetransmit(

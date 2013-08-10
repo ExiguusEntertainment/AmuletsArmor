@@ -863,12 +863,6 @@ T_void SMClientConnectGetServerID(
     p_data = (T_smClientData *)StateMachineGetExtraData(handle) ;
     DebugCheck(p_data != NULL) ;
 
-//    PromptDisplayMessage("Login accepted.") ;
-
-//puts("Login accepted.") ;
-    ClientSetCurrentServerID(SERVER_ID_NONE) ;
-    ClientSendRequestServerIDPacket() ;
-
     /* Determine when we will take long. */
     p_data->getServerIDTimeout = TickerGet() + TICKS_PER_SECOND * 10 ;
 
@@ -900,25 +894,9 @@ T_void SMClientConnectLookForServerID(
     p_data = (T_smClientData *)StateMachineGetExtraData(handle) ;
     DebugCheck(p_data != NULL) ;
 
-    serverID = ClientGetCurrentServerID() ;
-//printf("Got serverID: %d\n", serverID) ;
-    if (serverID != SERVER_ID_NONE)  {
-        if (serverID == p_data->lookingForServerID)  {
-            SMClientConnectSetFlag(
-                CLIENT_CONNECT_FLAG_CORRECT_SERVER_ID,
-                TRUE) ;
-        } else  {
-            SMClientConnectSetFlag(
-                CLIENT_CONNECT_FLAG_INCORRECT_SERVER_ID,
-                TRUE) ;
-        }
-    } else {
-        if (TickerGet() > p_data->getServerIDTimeout)  {
-            SMClientConnectSetFlag(
-                CLIENT_CONNECT_FLAG_GET_SERVER_ID_TIMEOUT,
-                TRUE) ;
-        }
-    }
+    SMClientConnectSetFlag(
+        CLIENT_CONNECT_FLAG_CORRECT_SERVER_ID,
+        TRUE) ;
 
     DebugEnd() ;
 }

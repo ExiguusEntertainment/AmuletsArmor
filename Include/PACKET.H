@@ -345,15 +345,6 @@ typedef struct {
     T_sword16 experience          PACK ;
 } T_experiencePacket ;
 
-typedef struct {
-    T_byte8 command               PACK ;
-} T_requestServerIDPacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word32 serverID             PACK ;
-} T_serverIDPacket ;
-
 /* ------------------------------------------------------------------------ */
 
 typedef T_byte8 E_checkPasswordStatus ;

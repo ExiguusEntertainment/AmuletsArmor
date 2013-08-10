@@ -146,30 +146,6 @@ puts("ClientReceiveGotoPlacePacket");
     DebugEnd() ;
 }
 
-/*-------------------------------------------------------------------------*
- * Routine:  ClientReceiveServerdIDPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ClientReceiveServerIDPacket receives a server id packet that tells
- *  what the unique server identifier is.
- *
- *  @param p_packet -- server id packet
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientReceiveServerIDPacket(T_packetEitherShortOrLong *p_packet)
-{
-    T_serverIDPacket *p_serverID ;
-
-    DebugRoutine("ClientReceiveServerIDPacket") ;
-
-    /* get a quick pointer. */
-    p_serverID = (T_serverIDPacket *)(p_packet->data) ;
-
-    ClientSetCurrentServerID(p_serverID->serverID) ;
-
-    DebugEnd() ;
-}
-
 /* LES: 06/12/96 */
 T_void ClientReceiveSyncPacket(
            T_packetEitherShortOrLong *p_packet)
