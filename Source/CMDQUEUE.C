@@ -105,15 +105,6 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* 41 CSC_REQUEST_MEMORY_TRANSFER */
     NULL,                  /* 42 CSC_MEMORY_TRANSFER_READY */
     NULL,                  /* 43 CSC_MEMORY_TRANSFER_DATA */
-
-    NULL,                  /* 44 CSC_CHANGE_BODY_PART */
-    NULL,                  /* 45 CSC_PING */
-    NULL,                  /* 46 SC_WALL_STATE_CHANGE */
-    NULL,                  /* 47 SC_SIDE_STATE_CHANGE */
-    NULL,                  /* 48 SC_SECTOR_STATE_CHANGE */
-    NULL,                  /* 49 SC_GROUP_STATE_CHANGE */
-
-    NULL,                  /* 50 SC_EXPERIENCE */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
@@ -163,14 +154,6 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 42 CSC_MEMORY_TRANSFER_READY */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 43 CSC_MEMORY_TRANSFER_DATA */
 
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 44 CSC_CHANGE_BODY_PART */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 45 CSC_PING */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 46 SC_WALL_STATE_CHANGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 47 SC_SIDE_STATE_CHANGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 48 SC_SECTOR_STATE_CHANGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 49 SC_GROUP_STATE_CHANGE */
-
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 50 SC_EXPERIENCE */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];

@@ -306,44 +306,8 @@ typedef struct {
 
 typedef struct {
     T_byte8 command               PACK ;
-    T_byte8 bodyLocation          PACK ;
-    T_word16 newType              PACK ;
-    T_word16 objServerID          PACK ;
-    T_word16 player               PACK ;
-} T_changeBodyPartPacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
     T_byte8 outsideLightLevel     PACK ;
 } T_dayNightPacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 wallNum              PACK ;
-    T_word16 wallState            PACK ;
-} T_wallStateChangePacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 sideNum              PACK ;
-    T_word16 sideState            PACK ;
-} T_sideStateChangePacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 sectorNum            PACK ;
-    T_word16 sectorState          PACK ;
-} T_sectorStateChangePacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 groupNum             PACK ;
-} T_groupStateChangePacket ;
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_sword16 experience          PACK ;
-} T_experiencePacket ;
 
 /* ------------------------------------------------------------------------ */
 

@@ -57,14 +57,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDCSC_MEMORY_TRANSFER_READY",   /* 42 */
         "PACKET_COMMANDCSC_MEMORY_TRANSFER_DATA",    /* 43 */
 
-        "PACKET_COMMANDCSC_CHANGE_BODY_PART",      /* 44  not used */
-        "PACKET_COMMANDCSC_PING",                  /* 45 */
-        "PACKET_COMMANDSC_WALL_STATE_CHANGE",      /* 46  not used */
-        "PACKET_COMMANDSC_SIDE_STATE_CHANGE",      /* 47  not used */
-        "PACKET_COMMANDSC_SECTOR_STATE_CHANGE",    /* 48  not used */
-        "PACKET_COMMANDSC_GROUP_STATE_CHANGE",     /* 49  not used */
-        "PACKET_COMMANDSC_EXPERIENCE",             /* 50  not used */
-
         "PACKET_COMMAND_UNKNOWN"
 	};
 	if (command > 74)

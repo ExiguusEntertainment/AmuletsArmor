@@ -336,13 +336,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* CSC_MEMORY_TRANSFER_READY */
       NULL,                                       /* CSC_MEMORY_TRANSFER_DATA */
 
-      NULL,                                       /* CSC_CHANGE_BODY_PART */
-      NULL,                                       /* CSC_PING */
-      NULL,                                       /* SC_WALL_STATE_CHANGE */
-      NULL,                                       /* SC_SIDE_STATE_CHANGE */
-      NULL,                                       /* SC_SECTOR_STATE_CHANGE */
-      NULL,                                       /* SC_GROUP_STATE_CHANGE */
-      NULL,                                       /* SC_EXPERIENCE */
    };
 
     DebugRoutine("ClientInit") ;
