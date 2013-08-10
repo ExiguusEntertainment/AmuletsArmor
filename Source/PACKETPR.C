@@ -53,10 +53,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDRT_TRANSFER_CANCEL",       /* 39 */
         "PACKET_COMMANDTR_FILE_NOT_HERE",         /* 40 */
 
-        "PACKET_COMMANDCSC_REQUEST_MEMORY_TRANSFER", /* 41 */
-        "PACKET_COMMANDCSC_MEMORY_TRANSFER_READY",   /* 42 */
-        "PACKET_COMMANDCSC_MEMORY_TRANSFER_DATA",    /* 43 */
-
         "PACKET_COMMAND_UNKNOWN"
 	};
 	if (command > 74)

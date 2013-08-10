@@ -101,10 +101,6 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* RT_TRANSFER_COMPLETE */
     NULL,                  /* RT_TRANSFER_CANCEL */
     NULL,                  /* 40 TR_FILE_NOT_HERE */
-
-    NULL,                  /* 41 CSC_REQUEST_MEMORY_TRANSFER */
-    NULL,                  /* 42 CSC_MEMORY_TRANSFER_READY */
-    NULL,                  /* 43 CSC_MEMORY_TRANSFER_DATA */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
@@ -149,11 +145,6 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* RT_TRANSFER_COMPLETE */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* RT_TRANSFER_CANCEL */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* TR_FILE_NOT_HERE */
-
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 41 CSC_REQUEST_MEMORY_TRANSFER */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 42 CSC_MEMORY_TRANSFER_READY */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 43 CSC_MEMORY_TRANSFER_DATA */
-
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];

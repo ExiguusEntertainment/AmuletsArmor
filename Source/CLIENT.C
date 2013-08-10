@@ -331,11 +331,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* TR_TRANSFER_COMPLETE */
       NULL,                                       /* RT_TRANSFER_CANCEL */
       NULL,                                       /* TR_FILE_NOT_HERE */
-
-      NULL,                                       /* CSC_REQUEST_MEMORY_TRANSFER */
-      NULL,                                       /* CSC_MEMORY_TRANSFER_READY */
-      NULL,                                       /* CSC_MEMORY_TRANSFER_DATA */
-
    };
 
     DebugRoutine("ClientInit") ;

@@ -317,27 +317,12 @@ typedef T_byte8 E_checkPasswordStatus ;
 #define CHECK_PASSWORD_STATUS_UNKNOWN        2
 
 /* ------------------------------------------------------------------------ */
-/* The T_changePasswordPacket and T_changePasswordStatusPacket are used */
-/* together to change a character's password and then to return a status */
-/* telling if the password was successfully changed. */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_byte8 slot                  PACK ;
-    T_byte8 password[MAX_SIZE_PASSWORD]  PACK ;
-    T_byte8 newPassword[MAX_SIZE_PASSWORD]  PACK ;
-} T_changePasswordPacket ;
 
 typedef T_byte8 E_changePasswordStatus ;
 #define CHANGE_PASSWORD_STATUS_OK             0
 #define CHANGE_PASSWORD_STATUS_WRONG          1
 #define CHANGE_PASSWORD_STATUS_ABORT          2
 #define CHANGE_PASSWORD_STATUS_UNKNOWN        3
-
-typedef struct {
-    T_byte8 command               PACK ;
-    E_changePasswordStatus status  PACK ;
-} T_changePasswordStatusPacket ;
 
 /* ------------------------------------------------------------------------ */
 
