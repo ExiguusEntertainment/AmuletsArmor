@@ -570,7 +570,6 @@ T_void SMClientConnectConnectToServer(
     SMClientConnectSetFlag(
         CLIENT_CONNECT_FLAG_NOT_ALLOWED_TO_ENTER,
         FALSE) ;
-    ClientSetServerEnterStatus(REQUEST_ENTER_STATUS_WAITING) ;
 
     p_data = (T_smClientData *)StateMachineGetExtraData(handle) ;
     DebugCheck(p_data != NULL) ;
@@ -983,8 +982,6 @@ T_void SMClientConnectGotoStart(
     /* Start the timeout timer for about 10 seconds. */
     p_data->loginTimeout = TickerGet() + 1400 ;
 //    PromptStatusBarInit("Asking for directions ...", 1400) ;
-
-    ClientSendRequestEnterPacket() ;
 
     DebugEnd() ;
 }
@@ -1450,7 +1447,6 @@ T_void SMClientConnectWaitForStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
 {
-    E_requestEnterStatus status ;
     T_sword32 timeLeft ;
     T_smClientData *p_data ;
 
@@ -1460,33 +1456,9 @@ T_void SMClientConnectWaitForStart(
     p_data = (T_smClientData *)StateMachineGetExtraData(handle) ;
     DebugCheck(p_data != NULL) ;
 
-    status = ClientGetServerEnterStatus() ;
-
-    if (status != REQUEST_ENTER_STATUS_WAITING)  {
-        if (status == REQUEST_ENTER_STATUS_CLOSED)  {
-            SMClientConnectSetFlag(
-                CLIENT_CONNECT_FLAG_NOT_ALLOWED_TO_ENTER,
-                TRUE) ;
-//            PromptStatusBarClose() ;
-        } else {
-            SMClientConnectSetFlag(
-                CLIENT_CONNECT_FLAG_ALLOWED_TO_ENTER,
-                TRUE) ;
-//            PromptStatusBarClose() ;
-        }
-    } else {
-        timeLeft = p_data->loginTimeout - TickerGet() ;
-        if (timeLeft < 0)
-            timeLeft = 0 ;
-//        PromptStatusBarUpdate(1400 - timeLeft) ;
-
-        if (timeLeft <= 0)  {
-            SMClientConnectSetFlag(
-                CLIENT_CONNECT_FLAG_TIMEOUT_LOGIN,
-                TRUE) ;
-//            PromptStatusBarClose() ;
-        }
-    }
+    SMClientConnectSetFlag(
+        CLIENT_CONNECT_FLAG_ALLOWED_TO_ENTER,
+        TRUE) ;
 
     DebugEnd() ;
 }

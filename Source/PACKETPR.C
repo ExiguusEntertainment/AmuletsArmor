@@ -66,8 +66,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDSC_EXPERIENCE",             /* 50  not used */
         "PACKET_COMMANDCS_REQUEST_SERVER_ID",      /* 51 */
         "PACKET_COMMANDSC_SERVER_ID",              /* 52 */
-        "PACKET_COMMANDCS_REQUEST_ENTER",          /* 53 */
-        "PACKET_COMMANDSC_REQUEST_ENTER_STATUS",   /* 54 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};

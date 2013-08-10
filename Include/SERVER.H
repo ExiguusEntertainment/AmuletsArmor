@@ -41,9 +41,6 @@ T_void ServerSetServerID(T_word32 newID) ;
 
 T_word32 ServerGetServerID(T_void) ;
 
-T_void ServerReceiveRequestEnterPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
 T_void ServerReceiveRequestCharacterListPacket(
            T_packetEitherShortOrLong *p_packet) ;
 

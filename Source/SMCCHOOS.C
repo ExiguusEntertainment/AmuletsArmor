@@ -1255,11 +1255,6 @@ T_void SMCChooseCheckPasswordForLoadEnter(
     p_data = (T_SMCChooseData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-/*
-    ClientSendCheckPassword(
-        StatsGetActive(),
-        p_data->attemptPassword) ;
-*/
     StatsGetPassword(StatsGetActive(), password) ;
     if (strnicmp(password, p_data->attemptPassword, MAX_SIZE_PASSWORD) == 0)  {
         ClientSetCheckPasswordStatus(CHECK_PASSWORD_STATUS_OK) ;

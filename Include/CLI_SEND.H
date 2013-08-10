@@ -11,13 +11,7 @@ T_void ClientSendMessage(T_byte8 *message);
 
 T_void ClientSendRequestServerIDPacket(T_void);
 
-T_void ClientSendRequestEnterPacket(T_void);
-
 T_void ClientSendRequestCharacterList(T_void);
-
-T_void ClientSendCheckPassword(
-        T_byte8 slot,
-        T_byte8 password[MAX_SIZE_PASSWORD]);
 
 T_void ClientRequestDataBlock(T_word16 dataBlockType, T_word32 extraData);
 

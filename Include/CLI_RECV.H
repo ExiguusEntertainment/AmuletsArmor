@@ -17,9 +17,6 @@ T_void ClientReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket) ;
 
 T_void ClientReceiveServerIDPacket(T_packetEitherShortOrLong *p_packet);
 
-T_void ClientReceiveRequestEnterStatusPacket(
-           T_packetEitherShortOrLong *p_packet);
-
 T_void ClientReceiveSyncPacket(
            T_packetEitherShortOrLong *p_packet) ;
 

@@ -170,32 +170,6 @@ T_void ClientReceiveServerIDPacket(T_packetEitherShortOrLong *p_packet)
     DebugEnd() ;
 }
 
-/*-------------------------------------------------------------------------*
- * Routine:  ClientReceiveRequestEnterStatusPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ClientReceiveRequestEnterStatusPacket is called when the server is
- *  responding to a ClientRequestEnterStatusPacket.
- *
- *  @param p_packet -- request enter status packet
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientReceiveRequestEnterStatusPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_requestEnterStatusPacket *p_status ;
-
-    DebugRoutine("ClientReceiveReqeustEnterStatusPacket") ;
-
-    /* get a quick pointer. */
-    p_status = (T_requestEnterStatusPacket *)(p_packet->data) ;
-
-    /* Change the enter status. */
-    ClientSetServerEnterStatus(p_status->status) ;
-
-    DebugEnd() ;
-}
-
 /* LES: 06/12/96 */
 T_void ClientReceiveSyncPacket(
            T_packetEitherShortOrLong *p_packet)

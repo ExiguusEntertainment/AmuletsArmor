@@ -96,57 +96,6 @@ T_void ClientSendRequestServerIDPacket(T_void)
 
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendRequestEnterPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendRequestEnterPacket sends a request to server for
- *  entering the server's first screen.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendRequestEnterPacket(T_void)
-{
-    T_packetLong packet ;
-    T_requestServerIDPacket *p_requestServerID ;
-
-    DebugRoutine("ClientSendRequestEnterPacket") ;
-
-    /* Get a quick pointer to the true action data. */
-    p_requestServerID = (T_requestServerIDPacket *)packet.data ;
-
-    p_requestServerID->command = PACKET_COMMANDCS_REQUEST_ENTER ;
-    packet.header.packetLength = sizeof(T_requestEnterPacket) ;
-
-    /* Send the packet. */
-    CmdQSetActivePortNum(0) ;
-    CmdQSendPacket((T_packetEitherShortOrLong *)&packet, 280, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSendCheckPassword
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendCheckPassword asks the server to check the given password
- *  against the given character slot's password.
- *
- *  @param slot -- Slot of character password to check
- *  @param password -- Password to check
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendCheckPassword(
-           T_byte8 slot,
-           T_byte8 password[MAX_SIZE_PASSWORD])
-{
-    DebugRoutine("ClientSendCheckPassword") ;
-
-    /* Password is always ok for now. */
-    ClientSetCheckPasswordStatus(CHECK_PASSWORD_STATUS_OK) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientRequestTake
  *-------------------------------------------------------------------------*/
 /**

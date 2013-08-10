@@ -142,10 +142,6 @@ T_word32 ClientGetCurrentServerID(T_void);
 
 T_void ClientSetCurrentServerID(T_word32 newServerID);
 
-T_void ClientSetServerEnterStatus(E_requestEnterStatus status);
-
-E_requestEnterStatus ClientGetServerEnterStatus(T_void);
-
 E_clientSaveCharStatus ClientGetSaveCharStatus(T_void);
 
 T_void ClientSetSaveCharStatus(E_clientSaveCharStatus status);

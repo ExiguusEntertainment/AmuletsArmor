@@ -356,43 +356,10 @@ typedef struct {
 
 /* ------------------------------------------------------------------------ */
 
-typedef struct {
-    T_byte8 command               PACK ;
-} T_requestEnterPacket ;
-
-typedef T_byte8 E_requestEnterStatus ;
-#define REQUEST_ENTER_STATUS_WAITING       0
-#define REQUEST_ENTER_STATUS_OK            1
-#define REQUEST_ENTER_STATUS_CLOSED        2
-#define REQUEST_ENTER_STATUS_COMPLETED     3
-#define REQUEST_ENTER_STATUS_FULL          4
-#define REQUEST_ENTER_STATUS_UNKNOWN       5
-
-typedef struct {
-    T_byte8 command               PACK ;
-    E_requestEnterStatus status   PACK ;
-} T_requestEnterStatusPacket ;
-
-/* ------------------------------------------------------------------------ */
-/* The T_checkPasswordPacket and T_checkPasswordStatusPacket are used */
-/* together to check a character's password and then to return a status */
-/* telling if the password matches the character. */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_byte8 slot                  PACK ;
-    T_byte8 password[MAX_SIZE_PASSWORD]  PACK ;
-} T_checkPasswordPacket ;
-
 typedef T_byte8 E_checkPasswordStatus ;
 #define CHECK_PASSWORD_STATUS_OK             0
 #define CHECK_PASSWORD_STATUS_WRONG          1
 #define CHECK_PASSWORD_STATUS_UNKNOWN        2
-
-typedef struct {
-    T_byte8 command               PACK ;
-    E_checkPasswordStatus status  PACK ;
-} T_checkPasswordStatusPacket ;
 
 /* ------------------------------------------------------------------------ */
 /* The T_changePasswordPacket and T_changePasswordStatusPacket are used */

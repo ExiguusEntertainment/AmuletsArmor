@@ -790,32 +790,6 @@ T_void ServerSetServerID(T_word32 newID)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ServerReceiveRequestEnterPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ServerReceiveRequestEnterPacket is called when a client is wanting
- *  to receive info about if he can enter.
- *
- *  @param p_packet -- request enter packet
- *
- *<!-----------------------------------------------------------------------*/
-T_void ServerReceiveRequestEnterPacket(
-           T_packetEitherShortOrLong *p_packet)
-{
-    T_packetShort packet ;
-    T_requestEnterStatusPacket *p_status ;
-
-    DebugRoutine("ServerReceiveRequestEnterPacket") ;
-
-    p_status = (T_requestEnterStatusPacket *)(packet.data) ;
-    p_status->command = PACKET_COMMANDSC_REQUEST_ENTER_STATUS ;
-    p_status->status = REQUEST_ENTER_STATUS_OK ;
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ServerReceiveRequestCharacterListPacket
  *-------------------------------------------------------------------------*/
 /**

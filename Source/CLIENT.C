@@ -97,8 +97,6 @@ static T_word32 G_currentPlace = PLACE_NOWHERE ;
 static T_word16 G_currentStartLocation = 0 ;
 static T_word16 G_lastSector = 0xFFFF ;
 static T_word32 G_currentServerID = SERVER_ID_NONE ;
-static E_requestEnterStatus G_enterServerStatus =
-                                REQUEST_ENTER_STATUS_WAITING ;
 
 /* Various client stati */
 static E_clientSaveCharStatus G_clientSaveCharStatus =
@@ -348,8 +346,6 @@ T_void ClientInit(T_void)
       NULL,                                       /* SC_EXPERIENCE */
       NULL,                                       /* CS_REQUEST_SERVER_ID */
       ClientReceiveServerIDPacket,                /* SC_SERVER_ID */
-      NULL,                                       /* CS_REQUEST_ENTER */
-      ClientReceiveRequestEnterStatusPacket,      /* SC_REQUEST_ENTER_STATUS */
    };
 
     DebugRoutine("ClientInit") ;
@@ -2903,36 +2899,6 @@ T_word32 ClientGetCurrentServerID(T_void)
 T_void ClientSetCurrentServerID(T_word32 newServerID)
 {
     G_currentServerID = newServerID ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSetServerEnterStatus
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSetServerEnterStatus sets what state in enter the server we
- *  are in.
- *
- *  @param status -- New status
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSetServerEnterStatus(E_requestEnterStatus status)
-{
-    G_enterServerStatus = status ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientGetServerEnterStatus
- *-------------------------------------------------------------------------*/
-/**
- *  ClientGetServerEnterStatus gets what state in enter the server we
- *  are in.
- *
- *  @return status
- *
- *<!-----------------------------------------------------------------------*/
-E_requestEnterStatus ClientGetServerEnterStatus(T_void)
-{
-    return G_enterServerStatus ;
 }
 
 /*-------------------------------------------------------------------------*
