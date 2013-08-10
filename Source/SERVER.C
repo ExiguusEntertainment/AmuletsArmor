@@ -105,52 +105,61 @@ T_void ServerPlayerLeft(T_player player)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ServerReceiveProjectileAddPacket
+ * Routine:  ServerProjectileAdd
  *-------------------------------------------------------------------------*/
 /**
- *  A PROJECTILE_CREATE packet is used as an alternative to an
+ *  A project add command is used as an alternative to an
  *  OBJECT_CREATE when the new object is thrown, fired, or otherwise
- *  projected from a known origin object.  This allows the packet to be
- *  SHORT rather than LONG, since a good deal of positional information is
- *  implicit and doesn't need to be sent.  This routine handles these
- *  packets.
+ *  projected from a known origin object.
  *
- *  @param p_packet -- objectAdd packet
+ *  @param [in] objectType -- Type of object to create
+ *  @param [in] initialSpeed -- Speed of object, 0=none
+ *  @param [in] angle -- For initial speed and facing
+ *  @param [in] x -- Starting X position on map
+ *  @param [in] y -- Starting Y position on map
+ *  @param [in] z -- Starting Z position on map
+ *  @param [in] vz -- Velocity along the z for upward/downward velocity
+ *  @param [in] target -- Aimed Target, if any (0=none)
+ *  @param [in] ownerObjID -- Owner of this created object (0=none)
  *
  *  @return Created object
- *
  *<!-----------------------------------------------------------------------*/
-T_3dObject *ServerReceiveProjectileAddPacket (T_packetEitherShortOrLong *p_packet)
+T_3dObject *ServerProjectileAdd(
+        T_word16 objectType,
+        T_byte8 initialSpeed,
+        T_word16 angle,
+        T_sword16 x,
+        T_sword16 y,
+        T_sword16 z,
+        T_sword16 vz,
+        T_word16 target,
+        T_word16 ownerObjID)
 {
-    T_projectileAddPacket *p_addPacket;
     T_3dObject *p_obj;
     T_sword32 startX, startY;
     E_Boolean creationOK = TRUE;
 
-    DebugRoutine ("ServerReceiveProjectileAddPacket");
+    DebugRoutine ("ServerProjectileAdd");
 //printf("SRProjectileAdd: called by %s\n", DebugGetCallerName()) ;
-
-    /** Get a pointer to the add packet data. **/
-    p_addPacket = (T_projectileAddPacket *)(p_packet->data);
 
     /** Create a new object in my world. **/
     p_obj = ObjectCreate ();
 
     /** Set its type according to the packet instructions. **/
-    ObjectSetType (p_obj, p_addPacket->objectType);
+    ObjectSetType (p_obj, objectType);
 
     /** Set up its movement parameters. **/
-    ObjectSetX16(p_obj, p_addPacket->x) ;
-    ObjectSetY16(p_obj, p_addPacket->y) ;
-    ObjectSetZ16(p_obj, p_addPacket->z) ;
-    ObjectSetAngle(p_obj, p_addPacket->angle) ;
-    ObjectSetZVel(p_obj, (((T_sword32)p_addPacket->vz)<<16)) ;
+    ObjectSetX16(p_obj, x) ;
+    ObjectSetY16(p_obj, y) ;
+    ObjectSetZ16(p_obj, z) ;
+    ObjectSetAngle(p_obj, angle) ;
+    ObjectSetZVel(p_obj, (((T_sword32)vz)<<16)) ;
 
     /* Attach an owner ID */
-    ObjectSetOwnerID(p_obj, p_addPacket->ownerObjID) ;
+    ObjectSetOwnerID(p_obj, ownerObjID) ;
 
-    startX = (p_addPacket->x << 16) ;
-    startY = (p_addPacket->y << 16) ;
+    startX = (x << 16) ;
+    startY = (y << 16) ;
 
     /** Did everything go alright? **/
     if (creationOK == TRUE)
@@ -158,26 +167,22 @@ T_3dObject *ServerReceiveProjectileAddPacket (T_packetEitherShortOrLong *p_packe
         /** Yes.  Now that it's ready, add it to the world. **/
         ObjectAdd (p_obj);
         ObjectSetUpSectors(p_obj);
-        ObjectSetZ16(p_obj, p_addPacket->z) ;
+        ObjectSetZ16(p_obj, z) ;
         ObjectSetAngularVelocity (
             p_obj,
-            p_addPacket->angle,
-            (T_word16)p_addPacket->initialSpeed);
-
-        /** That concludes my local object creation. **/
-        /** To tell all the clients to create it too, I just send them all **/
-        /** the same packet, plus my server ID value. **/
-        p_addPacket->objectID = ObjectGetServerId (p_obj);
+            angle,
+            (T_word16)initialSpeed);
 
         /* Try setting up the target for this object. */
-        if (p_addPacket->target != 0)
-            ObjectSetTarget(p_obj, p_addPacket->target) ;
+        if (target != 0)
+            ObjectSetTarget(p_obj, target) ;
     }
 
     DebugEnd ();
 
     return p_obj ;
 }
+
 
 /*-------------------------------------------------------------------------*
  * Routine:  ServerShootProjectile
@@ -204,29 +209,19 @@ T_3dObject *ServerShootProjectile(
           T_word16 initSpeed,
           T_3dObject *p_target)
 {
-    T_packetLong packet ;
-    T_projectileAddPacket *p_packet ;
     T_sword32 distance ;
     T_sword32 x, y ;
     T_sword16 tx, ty ;
     T_sword32 deltaHeight;
     T_sword16 heightTarget ;
     T_3dObject *p_obj ;
+    T_sword32 obj_x, obj_y, obj_z, obj_vz ;
+    T_word16 obj_ownerObjID;
+    T_word16 obj_target;
 
     DebugRoutine("ServerShootProjectile") ;
     DebugCheck(p_objSource != NULL) ;
 //printf("ServerShootProj: called by %s\n", DebugGetCallerName()) ;
-
-    /* Get a quick pointer. */
-    p_packet = (T_projectileAddPacket *)packet.data ;
-    memset(&packet, 0, sizeof(packet)) ;
-
-    /* Set up the short packet. */
-    packet.header.packetLength = sizeof(T_projectileAddPacket) ;
-
-    /* Fill it with the parameters. */
-    /* Start with the command. */
-    p_packet->command = PACKET_COMMANDCSC_PROJECTILE_CREATE;
 
     distance = (ObjectGetRadius(p_objSource) << 1) ;
 
@@ -236,32 +231,27 @@ T_3dObject *ServerShootProjectile(
          &x,
          &y) ;
 
-    p_packet->x = (x>>16) ;
-    p_packet->y = (y>>16) ;
-    p_packet->z = ObjectGetZ16(p_objSource) ;
-    p_packet->z += ((ObjectGetHeight(p_objSource)*2)/3) ;
-    p_packet->z -= 10 ;
-    p_packet->vz = 0 ;
+    obj_x = (x>>16) ;
+    obj_y = (y>>16) ;
+    obj_z = ObjectGetZ16(p_objSource) ;
+    obj_z += ((ObjectGetHeight(p_objSource)*2)/3) ;
+    obj_z -= 10 ;
+    obj_vz = 0 ;
 
     if (Collide3dObjectToXYCheckLineOfSightWithZ(
                       p_objSource,
-                      p_packet->x,
-                      p_packet->y,
-                      p_packet->z) == TRUE)  {
-        p_packet->x = ObjectGetX16(p_objSource) ;
-        p_packet->y = ObjectGetY16(p_objSource) ;
+                      obj_x,
+                      obj_y,
+                      obj_z) == TRUE)  {
+        obj_x = ObjectGetX16(p_objSource) ;
+        obj_y = ObjectGetY16(p_objSource) ;
     }
 
-    p_packet->objectID = 0 ;  /* Filled by server. */
-
-    p_packet->objectType = typeObj ;
-    p_packet->initialSpeed = (T_byte8)initSpeed ;
-    p_packet->angle = angle ;
-    p_packet->ownerObjID = ObjectGetServerId(p_objSource) ;
+    obj_ownerObjID = ObjectGetServerId(p_objSource) ;
 
     if (p_target != NULL)  {
         /** Target. **/
-        p_packet->target = ObjectGetServerId (p_target);
+        obj_target = ObjectGetServerId (p_target);
 
         /* Find where the target is located. */
         tx = ObjectGetX16(p_target) ;
@@ -278,7 +268,7 @@ T_3dObject *ServerShootProjectile(
         if (distance > 3)
             deltaHeight =
                 (((T_sword32)
-                    (heightTarget - p_packet->z
+                    (heightTarget - obj_z
                         /* ObjectGetZ16(p_objSource) */))<<16) / distance ;
         else
             deltaHeight = 0 ;
@@ -292,18 +282,27 @@ T_3dObject *ServerShootProjectile(
         if (deltaHeight <= -0x400000)
             deltaHeight = -0x400000 ;
 
-        p_packet->vz = ((T_sword16)(deltaHeight>>16)) ;
+        obj_vz = ((T_sword16)(deltaHeight>>16)) ;
 
         /* If the target is invisible or translucent, randomly turn a */
         /* little to make it harder to hit. */
         if (ObjectIsStealthy(p_target))  {
-            p_packet->angle += (RandomValue() & 0x3FF) - 0x200 ;
+            angle += (RandomValue() & 0x3FF) - 0x200 ;
         }
     } else {
     }
 
     /* This is a cheat, send it to ourself! */
-    p_obj = ServerReceiveProjectileAddPacket((T_packetEitherShortOrLong *)&packet) ;
+    p_obj = ServerProjectileAdd(
+                typeObj,
+                initSpeed,
+                angle,
+                obj_x,
+                obj_y,
+                obj_z,
+                obj_vz,
+                obj_target,
+                obj_ownerObjID) ;
 
     DebugEnd() ;
 
@@ -925,43 +924,29 @@ T_void ServerShootBasicProjectile(
            T_sword32 targetZ,
            T_word16 initialSpeed)
 {
-    T_packetLong packet ;
-    T_projectileAddPacket *p_packet ;
     T_sword16 tx, ty ;
     T_sword32 deltaHeight;
     T_sword16 heightTarget ;
     T_word16 angle ;
     T_word16 distance ;
+    T_sword32 obj_x, obj_y, obj_z, obj_vz ;
+    T_word16 obj_ownerObjID;
+    T_word16 obj_target;
 
     DebugRoutine("ServerShootBasicProjectile") ;
 
-    /* Get a quick pointer. */
-    p_packet = (T_projectileAddPacket *)packet.data ;
-
-    /* Set up the short packet. */
-    packet.header.packetLength = sizeof(T_projectileAddPacket) ;
-
-    /* Fill it with the parameters. */
-    /* Start with the command. */
-    p_packet->command = PACKET_COMMANDCSC_PROJECTILE_CREATE;
-
-    p_packet->x = (x>>16) ;
-    p_packet->y = (y>>16) ;
-    p_packet->z = (z>>16) ;
+    obj_x = (x>>16) ;
+    obj_y = (y>>16) ;
+    obj_z = (z>>16) ;
 
     angle = MathArcTangent(
                 (T_sword16)((targetX-x)>>16),
                 (T_sword16)((targetY-y)>>16)) ;
-    p_packet->angle = angle ;
     tx = (targetX >> 16) ;
     ty = (targetY >> 16) ;
 
-    p_packet->objectID = 0 ;  /* Filled by server. */
-
-    p_packet->objectType = objectType ;
-    p_packet->initialSpeed = (T_byte8)initialSpeed ;
-    p_packet->ownerObjID = 0 ;
-    p_packet->target = 0 ;
+    obj_ownerObjID = 0 ;
+    obj_target = 0 ;
 
     /* Find where the target is located. */
     tx = (targetX>>16) ;
@@ -978,7 +963,7 @@ T_void ServerShootBasicProjectile(
     if (distance != 0)
         deltaHeight =
             (((T_sword32)
-                (heightTarget - p_packet->z))<<16) / distance ;
+                (heightTarget - obj_z))<<16) / distance ;
     else
         deltaHeight = 0 ;
     deltaHeight *= 40 ;
@@ -991,10 +976,11 @@ T_void ServerShootBasicProjectile(
     if (deltaHeight <= -0x320000)
         deltaHeight = -0x320000 ;
 
-    p_packet->vz = ((T_sword16)(deltaHeight>>16)) ;
+    obj_vz = ((T_sword16)(deltaHeight>>16)) ;
 
     /* This is a cheat, send it to ourself! */
-    ServerReceiveProjectileAddPacket((T_packetEitherShortOrLong *)&packet) ;
+    ServerProjectileAdd(objectType, initialSpeed, angle, obj_x, obj_y, obj_z, obj_vz,
+            obj_target, obj_ownerObjID);
 
     DebugEnd() ;
 }

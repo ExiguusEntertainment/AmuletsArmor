@@ -93,14 +93,6 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* SC_PLACE_START */
     NULL,                  /* CSC_GOTO_PLACE */
     NULL,                  /* CS_GOTO_SUCCEEDED */
-    NULL,                  /* RT_REQUEST_FILE */
-    NULL,                  /* TR_START_TRANSFER */
-    NULL,                  /* TR_DATA_PACKET */
-    NULL,                  /* TR_FINAL_PACKET */
-    NULL,                  /* RT_RESEND_PLEASE */
-    NULL,                  /* RT_TRANSFER_COMPLETE */
-    NULL,                  /* RT_TRANSFER_CANCEL */
-    NULL,                  /* 40 TR_FILE_NOT_HERE */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
@@ -136,15 +128,6 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* SC_PLACE_START */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* CSC_GOTO_PLACE */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* CS_GOTO_SUCCEEDED */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* CSC_PROJECTILE_CREATE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* RT_REQUEST_FILE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* TR_START_TRANSFER */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* TR_DATA_PACKET */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* TR_FINAL_PACKET */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* RT_RESEND_PLEASE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* RT_TRANSFER_COMPLETE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* RT_TRANSFER_CANCEL */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* TR_FILE_NOT_HERE */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];

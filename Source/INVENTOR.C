@@ -1445,10 +1445,6 @@ E_Boolean InventoryThrowObjectIntoWorld (T_word16 x, T_word16 y)
     T_sword16 throwspeed,throwangle;
     T_word16 objectRadius;
     T_word16 oldangle ;
-#if 0
-    T_packetShort packet;
-    T_projectileAddPacket *p_addPacket;
-#endif
     T_inventoryItemStruct *p_inv;
     T_3dObject *p_object;
 
@@ -1525,17 +1521,6 @@ E_Boolean InventoryThrowObjectIntoWorld (T_word16 x, T_word16 y)
 
                     retvalue=TRUE;
                     /** We need to send a projectile packet to the server. **/
-#if 0
-                    p_addPacket = (T_projectileAddPacket *)(packet.data);
-
-                    p_addPacket->command = PACKET_COMMANDCSC_PROJECTILE_CREATE;
-                    p_addPacket->sourceObject = ObjectGetServerId (PlayerGetObject ());
-                    p_addPacket->objectType = ObjectGetType (p_object);
-                    p_addPacket->initialSpeed = throwspeed;
-                    p_addPacket->angle = throwangle;
-
-                    CmdQSendShortPacket (&packet, 140, 0, NULL);
-#endif
                     ClientThrowObject(p_object, throwspeed, throwangle) ;
 
                     /** And, now that the server is about to create this new object, **/

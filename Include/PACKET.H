@@ -249,39 +249,6 @@ typedef struct {
     T_word16 bodyParts[MAX_BODY_PARTS]           PACK;   /* body parts.  + 20 bytes */
 } T_objectAddPacket;                     /*= 51 bytes = LONG packet. */
 
-/** This packet is similar to an ObjectAdd, but it is for a "projectile" **/
-/** -- an object entering the world projected from another object.  Thus, **/
-/** if we provide an object ID and a linear velocity, the initial X, Y, **/
-/** and Z are known, and XV, YV, and ZV are readily computed. **/
-
-/** Note that I only had room for an 8-bit initial speed.  To get the **/
-/** real speed, just sign-extend it. **/
-
-#if 0
-typedef struct {
-    T_byte8 command              PACK;  /** CSC_PROJECTILE_CREATE **/
-    T_word16 objectID            PACK;  /** New object's ID **/
-    T_word16 sourceObject        PACK;  /** Object from which it comes **/
-    T_word16 objectType          PACK;  /** New object's type **/
-    T_byte8 initialSpeed         PACK;  /** New object's initial speed **/
-    T_word16 angle               PACK;  /** New object's travel direction **/
-                    /** !! Or, if the object is a fball, the TARGET. **/
-} T_projectileAddPacket;
-#endif
-typedef struct {
-    T_byte8 command              PACK;  /** CSC_PROJECTILE_CREATE **/
-    T_word16 objectID            PACK;  /** New object's ID **/
-    T_word16 objectType          PACK;  /** New object's type **/
-    T_byte8 initialSpeed         PACK;  /** New object's initial speed **/
-    T_word16 angle               PACK;  /** New object's travel direction **/
-    T_sword16 x                  PACK;  /* Start location */
-    T_sword16 y                  PACK;
-    T_sword16 z                  PACK;
-    T_sword16 vz                 PACK;  /* Velocity along z. */
-    T_word16 target              PACK;  /* Target id if targetting. */
-    T_word16 ownerObjID          PACK;  /* ID of owner object. */
-} T_projectileAddPacket;
-
 typedef struct {
     T_byte8 command              PACK ;
     T_word16 loginId             PACK ;

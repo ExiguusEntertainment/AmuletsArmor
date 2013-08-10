@@ -267,10 +267,9 @@ E_Boolean Effect(E_effectType effecttype,
         break;
 
         case EFFECT_CREATE_PROJECTILE:
-//        ClientShootFireball();
-        //* will be something like */
-        // ClientCreateProjectile (E_effectMissileType type, duration, power);
-        ClientCreateProjectile(data1, data2, data3) ;
+            //* will be something like */
+            // ClientCreateProjectile (E_effectMissileType type, duration, power);
+            ClientCreateProjectile(data1, data2, data3) ;
 
         /* add a proper color effect */
         switch (data1)

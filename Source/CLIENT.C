@@ -150,16 +150,10 @@ T_void ClientUpdateHealth(T_void) ;
 
 T_word16 ClientGetDelta(T_void) ;
 
-T_void ClientShootFireball(T_void) ;
-
 T_void IClientLoginAck(
                   T_word32 extraData,
                   T_packetEitherShortOrLong *p_packet) ;
 T_void ClientGotoForm(T_word32 formNumber) ;
-
-T_void ClientShootFireballAck (T_word32 extraData,
-                               T_packetEitherShortOrLong *p_packet);
-
 
 static T_void ClientOverlayDone (T_word16 animnum, T_byte8 flag);
 
@@ -321,16 +315,6 @@ T_void ClientInit(T_void)
       ClientReceivePlaceStartPacket,              /* SC_PLACE_START */
       ClientReceiveGotoPlacePacket,               /* CSC_GOTO_PLACE */
       NULL,                                       /* CS_GOTO_SUCCEEDED */
-      NULL,                                       /* CSC_PROJECTILE_CREATE */
-
-      NULL,                                       /* RT_REQUEST_FILE */
-      NULL,                                       /* TR_START_TRANSFER */
-      NULL,                                       /* TR_DATA_PACKET */
-      NULL,                                       /* TR_FINAL_PACKET */
-      NULL,                                       /* RT_RESEND_PLEASE */
-      NULL,                                       /* TR_TRANSFER_COMPLETE */
-      NULL,                                       /* RT_TRANSFER_CANCEL */
-      NULL,                                       /* TR_FILE_NOT_HERE */
    };
 
     DebugRoutine("ClientInit") ;
@@ -358,127 +342,6 @@ T_void ClientInit(T_void)
 //OutputItems();
 
      DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientShootFireballAck
- *-------------------------------------------------------------------------*/
-/**
- *  ClientShootFireballAck confirms that a fireball was sent, and emits
- *  the fireball-shooting sound.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientShootFireballAck (T_word32 extraData,
-                               T_packetEitherShortOrLong *p_packet)
-{
-   DebugRoutine ("ClientShootFireballAck");
-
-   G_attackComplete = TRUE ;
-
-   DebugEnd ();
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientShootFireball
- *-------------------------------------------------------------------------*/
-/**
- *  ClientShootFireball creates a fireball object and requests that the
- *  server add it to the game.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientShootFireball(T_void)
-{
-    T_sword32 x, y ;
-    T_sword16 heightTarget ;
-    T_3dObject *target ;
-    T_sword16 tx, ty ;
-    T_sword32 distance ;
-    T_sword32 deltaHeight;
-
-    T_packetLong packet;
-    T_projectileAddPacket *p_addPacket;
-
-
-    DebugRoutine("ClientShootFireball") ;
-
-    G_attackComplete = FALSE ;
-
-    /** Get a pointer to our projectile-add packet **/
-    p_addPacket = (T_projectileAddPacket *)(packet.data);
-
-    p_addPacket->command = PACKET_COMMANDCSC_PROJECTILE_CREATE;
-
-    /** We are requesting a fireball... **/
-    p_addPacket->objectType = OBJECT_TYPE_FIREBALL;
-
-    /** ... shot by this player ... **/
-    ObjectGetForwardPosition(
-         PlayerGetObject(),
-         PLAYER_OBJECT_RADIUS + (PLAYER_OBJECT_RADIUS/2) + 22,
-         &x,
-         &y) ;
-    p_addPacket->x = (x>>16) ;
-    p_addPacket->y = (y>>16) ;
-    p_addPacket->z = PlayerGetZ16() ;
-    p_addPacket->z += 10 ;
-    p_addPacket->vz = 0 ;
-    p_addPacket->angle = PlayerGetAngle() ;
-
-    /** ... with speed 50 ... **/
-    p_addPacket->initialSpeed = 50;
-
-    /** ... and Z velocity (don't let the 'angle' name fool you... :) **/
-    /** based on whether we are targeting anything. **/
-
-    /* See if there is a target in view. */
-    target = ViewGetMiddleTarget() ;
-
-    /* Check if there is a target. */
-    if (target == NULL)  {
-        /** No target. **/
-        p_addPacket->target = 0;
-
-        /* Change the angle based on the angle we are viewing. */
-        p_addPacket->vz = (((T_sword16)View3dGetUpDownAngle())<<5)/100 ;
-
-        p_addPacket->z += p_addPacket->vz >> 2 ;
-    } else  {
-        /** Target. **/
-        p_addPacket->target = ObjectGetServerId (target);
-
-        /* Find where the target is located. */
-        tx = ObjectGetX16(target) ;
-        ty = ObjectGetY16(target) ;
-
-        /* Calculate the distance between here and there. */
-        distance = CalculateDistance(x >> 16, y >> 16, tx, ty) ;
-
-        /* How high is the target? */
-        heightTarget = ObjectGetMiddleHeight(target) ;
-
-        /* Calculate the steps necessary to draw a straight */
-        /* line to the target. */
-        deltaHeight = (((T_sword32)(heightTarget - PlayerGetZ16()))<<16) / distance ;
-        deltaHeight *= 40 ;
-
-        /* Don't allow more than 45 degrees up. */
-        if (deltaHeight >= 0x320000)
-            deltaHeight = 0x320000 ;
-
-        /* Don't allow more than 45 degrees down. */
-        if (deltaHeight <= -0x320000)
-            deltaHeight = -0x320000 ;
-
-        p_addPacket->vz = ((T_sword16)(deltaHeight>>16)) ;
-    }
-
-    /** Now we just send the packet. **/
-    packet.header.packetLength = sizeof(T_projectileAddPacket) ;
-    CmdQSendPacket ((T_packetEitherShortOrLong *)&packet, 140, 0, ClientShootFireballAck);
-
-    DebugEnd ();
-
-    return;
 }
 
 static T_word16 G_missileToObjectType[EFFECT_MISSILE_UNKNOWN] = {
@@ -550,53 +413,6 @@ T_void ClientCreateProjectile (
     }
     DebugEnd() ;
 }
-
-/* LES: 12/21/95 */
-T_void ClientObjectShootObject(
-           T_word16 objectType,
-           T_word16 sourceObject,
-           T_word16 angle,
-           T_word16 velocity)
-{
-    T_packetShort packet;
-    T_projectileAddPacket *p_addPacket;
-    T_sword32 x, y ;
-
-    DebugRoutine("ClientObjectShootObject") ;
-//printf("OSO: %d %d %d %d\n", objectType, sourceObject, angle, velocity) ;
-    /** Get a pointer to our projectile-add packet **/
-    p_addPacket = (T_projectileAddPacket *)(packet.data);
-
-    p_addPacket->command = PACKET_COMMANDCSC_PROJECTILE_CREATE;
-
-    /** We are requesting a fireball... **/
-    p_addPacket->objectType = objectType ;
-
-    /** ... shot by this player ... **/
-    ObjectGetForwardPosition(
-         PlayerGetObject(),
-         PLAYER_OBJECT_RADIUS + (PLAYER_OBJECT_RADIUS/2) + 20,
-         &x,
-         &y) ;
-    p_addPacket->x = (T_sword16)(x>>16) ;
-    p_addPacket->y = (T_sword16)(y>>16) ;
-    p_addPacket->z = PlayerGetZ16() ;
-    p_addPacket->z += 10 ;
-    p_addPacket->vz = 0 ;
-    p_addPacket->angle = PlayerGetAngle() ;
-
-    /** ... with speed 50 ... **/
-    p_addPacket->initialSpeed = (T_byte8)velocity ;
-
-    /** Target. **/
-    p_addPacket->angle = angle ;
-
-    /** Now we just send the packet. **/
-    CmdQSendShortPacket (&packet, 210, 0, NULL);
-
-    DebugEnd ();
-}
-
 
 /*-------------------------------------------------------------------------*
  * Routine:  ClientAttackSent

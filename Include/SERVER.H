@@ -26,7 +26,16 @@ T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet) ;
 
 T_void ServerReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket) ;
 
-T_3dObject *ServerReceiveProjectileAddPacket (T_packetEitherShortOrLong *p_packet);
+T_3dObject *ServerProjectileAdd(
+        T_word16 objectType,
+        T_byte8 initialSpeed,
+        T_word16 angle,
+        T_sword16 x,
+        T_sword16 y,
+        T_sword16 z,
+        T_sword16 vz,
+        T_word16 target,
+        T_word16 ownerObjID);
 
 T_3dObject *ServerShootProjectile(
           T_3dObject *p_objSource,

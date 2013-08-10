@@ -3315,7 +3315,7 @@ static T_word16 ICommandObjectShootObject(
     T_scriptDataItem value, value2, value3 ;
 
     DebugRoutine("ICommandObjectShootObject") ;
-puts("COmmandObjectShootObject") ;
+
     value = IScriptGetAny(script, &position) ;
     value2 = IScriptGetAny(script, &position) ;
     value3 = IScriptGetAny(script, &position) ;
@@ -3328,17 +3328,11 @@ puts("COmmandObjectShootObject") ;
 #endif
     DebugCheck(p_obj != NULL) ;
     if (p_obj)  {
-        angle = ObjectGetAngle(p_obj) ;
-
-#ifdef SERVER_ONLY
-        DebugCheck(FALSE) ;
-#else
-        ClientObjectShootObject(
-            value2.ns.number,
-            value.ns.number,
-            angle,
-            value3.ns.number) ;
-#endif
+        // Shoot directly with the server/world system
+        T_word16 objectType = value2.ns.number;
+        T_word16 angle = ObjectGetAngle(p_obj) ;
+        T_word16 velocity = value3.ns.number;
+        ServerShootProjectile(p_obj, angle, objectType, velocity, 0);
     }
 
     DebugEnd() ;

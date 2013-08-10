@@ -86,12 +86,6 @@ T_void ClientInit(T_void);
 
 T_void ClientFinish(T_void);
 
-T_void ClientObjectShootObject(
-        T_word16 objectType,
-        T_word16 sourceObject,
-        T_word16 angle,
-        T_word16 velocity);
-
 T_void ClientThrowObject(
         T_3dObject *p_obj,
         T_sword16 throwspeed,

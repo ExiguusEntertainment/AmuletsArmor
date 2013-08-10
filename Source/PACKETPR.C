@@ -40,18 +40,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMANDSC_PLACE_START",           /* 29 */
         "PACKET_COMMANDCSC_GOTO_PLACE",           /* 30 */
         "PACKET_COMMANDCS_GOTO_SUCCEEDED",        /* 31 */
-        "PACKET_COMMANDCSC_PROJECTILE_CREATE",    /* 32  not used */
-
-    /** File transfer packets.**/
-    /**  RT = receiver->transmitter", TR = transmitter->receiver **/
-        "PACKET_COMMANDRT_REQUEST_FILE",          /* 33 */
-        "PACKET_COMMANDTR_START_TRANSFER",        /* 34 */
-        "PACKET_COMMANDTR_DATA_PACKET",           /* 35 */
-        "PACKET_COMMANDTR_FINAL_PACKET",          /* 36 */
-        "PACKET_COMMANDRT_RESEND_PLEASE",         /* 37 */
-        "PACKET_COMMANDRT_TRANSFER_COMPLETE",     /* 38 */
-        "PACKET_COMMANDRT_TRANSFER_CANCEL",       /* 39 */
-        "PACKET_COMMANDTR_FILE_NOT_HERE",         /* 40 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};
