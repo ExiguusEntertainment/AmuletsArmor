@@ -60,15 +60,6 @@ T_void PacketReceiveData(T_void *p_data, T_word16 size);
 /* !!! Needs to be moved! */
 typedef struct {
     T_byte8 command              PACK;
-    T_sword16 x                  PACK;
-    T_sword16 y                  PACK;
-    T_word16 angleAndStance      PACK;
-    T_byte8 player               PACK;
-    T_sword16 height             PACK;
-} T_movePacketData ;
-
-typedef struct {
-    T_byte8 command              PACK;
     T_byte8 visage               PACK;
     T_byte8 demeanor             PACK;
     T_word32 accountNum          PACK ;
@@ -101,63 +92,6 @@ typedef struct {
 } T_messagePacket ;
 
 typedef struct {
-    T_byte8   command            PACK ;
-    T_word16  id                 PACK ;
-    T_sword16 x                  PACK ;
-    T_sword16 y                  PACK ;
-    T_sword16 z                  PACK ;
-    T_byte8   angleAndStance     PACK ;
-} T_objectPositionPacket ;
-
-/* Define masks for the object position packet */
-#define OBJECT_POSITION_PACKET_ANGLE  0xF8
-#define OBJECT_POSITION_PACKET_STANCE 0x07
-#define OBJECT_POS_ANGLE_AND_STANCE(ang, sta)  ((T_byte8)  \
-            ( (((ang) & 0xF800) >> 8) | ((sta) & 7) ) )
-
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 objectID            PACK;
-} T_objectDestroyPacket;
-
-
-/** Sent to perform a "special effect" **/
-/** Current special effects are: **/
-
-#define SPECIAL_EFFECT_AREA_SOUND   0  /** Area sound: id=sound # **/
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_byte8 effect               PACK;
-    T_sword16 x                  PACK;
-    T_sword16 y                  PACK;
-    T_word16 radius              PACK;
-    T_word16 id                  PACK;
-} T_specialEffectPacket;
-
-
-/** When a client drops an object, it needs to send the following **/
-/** packet to the server, requesting the creation of an object. **/
-/** Also, when the server creates an object, she needs to send this **/
-/** packet to all her clients to tell them what she creates. **/
-
-typedef struct {
-    T_byte8 command              PACK;   /*   1 */ 
-    T_word16 objectID            PACK;   /*   2 */  /* Ignored for C->S */
-    T_word16 objectType          PACK;   /*   2 */
-    T_word32 X                   PACK;   /*   4 */
-    T_word32 Y                   PACK;   /*   4 */
-    T_word32 Z                   PACK;   /*   4 */
-    T_word32 XV                  PACK;   /*   4 */
-    T_word32 YV                  PACK;   /*   4 */
-    T_word32 ZV                  PACK;   /*   4 */
-    T_word16 angle               PACK;   /* + 2 */
-
-    T_word16 bodyParts[MAX_BODY_PARTS]           PACK;   /* body parts.  + 20 bytes */
-} T_objectAddPacket;                     /*= 51 bytes = LONG packet. */
-
-typedef struct {
     T_byte8 command              PACK ;
     T_word16 loginId             PACK ;
     T_word16 objectId            PACK ;
@@ -179,11 +113,6 @@ typedef struct {
     T_word16 startLocation       PACK ;
 } T_gotoSucceededPacket ;
 
-typedef struct {
-    T_byte8 command               PACK ;
-    T_byte8 outsideLightLevel     PACK ;
-} T_dayNightPacket ;
-
 /* ------------------------------------------------------------------------ */
 
 typedef T_byte8 E_checkPasswordStatus ;
@@ -201,59 +130,7 @@ typedef T_byte8 E_changePasswordStatus ;
 
 /* ------------------------------------------------------------------------ */
 
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 dataBlockType        PACK ;
-    T_word32 extraData            PACK ;
-} T_requestDataBlockPacket ;
-
 /* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command               PACK ;
-    T_word16 objectID             PACK ;
-    T_word16 damage               PACK ;
-    T_byte8 damageType            PACK ;
-    T_word16 ownerObjID           PACK ;
-} T_damageObjectPacket ;
-
-/* ------------------------------------------------------------------------ */
-
-/* ------------------------------------------------------------------------ */
-
-/* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command ;
-    T_word16 item ;
-    T_word16 numItems ;
-    T_word16 storeID ;            /* 0 to MAX_STORES (63) */
-} T_requestStoreAddItemPacket ;
-
-/* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command ;
-    T_word16 item ;
-    T_word16 numItems ;
-    T_word16 storeID ;
-} T_requestStoreRemoveItemPacket ;
-
-/* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command ;
-    T_byte8 removeResult ;
-    T_word16 storeID ;
-} T_storeRemoveResultPacket ;
-
-/* ------------------------------------------------------------------------ */
-
-typedef struct {
-    T_byte8 command ;
-    T_byte8 addResult ;
-    T_word16 storeID ;
-} T_storeAddResultPacket ;
 
 /* ------------------------------------------------------------------------ */
 
@@ -264,16 +141,6 @@ typedef struct {
     T_byte8 transmitStart ;
     T_gameGroupID groupID ;
 } T_retransmitPacket ;
-
-/* ------------------------------------------------------------------------ */
-
-/* Block for transmitting a character block (particularly to be stored) */
-typedef struct {
-    T_word16 slot ;
-    T_byte8 password[MAX_SIZE_PASSWORD] ;
-    T_word32 size ;
-    T_byte8 charData[] ;
-} T_characterBlock ;
 
 /* ------------------------------------------------------------------------ */
 

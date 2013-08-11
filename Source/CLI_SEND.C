@@ -70,10 +70,9 @@ T_void ClientSendMessage(T_byte8 *message)
  * Routine:  ClientRequestTake
  *-------------------------------------------------------------------------*/
 /**
- *  ClientRequestTake sends the proper packet to the server to request
- *  permission to take an object.  The object is actually 'taken' if the
- *  server responds with permission with a SC_TAKE_REPLY packet.  See
- *  ClientReceiveTakeReply().
+ *  ClientRequestTake queues up a request to take an item.  It isn't
+ *  taken until the csync packet goes through.  There will be a small
+ *  delay until that happens.
  *
  *  @param p_obj -- Object to request taking.
  *  @param autoStore -- Flag TRUE if Automatically store the item

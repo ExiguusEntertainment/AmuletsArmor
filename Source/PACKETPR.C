@@ -19,11 +19,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMAND_GAME_START",              /*  8 */
         "PACKET_COMMAND_SYNC",                    /*  9 */
         "PACKET_COMMAND_MESSAGE",                 /* 10 */
-        "PACKET_COMMANDSC_OBJECT_POSITION",       /* 11 */
-        "PACKET_COMMANDSC_TAKE_REPLY",            /* 12 */
-        "PACKET_COMMANDCSC_ADD_OBJECT",           /* 13 */
-        "PACKET_COMMANDSC_DESTROY_OBJECT",        /* 14  not used */
-        "PACKET_COMMANDSC_SPECIAL_EFFECT",        /* 15  not used */
         "PACKET_COMMANDSC_PLACE_START",           /* 16 */
         "PACKET_COMMANDCSC_GOTO_PLACE",           /* 17 */
         "PACKET_COMMANDCS_GOTO_SUCCEEDED",        /* 18 */

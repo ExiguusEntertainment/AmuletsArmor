@@ -344,11 +344,6 @@ T_void ClientInit(T_void)
       ClientReceiveGameStartPacket,               /* 8 GAME_START */
       ClientReceiveSyncPacket,                    /* 9 SYNC */
       ClientReceiveMessagePacket,                 /* 10 MESSAGE */
-      NULL,                                       /* 11 SC_OBJECT_POSITION */
-      NULL,                                       /* 12 SC_TAKE_REPLY */
-      NULL,                                       /* 13 CSC_ADD_OBJECT */
-      NULL,                                       /* 14 SC_DESTROY_OBJECT */
-      NULL,                                       /* 15 SC_SPECIAL_EFFECT */
       ClientReceivePlaceStartPacket,              /* 16 SC_PLACE_START */
       ClientReceiveGotoPlacePacket,               /* 17 CSC_GOTO_PLACE */
       NULL,                                       /* 18 CS_GOTO_SUCCEEDED */
