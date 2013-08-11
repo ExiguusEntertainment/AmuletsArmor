@@ -223,7 +223,7 @@ T_void ClientInitMouseAndColor (T_void)
     DebugEnd();
 }
 
-void OutputItems(void)
+void OutputItemDesc(void)
 {
 	FILE *fp;
 	int count = 0;
@@ -234,13 +234,10 @@ void OutputItems(void)
 	T_resource res;
 	T_word32 len;
 
-	fp = fopen("items.txt", "w");
-	fprintf(fp, "{| border=\"1\" cellspacing=\"0\" cellpadding=\"4\"\n");
-	fprintf(fp, "! #\n! Identified name\n! Unidentified name\n");
+	fp = fopen("itemdesc.txt", "w");
 	for (i=0; i<65536; i++) {
         sprintf((char *)name, "OBJDESC2/DES%05d.TXT", i);
 		if (PictureExist(name)) {
-			fprintf(fp, "|-\n| %d\n", i);
 			p = PictureLockData(name, &res);
 			len = ResourceGetSize(res);
 			memcpy(string, p, len);
@@ -252,7 +249,7 @@ void OutputItems(void)
 				else
 					break;
 			}
-			fprintf(fp, "| %s\n", string);
+            fprintf(fp, "%d\n\t{\n\t\ttitle = \"%s\";\n\t\tsprite = \"I%05d\";\n\t}\n", i, string, i);
 			PictureUnlock(res);
 
 			sprintf((char *)name, "OBJDESC/DES%05d.TXT", i);
@@ -268,53 +265,93 @@ void OutputItems(void)
 					else
 						break;
 				}
-				fprintf(fp, "| %s\n", string);
 				PictureUnlock(res);
-			} else {
-				fprintf(fp, "| ?\n", p);
 			}
 		}
 	}
-	fprintf(fp, "|}\n");
 	fclose(fp);
 }
+
+void OutputItems(void)
+{
+    FILE *fp;
+    int count = 0;
+    int i;
+    T_byte8 name[100];
+    T_byte8 string[1000];
+    T_byte8 *p;
+    T_resource res;
+    T_word32 len;
+
+    fp = fopen("items.txt", "w");
+    fprintf(fp, "{| border=\"1\" cellspacing=\"0\" cellpadding=\"4\"\n");
+    fprintf(fp, "! #\n! Identified name\n! Unidentified name\n");
+    for (i=0; i<65536; i++) {
+        sprintf((char *)name, "OBJDESC2/DES%05d.TXT", i);
+        if (PictureExist(name)) {
+            fprintf(fp, "|-\n| %d\n", i);
+            p = PictureLockData(name, &res);
+            len = ResourceGetSize(res);
+            memcpy(string, p, len);
+            string[len] = '\0';
+            while (len) {
+                len--;
+                if ((string[len] == '\r') || (string[len] == '\n'))
+                    string[len] = '\0';
+                else
+                    break;
+            }
+            fprintf(fp, "| %s\n", string);
+            PictureUnlock(res);
+
+            sprintf((char *)name, "OBJDESC/DES%05d.TXT", i);
+            if (PictureExist(name)) {
+                p = PictureLockData(name, &res);
+                len = ResourceGetSize(res);
+                memcpy(string, p, len);
+                string[len] = '\0';
+                while (len) {
+                    len--;
+                    if ((string[len] == '\r') || (string[len] == '\n'))
+                        string[len] = '\0';
+                    else
+                        break;
+                }
+                fprintf(fp, "| %s\n", string);
+                PictureUnlock(res);
+            } else {
+                fprintf(fp, "| ?\n", p);
+            }
+        }
+    }
+    fprintf(fp, "|}\n");
+    fclose(fp);
+}
+
 
 T_void ClientInit(T_void)
 {
    T_cmdQActionRoutine callbacks[PACKET_COMMAND_MAX] =
    {
-      NULL,                                       /* ACK */
-      NULL,                                       /* LOGIN */
-      ClientSyncReceiveRetransmitPacket,          /* RETRANSMIT */
-      NULL,                                       /* MONSTER_MOVE */
-      NULL,                                       /* PLAYER_ATTACK */
-      ClientReceiveTownUIMessagePacket,           /* 5 TOWN_UI_MESSAGE */
-      ClientReceivePlayerIDSelf,                  /* 6 PLAYER_ID_SELF */
-      ClientReceiveRequestPlayerIDPacket,         /* 7 REQUEST_PLAYER_ID */
-      ClientReceiveGameRequestJoinPacket,         /* 8 GAME_REQUEST_JOIN */
-      ClientReceiveGameRespondJoinPacket,         /* 9 GAME_RESPOND_JOIN */
-      ClientReceiveGameStartPacket,               /* 10 GAME_START */
-      NULL,                                       /* FIREBALL_STOP */
-      NULL,                                       /* MOVE_CREATURE */
-      NULL,                                       /* SC_DAMAGE */
-      NULL,                                       /* CREATURE_ATTACK */
-      NULL,                                       /* CREATURE_HURT */
-      NULL,                                       /* CREATURE_DEAD */
-      NULL,                                       /* REVERSE_SECTOR */
-      ClientReceiveSyncPacket,                    /* SYNC */
-      NULL,                                       /* PICK_UP */
-      ClientReceiveMessagePacket,                 /* MESSAGE */
-      NULL,                                       /* OPEN_DOOR */
-      NULL,                                       /* CANNED_SAYING */
-      NULL,                                       /* SC_OBJECT_POSITION */
-      NULL,                                       /* CS_REQUEST_TAKE */
-      NULL,                                       /* SC_TAKE_REPLY */
-      NULL,                                       /* CSC_ADD_OBJECT */
-      NULL,                                       /* SC_DESTROY_OBJECT */
-      NULL,                                       /* SC_SPECIAL_EFFECT */
-      ClientReceivePlaceStartPacket,              /* SC_PLACE_START */
-      ClientReceiveGotoPlacePacket,               /* CSC_GOTO_PLACE */
-      NULL,                                       /* CS_GOTO_SUCCEEDED */
+      NULL,                                       /* 0 ACK */
+      NULL,                                       /* 1 LOGIN */
+      ClientSyncReceiveRetransmitPacket,          /* 2 RETRANSMIT */
+      ClientReceiveTownUIMessagePacket,           /* 3 TOWN_UI_MESSAGE */
+      ClientReceivePlayerIDSelf,                  /* 4 PLAYER_ID_SELF */
+      ClientReceiveRequestPlayerIDPacket,         /* 5 REQUEST_PLAYER_ID */
+      ClientReceiveGameRequestJoinPacket,         /* 6 GAME_REQUEST_JOIN */
+      ClientReceiveGameRespondJoinPacket,         /* 7 GAME_RESPOND_JOIN */
+      ClientReceiveGameStartPacket,               /* 8 GAME_START */
+      ClientReceiveSyncPacket,                    /* 9 SYNC */
+      ClientReceiveMessagePacket,                 /* 10 MESSAGE */
+      NULL,                                       /* 11 SC_OBJECT_POSITION */
+      NULL,                                       /* 12 SC_TAKE_REPLY */
+      NULL,                                       /* 13 CSC_ADD_OBJECT */
+      NULL,                                       /* 14 SC_DESTROY_OBJECT */
+      NULL,                                       /* 15 SC_SPECIAL_EFFECT */
+      ClientReceivePlaceStartPacket,              /* 16 SC_PLACE_START */
+      ClientReceiveGotoPlacePacket,               /* 17 CSC_GOTO_PLACE */
+      NULL,                                       /* 18 CS_GOTO_SUCCEEDED */
    };
 
     DebugRoutine("ClientInit") ;
@@ -339,7 +376,7 @@ T_void ClientInit(T_void)
 
     /** Make note of the fact that we are now "up" **/
     G_clientInit = TRUE ;
-//OutputItems();
+//OutputItemDesc();
 
      DebugEnd() ;
 }

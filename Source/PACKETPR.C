@@ -11,35 +11,22 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMAND_ACK",                     /*  0 */
         "PACKET_COMMAND_LOGIN",                   /*  1 */
         "PACKET_COMMAND_RETRANSMIT",              /*  2 */
-        "PACKET_COMMAND_MONSTER_MOVE",            /*  3  not used */
-        "PACKET_COMMANDCS_PLAYER_ATTACK",         /*  4  not used */
-        "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  5 */
-        "PACKET_COMMAND_PLAYER_ID_SELF",          /*  6 */
-        "PACKET_COMMAND_REQUEST_PLAYER_ID",       /*  7 */
-        "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  8 */
-        "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  9 */
-        "PACKET_COMMAND_GAME_START",              /* 10 */
-        "PACKET_COMMAND_FIREBALL_STOP",           /* 11  not used */
-        "PACKET_COMMAND_MOVE_CREATURE",           /* 12  not used */
-        "PACKET_COMMANDSC_DAMAGE",                /* 13  not used */
-        "PACKET_COMMAND_CREATURE_ATTACK",         /* 14  not used */
-        "PACKET_COMMAND_CREATURE_HURT",           /* 15  not used */
-        "PACKET_COMMAND_CREATURE_DEAD",           /* 16  not used */
-        "PACKET_COMMAND_REVERSE_SECTOR",          /* 17  not used */
-        "PACKET_COMMAND_SYNC",                    /* 18 */
-        "PACKET_COMMAND_PICK_UP",                 /* 19  not used */
-        "PACKET_COMMAND_MESSAGE",                 /* 20 */
-        "PACKET_COMMAND_OPEN_DOOR",               /* 21  not used */
-        "PACKET_COMMAND_CANNED_SAYING",           /* 22  not used */
-        "PACKET_COMMANDSC_OBJECT_POSITION",       /* 23 */
-        "PACKET_COMMANDCS_REQUEST_TAKE",          /* 24  not used */
-        "PACKET_COMMANDSC_TAKE_REPLY",            /* 25 */
-        "PACKET_COMMANDCSC_ADD_OBJECT",           /* 26 */
-        "PACKET_COMMANDSC_DESTROY_OBJECT",        /* 27  not used */
-        "PACKET_COMMANDSC_SPECIAL_EFFECT",        /* 28  not used */
-        "PACKET_COMMANDSC_PLACE_START",           /* 29 */
-        "PACKET_COMMANDCSC_GOTO_PLACE",           /* 30 */
-        "PACKET_COMMANDCS_GOTO_SUCCEEDED",        /* 31 */
+        "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  3 */
+        "PACKET_COMMAND_PLAYER_ID_SELF",          /*  4 */
+        "PACKET_COMMAND_REQUEST_PLAYER_ID",       /*  5 */
+        "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  6 */
+        "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  7 */
+        "PACKET_COMMAND_GAME_START",              /*  8 */
+        "PACKET_COMMAND_SYNC",                    /*  9 */
+        "PACKET_COMMAND_MESSAGE",                 /* 10 */
+        "PACKET_COMMANDSC_OBJECT_POSITION",       /* 11 */
+        "PACKET_COMMANDSC_TAKE_REPLY",            /* 12 */
+        "PACKET_COMMANDCSC_ADD_OBJECT",           /* 13 */
+        "PACKET_COMMANDSC_DESTROY_OBJECT",        /* 14  not used */
+        "PACKET_COMMANDSC_SPECIAL_EFFECT",        /* 15  not used */
+        "PACKET_COMMANDSC_PLACE_START",           /* 16 */
+        "PACKET_COMMANDCSC_GOTO_PLACE",           /* 17 */
+        "PACKET_COMMANDCS_GOTO_SUCCEEDED",        /* 18 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};

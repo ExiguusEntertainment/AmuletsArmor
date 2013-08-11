@@ -87,54 +87,10 @@ typedef struct {
 } T_changeWeaponPacket ;
 
 typedef struct {
-    T_byte8 command              PACK;
-    T_word16 player              PACK;
-    T_word16 action              PACK;
-} T_actionPacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_byte8 player               PACK;
-    T_word16 damage              PACK;
-    T_byte8 damageType           PACK;
-} T_attackPacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 player              PACK;
-    T_word16 damage              PACK;
-    T_byte8 type                 PACK;
-    T_sword16 x                  PACK;
-    T_sword16 y                  PACK;
-    T_word16 ownerObjID          PACK;
-} T_damagePacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_sword16 x, y               PACK;
-    T_byte8 radius               PACK;
-    T_byte8 damage               PACK;
-    T_byte8 player               PACK;
-} T_damageAtPacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 sector              PACK;
-    T_word16 activity            PACK;
-    T_word16 player              PACK;
-} T_reverseSectorPacket ;
-
-typedef struct {
     T_byte8 command              PACK ;
     T_gameGroupID groupID        PACK ;
     T_byte8 syncData[1]          PACK ;
 } T_syncPacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 objNum              PACK;
-    T_word16 player              PACK;
-} T_pickUpPacket ;
 
 typedef struct {
     T_byte8 command              PACK;
@@ -143,30 +99,6 @@ typedef struct {
     T_byte8 message[MAX_MESSAGE_LEN+1]
                                  PACK;
 } T_messagePacket ;
-
-#define DOOR_PACKET_OPEN_DOOR        0
-#define DOOR_PACKET_CLOSE_DOOR       1
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 sector              PACK;
-    T_word16 player              PACK;
-    T_byte8 open_or_close        PACK;  /* 0 = open, 1 = close */
-} T_doorPacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 player              PACK;
-    T_sword16 x                  PACK;
-    T_sword16 y                  PACK;
-    T_word16 saying              PACK;
-    T_byte8 loudnessAndVoice     PACK;
-} T_cannedSayingPacket ;
-
-/** Masks for the loudness/voice field **/
-#define CANNED_SAYING_LOUDNESS   0x0F    /** ---- XXXX **/
-#define CANNED_SAYING_VOICE      0xF0    /** XXXX ---- **/
-#define CANNED_SAYING_LOUDNESS_AND_VOICE(loud,voice) \
-             ((T_byte8)(((voice & 0x0F) << 4) | (loud & 0x0F)))
 
 typedef struct {
     T_byte8   command            PACK ;
@@ -203,30 +135,6 @@ typedef struct {
     T_word16 radius              PACK;
     T_word16 id                  PACK;
 } T_specialEffectPacket;
-
-
-/** Sent to request permission to take an object **/
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 id                  PACK;  /** 'Server ID' of object **/
-    T_word16 playerID            PACK;  /** Player ID **/
-} T_objectRequestTakePacket;
-
-
-/** The following packet is sent to reply to a client's request **/
-/** to take an object.  **/
-/** the 'reply' byte can be one of the following values: **/
-
-#define TAKE_PERMISSION_GRANTED     0 /** Okay, taken. **/
-#define TAKE_NO_WAY_TOO_FAR_AWAY    1 /** Object is too far away. **/
-#define TAKE_NO_WAY_STUCK_TO_GROUND 2 /** Object is not marked grabbable. **/
-#define TAKE_NO_WAY_DOESNT_EXIST    3 /** Object doesn't exist! **/
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_byte8 reply                PACK;  /** See just above. **/
-    T_word16 id                  PACK;  /** 'Server ID' of object **/
-} T_objectTakeReplyPacket;
 
 
 /** When a client drops an object, it needs to send the following **/

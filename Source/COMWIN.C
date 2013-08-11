@@ -24,7 +24,6 @@
 
 static E_Boolean G_comwinIsOpen=FALSE;
 static T_byte8 G_fielddata[300]="";
-//static T_comwinCannedSayingStruct G_cannedSayings[MAX_CANNED_SAYINGS];
 static T_byte8 *G_cannedSayingTexts[NUM_CANNED_SAYINGS] =
 {
     "Come here!",

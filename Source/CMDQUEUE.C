@@ -61,73 +61,46 @@ static T_cmdQStruct *G_activeCmdQList = NULL ;
 
 /** All callbacks are now set dynamically. **/
 static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
-    NULL,                  /* ACK */
-    NULL,                  /* LOGIN */
+    NULL,                  /* 0 ACK */
+    NULL,                  /* 1 LOGIN */
     NULL,                  /* 2 RETRANSMIT */
-    NULL,                  /* MONSTER_MOVE */
-    NULL,                  /* PLAYER_ATTACK */
-    NULL,                  /* 5 TOWN_UI_MESSAGE */
-    NULL,                  /* 6 PLAYER_ID_SELF */
-    NULL,                  /* 7 REQUEST_PLAYER_ID */
-    NULL,                  /* 8 GAME_REQUEST_JOIN */
-    NULL,                  /* 9 GAME_RESPOND_JOIN */
-    NULL,                  /* 10 GAME_START */
-    NULL,                  /* FIREBALL_STOP */
-    NULL,                  /* MOVE_CREATURE */
-    NULL,                  /* SC_DAMAGE */
-    NULL,                  /* CREATURE_ATTACK */
-    NULL,                  /* CREATURE_HURT */
-    NULL,                  /* CREATURE_DEAD */
-    NULL,                  /* REVERSE_SECTOR */
-    NULL,                  /* SYNC */
-    NULL,                  /* PICK_UP */
-    NULL,                  /* MESSAGE */
-    NULL,                  /* OPEN_DOOR */
-    NULL,                  /* CANNED_SAYING */
-    NULL,                  /* SC_OBJECT_POSITION */
-    NULL,                  /* CS_REQUEST_TAKE */
-    NULL,                  /* SC_TAKE_REPLY */
-    NULL,                  /* CSC_ADD_OBJECT */
-    NULL,                  /* SC_DESTROY_OBJECT */
-    NULL,                  /* SC_SPECIAL_EFFECT */
-    NULL,                  /* SC_PLACE_START */
-    NULL,                  /* CSC_GOTO_PLACE */
-    NULL,                  /* CS_GOTO_SUCCEEDED */
+    NULL,                  /* 3 TOWN_UI_MESSAGE */
+    NULL,                  /* 4 PLAYER_ID_SELF */
+    NULL,                  /* 5 REQUEST_PLAYER_ID */
+    NULL,                  /* 6 GAME_REQUEST_JOIN */
+    NULL,                  /* 7 GAME_RESPOND_JOIN */
+    NULL,                  /* 8 GAME_START */
+    NULL,                  /* 9 SYNC */
+    NULL,                  /* 10 MESSAGE */
+    NULL,                  /* 11 SC_OBJECT_POSITION */
+    NULL,                  /* 12 SC_TAKE_REPLY */
+    NULL,                  /* 13 CSC_ADD_OBJECT */
+    NULL,                  /* 14 SC_DESTROY_OBJECT */
+    NULL,                  /* 15 SC_SPECIAL_EFFECT */
+    NULL,                  /* 16 SC_PLACE_START */
+    NULL,                  /* 17 CSC_GOTO_PLACE */
+    NULL,                  /* 18 CS_GOTO_SUCCEEDED */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
-    PACKET_COMMAND_TYPE_LOSSFUL,
-    PACKET_COMMAND_TYPE_LOSSLESS,
+    PACKET_COMMAND_TYPE_LOSSFUL,                /* 0 ACK */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 1 LOGIN */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 2 RETRANSMIT */
-    PACKET_COMMAND_TYPE_LOSSFUL, /**/
-    PACKET_COMMAND_TYPE_LOSSLESS, /* LESS */     /* PLAYER_ATTACK */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 5 TOWN_UI_MESSAGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 6 PLAYER_ID_SELF */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 7 REQUEST_PLAYER_ID */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 8 GAME_REQUEST_JOIN */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 9 GAME_RESPOND_JOIN */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 10 GAME START */
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSFUL, /**/
-    PACKET_COMMAND_TYPE_LOSSFUL, /* LESS */     /* SC_DAMAGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSFUL,                /* 18 SYNC */
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSFUL,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSFUL, /* LESS */     /* SC_SPECIAL_EFFECT */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* SC_PLACE_START */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* CSC_GOTO_PLACE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* CS_GOTO_SUCCEEDED */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 4 TOWN_UI_MESSAGE */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 5 PLAYER_ID_SELF */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 6 REQUEST_PLAYER_ID */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 7 GAME_REQUEST_JOIN */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 8 GAME START */
+    PACKET_COMMAND_TYPE_LOSSFUL,                /* 9 SYNC */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 10 MESSAGE */
+    PACKET_COMMAND_TYPE_LOSSFUL,                /* 11 SC_OBJECT_POSITION */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 12 SC_TAKE_REPLY */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 13 CSC_ADD_OBJECT */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 14 SC_DESTROY_OBJECT */
+    PACKET_COMMAND_TYPE_LOSSFUL, /* LESS */     /* 15 SC_SPECIAL_EFFECT */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 16 SC_PLACE_START */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 17 CSC_GOTO_PLACE */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 18 CS_GOTO_SUCCEEDED */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];
