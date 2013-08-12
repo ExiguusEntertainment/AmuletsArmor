@@ -3310,7 +3310,6 @@ static T_word16 ICommandObjectShootObject(
                     T_scriptHeader *script,
                     T_word16 position)
 {
-    T_word16 angle ;
     T_3dObject *p_obj ;
     T_scriptDataItem value, value2, value3 ;
 

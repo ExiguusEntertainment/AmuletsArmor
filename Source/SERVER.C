@@ -295,7 +295,7 @@ T_3dObject *ServerShootProjectile(
     /* This is a cheat, send it to ourself! */
     p_obj = ServerProjectileAdd(
                 typeObj,
-                initSpeed,
+                (T_byte8)initSpeed,
                 angle,
                 obj_x,
                 obj_y,
@@ -979,7 +979,7 @@ T_void ServerShootBasicProjectile(
     obj_vz = ((T_sword16)(deltaHeight>>16)) ;
 
     /* This is a cheat, send it to ourself! */
-    ServerProjectileAdd(objectType, initialSpeed, angle, obj_x, obj_y, obj_z, obj_vz,
+    ServerProjectileAdd(objectType, (T_byte8)initialSpeed, angle, obj_x, obj_y, obj_z, obj_vz,
             obj_target, obj_ownerObjID);
 
     DebugEnd() ;

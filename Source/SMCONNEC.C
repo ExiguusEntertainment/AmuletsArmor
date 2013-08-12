@@ -887,7 +887,6 @@ T_void SMClientConnectLookForServerID(
            T_word32 extraData)
 {
     T_smClientData *p_data ;
-    T_word32 serverID ;
 
     DebugRoutine("SMClientConnectLookForServerID") ;
 
@@ -1425,7 +1424,6 @@ T_void SMClientConnectWaitForStart(
            T_stateMachineHandle handle,
            T_word32 extraData)
 {
-    T_sword32 timeLeft ;
     T_smClientData *p_data ;
 
     DebugRoutine("SMClientConnectWaitForStart") ;
