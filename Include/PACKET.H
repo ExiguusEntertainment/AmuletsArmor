@@ -72,12 +72,6 @@ typedef struct {
 } T_logoffPacket ;
 
 typedef struct {
-    T_byte8 command              PACK;
-    T_word16 player              PACK;
-    T_word16 weapon              PACK;
-} T_changeWeaponPacket ;
-
-typedef struct {
     T_byte8 command              PACK ;
     T_gameGroupID groupID        PACK ;
     T_byte8 syncData[1]          PACK ;
@@ -99,19 +93,6 @@ typedef struct {
     T_sword16 yPos               PACK ;
     T_byte8 angle                PACK ;
 } T_placeStartPacket ;
-
-typedef struct {
-    T_byte8 command              PACK ;
-    T_word32 placeNumber         PACK ;
-    T_word16 startLocation       PACK ;
-} T_gotoPlacePacket ;
-
-/** This packet now specifies exactly what goto_place it's responding to **/
-typedef struct {
-    T_byte8 command              PACK ;
-    T_word32 placeNumber         PACK;
-    T_word16 startLocation       PACK ;
-} T_gotoSucceededPacket ;
 
 /* ------------------------------------------------------------------------ */
 

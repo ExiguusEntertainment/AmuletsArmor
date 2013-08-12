@@ -152,7 +152,6 @@
     <ClCompile Include="..\..\..\..\Source\COLORIZE.C" />
     <ClCompile Include="..\..\..\..\Source\COMWIN.C" />
     <ClCompile Include="..\..\..\..\Source\CONFIG.C" />
-    <ClCompile Include="..\..\..\..\Source\CONNUI.C" />
     <ClCompile Include="..\..\..\..\Source\CONTROL.C" />
     <ClCompile Include="..\..\..\..\Source\CRELOGIC.C" />
     <ClCompile Include="..\..\..\..\Source\CSYNCPCK.C" />
@@ -209,10 +208,6 @@
     <ClCompile Include="..\..\..\..\Source\SLIDR.C" />
     <ClCompile Include="..\..\..\..\Source\SMACHINE.C" />
     <ClCompile Include="..\..\..\..\Source\SMCCHOOS.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCDIS.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCLEAVE.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCLOGOF.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCONNEC.C" />
     <ClCompile Include="..\..\..\..\Source\SMCPLAY.C" />
     <ClCompile Include="..\..\..\..\Source\SMMAIN.C" />
     <ClCompile Include="..\..\..\..\Source\SOSEZ.C" />
@@ -335,10 +330,6 @@
     <ClInclude Include="..\..\..\..\Include\SLIDR.H" />
     <ClInclude Include="..\..\..\..\Include\SMACHINE.H" />
     <ClInclude Include="..\..\..\..\Include\SMCCHOOS.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCDIS.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCLEAVE.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCLOGOF.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCONNEC.H" />
     <ClInclude Include="..\..\..\..\Include\SMCPLAY.H" />
     <ClInclude Include="..\..\..\..\Include\SMMAIN.H" />
     <ClInclude Include="..\..\..\..\Include\SOS.H" />

@@ -22,10 +22,6 @@ T_sword16 ServerGetNextPlayer(T_player lastPlayer) ;
 
 T_3dObject *ServerGetPlayerObject(T_word16 playerId) ;
 
-T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet) ;
-
-T_void ServerReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket) ;
-
 T_3dObject *ServerProjectileAdd(
         T_word16 objectType,
         T_byte8 initialSpeed,

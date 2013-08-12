@@ -62,13 +62,9 @@ OBJS1 = $(OBJPATH)\keymap.obj      &
         $(OBJPATH)\mainui.obj      &
         $(OBJPATH)\txtbox.obj      &
         $(OBJPATH)\prompt.obj      &
-        $(OBJPATH)\smconnec.obj    &
         $(OBJPATH)\smmain.obj      &
         $(OBJPATH)\smcchoos.obj    &
         $(OBJPATH)\smcplay.obj     &
-        $(OBJPATH)\smclogof.obj    &
-        $(OBJPATH)\smcdis.obj      &
-        $(OBJPATH)\smcleave.obj    &
         $(OBJPATH)\inifile.obj     &
         $(OBJPATH)\efx.obj 
 
@@ -98,7 +94,7 @@ OBJS3 = $(OBJPATH)\packetdt.obj      &
         $(OBJPATH)\syncmem.obj
 
 OBJS4 = $(OBJPATH)\pics.obj $(OBJPATH)\server.obj $(OBJPATH)\stats.obj $(OBJPATH)\color.obj $(OBJPATH)\spells.obj $(OBJPATH)\button.obj $(OBJPATH)\objgen.obj
-OBJS5 = $(OBJPATH)\message.obj $(OBJPATH)\schedule.obj $(OBJPATH)\activity.obj $(OBJPATH)\client.obj $(OBJPATH)\overhead.obj $(OBJPATH)\dbllink.obj $(OBJPATH)\connUI.obj
+OBJS5 = $(OBJPATH)\message.obj $(OBJPATH)\schedule.obj $(OBJPATH)\activity.obj $(OBJPATH)\client.obj $(OBJPATH)\overhead.obj $(OBJPATH)\dbllink.obj 
 OBJS6 = $(OBJPATH)\mousemod.obj $(OBJPATH)\map.obj $(OBJPATH)\slidr.obj $(OBJPATH)\control.obj
 OBJS7 = $(OBJPATH)\form.obj $(OBJPATH)\txtfld.obj $(OBJPATH)\graphic.obj $(OBJPATH)\text.obj
 OBJS8 = $(OBJPATH)\view.obj $(OBJPATH)\cmdqueue.obj $(OBJPATH)\3d_view.obj $(OBJPATH)\3d_asm.obj $(OBJPATH)\3d_colli.obj $(OBJPATH)\3d_io.obj $(OBJPATH)\3d_trig.obj $(OBJPATH)\effect.obj
@@ -137,19 +133,11 @@ inifile.obj    : inifile.c inifile.h
 
 smcplay.obj    : smcplay.c smcplay.h
 
-smclogof.obj   : smclogof.c smclogof.h
-
-smcdis.obj     : smcdis.c smcdis.h
-
-smcleave.obj   : smcleave.c smcleave.h
-
 smcchoos.obj   : smcchoos.c smcchoos.h
 
 cmdqueue.obj   : cmdqueue.c cmdqueue.h
 
 smmain.obj     : smmain.c smmain.h
-
-smconnec.obj   : smconnec.c smconnec.h
 
 cli_send.obj   : cli_send.c cli_send.h
 
@@ -287,8 +275,6 @@ txtfld.obj     : txtfld.c txtfld.h
 txtbox.obj     : txtbox.c txtbox.h
 
 mainui.obj     : mainui.c mainui.h
-
-connUI.obj     : connUI.c connUI.h
 
 effect.obj     : effect.c effect.h
 

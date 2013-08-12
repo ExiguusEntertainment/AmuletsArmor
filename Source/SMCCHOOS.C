@@ -971,7 +971,6 @@ T_void SMCChooseRequestCreateEnter(
            T_stateMachineHandle handle,
            T_word32 extraData)
 {
-    T_byte8 password[14];
     T_SMCChooseData *p_data ;
     E_Boolean doAbort = FALSE ;
 

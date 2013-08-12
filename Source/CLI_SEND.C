@@ -171,42 +171,6 @@ T_void ClientRequestRetransmit(
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientSendGotoSucceeded
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendGotoSucceeded tells the server that the location has been
- *  reached and is now just waiting for the "OK" (PlaceStartPacket).
- *
- *  @param placeNumber -- Place player went to
- *  @param startLocation -- Sub-place player went to
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendGotoSucceeded(
-           T_word16 placeNumber,
-           T_word16 startLocation)
-{
-    T_packetShort packet ;
-    T_gotoSucceededPacket *p_succeed ;
-
-    DebugRoutine("ClientSendGotoSucceeded") ;
-
-    /* If we are not playing by ourselves, tell the others that */
-    /* we made it to the new place. */
-    if (ClientGetConnectionType() != CLIENT_CONNECTION_TYPE_SINGLE)  {
-        /** Prepare and send a GOTO_SUCCEEDED packet. **/
-        p_succeed = (T_gotoSucceededPacket *)packet.data;
-
-        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
-        p_succeed->placeNumber = placeNumber;
-        p_succeed->startLocation = startLocation ;
-
-        CmdQSendShortPacket(&packet, 600, 0, NULL) ;
-    }
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientSendTownUIAddMessage
  *-------------------------------------------------------------------------*/
 /**

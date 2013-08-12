@@ -56,7 +56,7 @@ Map see thru	^009:4^007
 Map smaller	^009:5^007
 Map bigger	^009:6^007
 Map position	^009:7^007
-Msgs up		^009:PGUP^007
+Msgs up	^009:PGUP^007
 Msgs down	^009:PGDN^007
 Time of day	^009:T^007
 Gamma ^003ALT	^009:G^007

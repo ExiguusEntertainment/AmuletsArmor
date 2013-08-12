@@ -72,9 +72,6 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* 8 GAME_START */
     NULL,                  /* 9 SYNC */
     NULL,                  /* 10 MESSAGE */
-    NULL,                  /* 16 SC_PLACE_START */
-    NULL,                  /* 17 CSC_GOTO_PLACE */
-    NULL,                  /* 18 CS_GOTO_SUCCEEDED */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
@@ -88,9 +85,6 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 8 GAME START */
     PACKET_COMMAND_TYPE_LOSSFUL,                /* 9 SYNC */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 10 MESSAGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 16 SC_PLACE_START */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 17 CSC_GOTO_PLACE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 18 CS_GOTO_SUCCEEDED */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];

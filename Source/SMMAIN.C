@@ -12,11 +12,7 @@
  *<!-----------------------------------------------------------------------*/
 #include "CLIENT.H"
 #include "MEMORY.H"
-#include "SMCONNEC.H"
 #include "SMCCHOOS.H"
-#include "SMCDIS.H"
-#include "SMCLEAVE.H"
-#include "SMCLOGOF.H"
 #include "SMCPLAY.H"
 #include "SMMAIN.H"
 
@@ -521,18 +517,7 @@ T_void SMMainConnectStart(
     DebugRoutine("SMMainConnectStart") ;
 
     /* Initialize the client connect state machine. */
-    if (ClientGetConnectionType() == CLIENT_CONNECTION_TYPE_SINGLE)  {
-        SMMainSetFlag(SMMAIN_FLAG_CONNECT_COMPLETE, TRUE) ;
-    } else {
-        SMClientConnectInit() ;
-
-        SMMainSetFlag(
-            SMMAIN_FLAG_CONNECT_EXIT,
-            FALSE) ;
-        SMMainSetFlag(
-            SMMAIN_FLAG_CONNECT_COMPLETE,
-            FALSE) ;
-    }
+    SMMainSetFlag(SMMAIN_FLAG_CONNECT_COMPLETE, TRUE) ;
 
     KeyboardBufferOn() ;
 
@@ -557,11 +542,6 @@ T_void SMMainConnectEnd(
 {
     DebugRoutine("SMMainConnectEnd") ;
 
-    if (ClientGetConnectionType() != CLIENT_CONNECTION_TYPE_SINGLE)  {
-        /* Code goes here. */
-        SMClientConnectFinish() ;
-    }
-
     KeyboardBufferOff() ;
 
     DebugEnd() ;
@@ -583,12 +563,7 @@ T_void SMMainConnectUpdate(
 {
     DebugRoutine("SMMainConnectStart") ;
 
-    if (ClientGetConnectionType() != CLIENT_CONNECTION_TYPE_SINGLE)  {
-        /* Update the client state machine. */
-        SMClientConnectUpdate() ;
-    }
-
-    if (SMClientConnectIsDone())
+//    if (SMClientConnectIsDone())
         SMMainSetFlag(
             SMMAIN_FLAG_CONNECT_EXIT,
             TRUE) ;
@@ -706,15 +681,8 @@ T_void SMMainLeaveServerStart(
 
     SMMainSetFlag(SMMAIN_FLAG_LEAVE_SERVER_COMPLETE, FALSE) ;
 
-    if (ClientGetConnectionType() == CLIENT_CONNECTION_TYPE_SINGLE)  {
-        /* Leave as soon as possible. */
-        SMMainSetFlag(SMMAIN_FLAG_END_GAME, TRUE) ;
-
-        /* Got to exit. */
-//        StateMachineGotoState(handle, SMMAIN_STATE_EXIT_GAME) ;
-    } else {
-        SMCLeaveInitialize() ;
-    }
+    /* Leave as soon as possible. */
+    SMMainSetFlag(SMMAIN_FLAG_END_GAME, TRUE) ;
 
     DebugEnd() ;
 }
@@ -740,10 +708,6 @@ T_void SMMainLeaveServerIdle(
 
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
-
-    if (ClientGetConnectionType() != CLIENT_CONNECTION_TYPE_SINGLE)  {
-        SMCLeaveUpdate() ;
-    }
 
     DebugEnd() ;
 }
@@ -771,10 +735,6 @@ T_void SMMainLeaveServerExit(
 
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
-
-    if (ClientGetConnectionType() != CLIENT_CONNECTION_TYPE_SINGLE)  {
-        SMCLeaveFinish() ;
-    }
 
     DebugEnd() ;
 }
@@ -892,7 +852,7 @@ T_void SMMainLogoffEnter(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCLogoffInitialize() ;
+//    SMCLogoffInitialize() ;
 
     SMMainSetFlag(
         SMMAIN_FLAG_DROPPED,
@@ -926,7 +886,10 @@ T_void SMMainLogoffIdle(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCLogoffUpdate() ;
+//    SMCLogoffUpdate() ;
+    SMMainSetFlag(
+        SMMAIN_FLAG_LOGOFF_COMPLETE,
+        TRUE) ;
 
     DebugEnd() ;
 }
@@ -955,7 +918,7 @@ T_void SMMainLogoffExit(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCLogoffFinish() ;
+//    SMCLogoffFinish() ;
 
     DebugEnd() ;
 }
@@ -982,7 +945,7 @@ T_void SMMainDisconnectedEnter(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCDisconnectInitialize() ;
+//    SMCDisconnectInitialize() ;
 
     SMMainSetFlag(
         SMMAIN_FLAG_DISCONNECT_COMPLETE,
@@ -1013,7 +976,7 @@ T_void SMMainDisconnectedIdle(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCDisconnectUpdate() ;
+//    SMCDisconnectUpdate() ;
 
     DebugEnd() ;
 }
@@ -1042,7 +1005,7 @@ T_void SMMainDisconnectedExit(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCDisconnectFinish() ;
+//    SMCDisconnectFinish() ;
 
     DebugEnd() ;
 }

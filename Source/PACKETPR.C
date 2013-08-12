@@ -19,9 +19,6 @@ const char *PacketName(unsigned char command)
         "PACKET_COMMAND_GAME_START",              /*  8 */
         "PACKET_COMMAND_SYNC",                    /*  9 */
         "PACKET_COMMAND_MESSAGE",                 /* 10 */
-        "PACKET_COMMANDSC_PLACE_START",           /* 16 */
-        "PACKET_COMMANDCSC_GOTO_PLACE",           /* 17 */
-        "PACKET_COMMANDCS_GOTO_SUCCEEDED",        /* 18 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};
@@ -129,12 +126,12 @@ void PacketPrint(void *aData, unsigned int aSize)
 				printf("} time=%d firstlevel=%d", p->timeOfDay, p->firstLevel);
 			}
 			break;
-		case PACKET_COMMANDCS_GOTO_SUCCEEDED:
-			{
-				T_gotoSucceededPacket *p = (T_gotoSucceededPacket *)p_packet->data;
-				printf("(location=%d place=%d)", p->startLocation, p->placeNumber);
-			}
-			break;
+//		case PACKET_COMMANDCS_GOTO_SUCCEEDED:
+//			{
+//				T_gotoSucceededPacket *p = (T_gotoSucceededPacket *)p_packet->data;
+//				printf("(location=%d place=%d)", p->startLocation, p->placeNumber);
+//			}
+//			break;
 		case PACKET_COMMAND_REQUEST_PLAYER_ID:
 			printf("()");
 			break;

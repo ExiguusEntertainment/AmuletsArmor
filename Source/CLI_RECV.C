@@ -131,19 +131,19 @@ T_void ClientReceiveMessagePacket(T_packetEitherShortOrLong *p_packet)
  *<!-----------------------------------------------------------------------*/
 T_void ClientReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket)
 {
-    T_gotoPlacePacket *p_packet ;
-
-    DebugRoutine("ClientReceiveGotoPlacePacket") ;
-puts("ClientReceiveGotoPlacePacket");
-
-    if (ClientIsAttemptingLogout() == FALSE)  {
-        /* Get a quick pointer. */
-        p_packet = (T_gotoPlacePacket *)p_gotoPacket->data ;
-
-        ClientForceGotoPlace(p_packet->placeNumber, p_packet->startLocation) ;
-    }
-
-    DebugEnd() ;
+//    T_gotoPlacePacket *p_packet ;
+//
+//    DebugRoutine("ClientReceiveGotoPlacePacket") ;
+//puts("ClientReceiveGotoPlacePacket");
+//
+//    if (ClientIsAttemptingLogout() == FALSE)  {
+//        /* Get a quick pointer. */
+//        p_packet = (T_gotoPlacePacket *)p_gotoPacket->data ;
+//
+//        ClientForceGotoPlace(p_packet->placeNumber, p_packet->startLocation) ;
+//    }
+//
+//    DebugEnd() ;
 }
 
 /* LES: 06/12/96 */

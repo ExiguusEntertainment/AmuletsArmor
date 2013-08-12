@@ -20,11 +20,8 @@ typedef enum {
     PACKET_COMMAND_GAME_START,              /*  8 */
     PACKET_COMMAND_SYNC,                    /*  9 */
     PACKET_COMMAND_MESSAGE,                 /* 10 */
-    PACKET_COMMANDSC_PLACE_START,           /* 16 */
-    PACKET_COMMANDCSC_GOTO_PLACE,           /* 17 */
-    PACKET_COMMANDCS_GOTO_SUCCEEDED,        /* 18 */
 
-    PACKET_COMMAND_UNKNOWN=19
+    PACKET_COMMAND_UNKNOWN=11
 } E_packetCommand ;
 
 typedef T_void *T_packetHandle ;

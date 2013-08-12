@@ -35,14 +35,6 @@ typedef enum {
     CLIENT_SAVE_CHAR_STATUS_UNKNOWN
 } E_clientSaveCharStatus;
 
-typedef T_byte8 E_clientConnectionType;
-#define CLIENT_CONNECTION_TYPE_SINGLE              0
-#define CLIENT_CONNECTION_TYPE_MODEM_CALL          1
-#define CLIENT_CONNECTION_TYPE_MODEM_ANSWER        2
-#define CLIENT_CONNECTION_TYPE_DIRECT_IPX          3
-#define CLIENT_CONNECTION_TYPE_MODEM_TO_SERVER     4
-#define CLIENT_CONNECTION_TYPE_UNKNOWN             5
-
 T_void ClientMain(T_void);
 
 T_void ClientLogin(T_void);
@@ -145,10 +137,6 @@ E_changePasswordStatus ClientGetChangePasswordStatus(T_void);
 T_void ClientSetChangePasswordStatus(E_changePasswordStatus status);
 
 E_Boolean ClientIsServerBased(T_void);
-
-E_clientConnectionType ClientGetConnectionType(T_void);
-
-T_void ClientSetConnectionType(E_clientConnectionType type);
 
 T_void ClientStartPlayer(T_word16 objectId, T_word16 loginId);
 
