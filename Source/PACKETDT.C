@@ -308,6 +308,7 @@ T_void PacketCloseReceiveFile(T_void)
 
 T_void PacketReceiveData(T_void *p_data, T_word16 size)
 {
+    void PacketPrint(void *aData, unsigned int aSize);
     DebugRoutine("ConnectReceiveData") ;
     DebugCheck(p_data != NULL) ;
 
@@ -325,6 +326,7 @@ T_void PacketReceiveData(T_void *p_data, T_word16 size)
 
     memcpy(&newPacket, p_data, size) ;
     newPacketFilled = TRUE ;
+    PacketPrint(p_data, size);
 
     DebugEnd() ;
 }
