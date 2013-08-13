@@ -8,8 +8,6 @@
 #include "GROUP.H"
 #include "VIEWFILE.H"
 
-#define MAX_SIZE_PASSWORD 12
-
 /* ------------------------------------------------------------------------ */
 
 #define SHORT_PACKET_LENGTH 10
@@ -147,7 +145,7 @@ typedef T_byte8 T_playerIDState ;
 #define PLAYER_ID_STATE_JOINING_GAME         2
 #define PLAYER_ID_STATE_UNKNOWN              3
 
-typedef struct {
+typedef struct { //46 bytes
     T_byte8 name[30] ;
     T_directTalkUniqueAddress uniqueAddress ;
     T_playerIDLocation location ;
