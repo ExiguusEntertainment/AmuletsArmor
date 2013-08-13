@@ -81,9 +81,12 @@ typedef T_byte8 E_statsCharacterStatus ;
 #define CHARACTER_STATUS_UNDEFINED           4
 #define CHARACTER_STATUS_UNKNOWN             5
 
+#define STATS_CHARACTER_NAME_MAX_LENGTH      30 // includes null at end
+#define MAX_SIZE_PASSWORD 12
+
 typedef struct
 {
-    T_byte8 name[30];
+    T_byte8 name[STATS_CHARACTER_NAME_MAX_LENGTH];
     T_byte8 password[MAX_SIZE_PASSWORD];
     E_statsCharacterStatus status;
     T_byte8 mail;
@@ -115,7 +118,7 @@ typedef struct  {
 /** AMT - 7/11/95 **/
 typedef struct _T_playerStats
 {
-   T_byte8             Name[30];
+   T_byte8             Name[STATS_CHARACTER_NAME_MAX_LENGTH];
    T_byte8             ClassName[30];
    T_byte8             ClassTitle[35];
 
