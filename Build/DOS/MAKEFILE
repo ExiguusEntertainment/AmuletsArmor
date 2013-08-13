@@ -84,14 +84,16 @@ OBJS2 = $(OBJPATH)\ticker.obj      &
         $(OBJPATH)\SOSEZ.OBJ       &
         $(OBJPATH)\PROFILE.OBJ     &
         $(OBJPATH)\mapanim.obj
-OBJS3 = $(OBJPATH)\packetdt.obj      &
+OBJS3 = $(OBJPATH)\packetdt.obj    &
         $(OBJPATH)\config.obj      &
         $(OBJPATH)\sqrtdat.obj     &
         $(OBJPATH)\player.obj      &
         $(OBJPATH)\object.obj      &
         $(OBJPATH)\script.obj      &
         $(OBJPATH)\escmenu.obj  &
-        $(OBJPATH)\syncmem.obj
+        $(OBJPATH)\syncmem.obj  &
+        $(OBJPATH)\packetpr.obj
+        
 
 OBJS4 = $(OBJPATH)\pics.obj $(OBJPATH)\server.obj $(OBJPATH)\stats.obj $(OBJPATH)\color.obj $(OBJPATH)\spells.obj $(OBJPATH)\button.obj $(OBJPATH)\objgen.obj
 OBJS5 = $(OBJPATH)\message.obj $(OBJPATH)\schedule.obj $(OBJPATH)\activity.obj $(OBJPATH)\client.obj $(OBJPATH)\overhead.obj $(OBJPATH)\dbllink.obj 
@@ -227,6 +229,8 @@ slider.obj     : slider.c slider.h
 support.obj    : support.c
 
 packetdt.obj     : packetdt.c packet.h
+
+packetpr.obj     : packetpr.c packet.h
 
 dispatch.obj   : dispatch.c dispatch.h travloc.h
 
