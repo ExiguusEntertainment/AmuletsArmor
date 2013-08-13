@@ -221,34 +221,10 @@ T_void ClientSendPlayerIDSelf(T_void)
 
     CmdQSendLongPacket(&packet, 600, 0, NULL);
 
+    // Also, put ourself on the list
     ClientReceivePlayerIDSelf((T_packetEitherShortOrLong *)&packet);
 
     DebugEnd();
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSendRequestPlayerID
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendRequestPlayerID asks that the given player tell what
- *  location and state the player is in.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendRequestPlayerID(T_void)
-{
-    T_packetShort packet ;
-	memset(&packet, 0, sizeof(packet));
-
-    DebugRoutine("ClientSendRequestPlayerID") ;
-
-    /* Send a short packet with this simple command to get a player id. */
-    packet.data[0] = PACKET_COMMAND_REQUEST_PLAYER_ID ;
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-	// Send out our ID too.
-    ClientReceiveRequestPlayerIDPacket((T_packetEitherShortOrLong *)&packet) ;
-
-    DebugEnd() ;
 }
 
 /*-------------------------------------------------------------------------*

@@ -30,7 +30,7 @@ FILE *G_packetFile ;
 
 typedef enum {
     PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSFUL
+    PACKET_COMMAND_TYPE_LOSSY
 } E_packetCommandType ;
 
 typedef T_cmdQActionRoutine *T_comQActionList ;
@@ -66,25 +66,24 @@ static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* 2 RETRANSMIT */
     NULL,                  /* 3 TOWN_UI_MESSAGE */
     NULL,                  /* 4 PLAYER_ID_SELF */
-    NULL,                  /* 5 REQUEST_PLAYER_ID */
-    NULL,                  /* 6 GAME_REQUEST_JOIN */
-    NULL,                  /* 7 GAME_RESPOND_JOIN */
-    NULL,                  /* 8 GAME_START */
-    NULL,                  /* 9 SYNC */
-    NULL,                  /* 10 MESSAGE */
+    NULL,                  /* 5 GAME_REQUEST_JOIN */
+    NULL,                  /* 6 GAME_RESPOND_JOIN */
+    NULL,                  /* 7 GAME_START */
+    NULL,                  /* 8 SYNC */
+    NULL,                  /* 9 MESSAGE */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
-    PACKET_COMMAND_TYPE_LOSSFUL,                /* 0 ACK */
+    PACKET_COMMAND_TYPE_LOSSY,                  /* 0 ACK */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 1 LOGIN */
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 2 RETRANSMIT */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 4 TOWN_UI_MESSAGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 5 PLAYER_ID_SELF */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 6 REQUEST_PLAYER_ID */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 7 GAME_REQUEST_JOIN */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 8 GAME START */
-    PACKET_COMMAND_TYPE_LOSSFUL,                /* 9 SYNC */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 10 MESSAGE */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 3 TOWN_UI_MESSAGE */
+    PACKET_COMMAND_TYPE_LOSSY,                  /* 4 PLAYER_ID_SELF */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 5 GAME_REQUEST_JOIN */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 6 GAME_RESPOND_JOIN */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 7 GAME START */
+    PACKET_COMMAND_TYPE_LOSSY,                  /* 8 SYNC */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 9 MESSAGE */
 } ;
 
 static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];
@@ -536,7 +535,7 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
                     } else {
                         /* No, do the normal action. */
 
-                        /** If this is a lossful packet, always call the **/
+                        /** If this is a lossy packet, always call the **/
                         /** callback routine. **/
                         packetOkay = TRUE;
 
@@ -567,7 +566,7 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
 
                             INDICATOR_LIGHT(268, INDICATOR_RED) ;
                         }
-                        /* IF the packet is a new packet or a lossful one, */
+                        /* IF the packet is a new packet or a lossy one, */
                         /* we'll go ahead and do the appropriate action */
                         /* on this side. */
 //printf("Considering %p [%d]\n", G_cmdQActionList[command], command) ;
@@ -674,10 +673,10 @@ T_void ICmdQUpdateSendForPort(T_void)
                         /* Was the packet actually sent? */
                         if (status == 0) {
                             /* Packet was sent correctly (as far as we know). */
-                            /* Is this a lossful or lossless command queue? */
+                            /* Is this a lossy or lossless command queue? */
                             if (G_CmdQTypeCommand[currentCmd]
-                                    == PACKET_COMMAND_TYPE_LOSSFUL) {
-                                /* Lossful.  Means we can go ahead and */
+                                    == PACKET_COMMAND_TYPE_LOSSY) {
+                                /* Lossy.  Means we can go ahead and */
                                 /* discard this packet. */
                                 ICmdQDiscardPacket(currentCmd);
                             } else {

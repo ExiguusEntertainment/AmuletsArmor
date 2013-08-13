@@ -14,14 +14,13 @@ typedef enum {
     PACKET_COMMAND_RETRANSMIT,              /*  2 */
     PACKET_COMMAND_TOWN_UI_MESSAGE,         /*  3 */
     PACKET_COMMAND_PLAYER_ID_SELF,          /*  4 */
-    PACKET_COMMAND_REQUEST_PLAYER_ID,       /*  5 */
-    PACKET_COMMAND_GAME_REQUEST_JOIN,       /*  6 */
-    PACKET_COMMAND_GAME_RESPOND_JOIN,       /*  7 */
-    PACKET_COMMAND_GAME_START,              /*  8 */
-    PACKET_COMMAND_SYNC,                    /*  9 */
-    PACKET_COMMAND_MESSAGE,                 /* 10 */
+    PACKET_COMMAND_GAME_REQUEST_JOIN,       /*  5 */
+    PACKET_COMMAND_GAME_RESPOND_JOIN,       /*  6 */
+    PACKET_COMMAND_GAME_START,              /*  7 */
+    PACKET_COMMAND_SYNC,                    /*  8 */
+    PACKET_COMMAND_MESSAGE,                 /*  9 */
 
-    PACKET_COMMAND_UNKNOWN=11
+    PACKET_COMMAND_UNKNOWN=10
 } E_packetCommand ;
 
 typedef T_void *T_packetHandle ;

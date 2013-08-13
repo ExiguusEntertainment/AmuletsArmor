@@ -196,29 +196,26 @@ T_void ClientReceiveTownUIMessagePacket(
     DebugEnd() ;
 }
 
-T_void ClientReceivePlayerIDSelf(
-           T_packetEitherShortOrLong *p_packet)
+/*-------------------------------------------------------------------------*
+ * Routine:  ClientReceivePlayerIDSelf
+ *-------------------------------------------------------------------------*/
+/**
+ *  A player has sent a PLAYER_ID_SELF packet.  Update the state of that
+ *  player.
+ *
+ *<!-----------------------------------------------------------------------*/
+T_void ClientReceivePlayerIDSelf(T_packetEitherShortOrLong *p_packet)
 {
-    T_playerIDSelfPacket *p_self ;
+    T_playerIDSelfPacket *p_self;
 
-    DebugRoutine("ClientReceivePlayerIDSelf") ;
+    DebugRoutine("ClientReceivePlayerIDSelf");
 
-    p_self = (T_playerIDSelfPacket *)(p_packet->data) ;
+    p_self = (T_playerIDSelfPacket *)(p_packet->data);
 
     /* Update somebody. */
-    PeopleHereUpdatePlayer(&p_self->id) ;
+    PeopleHereUpdatePlayer(&p_self->id);
 
-    DebugEnd() ;
-}
-
-T_void ClientReceiveRequestPlayerIDPacket(T_packetEitherShortOrLong *p_packet)
-{
-    DebugRoutine("ClientReceiveRequestPlayerIDPacket") ;
-
-    /* Respond by sending a player id. */
-    ClientSendPlayerIDSelf() ;
-
-    DebugEnd() ;
+    DebugEnd();
 }
 
 T_void ClientReceiveGameRequestJoinPacket(

@@ -19,8 +19,6 @@ T_void ClientRequestRetransmit(
 
 T_void ClientSendTownUIAddMessage(T_byte8 *p_msg);
 
-T_void ClientSendRequestPlayerID(T_void);
-
 T_void ClientSendPlayerIDSelf(T_void);
 
 T_void ClientSendRespondToJoinPacket(

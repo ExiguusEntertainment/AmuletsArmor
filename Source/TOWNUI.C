@@ -30,8 +30,11 @@
 #include "PROMPT.H"
 #include "SOUND.H"
 #include "STATS.H"
+#include "TICKER.H"
 #include "TOWNUI.H"
 #include "TXTBOX.H"
+
+#define PLAYER_ID_INTERVAL      (TICKS_PER_SECOND * 2) // once every 2 seconds
 
 #define TOWN_NUM_MESSAGES 15
 #define TOWN_MESSAGE_SIZE 60
@@ -63,6 +66,8 @@ static T_doubleLinkList G_chatList = DOUBLE_LINK_LIST_BAD;
 static T_keyboardEventHandler G_oldKeyHandler = NULL;
 static E_Boolean G_isOnePlayer;
 static E_Boolean G_adventureComplete = FALSE;
+static T_word32 G_timeIDLastUpdated = 0;
+
 /* internal routine prototypes */
 static T_void TownUIUpdateGraphics(T_void);
 static T_void TownUIGotoPlace(T_buttonID buttonID);
@@ -295,12 +300,27 @@ T_void TownUIStart(T_word32 formNum)
      #endif
      */
 
+    // Let everyone know we are here once every so much time
+    // If this is not sent enough, we'll be dropped from the list
+    ClientSendPlayerIDSelf();
+    G_timeIDLastUpdated = TickerGet();
+
     DebugEnd();
 }
 
 T_void TownUIUpdate(T_void)
 {
+    T_word32 time;
     DebugRoutine("TownUIUpdate");
+
+    // For players sitting in the town ui, send out an player ID
+    // every so often.  If the list is not updated, players will be
+    // dropped.
+    time = TickerGet();
+    if ((time - G_timeIDLastUpdated) >= PLAYER_ID_INTERVAL) {
+        G_timeIDLastUpdated += PLAYER_ID_INTERVAL;
+        ClientSendPlayerIDSelf();
+    }
 
     DebugEnd();
 }
@@ -682,7 +702,7 @@ static T_void TownUIUpdateQuestInfo(T_void)
     INIFileGetString(idata, "main", "nummaps", stmp, 4096);
     nummaps = atoi(stmp);
     sprintf(stmp2, "^007     Number of maps :\t^009%d\r", nummaps);
-    sprintf(stmp3, "%s%s", stmp3, stmp2);
+    strcat(stmp3, stmp2);
     mapNum = StatsFindPastPlace(G_firstAdventureMap);
 
     if (mapNum == 0) {

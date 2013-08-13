@@ -312,12 +312,11 @@ T_void ClientInit(T_void)
       ClientSyncReceiveRetransmitPacket,          /* 2 RETRANSMIT */
       ClientReceiveTownUIMessagePacket,           /* 3 TOWN_UI_MESSAGE */
       ClientReceivePlayerIDSelf,                  /* 4 PLAYER_ID_SELF */
-      ClientReceiveRequestPlayerIDPacket,         /* 5 REQUEST_PLAYER_ID */
-      ClientReceiveGameRequestJoinPacket,         /* 6 GAME_REQUEST_JOIN */
-      ClientReceiveGameRespondJoinPacket,         /* 7 GAME_RESPOND_JOIN */
-      ClientReceiveGameStartPacket,               /* 8 GAME_START */
-      ClientReceiveSyncPacket,                    /* 9 SYNC */
-      ClientReceiveMessagePacket,                 /* 10 MESSAGE */
+      ClientReceiveGameRequestJoinPacket,         /* 5 GAME_REQUEST_JOIN */
+      ClientReceiveGameRespondJoinPacket,         /* 6 GAME_RESPOND_JOIN */
+      ClientReceiveGameStartPacket,               /* 7 GAME_START */
+      ClientReceiveSyncPacket,                    /* 8 SYNC */
+      ClientReceiveMessagePacket,                 /* 9 MESSAGE */
    };
 
     DebugRoutine("ClientInit") ;
