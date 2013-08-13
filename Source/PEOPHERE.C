@@ -40,7 +40,7 @@ static T_void ISetupGame(T_gameGroupID groupID) ;
 #define MAX_PLAYERS_PER_GAME  4
 static T_word16 G_numPeopleInGame = 0 ;
 static T_directTalkUniqueAddress G_peopleInGame[MAX_PLAYERS_PER_GAME] ;
-static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][60] ;
+static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENGTH] ;
 
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereInitialize
@@ -103,9 +103,6 @@ T_void PeopleHereReset(T_void)
     /* Start by clearing the list. */
     IClearList() ;
 
-    /* Now request for everyone around to talk to you. */
-    ClientSendRequestPlayerID() ;
-
     DebugEnd() ;
 }
 
@@ -149,7 +146,8 @@ T_word16 PeopleHereGetNumInGame(T_gameGroupID groupID)
  * Routine:  PeopleHereFindPlayerGame
  *-------------------------------------------------------------------------*/
 /**
- *  Search to find a player in a game.
+ *  Search to find a player in a game.  Search the player list for a
+ *  given name and return its group id (if any).
  *
  *  @param p_name -- Name to find
  *  @param p_groupID -- ID of player
@@ -252,7 +250,7 @@ static T_playerIDSelf *IFindByName(T_byte8 *p_name)
  * Routine:  ICreatePlayerID
  *-------------------------------------------------------------------------*/
 /**
- *  ICreatePlayerID creates a new blank form for a given person
+ *  ICreatePlayerID creates a new blank entry for a given person
  *
  *  @param p_name -- Name to search by
  *
@@ -345,39 +343,22 @@ T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
     DebugEnd() ;
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetUniqueGroupID
+ *-------------------------------------------------------------------------*/
+/**
+ *  Get a unique group ID for us.  We have one, it just so happens to
+ *  equal our unique address.
+ *
+ *  @return Game group ID for this player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_gameGroupID PeopleHereGetUniqueGroupID(T_void)
 {
-#if 0
-    T_byte8 found[256] ;
-    T_doubleLinkListElement element ;
-    T_playerIDSelf *p_check ;
-    T_word16 i ;
-#endif
     T_gameGroupID groupID ;
 
     DebugRoutine("PeopleHereGetUniqueGroupID") ;
 
-#if 0
-    /* Clear our list of found ids */
-    memset(found, 0, sizeof(found)) ;
-
-    /* 0 is not allowed. */
-    found[0] = 1 ;
-
-    /* Put 1's into the game slots that are taken. */
-    element = DoubleLinkListGetFirst(G_peopleList) ;
-    while (element != DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-        p_check = (T_playerIDSelf *)DoubleLinkListElementGetData(element) ;
-        found[p_check->groupID] = 1 ;
-        element = DoubleLinkListElementGetNext(element) ;
-    }
-
-    /* Generate an appropriate number. */
-    /* Stop as soon as we find a blank slot. */
-    for (i=1; i<255; i++)
-        if (found[i] == 0)
-            break ;
-#endif
     /* Use our address as the unique address of the game. */
     DirectTalkGetUniqueAddress(&groupID) ;
 
@@ -386,26 +367,72 @@ T_gameGroupID PeopleHereGetUniqueGroupID(T_void)
     return groupID ;
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereSetOurState
+ *-------------------------------------------------------------------------*/
+/**
+ *  Accessor function to change our current state.
+ *
+ *  @param [in] state -- Our new game state (joining, creating, etc.)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereSetOurState(T_playerIDState state)
 {
     G_ourState = state ;
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereSetOurState
+ *-------------------------------------------------------------------------*/
+/**
+ *  Accessor function to return our current state.
+ *
+ *  @return Our current game state (joining, creating, etc.)
+ *
+ *<!-----------------------------------------------------------------------*/
 T_playerIDState PeopleHereGetOurState(T_void)
 {
     return G_ourState ;
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereSetOurAdventure
+ *-------------------------------------------------------------------------*/
+/**
+ *  Accessor function set the adventure ID.
+ *
+ *  @param [in] adventure -- 16-bit adventure id.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereSetOurAdventure(T_word16 adventure)
 {
     G_ourAdventure = adventure ;
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetOurAdventure
+ *-------------------------------------------------------------------------*/
+/**
+ *  Accessor function to get the adventure ID.
+ *
+ *  @return Current 16-bit adventure id.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_word16 PeopleHereGetOurAdventure(T_void)
 {
     return G_ourAdventure ;
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereRequestJoin
+ *-------------------------------------------------------------------------*/
+/**
+ *  Someone is requesting to join our game that we are creating!  Do
+ *  we have room?
+ *
+ *  @return Current 16-bit adventure id.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereRequestJoin(
         T_directTalkUniqueAddress uniqueAddress,
         T_gameGroupID groupID,
