@@ -6,7 +6,7 @@
 
 #include "GENERAL.H"
 
-#define MAX_COMM_PORTS 64
+#define MAX_COMM_PORTS 1
 
 typedef enum {
     BAUD_RATE_2400,

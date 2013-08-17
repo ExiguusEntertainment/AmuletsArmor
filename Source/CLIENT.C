@@ -2919,9 +2919,6 @@ T_void ClientForceGotoPlace(
             CmdQUpdateAllSends() ;
         } while (TickerGet() <= timeToUpdate) ;
 
-        CmdQSetActivePortNum(0) ;
-//        CommClearPort() ;
-
         previousLocation = ClientGetCurrentPlace() ;
         ClientSetCurrentPlace(placeNumber) ;
         ClientSetCurrentStartLocation(startLocation) ;

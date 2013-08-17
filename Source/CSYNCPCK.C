@@ -1287,14 +1287,6 @@ T_void ClientSyncUpdate(T_void)
 //            lastTime += 70 ;
             lastTime = time ;
 //puts("Sending resend") ;
-/*
-            CmdQSetActivePortNum(0) ;
-            CmdQSendPacket(
-               (T_packetEitherShortOrLong *)&packet,
-               140,
-               0,
-               NULL) ;
-*/
             /* Resend packet to all our friends. */
             for (i=0; i<G_numPlayers; i++)  {
                 if ((ObjectGetServerId(PlayerGetObject())-9000) != i)  {
@@ -1617,9 +1609,6 @@ T_void ClientSyncPacketProcess(T_syncronizePacket *p_sync)
                 /* But don't send another if we are still resyncing. */
                 if ((TickerGet() - G_playerPacketResyncTime[player]) >
                        ((T_word32)TICKS_PER_SECOND/4))  {
-//                    CmdQSetActivePortNum(0) ;
-//    printf("Requesting retrans at %d\n", G_playerLastSyncNumArray[player]+1) ;
-//    MessagePrintf("Requesting retrans at %d", G_playerLastSyncNumArray[player]+1) ;
                     /* Resend packet to all our friends. */
 //                    for (i=0; i<G_numPlayers; i++)  {
                         if (G_playerLeft[player] == FALSE)  {

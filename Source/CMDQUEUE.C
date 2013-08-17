@@ -38,6 +38,7 @@ typedef T_cmdQActionRoutine *T_comQActionList ;
 typedef struct T_cmdQPacketStructTag {
     struct T_cmdQPacketStructTag *prev ;
     struct T_cmdQPacketStructTag *next ;
+    T_directTalkUniqueAddress destination;
     T_word32 timeToRetry ;
     T_word32 extraData ;
     T_word16 retryTime ;
@@ -54,8 +55,6 @@ typedef struct {
 } T_cmdQStruct ;
 
 static E_Boolean G_init = FALSE ;
-
-static T_word16 G_activePort = 0xFFFF ;
 
 static T_cmdQStruct *G_activeCmdQList = NULL ;
 
@@ -86,17 +85,7 @@ static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
     PACKET_COMMAND_TYPE_LOSSLESS,               /* 9 MESSAGE */
 } ;
 
-static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];
-
-typedef struct {
-    T_word32 time ;
-    T_word32 throughput ;
-    T_byte8 commandPos ;
-} T_cmdQueueInfo ;
-
-static T_cmdQueueInfo G_cmdQueueInfo[MAX_COMM_PORTS];
-
-static T_cmdQueueInfo *P_activeQueueInfo = NULL ;
+static T_cmdQStruct G_cmdQueue[PACKET_COMMAND_MAX];
 
 /** CMDQUEUE now controls the packet ID's. **/
 static T_word32 G_nextPacketId = 0;
@@ -143,22 +132,12 @@ T_void CmdQInitialize(T_void)
 #endif
 
     /* Clear some of those global variables. */
-    memset(G_cmdQueues, 0, sizeof(G_cmdQueues)) ;
-    memset(G_cmdQueueInfo, 0, sizeof (G_cmdQueueInfo)) ;
+    memset(G_cmdQueue, 0, sizeof(G_cmdQueue)) ;
 
-#if 0
-    /* Let's see how many ports there are. */
-    numPorts = CommGetNumberPorts() ;
+    // Use port 0 (the only port)
 
-    /* Go through to each port and set it up. */
-    for (port=0; port<numPorts; port++)  {
-        /* Set the active port. */
-        CommSetActivePortN(port) ;
-    }
-#endif
-
-    /* Make the active port an illegal port. */
-    G_activePort = 0xFFFF ;
+    /* Declare which list of command queues we want active (for this port). */
+    G_activeCmdQList = &G_cmdQueue ;
 
     DebugEnd() ;
 }
@@ -206,59 +185,6 @@ T_void CmdQFinish(T_void)
 #endif
 
     DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  CmdQSetActivePortNum
- *-------------------------------------------------------------------------*/
-/**
- *  CmdQSetActivePortNum sets up the Cmd Queue module for the given
- *  port (and makes the given port the active communications port).
- *
- *  @param num -- Number of port to make active.
- *
- *<!-----------------------------------------------------------------------*/
-T_void CmdQSetActivePortNum(T_word16 num)
-{
-    DebugRoutine("CmdQSetActivePortNum") ;
-    DebugCheck(G_init == TRUE) ;
-
-    /* Go ahead and set the active port. */
-//    CommSetActivePortN(num) ;
-    G_activePort = num ;
-
-    /* Declare which list of command queues we want active (for this port). */
-    G_activeCmdQList = &G_cmdQueues[num][0] ;
-
-    /* Set a poiner to that queue's overall information. */
-    P_activeQueueInfo = &G_cmdQueueInfo[num] ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  CmdQGetActivePortNum
- *-------------------------------------------------------------------------*/
-/**
- *  CmdQGetActivePortNum returns the number of the active port being
- *  used.
- *
- *  @return Number of port.
- *
- *<!-----------------------------------------------------------------------*/
-T_word16 CmdQGetActivePortNum(T_void)
-{
-    T_word16 portNum ;
-
-    DebugRoutine("CmdQGetActivePortNum") ;
-    DebugCheck(G_init == TRUE) ;
-
-    /* Just get it. */
-    portNum = G_activePort ;
-
-    DebugEnd() ;
-
-    return portNum ;
 }
 
 /*-------------------------------------------------------------------------*
@@ -420,21 +346,7 @@ T_void CmdQUpdateAllSends(T_void)
 {
     DebugRoutine("CmdQUpdateAllSends") ;
 
-#if 0
-    /* Let's see how many ports there are. */
-    numPorts = CommGetNumberPorts() ;
-
-    /* Go through to each port looking for incoming data. */
-    for (port=0; port<numPorts; port++)  {
-        /* Set the active port (and any additional information). */
-        CmdQSetActivePortNum(port) ;
-
-        ICmdQUpdateSendForPort() ;
-    }
-#else
-    CmdQSetActivePortNum(0) ;
     ICmdQUpdateSendForPort() ;
-#endif
 
     DebugEnd() ;
 }
@@ -457,7 +369,6 @@ T_void CmdQUpdateAllReceives(T_void)
     T_word32 packetId ;
     T_packetShort ackPacket ;
     E_Boolean packetOkay;
-    T_word16 port ;
     T_word16 numPorts ;
 
     DebugRoutine("CmdQUpdateAllReceives") ;
@@ -467,18 +378,14 @@ T_void CmdQUpdateAllReceives(T_void)
     /* Let's see how many ports there are. */
     DebugCheckValidStack() ;
 //    numPorts = CommGetNumberPorts() ;
-    numPorts = 1 ;
     DebugCheckValidStack() ;
 
-    /* Go through to each port looking for incoming data. */
-    for (port=0; port<numPorts; port++)  {
         /* Set the active port (and any additional information). */
         DebugCheckValidStack() ;
 
         /* Hunting for a bug... */
         /* ... . */
 
-        CmdQSetActivePortNum(port) ;
         DebugCheckValidStack() ;
 
         /* Loop while there are packets to get. */
@@ -589,7 +496,6 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
             }
             DebugCheckValidStack() ;
         } while (status == 0) ;
-    }
     DebugEnd() ;
 
     INDICATOR_LIGHT(260, INDICATOR_RED) ;
@@ -725,8 +631,6 @@ T_void ICmdQUpdateSendForPort(T_void)
         } while ((bytesused < maxOutput) && (sentAny == TRUE));
     }
 
-    P_activeQueueInfo->commandPos = currentCmd;
-
     DebugEnd();
 }
 
@@ -852,17 +756,7 @@ T_void CmdQClearAllPorts(T_void)
     T_word16 port ;
     DebugRoutine("CmdQClearAllPorts") ;
 
-    /* Let's see how many ports there are. */
-//    numPorts = CommGetNumberPorts() ;
-    numPorts = 1 ;
-
-    /* Go through to each port and set it up. */
-    for (port=0; port<numPorts; port++)  {
-        /* Set the active port. */
-        CmdQSetActivePortNum(port) ;
-
-        ICmdQClearPort() ;
-    }
+    ICmdQClearPort() ;
 
     DebugEnd() ;
 }
@@ -942,8 +836,6 @@ static T_void ICmdQClearPort(T_void)
  *  NOTE: 
  *  NEVER PASS AN ACK PACKET TO THIS ROUTINE.  It does not properly
  *  work with them.
- *  Be sure to make a call to CmdQSetActivePortNum or else this routine
- *  will be unpredictable.
  *
  *  @param p_packet -- Packet being forced in
  *

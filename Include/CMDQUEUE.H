@@ -38,10 +38,6 @@ T_void CmdQInitialize(T_void) ;
 
 T_void CmdQFinish(T_void) ;
 
-T_void CmdQSetActivePortNum(T_word16 num) ;
-
-T_word16 CmdQGetActivePortNum(T_void) ;
-
 T_void CmdQSendShortPacket(
             T_packetShort *p_packet,
             T_word16 retryTime,
