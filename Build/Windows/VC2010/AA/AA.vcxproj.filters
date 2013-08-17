@@ -146,9 +146,6 @@
     <ClCompile Include="..\..\..\..\Source\LIGHT.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\LL_COMM.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\LOOK.C">
       <Filter>Source Files</Filter>
     </ClCompile>

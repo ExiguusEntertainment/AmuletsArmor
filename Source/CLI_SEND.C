@@ -311,7 +311,7 @@ T_void ClientSendGameStartPacket(
     T_packetLong packet ;
     T_gameStartPacket *p_start ;
 
-    DebugRoutine("ClientSendRequestJoin") ;
+    DebugRoutine("ClientSendGameStartPacket") ;
 
     p_start = (T_gameStartPacket *)(packet.data) ;
 

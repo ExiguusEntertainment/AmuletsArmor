@@ -18,7 +18,6 @@
  * @{
  *
  *<!-----------------------------------------------------------------------*/
-#include "COMM.H"
 #include "CMDQUEUE.H"
 #include "GENERAL.H"
 #include "MEMORY.H"
@@ -137,7 +136,7 @@ T_void CmdQInitialize(T_void)
     // Use port 0 (the only port)
 
     /* Declare which list of command queues we want active (for this port). */
-    G_activeCmdQList = &G_cmdQueue ;
+    G_activeCmdQList = &G_cmdQueue[0] ;
 
     DebugEnd() ;
 }
@@ -369,7 +368,6 @@ T_void CmdQUpdateAllReceives(T_void)
     T_word32 packetId ;
     T_packetShort ackPacket ;
     E_Boolean packetOkay;
-    T_word16 numPorts ;
 
     DebugRoutine("CmdQUpdateAllReceives") ;
     INDICATOR_LIGHT(260, INDICATOR_GREEN) ;
@@ -752,8 +750,6 @@ T_void CmdQSendPacket(
  *<!-----------------------------------------------------------------------*/
 T_void CmdQClearAllPorts(T_void)
 {
-    T_word16 numPorts ;
-    T_word16 port ;
     DebugRoutine("CmdQClearAllPorts") ;
 
     ICmdQClearPort() ;

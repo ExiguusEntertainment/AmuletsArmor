@@ -175,7 +175,6 @@
     <ClCompile Include="..\..\..\..\Source\KEYBOARD.C" />
     <ClCompile Include="..\..\..\..\Source\KEYMAP.C" />
     <ClCompile Include="..\..\..\..\Source\LIGHT.C" />
-    <ClCompile Include="..\..\..\..\Source\LL_COMM.C" />
     <ClCompile Include="..\..\..\..\Source\LOOK.C" />
     <ClCompile Include="..\..\..\..\Source\MAINUI.C" />
     <ClCompile Include="..\..\..\..\Source\MAP.C" />
