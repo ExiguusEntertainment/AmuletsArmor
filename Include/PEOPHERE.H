@@ -46,6 +46,7 @@ T_void PeopleHereRespondToJoin(
            T_gameGroupID groupID,
            T_word16 adventure,
            E_respondJoin response);
+T_word16 PeopleHereGetNumInGroupGame(void);
 #endif
 
 /****************************************************************************/

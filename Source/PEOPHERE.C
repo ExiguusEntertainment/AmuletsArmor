@@ -22,25 +22,49 @@
 #include "TOWNUI.H"
 
 /* List of T_playerIDSelf structures */
-static T_doubleLinkList G_peopleList = DOUBLE_LINK_LIST_BAD ;
-
-static E_Boolean G_init = FALSE ;
-
-static T_playerIDState G_ourState = PLAYER_ID_STATE_NONE ;
-
-static T_word16 G_ourAdventure = 0 ;
-
-/* Internal prototypes: */
-static T_void IClearList(T_void) ;
-static T_playerIDSelf *IFindByName(T_byte8 *p_name) ;
-static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID) ;
-static T_playerIDLocation IGetOurLocation(T_void) ;
-static T_void ISetupGame(T_gameGroupID groupID) ;
-
+//static T_doubleLinkList G_peopleList = DOUBLE_LINK_LIST_BAD ;
+//
+//
+//
+//
+///* Internal prototypes: */
+//static T_void IClearList(T_void) ;
+//static T_playerIDSelf *IFindByName(T_byte8 *p_name) ;
+//static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID) ;
+//static T_playerIDLocation IGetOurLocation(T_void) ;
+//static T_void ISetupGame(T_gameGroupID groupID) ;
+//
+/*-------------------------------------------------------------------------*
+ * Constants:
+ *-------------------------------------------------------------------------*/
+#define MAX_PLAYERS_IN_WORLD  256
 #define MAX_PLAYERS_PER_GAME  4
-static T_word16 G_numPeopleInGame = 0 ;
-static T_directTalkUniqueAddress G_peopleInGame[MAX_PLAYERS_PER_GAME] ;
-static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENGTH] ;
+
+/*-------------------------------------------------------------------------*
+ * Globals:
+ *-------------------------------------------------------------------------*/
+//! What are the people in the town/guild?
+static T_playerIDSelf G_peopleList[MAX_PLAYERS_IN_WORLD];
+//! Have we initialized?
+static E_Boolean G_init = FALSE;
+//! What state are we in (relative to people in the groups
+static T_playerIDState G_ourState = PLAYER_ID_STATE_NONE;
+//! Which adventure id is being planned for this game?
+static T_word16 G_ourAdventure = 0;
+//! Number of players in the current game group
+static T_word16 G_numPeopleInGame = 0;
+//! Unique address of each player in the current game
+static T_directTalkUniqueAddress G_peopleNetworkIDInGame[MAX_PLAYERS_PER_GAME];
+//! Names of the players in the current synchronized game
+static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENGTH];
+
+/*-------------------------------------------------------------------------*
+ * Prototypes:
+ *-------------------------------------------------------------------------*/
+static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID);
+static T_playerIDSelf *IFindByName(T_byte8 *p_name);
+static T_playerIDLocation IGetOurLocation(T_void);
+static T_void ISetupGame(T_gameGroupID groupID);
 
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereInitialize
@@ -51,20 +75,20 @@ static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENG
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereInitialize(T_void)
 {
-    DebugRoutine("PeopleHereInitialize") ;
-    DebugCheck(G_init == FALSE) ;
+    DebugRoutine("PeopleHereInitialize");
+    DebugCheck(G_init == FALSE);
 
-    G_init = TRUE ;
+    G_init = TRUE;
 
-    /* Create a list of playerIDSelf structures. */
-    G_peopleList = DoubleLinkListCreate() ;
+    /* Clear list of playerIDSelf structures. */
+    memset(G_peopleList, 0, sizeof(G_peopleList));
+    G_ourState = PLAYER_ID_STATE_NONE;
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
-
 /*-------------------------------------------------------------------------*
- * Routine:  People Here finish
+ * Routine:  PeopleHereFinish
  *-------------------------------------------------------------------------*/
 /**
  *  People here finish cleans up the people here module by removing
@@ -73,20 +97,17 @@ T_void PeopleHereInitialize(T_void)
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereFinish(T_void)
 {
-    DebugRoutine("PeopleHereFinish") ;
-    DebugCheck(G_init == TRUE) ;
+    DebugRoutine("PeopleHereFinish");
+    DebugCheck(G_init == TRUE);
 
-    /* Empty the list. */
-    IClearList() ;
+    /* Clear the list */
+    memset(G_peopleList, 0, sizeof(G_peopleList));
 
-    /* Get rid of the list itself. */
-    DoubleLinkListDestroy(G_peopleList) ;
+    G_init = FALSE;
+    G_ourState = PLAYER_ID_STATE_NONE;
 
-    G_init = FALSE ;
-
-    DebugEnd() ;
+    DebugEnd();
 }
-
 
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereReset
@@ -97,15 +118,15 @@ T_void PeopleHereFinish(T_void)
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereReset(T_void)
 {
-    DebugRoutine("PeopleHereReset") ;
-    DebugCheck(G_init == TRUE) ;
+    DebugRoutine("PeopleHereReset");
+    DebugCheck(G_init == TRUE);
 
-    /* Start by clearing the list. */
-    IClearList() ;
+    /* Clear the list */
+    memset(G_peopleList, 0, sizeof(G_peopleList));
+    G_ourState = PLAYER_ID_STATE_NONE;
 
-    DebugEnd() ;
+    DebugEnd();
 }
-
 
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereGetNumInGame
@@ -120,27 +141,22 @@ T_void PeopleHereReset(T_void)
  *<!-----------------------------------------------------------------------*/
 T_word16 PeopleHereGetNumInGame(T_gameGroupID groupID)
 {
-    T_doubleLinkListElement element ;
-    T_playerIDSelf *p_check ;
-    T_word16 numFound = 0 ;
+    T_word16 numFound = 0;
+    T_word16 i;
+    T_playerIDSelf *p = G_peopleList;
 
-    DebugRoutine("PeopleHereGetNumInGame") ;
+    DebugRoutine("PeopleHereGetNumInGame");
 
-    element = DoubleLinkListGetFirst(G_peopleList) ;
-    while (element != DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-        p_check = (T_playerIDSelf *)DoubleLinkListElementGetData(element) ;
-
-        if (CompareGameGroupIDs(groupID, p_check->groupID))
-            numFound++ ;
-
-        element = DoubleLinkListElementGetNext(element) ;
+    for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
+        if ((p->name[0]) && (CompareGameGroupIDs(groupID, p->groupID))) {
+            numFound++;
+        }
     }
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return numFound ;
+    return numFound;
 }
-
 
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereFindPlayerGame
@@ -155,57 +171,25 @@ T_word16 PeopleHereGetNumInGame(T_gameGroupID groupID)
  *  @return TRUE if found, else FALSE.
  *
  *<!-----------------------------------------------------------------------*/
-E_Boolean PeopleHereFindPlayerGame(
-              T_byte8 *p_name,
-              T_gameGroupID *p_groupID)
+E_Boolean PeopleHereFindPlayerGame(T_byte8 *p_name, T_gameGroupID *p_groupID)
 {
-    T_playerIDSelf *p_find ;
-    E_Boolean found = FALSE ;
+    T_playerIDSelf *p_find;
+    E_Boolean found = FALSE;
 
-    DebugRoutine("PeopleHereFindPlayerGame") ;
+    DebugRoutine("PeopleHereFindPlayerGame");
 
     /* Search for the name */
-    p_find = IFindByName(p_name) ;
+    p_find = IFindByName(p_name);
 
     /* If the name is found, give it a group id. */
-    if (p_find)  {
-        *p_groupID = p_find->groupID ;
-        found = TRUE ;
+    if (p_find) {
+        *p_groupID = p_find->groupID;
+        found = TRUE;
     }
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return found ;
-}
-
-
-/*-------------------------------------------------------------------------*
- * Routine:  IClearList
- *-------------------------------------------------------------------------*/
-/**
- *  IClearList frees and removes all nodes in the double link list of
- *  T_playerIDSelf structures.
- *
- *<!-----------------------------------------------------------------------*/
-static T_void IClearList(T_void)
-{
-    T_doubleLinkListElement element ;
-    T_doubleLinkListElement nextElement ;
-
-    DebugRoutine("IClearList") ;
-    DebugCheck(G_peopleList != DOUBLE_LINK_LIST_BAD) ;
-
-    /* Free all the elements in the list. */
-    while ((element = DoubleLinkListGetFirst(G_peopleList)) !=
-                 DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-        nextElement = DoubleLinkListElementGetNext(element) ;
-
-        /* Remove and free the element from the list. */
-        MemFree(DoubleLinkListElementGetData(element)) ;
-        DoubleLinkListRemoveElement(element) ;
-    }
-
-    DebugEnd() ;
+    return found;
 }
 
 /*-------------------------------------------------------------------------*
@@ -222,28 +206,22 @@ static T_void IClearList(T_void)
  *<!-----------------------------------------------------------------------*/
 static T_playerIDSelf *IFindByName(T_byte8 *p_name)
 {
-    T_doubleLinkListElement element ;
-    T_playerIDSelf *p_found = NULL ;
-    T_playerIDSelf *p_check ;
+    T_playerIDSelf *p_found = NULL;
+    T_word16 i;
+    T_playerIDSelf *p = G_peopleList;
 
-    DebugRoutine("IFindByName") ;
-    DebugCheck(G_peopleList != DOUBLE_LINK_LIST_BAD) ;
+    DebugRoutine("IFindByName");
 
-    /* Go through the current list and look for a match */
-    element = DoubleLinkListGetFirst(G_peopleList) ;
-    while (element != DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-        p_check = (T_playerIDSelf *)DoubleLinkListElementGetData(element) ;
-        if (strcmp(p_check->name, p_name) == 0)  {
-            p_found = p_check ;
-            break ;
+    for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
+        if ((p->name[0]) && (strcmp(p_name, p->name)==0)) {
+            p_found = p;
+            break;
         }
-
-        element = DoubleLinkListElementGetNext(element) ;
     }
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return p_found ;
+    return p_found;
 }
 
 /*-------------------------------------------------------------------------*
@@ -252,36 +230,36 @@ static T_playerIDSelf *IFindByName(T_byte8 *p_name)
 /**
  *  ICreatePlayerID creates a new blank entry for a given person
  *
- *  @param p_name -- Name to search by
+ *  @param p_playerID -- ID of new player to add
  *
  *  @return Found player ID pointer or NULL
  *
  *<!-----------------------------------------------------------------------*/
 static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID)
 {
-    T_playerIDSelf *p_new = NULL ;
+    T_playerIDSelf *p_new = NULL;
+    T_word16 i;
+    T_playerIDSelf *p = G_peopleList;
 
-    DebugRoutine("ICreatePlayerID") ;
+    DebugRoutine("ICreatePlayerID");
 
-    /* Create a new node. */
-    p_new = MemAlloc(sizeof(T_playerIDSelf)) ;
-    DebugCheck(p_new != NULL) ;
-    if (p_new)  {
-        /* Fill out the new element with the defaults. */
-        memset(p_new, 0, sizeof(T_playerIDSelf)) ;
-        strncpy(p_new->name, p_playerID->name, 30) ;
-        p_new->uniqueAddress = p_playerID->uniqueAddress ;
-
-        /* Add to double link list, but make sure everything is ok. */
-        if (DoubleLinkListAddElementAtEnd(G_peopleList, p_new) == DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-            MemFree(p_new) ;
-            p_new = NULL ;
+    // Find a slot with no name
+    for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
+        if (p->name[0] == '\0') {
+            memcpy(p, p_playerID, sizeof(*p));
+            
+            // We want the transition from nowhere to somewhere, 
+            // start at nowhere for a newly created character
+            p->location = PLAYER_ID_LOCATION_NOWHERE;
+            p->state = PLAYER_ID_STATE_NONE;
+            p_new = p;
+            break;
         }
     }
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return p_new ;
+    return p_new;
 }
 
 /*-------------------------------------------------------------------------*
@@ -295,28 +273,28 @@ static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID)
  *<!-----------------------------------------------------------------------*/
 static T_playerIDLocation IGetOurLocation(T_void)
 {
-    T_playerIDLocation location = PLAYER_ID_LOCATION_NOWHERE ;
-    T_word16 place ;
+    T_playerIDLocation location = PLAYER_ID_LOCATION_NOWHERE;
+    T_word16 place;
 
-    DebugRoutine("IGetOurLocation") ;
+    DebugRoutine("IGetOurLocation");
 
-    place = ClientGetCurrentPlace() ;
+    place = ClientGetCurrentPlace();
 
-    switch(place)  {
-        case HARDFORM_GOTO_PLACE_OFFSET+HARD_FORM_GUILD:
-            location = PLAYER_ID_LOCATION_GUILD ;
-            break ;
-        case HARDFORM_GOTO_PLACE_OFFSET+HARD_FORM_TOWN:
-            location = PLAYER_ID_LOCATION_TOWN ;
-            break ;
+    switch (place) {
+        case HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_GUILD:
+            location = PLAYER_ID_LOCATION_GUILD;
+            break;
+        case HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN:
+            location = PLAYER_ID_LOCATION_TOWN;
+            break;
     }
 
     if ((place < HARDFORM_GOTO_PLACE_OFFSET) && (place != 0))
-        location = PLAYER_ID_LOCATION_GAME ;
+        location = PLAYER_ID_LOCATION_GAME;
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return location ;
+    return location;
 }
 
 /*-------------------------------------------------------------------------*
@@ -330,17 +308,17 @@ static T_playerIDLocation IGetOurLocation(T_void)
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
 {
-    DebugRoutine("PeopleHereGetPlayerIDSelfStruct") ;
-    DebugCheck(p_self != NULL) ;
+    DebugRoutine("PeopleHereGetPlayerIDSelfStruct");
+    DebugCheck(p_self != NULL);
 
-    strncpy(p_self->name, StatsGetName(), 30) ;
-    DirectTalkGetUniqueAddress(&p_self->uniqueAddress) ;
-    p_self->location = IGetOurLocation() ;
-    p_self->state = G_ourState ;
-    p_self->groupID = ClientSyncGetGameGroupID() ;
-    p_self->adventure = PeopleHereGetOurAdventure() ;
+    strncpy(p_self->name, StatsGetName(), 30);
+    DirectTalkGetUniqueAddress(&p_self->uniqueAddress);
+    p_self->location = IGetOurLocation();
+    p_self->state = G_ourState;
+    p_self->groupID = ClientSyncGetGameGroupID();
+    p_self->adventure = PeopleHereGetOurAdventure();
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -355,16 +333,16 @@ T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
  *<!-----------------------------------------------------------------------*/
 T_gameGroupID PeopleHereGetUniqueGroupID(T_void)
 {
-    T_gameGroupID groupID ;
+    T_gameGroupID groupID;
 
-    DebugRoutine("PeopleHereGetUniqueGroupID") ;
+    DebugRoutine("PeopleHereGetUniqueGroupID");
 
     /* Use our address as the unique address of the game. */
-    DirectTalkGetUniqueAddress(&groupID) ;
+    DirectTalkGetUniqueAddress(&groupID);
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return groupID ;
+    return groupID;
 }
 
 /*-------------------------------------------------------------------------*
@@ -378,7 +356,7 @@ T_gameGroupID PeopleHereGetUniqueGroupID(T_void)
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereSetOurState(T_playerIDState state)
 {
-    G_ourState = state ;
+    G_ourState = state;
 }
 
 /*-------------------------------------------------------------------------*
@@ -392,7 +370,7 @@ T_void PeopleHereSetOurState(T_playerIDState state)
  *<!-----------------------------------------------------------------------*/
 T_playerIDState PeopleHereGetOurState(T_void)
 {
-    return G_ourState ;
+    return G_ourState;
 }
 
 /*-------------------------------------------------------------------------*
@@ -406,7 +384,7 @@ T_playerIDState PeopleHereGetOurState(T_void)
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereSetOurAdventure(T_word16 adventure)
 {
-    G_ourAdventure = adventure ;
+    G_ourAdventure = adventure;
 }
 
 /*-------------------------------------------------------------------------*
@@ -420,7 +398,7 @@ T_void PeopleHereSetOurAdventure(T_word16 adventure)
  *<!-----------------------------------------------------------------------*/
 T_word16 PeopleHereGetOurAdventure(T_void)
 {
-    return G_ourAdventure ;
+    return G_ourAdventure;
 }
 
 /*-------------------------------------------------------------------------*
@@ -428,7 +406,11 @@ T_word16 PeopleHereGetOurAdventure(T_void)
  *-------------------------------------------------------------------------*/
 /**
  *  Someone is requesting to join our game that we are creating!  Do
- *  we have room?
+ *  we have room?  Are they requesting the right group and adventure id?
+ *
+ *  @param unqiueAddress -- unique address of person requesting to join
+ *  @param groupID -- ID of group being requested to join
+ *  @param adventure -- Number of adventure being requested to join
  *
  *  @return Current 16-bit adventure id.
  *
@@ -438,112 +420,108 @@ T_void PeopleHereRequestJoin(
         T_gameGroupID groupID,
         T_word16 adventure)
 {
-    T_word16 i ;
-    T_gameGroupID ourGroupID ;
+    T_word16 i;
+    T_gameGroupID ourGroupID;
 
-    DebugRoutine("PeopleHereRequestJoin") ;
+    DebugRoutine("PeopleHereRequestJoin");
 
-    ourGroupID = ClientSyncGetGameGroupID() ;
-/*
-puts("PeopleHereRequestJoin") ;  fflush(stdout) ;
-printf("groupID=%02X:%02X:%02X:%02X:%02X:%02X, get=%d\n", groupID.address[0], groupID.address[1], groupID.address[2], groupID.address[3], groupID.address[4], groupID.address[5], ClientSyncGetGameGroupID()) ;
-printf("state=%d\n", PeopleHereGetOurState()) ;
-printf("adventure=%d, advhere=%d\n", adventure, PeopleHereGetOurAdventure()) ;
-printf("ourloc=%d\n", IGetOurLocation()) ;  fflush(stdout) ;
-*/
+    ourGroupID = ClientSyncGetGameGroupID();
 
     /* In order to process this packet, we must be the */
     /* creator of the game and THIS particular group. */
-    if ((CompareGameGroupIDs(groupID, ourGroupID)))  {
-        if ((PeopleHereGetOurState() == PLAYER_ID_STATE_CREATING_GAME) &&
-            (adventure == PeopleHereGetOurAdventure()) &&
-            (IGetOurLocation() == PLAYER_ID_LOCATION_GUILD))  {
-            if (G_numPeopleInGame < MAX_PLAYERS_PER_GAME)  {
+    if ((CompareGameGroupIDs(groupID, ourGroupID))) {
+        if ((PeopleHereGetOurState() == PLAYER_ID_STATE_CREATING_GAME)
+                && (adventure == PeopleHereGetOurAdventure())
+                && (IGetOurLocation() == PLAYER_ID_LOCATION_GUILD)) {
+            if (G_numPeopleInGame < MAX_PLAYERS_PER_GAME) {
                 /* Add this person to the list (if not already) */
-                for (i=0; i<G_numPeopleInGame; i++)  {
+                for (i = 0; i < G_numPeopleInGame; i++) {
                     /* Stop if we have seen this one before. */
-                    if (memcmp(
-                            &uniqueAddress,
-                            &G_peopleInGame[i],
+                    if (memcmp(&uniqueAddress, &G_peopleNetworkIDInGame[i],
                             sizeof(uniqueAddress)) == 0)
-                        break ;
+                        break;
                 }
 
                 /* Are we at the end?  Then add the name. */
-                if (i==G_numPeopleInGame)  {
-                    G_peopleInGame[i] = uniqueAddress ;
-                    G_numPeopleInGame++ ;
+                if (i == G_numPeopleInGame) {
+                    G_peopleNetworkIDInGame[i] = uniqueAddress;
+                    G_numPeopleInGame++;
                 }
 
-                ClientSendRespondToJoinPacket(
-                    uniqueAddress,
-                    groupID,
-                    adventure,
-                    GAME_RESPOND_JOIN_OK) ;
+                ClientSendRespondToJoinPacket(uniqueAddress, groupID, adventure,
+                GAME_RESPOND_JOIN_OK);
             } else {
-                ClientSendRespondToJoinPacket(
-                    uniqueAddress,
-                    groupID,
-                    adventure,
-                    GAME_RESPOND_JOIN_FULL) ;
+                ClientSendRespondToJoinPacket(uniqueAddress, groupID, adventure,
+                GAME_RESPOND_JOIN_FULL);
             }
         } else {
-            ClientSendRespondToJoinPacket(
-                uniqueAddress,
-                groupID,
-                adventure,
-                GAME_RESPOND_JOIN_CANCELED) ;
+            ClientSendRespondToJoinPacket(uniqueAddress, groupID, adventure,
+            GAME_RESPOND_JOIN_CANCELED);
         }
     }
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereRespondToJoin
+ *-------------------------------------------------------------------------*/
+/**
+ *  After requesting to join, this is the response handler.
+ *
+ *  @param unqiueAddress -- unique address of person requesting to join
+ *  @param groupID -- ID of group being requested to join
+ *  @param adventure -- Number of adventure being requested to join
+ *  @param response -- Response to attempted join
+ *
+ *  @return Current 16-bit adventure id.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereRespondToJoin(
-           T_directTalkUniqueAddress uniqueAddress,
-           T_gameGroupID groupID,
-           T_word16 adventure,
-           E_respondJoin response)
+        T_directTalkUniqueAddress uniqueAddress,
+        T_gameGroupID groupID,
+        T_word16 adventure,
+        E_respondJoin response)
 {
-    T_directTalkUniqueAddress ourAddress ;
-    DebugRoutine("PeopleHereRespondToJoin") ;
+    T_directTalkUniqueAddress ourAddress;
+    DebugRoutine("PeopleHereRespondToJoin");
 
     /* Make sure this refers to us. */
-    DirectTalkGetUniqueAddress(&ourAddress) ;
-    if (memcmp(&ourAddress, &uniqueAddress, sizeof(ourAddress)) == 0)  {
+    DirectTalkGetUniqueAddress(&ourAddress);
+    if (memcmp(&ourAddress, &uniqueAddress, sizeof(ourAddress)) == 0) {
         /* Yep, thats us. */
-        switch(response)  {
+        switch (response) {
             case GAME_RESPOND_JOIN_OK:
                 /* Tell others that I'm trying to join in the game. */
-                PeopleHereSetOurState(PLAYER_ID_STATE_JOINING_GAME) ;
-                PeopleHereSetOurAdventure(adventure) ;
-                ClientSyncSetGameGroupID(groupID) ;
+                PeopleHereSetOurState(PLAYER_ID_STATE_JOINING_GAME);
+                PeopleHereSetOurAdventure(adventure);
+                ClientSyncSetGameGroupID(groupID);
 
                 /* we are in. */
                 GuildUIConfirmJoinGame();
 
                 /* Send out a message that this is what we are doing. */
-                ClientSendPlayerIDSelf() ;
+                ClientSendPlayerIDSelf();
 
-                PeopleHereGeneratePeopleInGame(groupID) ;
-                break ;
+                PeopleHereGeneratePeopleInGame(groupID);
+                break;
             case GAME_RESPOND_JOIN_FULL:
-                PeopleHereSetOurState(PLAYER_ID_STATE_NONE) ;
-                MessageAdd("Game is already full.") ;
-                break ;
+                PeopleHereSetOurState(PLAYER_ID_STATE_NONE);
+                MessageAdd("Game is already full.");
+                break;
             case GAME_RESPOND_JOIN_CANCELED:
-                PeopleHereSetOurState(PLAYER_ID_STATE_NONE) ;
-                MessageAdd("Game was cancelled.") ;
-                break ;
+                PeopleHereSetOurState(PLAYER_ID_STATE_NONE);
+                MessageAdd("Game was cancelled.");
+                break;
             default:
-                DebugCheck(FALSE) ;
-                break ;
+                DebugCheck(FALSE);
+                break;
         }
     } else {
         /* Not us.  Just ignore. */
     }
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -551,126 +529,112 @@ T_void PeopleHereRespondToJoin(
  *-------------------------------------------------------------------------*/
 /**
  *  PeopleHereUpdatePlayer is called per player self ID received.
- *  This routine updates the list and takes appropriate actions.
+ *  This routine updates the list and takes appropriate actions. The
+ *  player may be moving from room to room or other actions.
  *
- *  @param p_playerID -- New player action
+ *  @param p_playerID -- New player information
  *
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
 {
-    T_playerIDSelf *p_find ;
-    T_playerIDLocation location ;
-    T_gameGroupID ourGroupID ;
+    T_playerIDSelf *p_find;
+    T_playerIDLocation location;
+    T_gameGroupID ourGroupID;
 
-    DebugRoutine("PeopleHereUpdatePlayer") ;
-    DebugCheck(p_playerID != NULL) ;
-    DebugCheck(G_init == TRUE) ;
+    DebugRoutine("PeopleHereUpdatePlayer");
+    DebugCheck(p_playerID != NULL);
+    DebugCheck(G_init == TRUE);
 
     /* What is our address again? */
-    ourGroupID = ClientSyncGetGameGroupID() ;
-
-/*
-printf("'%s' %d state, %d location, ", p_playerID->name, p_playerID->state, p_playerID->location) ;
-DirectTalkPrintAddress(stdout, &p_playerID->groupID) ;
-printf(" groupID\n") ;
-*/
+    ourGroupID = ClientSyncGetGameGroupID();
 
     /* See what our location is.  If there is not a match, */
     /* we don't care about that location. */
-    location = IGetOurLocation() ;
+    location = IGetOurLocation();
 
-    /* First, try finding the name. */
-    p_find = IFindByName(p_playerID->name) ;
+    /* First, try finding the player doing the action. */
+    p_find = IFindByName(p_playerID->name);
 
-    /* If not found, try creating the player. */
+    /* If not found, try creating the player.  Must have arrived. */
     if (p_find == NULL)
-        p_find = ICreatePlayerID(p_playerID) ;
+        p_find = ICreatePlayerID(p_playerID);
 
     /* If either work, go ahead and update the status. */
-    if (p_find)  {
+    if (p_find) {
         /* Check if the location is changing */
-        if (p_find->location != p_playerID->location)  {
+        if (p_find->location != p_playerID->location) {
             /* There is a difference, either coming or going. */
 
             /* Is the player entering or exiting? */
-            if (p_playerID->location == location)  {
+            if (p_playerID->location == location) {
                 /* Entering */
                 /* Do an action based on our location. */
-                switch(location)  {
+                switch (location) {
                     case PLAYER_ID_LOCATION_NOWHERE:
                         /* We both are nowhere. nothing happens. */
-                        break ;
+                        break;
                     case PLAYER_ID_LOCATION_TOWN:
                         /* Update the town list. */
                         TownAddPerson(p_find->name);
-                        break ;
+                        break;
                     case PLAYER_ID_LOCATION_GUILD:
                         /* Action is taken care of below. */
-/*
-                        if (ClientSyncGetGameGroupID() != 0)
-                            if (p_find->groupID == ClientSyncGetGameGroupID())
-                                PeopleHereGeneratePeopleInGame() ;
-*/
-                        break ;
+                        break;
                     case PLAYER_ID_LOCATION_GAME:
                         /* Player is elsewhere.  do nothing. */
-                        break ;
+                        break;
                     default:
                         /* What? */
-                        DebugCheck(FALSE) ;
-                        break ;
+                        DebugCheck(FALSE);
+                        break;
                 }
             } else {
                 /* Exiting */
                 /* Do an action based on our location. */
-                switch(location)  {
+                switch (location) {
                     case PLAYER_ID_LOCATION_NOWHERE:
                         /* We both are nowhere. nothing happens. */
-                        break ;
+                        break;
                     case PLAYER_ID_LOCATION_TOWN:
                         /* Update the town list. */
                         TownRemovePerson(p_find->name);
-                        break ;
+                        break;
                     case PLAYER_ID_LOCATION_GUILD:
                         /* Action is taken care of below. */
-/*
-                        if (ClientSyncGetGameGroupID() != 0)
-                            if (p_find->groupID == ClientSyncGetGameGroupID())
-                                PeopleHereGeneratePeopleInGame() ;
-*/
-                        break ;
+                        break;
                     case PLAYER_ID_LOCATION_GAME:
                         /* Player is elsewhere.  do nothing. */
-                        break ;
+                        break;
                     default:
                         /* What? */
-                        DebugCheck(FALSE) ;
-                        break ;
+                        DebugCheck(FALSE);
+                        break;
                 }
             }
         }
 
-        if (p_find->state != p_playerID->state)  {
+        // Was there a change of state?
+        if (p_find->state != p_playerID->state) {
             /* Do guild related events */
-            if (location == PLAYER_ID_LOCATION_GUILD)  {
-                if (!((PeopleHereGetOurState() == PLAYER_ID_STATE_CREATING_GAME) ||
-                    (PeopleHereGetOurState() == PLAYER_ID_STATE_JOINING_GAME)))  {
-                    if (p_playerID->state == PLAYER_ID_STATE_CREATING_GAME)  {
-                        GuildUIAddGame(
-                            p_playerID->adventure,
-                            p_playerID->groupID) ;
-                        PeopleHereGeneratePeopleInGame(p_playerID->groupID) ;
-                    } else if (p_find->state == PLAYER_ID_STATE_CREATING_GAME)  {
-                        GuildUIRemoveGame(
-                            p_playerID->adventure,
-                            p_playerID->groupID) ;
-                        PeopleHereGeneratePeopleInGame(*DirectTalkGetNullBlankUniqueAddress()) ;
+            if (location == PLAYER_ID_LOCATION_GUILD) {
+                if (!((PeopleHereGetOurState() == PLAYER_ID_STATE_CREATING_GAME)
+                        || (PeopleHereGetOurState()
+                                == PLAYER_ID_STATE_JOINING_GAME))) {
+                    if (p_playerID->state == PLAYER_ID_STATE_CREATING_GAME) {
+                        GuildUIAddGame(p_playerID->adventure,
+                                p_playerID->groupID);
+                        PeopleHereGeneratePeopleInGame(p_playerID->groupID);
+                    } else if (p_find->state == PLAYER_ID_STATE_CREATING_GAME) {
+                        GuildUIRemoveGame(p_playerID->adventure,
+                                p_playerID->groupID);
+                        PeopleHereGeneratePeopleInGame(
+                                *DirectTalkGetNullBlankUniqueAddress());
                     }
                 } else {
                     /* Detected that a game is removed. */
-                    if (p_find->state == PLAYER_ID_STATE_CREATING_GAME)  {
+                    if (p_find->state == PLAYER_ID_STATE_CREATING_GAME) {
                         /* Is it our game? */
-                        if (CompareGameGroupIDs(p_find->groupID, ourGroupID))  {
+                        if (CompareGameGroupIDs(p_find->groupID, ourGroupID)) {
                             /* Act like we pressed the cancel join button. */
                             GuildUICancelJoinGame(NULL);
                         }
@@ -679,81 +643,101 @@ printf(" groupID\n") ;
             }
         }
 
-        if (location == PLAYER_ID_LOCATION_GUILD)  {
+        // Are they in the guild and going to our game?
+        if (location == PLAYER_ID_LOCATION_GUILD) {
             /* Update the list of players if relevant to this group. */
-            if ((CompareGameGroupIDs(p_find->groupID, ourGroupID)) ||
-                (CompareGameGroupIDs(p_playerID->groupID, ourGroupID)))
-                PeopleHereGeneratePeopleInGame(ourGroupID) ;
+            if ((CompareGameGroupIDs(p_find->groupID, ourGroupID))
+                    || (CompareGameGroupIDs(p_playerID->groupID, ourGroupID)))
+                // Yes, in our game now
+                PeopleHereGeneratePeopleInGame(ourGroupID);
         }
 
         /* Only process the state if it changes. */
         /* Record the state in all cases. */
-        p_find->state = p_playerID->state ;
+        p_find->state = p_playerID->state;
 
         /* Store the location. */
-        p_find->location = p_playerID->location ;
+        p_find->location = p_playerID->location;
 
         /* Store the new groupID */
-        p_find->groupID = p_playerID->groupID ;
+        p_find->groupID = p_playerID->groupID;
 
-        if (location == PLAYER_ID_LOCATION_GUILD)  {
+        if (location == PLAYER_ID_LOCATION_GUILD) {
             /* Update the list of players if relevant to this group. */
-            PeopleHereGeneratePeopleInGame(ClientSyncGetGameGroupID()) ;
+            PeopleHereGeneratePeopleInGame(ClientSyncGetGameGroupID());
         }
     }
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGeneratePeopleInGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  Update the name of players in this game in the guild.  It clears
+ *  out the old list, looks at the people here, and updates.
+ *
+ *  @param groupID -- Group ID of this game in the guild.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereGeneratePeopleInGame(T_gameGroupID groupID)
 {
-    T_doubleLinkListElement element ;
-    T_playerIDSelf *p_check ;
+    T_word16 i;
+    T_playerIDSelf *p = G_peopleList;
 
-    DebugRoutine("PeopleHereGeneratePeopleInGame") ;
+    DebugRoutine("PeopleHereGeneratePeopleInGame");
 
-    GuildUIClearPlayers() ;
+    GuildUIClearPlayers();
 
-    if (IGetOurLocation() == PLAYER_ID_LOCATION_GUILD)  {
+    if (IGetOurLocation() == PLAYER_ID_LOCATION_GUILD) {
         /* Go through the list and identify everyone in this group. */
-        element = DoubleLinkListGetFirst(G_peopleList) ;
-        while (element != DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-            p_check = (T_playerIDSelf *)DoubleLinkListElementGetData(element) ;
-            DebugCheck(p_check != NULL) ;
-
-            if ((CompareGameGroupIDs(p_check->groupID, groupID)) &&
-                (p_check->location == PLAYER_ID_LOCATION_GUILD))  {
-                GuildUIAddPlayer(p_check->name) ;
+        for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
+            if ((CompareGameGroupIDs(p->groupID, groupID))
+                    && (p->location == PLAYER_ID_LOCATION_GUILD)) {
+                GuildUIAddPlayer(p->name);
             }
-
-            element = DoubleLinkListElementGetNext(element) ;
         }
     }
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetOurLocation
+ *-------------------------------------------------------------------------*/
+/**
+ *  Return our current location in the game world.
+ *
+ *  @return Player location identifier
+ *
+ *<!-----------------------------------------------------------------------*/
 T_playerIDLocation PeopleHereGetOurLocation(T_void)
 {
-    return IGetOurLocation() ;
+    return IGetOurLocation();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereStartGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  Let's start the game and go to the given first level.
+ *
+ *  @param firstLevel -- First level to go to
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereStartGame(T_word16 firstLevel)
 {
-    DebugRoutine("PeopleHereStartGame") ;
+    DebugRoutine("PeopleHereStartGame");
 
     /* Get the exact list of people going on this game. */
-    ISetupGame(ClientSyncGetGameGroupID()) ;
+    ISetupGame(ClientSyncGetGameGroupID());
 
-//printf("Starting game at %d\n", PeopleHereGetOurAdventure()) ; fflush(stdout) ;
-    ClientSendGameStartPacket(
-        ClientSyncGetGameGroupID(),
-        PeopleHereGetOurAdventure(),
-        (T_byte8)G_numPeopleInGame,
-        G_peopleInGame,
-        firstLevel) ;
+    ClientSendGameStartPacket(ClientSyncGetGameGroupID(),
+            PeopleHereGetOurAdventure(), (T_byte8)G_numPeopleInGame,
+            G_peopleNetworkIDInGame, firstLevel);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -769,84 +753,144 @@ T_void PeopleHereStartGame(T_word16 firstLevel)
  *<!-----------------------------------------------------------------------*/
 static T_void ISetupGame(T_gameGroupID groupID)
 {
-    T_doubleLinkListElement element ;
-    T_playerIDSelf *p_check ;
-    T_word16 numFound = 0 ;
+    T_playerIDSelf *p = G_peopleList;
+    T_word16 numFound = 0;
+    T_word16 i;
 
-    DebugRoutine("ISetupGame") ;
+    DebugRoutine("ISetupGame");
 
-    element = DoubleLinkListGetFirst(G_peopleList) ;
-    while (element != DOUBLE_LINK_LIST_ELEMENT_BAD)  {
-        p_check = (T_playerIDSelf *)DoubleLinkListElementGetData(element) ;
+    for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
+        if (CompareGameGroupIDs(groupID, p->groupID)) {
+            G_peopleNetworkIDInGame[numFound] = p->uniqueAddress;
+            numFound++;
 
-        if (CompareGameGroupIDs(groupID, p_check->groupID))  {
-            G_peopleInGame[numFound] = p_check->uniqueAddress ;
-            numFound++ ;
-
-            /* Stop if we reached the limit. */
+            /* Stop if we reached the limit.  Sorry to anybody else */
             if (numFound == MAX_PLAYERS_PER_GAME)
-                break ;
+                break;
         }
-
-        element = DoubleLinkListElementGetNext(element) ;
     }
 
-    G_numPeopleInGame = numFound ;
+    G_numPeopleInGame = numFound;
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereIDPlayer
+ *-------------------------------------------------------------------------*/
+/**
+ *  PeopleHereGetNumInGame counts the number of people in a game group.
+ *
+ *  @param game -- Game group id
+ *
+ *  @param T_word16 -- Number of players found
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereIDPlayer(T_word16 playerNum, T_byte8 *p_name)
 {
-    DebugRoutine("PeopleHereIDPlayer") ;
-    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME) ;
+    DebugRoutine("PeopleHereIDPlayer");
+    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME);
 
+    // Build a complete name using pieces of the name
     if (strlen(G_peopleNames[playerNum]) < 30)
-        strcat(G_peopleNames[playerNum], p_name) ;
-//printf("Player %d now named '%s'\n", playerNum, G_peopleNames[playerNum]) ;
+        strcat(G_peopleNames[playerNum], p_name);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereResetPlayerIDs
+ *-------------------------------------------------------------------------*/
+/**
+ *  Reset all the names of the players in the current synchronized game.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereResetPlayerIDs(T_void)
 {
-    DebugRoutine("PeopleHereResetPlayerIDs") ;
+    DebugRoutine("PeopleHereResetPlayerIDs");
 
-    memset(G_peopleNames, 0, sizeof(G_peopleNames)) ;
+    memset(G_peopleNames, 0, sizeof(G_peopleNames));
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetPlayerIDName
+ *-------------------------------------------------------------------------*/
+/**
+ *  Convert a player index (in the people here list) to a name.
+ *
+ *  @param [in] playerNum -- Index of name in people here list
+ *
+ *  @return Name of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_byte8 *PeopleHereGetPlayerIDName(T_word16 playerNum)
 {
-    DebugRoutine("PeopleHereGetPlayerIDName") ;
+    DebugRoutine("PeopleHereGetPlayerIDName");
 
-    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME) ;
+    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME);
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return G_peopleNames[playerNum] ;
+    return G_peopleNames[playerNum];
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetUniqueAddr
+ *-------------------------------------------------------------------------*/
+/**
+ *  Get the unique network ID for the given player index for a player in
+ *  a synchronized game.
+ *
+ *  @param [in] playerNum -- Index of name in people here list
+ *
+ *  @return Name of player
+ *
+ *<!-----------------------------------------------------------------------*/
 T_directTalkUniqueAddress *PeopleHereGetUniqueAddr(T_word16 playerNum)
 {
-    DebugRoutine("PeopleHereGetUniqueAddr") ;
-    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME) ;
+    DebugRoutine("PeopleHereGetUniqueAddr");
+    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME);
 
-    DebugEnd() ;
+    DebugEnd();
 
-    return &G_peopleInGame[playerNum] ;
+    return &G_peopleNetworkIDInGame[playerNum];
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereSetUniqueAddr
+ *-------------------------------------------------------------------------*/
+/**
+ *  Set the unique network ID for the player in this game based on
+ *  their index.
+ *
+ *  @param [in] playerNum -- Index of name in people here list
+ *  @param [in] uaddr -- Network ID.
+ *
+ *<!-----------------------------------------------------------------------*/
 T_void PeopleHereSetUniqueAddr(
-           T_word16 playerNum,
-           T_directTalkUniqueAddress *uaddr)
+        T_word16 playerNum,
+        T_directTalkUniqueAddress *uaddr)
 {
-    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME) ;
+    DebugCheck(playerNum < MAX_PLAYERS_PER_GAME);
 
-    memcpy(&G_peopleInGame[playerNum], uaddr, 6) ;
+    memcpy(&G_peopleNetworkIDInGame[playerNum], uaddr, 6);
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereGetNumInGroupGame
+ *-------------------------------------------------------------------------*/
+/**
+ *  Return the number of people in the currently active game.
+ *
+ *  @return Number of people.  Usually always 1 -- you.
+ *
+ *<!-----------------------------------------------------------------------*/
+T_word16 PeopleHereGetNumInGroupGame(void)
+{
+    return G_numPeopleInGame;
+}
 /** @} */
 /*-------------------------------------------------------------------------*
  * End of File:  PEOPHERE.C
