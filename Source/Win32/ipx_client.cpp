@@ -208,6 +208,11 @@ void IPXSendPacket(char const *p_data, unsigned int size)
     int result;
 	T_word32 tick = clock();
 
+	regHeader.src.socket[0] = 0x86;
+    regHeader.src.socket[1] = 0x9C;
+    regHeader.dest.socket[0] = 0x86;
+    regHeader.dest.socket[1] = 0x9C;
+
 #if 0
 	printf("IPXSendPacket: [");
 	for (int i=0; i<size; i++) {
@@ -231,13 +236,13 @@ void IPXSendPacket(char const *p_data, unsigned int size)
     // Set the destination network to be the return address (using network 0)
     SDLNet_Write32(0, regHeader.dest.network);
     memcpy(regHeader.dest.addr.byNode.node, G_destinationAddr, 6);
-    SDLNet_Write16(udpPort, regHeader.dest.socket);
+    SDLNet_Write16(0x869C, regHeader.dest.socket);
 
     // We are the source (localIpx)
     SDLNet_Write32(0, regHeader.src.network);
     memcpy(regHeader.src.addr.byNode.node, localIpxAddr.netnode,
             sizeof(regHeader.src.addr.byNode.node));
-    SDLNet_Write16(udpPort, regHeader.src.socket);
+    SDLNet_Write16(0x869C, regHeader.src.socket);
 
     // Copy over the data to send
     memcpy(sendBuffer + sizeof(IPXHeader), p_data, size);
@@ -465,6 +470,11 @@ int IPXConnectToServer(const char *strAddr)
         LOG_MSG("IPX: Unable resolve connection to server\n");
         return 0;
     }
+
+	regHeader.src.socket[0] = 0x86;
+    regHeader.src.socket[1] = 0x9C;
+    regHeader.dest.socket[0] = 0x86;
+    regHeader.dest.socket[1] = 0x9C;
 
     // Determined the proper IP address of the target
     // Now, generate the MAC address we'll use for this computer.
