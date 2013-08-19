@@ -563,6 +563,22 @@ T_byte8 *DirectTalkGetDestination(T_void)
     return G_talk->destinationAddress ;
 }
 
+/*--------------------------------------------------------------------------*
+ * Routine: DirectTalkIsBroadcastAddress
+ *--------------------------------------------------------------------------*/
+/**
+ * Determine if the given address is the broadcast address.
+ *
+ * @return TRUE if broadcast, else FALSE
+ */
+/*--------------------------------------------------------------------------*/
+T_byte8 DirectTalkIsBroadcastAddress(T_directTalkUniqueAddress *p_dest)
+{
+    static const T_byte8 broadcastAddress[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
+    return (memcmp(p_dest, broadcastAddress, 6)==0)?TRUE:FALSE;
+}
+
 /****************************************************************************
  * END OF FILE:  DOSDTALK.C
  ****************************************************************************/

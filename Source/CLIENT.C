@@ -111,7 +111,6 @@ T_word16 G_loginId = 0xFFFF ;
 /* Flag noting what direction we are facing. */
 static E_Boolean G_logoutAttempted = FALSE ;
 static E_Boolean G_clientIsActive = FALSE ;
-static E_Boolean G_clientIsLogin = FALSE ;
 
 /* Message being typed in for transmission/talking. */
 static T_byte8 G_message[MAX_MESSAGE_LEN+2] ;
@@ -146,9 +145,6 @@ T_void ClientUpdateHealth(T_void) ;
 
 T_word16 ClientGetDelta(T_void) ;
 
-T_void IClientLoginAck(
-                  T_word32 extraData,
-                  T_packetEitherShortOrLong *p_packet) ;
 T_void ClientGotoForm(T_word32 formNumber) ;
 
 static T_void ClientOverlayDone (T_word16 animnum, T_byte8 flag);
@@ -308,15 +304,14 @@ T_void ClientInit(T_void)
    T_cmdQActionRoutine callbacks[PACKET_COMMAND_MAX] =
    {
       NULL,                                       /* 0 ACK */
-      NULL,                                       /* 1 LOGIN */
-      ClientSyncReceiveRetransmitPacket,          /* 2 RETRANSMIT */
-      ClientReceiveTownUIMessagePacket,           /* 3 TOWN_UI_MESSAGE */
-      ClientReceivePlayerIDSelf,                  /* 4 PLAYER_ID_SELF */
-      ClientReceiveGameRequestJoinPacket,         /* 5 GAME_REQUEST_JOIN */
-      ClientReceiveGameRespondJoinPacket,         /* 6 GAME_RESPOND_JOIN */
-      ClientReceiveGameStartPacket,               /* 7 GAME_START */
-      ClientReceiveSyncPacket,                    /* 8 SYNC */
-      ClientReceiveMessagePacket,                 /* 9 MESSAGE */
+      ClientSyncReceiveRetransmitPacket,          /* 1 RETRANSMIT */
+      ClientReceiveTownUIMessagePacket,           /* 2 TOWN_UI_MESSAGE */
+      ClientReceivePlayerIDSelf,                  /* 3 PLAYER_ID_SELF */
+      ClientReceiveGameRequestJoinPacket,         /* 4 GAME_REQUEST_JOIN */
+      ClientReceiveGameRespondJoinPacket,         /* 5 GAME_RESPOND_JOIN */
+      ClientReceiveGameStartPacket,               /* 6 GAME_START */
+      ClientReceiveSyncPacket,                    /* 7 SYNC */
+      ClientReceiveMessagePacket,                 /* 8 MESSAGE */
    };
 
     DebugRoutine("ClientInit") ;
@@ -965,57 +960,6 @@ T_word16 ClientGetDelta(T_void)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientLogin
- *-------------------------------------------------------------------------*/
-/**
- *  ClientLogin requests to login into the server.
- *
- *  NOTE:
- *  It is assumed that the client has already attached to server and there
- *  is a data communications path open.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientLogin(T_void)
-{
-    T_packetShort packet ;
-    T_loginPacket *p_login;
-
-    DebugRoutine("ClientLogin") ;
-
-    /** Get a quick pointer. **/
-    p_login = (T_loginPacket *)(packet.data);
-
-    G_logoutAttempted = FALSE ;
-
-    /** Request a login as the character of my choice. **/
-    p_login->command = PACKET_COMMAND_LOGIN ;
-    p_login->accountNum = 0; // not used
-
-    CmdQSendShortPacket(&packet, 140, 0, IClientLoginAck) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  IClientLoginAck
- *-------------------------------------------------------------------------*/
-/**
- *  IClientLoginAck notes that the player is successfully connected to
- *  the server.
- *
- *<!-----------------------------------------------------------------------*/
-T_void IClientLoginAck(
-                  T_word32 extraData,
-                  T_packetEitherShortOrLong *p_packet)
-{
-    DebugRoutine("IClientLoginAck") ;
-
-    G_clientIsLogin = TRUE ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientLogoffFinish
  *-------------------------------------------------------------------------*/
 /**
@@ -1030,14 +974,9 @@ T_void ClientLogoffFinish(
     DebugRoutine("ClientLogoffFinish") ;
 
     /* Make sure we are logged on. */
-    if (G_clientIsLogin == TRUE)  {
-        /* We are no longer on. */
-        G_clientIsLogin = FALSE ;
+    KeyboardSetEventHandler(NULL) ;
 
-        KeyboardSetEventHandler(NULL) ;
-
-        ButtonCleanUp() ;
-    }
+    ButtonCleanUp() ;
 
     DebugEnd() ;
 }
@@ -1075,28 +1014,6 @@ T_void ClientLogoff(T_void)
     }
 
     DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientIsLogin
- *-------------------------------------------------------------------------*/
-/**
- *  Simple put, "Am I logged into the server?"
- *
- *  @return FALSE = no, TRUE = yes
- *
- *<!-----------------------------------------------------------------------*/
-E_Boolean ClientIsLogin(T_void)
-{
-    E_Boolean isLogin ;
-
-    DebugRoutine("ClientIsLogin") ;
-
-    isLogin = G_clientIsLogin ;
-
-    DebugEnd() ;
-
-    return isLogin ;
 }
 
 /*-------------------------------------------------------------------------*

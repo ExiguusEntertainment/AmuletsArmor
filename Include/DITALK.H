@@ -95,6 +95,8 @@ T_void DirectTalkSetDestinationAll(T_void) ;
 
 T_byte8 *DirectTalkGetDestination(T_void) ;
 
+T_byte8 DirectTalkIsBroadcastAddress(T_directTalkUniqueAddress *p_dest);
+
 #endif // _DITALK_H_
 
 /****************************************************************************/

@@ -45,10 +45,6 @@
 
 extern T_void PacketReceiveData(T_void *p_data, T_word16 size) ;
 
-T_void IClientLoginAck(
-                  T_word32 extraData,
-                  T_packetEitherShortOrLong *p_packet) ;
-
 static T_void IShowScreenNextPage (E_mouseEvent event,
                          T_word16 x,
                          T_word16 y,

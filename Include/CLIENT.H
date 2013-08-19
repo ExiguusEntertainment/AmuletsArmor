@@ -37,10 +37,6 @@ typedef enum {
 
 T_void ClientMain(T_void);
 
-T_void ClientLogin(T_void);
-
-E_Boolean ClientIsLogin(T_void);
-
 E_Boolean ClientIsActive(T_void);
 
 T_void ClientUpdate(T_void);

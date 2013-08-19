@@ -171,6 +171,7 @@
 #endif
 
 #define CompareGameGroupIDs(a, b) (((memcmp(&(a), &(b), sizeof(a)))==0)?TRUE:FALSE)
+#define CompareUniqueNetworkIDs(a, b) (((memcmp(&(a), &(b), sizeof(a)))==0)?TRUE:FALSE)
 
 #ifdef WIN32
 	#define far

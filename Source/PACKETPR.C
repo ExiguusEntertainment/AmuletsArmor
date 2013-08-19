@@ -9,15 +9,13 @@ const char *PacketName(unsigned char command)
 {
 	static const char *names[] = {
         "PACKET_COMMAND_ACK",                     /*  0 */
-        "PACKET_COMMAND_LOGIN",                   /*  1 */
-        "PACKET_COMMAND_RETRANSMIT",              /*  2 */
-        "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  3 */
-        "PACKET_COMMAND_PLAYER_ID_SELF",          /*  4 */
-        "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  5 */
-        "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  6 */
-        "PACKET_COMMAND_GAME_START",              /*  7 */
-        "PACKET_COMMAND_SYNC",                    /*  8 */
-        "PACKET_COMMAND_MESSAGE",                 /*  9 */
+        "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  1 */
+        "PACKET_COMMAND_PLAYER_ID_SELF",          /*  2 */
+        "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  3 */
+        "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  4 */
+        "PACKET_COMMAND_GAME_START",              /*  5 */
+        "PACKET_COMMAND_SYNC",                    /*  6 */
+        "PACKET_COMMAND_MESSAGE",                 /*  7 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};

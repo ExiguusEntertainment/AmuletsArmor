@@ -21,6 +21,7 @@ typedef struct {
     T_byte8    prefix            PACK;
     T_byte8    packetLength      PACK;
     T_word32   id                PACK;
+    T_directTalkUniqueAddress sender PACK;
     T_word16   checksum          PACK;
 } T_packetHeader ;
 
@@ -56,13 +57,6 @@ T_void PacketSetId (T_packetEitherShortOrLong *p_packet, T_word32 packetID);
 T_void PacketReceiveData(T_void *p_data, T_word16 size);
 
 /* !!! Needs to be moved! */
-typedef struct {
-    T_byte8 command              PACK;
-    T_byte8 visage               PACK;
-    T_byte8 demeanor             PACK;
-    T_word32 accountNum          PACK ;
-} T_loginPacket;
-
 typedef struct {
     T_byte8 command              PACK;
     T_word16 player              PACK;

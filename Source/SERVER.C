@@ -734,7 +734,7 @@ T_void ServerReceiveSyncPacket(T_packetEitherShortOrLong *p_packet)
 
     /* For the self server, just send it back. */
 //    ServerSendToAll(p_packet) ;
-    CmdQSendPacket(p_packet, 140, 0, NULL) ;
+    CmdQSendPacket(p_packet, &p_packet->header.sender, 140, 0, NULL) ;
 
     DebugEnd() ;
 }
