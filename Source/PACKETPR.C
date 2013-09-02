@@ -9,13 +9,14 @@ const char *PacketName(unsigned char command)
 {
 	static const char *names[] = {
         "PACKET_COMMAND_ACK",                     /*  0 */
-        "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  1 */
-        "PACKET_COMMAND_PLAYER_ID_SELF",          /*  2 */
-        "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  3 */
-        "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  4 */
-        "PACKET_COMMAND_GAME_START",              /*  5 */
-        "PACKET_COMMAND_SYNC",                    /*  6 */
-        "PACKET_COMMAND_MESSAGE",                 /*  7 */
+        "PACKET_COMMAND_RETRANSMIT",              /*  1 */
+        "PACKET_COMMAND_TOWN_UI_MESSAGE",         /*  2 */
+        "PACKET_COMMAND_PLAYER_ID_SELF",          /*  3 */
+        "PACKET_COMMAND_GAME_REQUEST_JOIN",       /*  4 */
+        "PACKET_COMMAND_GAME_RESPOND_JOIN",       /*  5 */
+        "PACKET_COMMAND_GAME_START",              /*  6 */
+        "PACKET_COMMAND_SYNC",                    /*  7 */
+        "PACKET_COMMAND_MESSAGE",                 /*  8 */
 
         "PACKET_COMMAND_UNKNOWN"
 	};
@@ -138,6 +139,9 @@ void PacketFPrint(FILE *fp, void *aData, unsigned int aSize)
 
 void PacketPrint(void *aData, unsigned int aSize)
 {
+#if WIN32
+    PacketFPrint(stdout, aData, aSize);
+#else
     FILE *fp;
 
     fp = fopen("packets.txt", "a");
@@ -145,6 +149,7 @@ void PacketPrint(void *aData, unsigned int aSize)
         PacketFPrint(fp, aData, aSize);
         fclose(fp);
     }
+#endif
 }
 /** @} */
 /*-------------------------------------------------------------------------*
