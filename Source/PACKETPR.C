@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "PACKET.H"
 #include "CMDQUEUE.H"
+#include "SYNCPACK.H"
 
 const char *PacketName(unsigned char command)
 {
@@ -73,6 +74,54 @@ const char *PacketSenderName(T_directTalkUniqueAddress addr)
     return sender;
 }
 
+void PacketSyncFPrintfAction(FILE *fp, T_playerAction type, T_word16 actionData[4])
+{
+    const char *actions[PLAYER_ACTION_UNKNOWN] = {
+        "NONE", /* 0 */
+        "CHANGE_SELF", /* 1 */
+        "MELEE_ATTACK", /* 2 */
+        "MISSILE_ATTACK", /* 3 */
+        "ACTIVATE_FORWARD", /* 4 */
+        "LEAVE_LEVEL", /* 5 */
+        "PICKUP_ITEM", /* 6 */
+        "THROW_ITEM", /* 7 */
+        "STEAL", /* 8 */
+        "STOLEN", /* 9 */
+        "AREA_SOUND", /* 10 */
+        "SYNC_NEW_PLAYER_WAIT", /* 11 */
+        "SYNC_NEW_PLAYER_SEND", /* 12 */
+        "SYNC_COMPLETE", /* 13 */
+        "GOTO_PLACE", /* 14 */
+        "DROP_AT", /* 15 */
+        "PAUSE_GAME_TOGGLE", /* 16 */
+        "ABORT_LEVEL", /* 17 */
+        "PICK_LOCK", /* 18 */
+        "ID_SELF", /* 19 */
+    };
+    if (type < PLAYER_ACTION_UNKNOWN)
+        fprintf(fp, "%s", actions[type]);
+    else
+        fprintf(fp, "UNKNOWN#%d", type);
+
+    fprintf(fp, "[%d, %d, %d, %d]", actionData[0], actionData[1], actionData[2], actionData[3]);
+}
+
+void PacketSyncFPrintf(FILE *fp, T_syncronizePacket *p)
+{
+    fprintf(fp,
+            "(syncNumber=%d deltaTime=%d objID=%d xyz=%d,%d,%d angle=%d stance=0x%02X",
+            p->syncNumber, p->deltaTime, p->playerObjectId, p->x, p->y, p->z,
+            p->angle, p->stanceAndVisibility);
+    if (p->fieldsAvailable & SYNC_PACKET_FIELD_ACTION) {
+        fprintf(fp, " action=");
+        PacketSyncFPrintfAction(fp, p->actionType, p->actionData);
+    }
+#ifndef COMPILE_OPTION_DONT_CHECK_SYNC_OBJECT_IDS
+    fprintf(fp, " nextid=%d nextwhen=%d", p->nextObjectId, p->nextObjectIdWhen);
+#endif
+    fprintf(fp, ")");
+}
+
 void PacketFPrint(FILE *fp, void *aData, unsigned int aSize)
 {
 	T_packetHeader *p_header = (T_packetHeader *)aData;
@@ -88,8 +137,8 @@ void PacketFPrint(FILE *fp, void *aData, unsigned int aSize)
 	} else if (p_header->packetLength == LONG_PACKET_LENGTH) {
 		fprintf(fp, "L");
 	} else {
-		fprintf(fp, "Illegal packet length!\n");
-		return;
+	    // special csyncpacket
+		fprintf(fp, "s");
 	}
 	fprintf(fp, "#%d: %s:%s", p_header->id, PacketSenderName(p_header->sender), PacketName(p_packet->data[0]));
 	switch (p_packet->data[0]) {
@@ -135,14 +184,15 @@ void PacketFPrint(FILE *fp, void *aData, unsigned int aSize)
 				fprintf(fp, "} time=%d firstlevel=%d", p->timeOfDay, p->firstLevel);
 			}
 			break;
-//		case PACKET_COMMANDCS_GOTO_SUCCEEDED:
-//			{
-//				T_gotoSucceededPacket *p = (T_gotoSucceededPacket *)p_packet->data;
-//				fprintf(fp, "(location=%d place=%d)", p->startLocation, p->placeNumber);
-//			}
-//			break;
+		case PACKET_COMMAND_SYNC:
+            {
+                T_syncPacket *p_sync = (T_syncPacket *)p_packet->data;
+                T_syncronizePacket *p = (T_syncronizePacket *)(p_sync->syncData) ;
+                PacketSyncFPrintf(fp, p);
+            }
+		    break;
 		default:
-			fprintf(fp, "Unknown packet type #%d!\n", p_packet->data[0]);
+			fprintf(fp, "Unknown packet type #%d!", p_packet->data[0]);
 			break;
 	}
 	fprintf(fp, "\n");
