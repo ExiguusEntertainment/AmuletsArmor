@@ -136,7 +136,7 @@ static T_playerIDSelf *IFindByName(T_byte8 *p_name)
     DebugRoutine("IFindByName");
 
     for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
-        if ((p->name[0]) && (strcmp(p_name, p->name)==0)) {
+        if ((p->name[0]) && (strcmp(p_name, p->name) == 0)) {
             p_found = p;
             break;
         }
@@ -170,7 +170,7 @@ static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID)
     for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
         if (p->name[0] == '\0') {
             memcpy(p, p_playerID, sizeof(*p));
-            
+
             // We want the transition from nowhere to somewhere, 
             // start at nowhere for a newly created character
             p->location = PLAYER_ID_LOCATION_NOWHERE;
