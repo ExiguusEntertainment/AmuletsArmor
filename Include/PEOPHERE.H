@@ -11,9 +11,6 @@ T_void PeopleHereInitialize(T_void) ;
 T_void PeopleHereFinish(T_void) ;
 T_void PeopleHereReset(T_void) ;
 T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID) ;
-E_Boolean PeopleHereFindPlayerGame(
-              T_byte8 *p_name,
-              T_gameGroupID *p_groupID) ;
 T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self) ;
 T_gameGroupID PeopleHereGetUniqueGroupID(T_void) ;
 

@@ -116,40 +116,6 @@ T_void PeopleHereReset(T_void)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  PeopleHereFindPlayerGame
- *-------------------------------------------------------------------------*/
-/**
- *  Search to find a player in a game.  Search the player list for a
- *  given name and return its group id (if any).
- *
- *  @param p_name -- Name to find
- *  @param p_groupID -- ID of player
- *
- *  @return TRUE if found, else FALSE.
- *
- *<!-----------------------------------------------------------------------*/
-E_Boolean PeopleHereFindPlayerGame(T_byte8 *p_name, T_gameGroupID *p_groupID)
-{
-    T_playerIDSelf *p_find;
-    E_Boolean found = FALSE;
-
-    DebugRoutine("PeopleHereFindPlayerGame");
-
-    /* Search for the name */
-    p_find = IFindByName(p_name);
-
-    /* If the name is found, give it a group id. */
-    if (p_find) {
-        *p_groupID = p_find->groupID;
-        found = TRUE;
-    }
-
-    DebugEnd();
-
-    return found;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  IFindByName
  *-------------------------------------------------------------------------*/
 /**
