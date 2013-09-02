@@ -542,7 +542,6 @@ T_void CmdQUpdateAllReceives(T_void)
             if (status == 0)  {
                 /* Yes, we did.  See what command is being issued. */
                 command = packet.data[0] ;
-MessagePrintf("Got packet: %d %d", command, packet.header.packetLength);
 
                 /* Make sure it is a legal commands.  Unfortunately, */
                 /* we'll have to ignore those illegal commands. */
@@ -550,9 +549,9 @@ MessagePrintf("Got packet: %d %d", command, packet.header.packetLength);
                     /* Is it an ACK packet? */
 
 
-//printf("R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, TickerGet()) ;  fflush(stdout) ;
+                    //printf("R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, TickerGet()) ;  fflush(stdout) ;
 #ifdef COMPILE_OPTION_CREATE_PACKET_DATA_FILE
-fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, SyncTimeGet()) ; fflush(G_packetFile) ;
+                    fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, SyncTimeGet()) ; fflush(G_packetFile) ;
 #endif
 
                     if (command == PACKET_COMMAND_ACK)  {
@@ -574,7 +573,8 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
                                     /* waiting? */
                                     T_cmdQPacketStruct *p = G_activeCmdQList[ackCommand].first;
                                     while (p) {
-                                        if (G_activeCmdQList[ackCommand].last->packet.header.id == packetId)  {
+                                        // Search for a matching packet id
+                                        if (p->packet.header.id == packetId)  {
                                             /* Yes. We can now discard it. */
                                             DebugCheckValidStack() ;
                                             ICmdQDiscardPacket(ackCommand, p) ;

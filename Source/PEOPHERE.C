@@ -813,6 +813,50 @@ T_word16 PeopleHereGetNumInGroupGame(void)
 {
     return G_numPeopleInGame;
 }
+
+/*-------------------------------------------------------------------------*
+ * Routine:  PeopleHereSendPacketToGroup
+ *-------------------------------------------------------------------------*/
+/**
+ *  Send a long packet to all members in a group.  Does not send to
+ *  ourself.
+ *
+ *  @param groupID -- Group ID to send to (0=town UI, otherwise game ID)
+ *  @param p_packet -- Pointer to packet to send
+ *  @param retryTime -- Retry time for sending this packet
+ *  @param extraData -- Extra data for this packet callback
+ *  @param p_callback -- Callback when sent (0 if no callback)
+ *
+ *<!-----------------------------------------------------------------------*/
+T_void PeopleHereSendPacketToGroup(
+        T_gameGroupID groupID,
+        T_packetLong *p_packet,
+        T_word16 retryTime,
+        T_word32 extraData,
+        T_cmdQPacketCallback p_callback)
+{
+    T_word16 i;
+    T_playerIDSelf *p = G_peopleList;
+    T_directTalkUniqueAddress ourID;
+
+    DebugRoutine("PeopleHereGeneratePeopleInGame");
+
+    DirectTalkGetUniqueAddress(&ourID);
+
+    /* Go through the list and identify everyone in this group. */
+    for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
+        if ((p->name[0]) && (CompareGameGroupIDs(p->groupID, groupID))) {
+            if (!CompareUniqueNetworkIDs(p->uniqueAddress, ourID)) {
+                // Create a long packet request for EACH player
+                CmdQSendLongPacket(p_packet, &p->uniqueAddress, retryTime, extraData,
+                        p_callback);
+            }
+        }
+    }
+
+    DebugEnd();
+}
+
 /** @} */
 /*-------------------------------------------------------------------------*
  * End of File:  PEOPHERE.C

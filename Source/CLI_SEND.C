@@ -30,41 +30,6 @@
 #include "SMCCHOOS.H"
 #include "STATS.H"
 
-static void IClientSendLongPacketToGroup(
-        T_packetLong *p_packet,
-        T_word16 retryTime,
-        T_word32 extraData,
-        T_cmdQPacketCallback p_callback)
-{
-    T_word16 i;
-    T_directTalkUniqueAddress myid;
-
-    for (i = 0; i < PeopleHereGetNumInGroupGame(); i++) {
-        if (!CompareUniqueNetworkIDs(myid, *PeopleHereGetUniqueAddr(i))) {
-            CmdQSendLongPacket(p_packet, PeopleHereGetUniqueAddr(i), 280, 0,
-                    NULL);
-        }
-    }
-}
-
-static void IClientSendShortPacketToPeopleHere(
-        T_packetShort *p_packet,
-        T_word16 retryTime,
-        T_word32 extraData,
-        T_cmdQPacketCallback p_callback)
-{
-    T_word16 i;
-    T_directTalkUniqueAddress myid;
-
-    DirectTalkGetUniqueAddress(&myid);
-    for (i = 0; i < PeopleHereGetNumInGroupGame(); i++) {
-        if (!CompareUniqueNetworkIDs(myid, *PeopleHereGetUniqueAddr(i))) {
-            CmdQSendShortPacket(p_packet, PeopleHereGetUniqueAddr(i), 280, 0,
-                    NULL);
-        }
-    }
-}
-
 /*-------------------------------------------------------------------------*
  * Routine:  ClientSendMessage
  *-------------------------------------------------------------------------*/
@@ -93,7 +58,7 @@ T_void ClientSendMessage(T_byte8 *message)
     sprintf(p_msg->message, "%-50.50s", buffer);
 
     /* Send the whole packet to several people */
-    IClientSendLongPacketToGroup(&packet, 280, 0, NULL);
+    PeopleHereSendPacketToGroup(ClientSyncGetGameGroupID(), &packet, 280, 0, NULL);
 
     /* Send it back to ourselves so we have a running log. */
     ClientReceiveMessagePacket((T_packetEitherShortOrLong *)&packet);
@@ -217,15 +182,19 @@ T_void ClientSendTownUIAddMessage(T_byte8 *p_msg)
 {
     T_townUIMessagePacket *p_msgPacket;
     T_packetLong packet;
+    T_directTalkUniqueAddress townGroup;
 
     DebugRoutine("ClientSendTownUIAddMessage");
+
+    townGroup = *DirectTalkGetNullBlankUniqueAddress();
 
     p_msgPacket = (T_townUIMessagePacket *)(packet.data);
     memset(p_msgPacket, 0, sizeof(T_townUIMessagePacket));
     p_msgPacket->command = PACKET_COMMAND_TOWN_UI_MESSAGE;
     strncpy((char *)p_msgPacket->name, (const char *)StatsGetName(), 29);
     strncpy((char *)p_msgPacket->msg, (char *)p_msg, 39);
-    CmdQSendLongPacket(&packet, 0, 600, 0, NULL);
+//    CmdQSendLongPacket(&packet, 0, 600, 0, NULL);
+    PeopleHereSendPacketToGroup(townGroup, &packet, 140, 0, NULL);
 
     ClientReceiveTownUIMessagePacket((T_packetEitherShortOrLong *)&packet);
 
@@ -360,7 +329,7 @@ T_void ClientSendGameStartPacket(
     p_start->firstLevel = firstLevel;
 
 //printf("Send request to start %d %d\n", groupID, adventure) ;
-    IClientSendLongPacketToGroup(&packet, 140, 0, NULL);
+    PeopleHereSendPacketToGroup(groupID, &packet, 140, 0, NULL);
 
     ClientReceiveGameStartPacket((T_packetEitherShortOrLong *)&packet);
 
