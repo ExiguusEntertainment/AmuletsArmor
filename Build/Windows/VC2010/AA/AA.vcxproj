@@ -309,6 +309,7 @@
     <ClInclude Include="..\..\..\..\Include\OPTIONS.H" />
     <ClInclude Include="..\..\..\..\Include\OVERHEAD.H" />
     <ClInclude Include="..\..\..\..\Include\OVERLAY.H" />
+    <ClInclude Include="..\..\..\..\Include\PACKET.H" />
     <ClInclude Include="..\..\..\..\Include\PACKETDT.H" />
     <ClInclude Include="..\..\..\..\Include\PACKLOG.H" />
     <ClInclude Include="..\..\..\..\Include\PEOPHERE.H" />

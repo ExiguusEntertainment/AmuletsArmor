@@ -219,7 +219,7 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
             movingAverage = fps;
         movingAverage = ((double)fps)*0.05+movingAverage*0.95;
         lastFPS += 1000;
-        printf("%02d:%02d:%02d.%03d FPS: %d, %f\n", tick/3600000, (tick/60000) % 60, (tick/1000) % 60, tick%1000, fps, movingAverage);
+        //printf("%02d:%02d:%02d.%03d FPS: %d, %f\n", tick/3600000, (tick/60000) % 60, (tick/1000) % 60, tick%1000, fps, movingAverage);
         fps = 0;
     }
     WindowsUpdateEvents();
