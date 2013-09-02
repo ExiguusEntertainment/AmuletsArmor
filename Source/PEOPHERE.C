@@ -21,19 +21,6 @@
 #include "STATS.H"
 #include "TOWNUI.H"
 
-/* List of T_playerIDSelf structures */
-//static T_doubleLinkList G_peopleList = DOUBLE_LINK_LIST_BAD ;
-//
-//
-//
-//
-///* Internal prototypes: */
-//static T_void IClearList(T_void) ;
-//static T_playerIDSelf *IFindByName(T_byte8 *p_name) ;
-//static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID) ;
-//static T_playerIDLocation IGetOurLocation(T_void) ;
-//static T_void ISetupGame(T_gameGroupID groupID) ;
-//
 /*-------------------------------------------------------------------------*
  * Constants:
  *-------------------------------------------------------------------------*/
@@ -126,36 +113,6 @@ T_void PeopleHereReset(T_void)
     G_ourState = PLAYER_ID_STATE_NONE;
 
     DebugEnd();
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  PeopleHereGetNumInGame
- *-------------------------------------------------------------------------*/
-/**
- *  PeopleHereGetNumInGame counts the number of people in a game group.
- *
- *  @param groupID -- Game group id
- *
- *  @return Number of players found
- *
- *<!-----------------------------------------------------------------------*/
-T_word16 PeopleHereGetNumInGame(T_gameGroupID groupID)
-{
-    T_word16 numFound = 0;
-    T_word16 i;
-    T_playerIDSelf *p = G_peopleList;
-
-    DebugRoutine("PeopleHereGetNumInGame");
-
-    for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
-        if ((p->name[0]) && (CompareGameGroupIDs(groupID, p->groupID))) {
-            numFound++;
-        }
-    }
-
-    DebugEnd();
-
-    return numFound;
 }
 
 /*-------------------------------------------------------------------------*
@@ -744,11 +701,10 @@ T_void PeopleHereStartGame(T_word16 firstLevel)
  * Routine:  ISetupGame
  *-------------------------------------------------------------------------*/
 /**
- *  PeopleHereGetNumInGame counts the number of people in a game group.
+ *  ISetupGame creates a new game by counting up to the maximum number
+ *  of players in the given groupID.  Sets G_numPeopleInGame.
  *
- *  @param game -- Game group id
- *
- *  @param T_word16 -- Number of players found
+ *  @param groupID -- Game group id
  *
  *<!-----------------------------------------------------------------------*/
 static T_void ISetupGame(T_gameGroupID groupID)
@@ -779,11 +735,11 @@ static T_void ISetupGame(T_gameGroupID groupID)
  * Routine:  PeopleHereIDPlayer
  *-------------------------------------------------------------------------*/
 /**
- *  PeopleHereGetNumInGame counts the number of people in a game group.
+ *  PeopleHereIDPlayer sets the name of of the game given player by
+ *  number in the list.  If already exists, appends more text.
  *
- *  @param game -- Game group id
- *
- *  @param T_word16 -- Number of players found
+ *  @param playerNum -- Player number
+ *  @param p_name -- Name of the player
  *
  *<!-----------------------------------------------------------------------*/
 T_void PeopleHereIDPlayer(T_word16 playerNum, T_byte8 *p_name)
