@@ -250,6 +250,7 @@ int SDL_main(int argc, char *argv[])
     atexit(SDL_Quit);
 
     screen = SDL_SetVideoMode(640, 400, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    SDL_WM_SetCaption("Amulets & Armor", "Amulets & Armor");
     SDL_ShowCursor( SDL_DISABLE ); 
 
     if(screen == NULL)
