@@ -29,7 +29,34 @@
 #include "STORE.H"
 #include "TOWNUI.H"
 #include "GUILDUI.H"
+#include "TICKER.H"
 
+/*-------------------------------------------------------------------------*
+ * Constants:
+ *-------------------------------------------------------------------------*/
+#define PLAYER_ID_INTERVAL      (TICKS_PER_SECOND * 2) // once every 2 seconds
+
+/*-------------------------------------------------------------------------*
+ * Types:
+ *-------------------------------------------------------------------------*/
+typedef struct {
+    T_hardFormStart start;
+    T_hardFormEnd end;
+    T_hardFormUpdate update;
+    T_hardFormHandleMouse handleMouse;
+} T_hardFormCallbackGroup;
+
+/*-------------------------------------------------------------------------*
+ * Globals:
+ *-------------------------------------------------------------------------*/
+static T_buttonID G_closeButton = NULL;
+static T_void HardFormExit(T_buttonID buttonID);
+static E_Boolean HardFormOpen = FALSE;
+static T_word32 G_timeIDLastUpdated = 0;
+
+/*-------------------------------------------------------------------------*
+ * Prototypes:
+ *-------------------------------------------------------------------------*/
 /* Test prototypes: */
 #if 0
 T_void HardFormStartTest(T_word32 formNum);
@@ -47,17 +74,6 @@ T_void HardFormHandleMouseTest2(
 T_void HardFormUpdateTest(T_void);
 T_void HardFormUpdateTest2(T_void);
 #endif
-
-static T_buttonID G_closeButton = NULL;
-static T_void HardFormExit(T_buttonID buttonID);
-static E_Boolean HardFormOpen = FALSE;
-
-typedef struct {
-    T_hardFormStart start;
-    T_hardFormEnd end;
-    T_hardFormUpdate update;
-    T_hardFormHandleMouse handleMouse;
-} T_hardFormCallbackGroup;
 
 static T_hardFormCallbackGroup G_callbackGroups[HARD_FORM_UNKNOWN] = {
     {
@@ -132,6 +148,9 @@ T_void HardFormStart(T_word32 formNum)
     if (G_callbackGroups[G_currentForm].start != NULL )
         G_callbackGroups[G_currentForm].start(formID);
 
+    if (G_timeIDLastUpdated)
+        G_timeIDLastUpdated = TickerGet();
+
     DebugEnd();
 }
 
@@ -202,6 +221,24 @@ T_void HardFormHandleMouse(
     DebugEnd();
 }
 
+void HardFormNetworkUpdate(void)
+{
+    T_word32 time;
+
+    DebugRoutine("HardFormNetworkUpdate");
+
+    // For players sitting in the town ui, send out an player ID
+    // every so often.  If the list is not updated, players will be
+    // dropped.
+    time = TickerGet();
+    if ((time - G_timeIDLastUpdated) >= PLAYER_ID_INTERVAL) {
+        G_timeIDLastUpdated += PLAYER_ID_INTERVAL;
+        ClientSendPlayerIDSelf();
+    }
+
+    DebugEnd();
+}
+
 T_void HardFormUpdate(T_void)
 {
     DebugRoutine("HardFormUpdate");
@@ -215,6 +252,7 @@ T_void HardFormUpdate(T_void)
         MouseUpdateEvents();
         if (G_callbackGroups[G_currentForm].update != NULL )
             G_callbackGroups[G_currentForm].update();
+        HardFormNetworkUpdate();
     }
 
     DebugEnd();

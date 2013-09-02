@@ -34,8 +34,6 @@
 #include "TOWNUI.H"
 #include "TXTBOX.H"
 
-#define PLAYER_ID_INTERVAL      (TICKS_PER_SECOND * 2) // once every 2 seconds
-
 #define TOWN_NUM_MESSAGES 15
 #define TOWN_MESSAGE_SIZE 60
 #define MAX_MAPS_PER_ADVENTURE 15
@@ -66,7 +64,6 @@ static T_doubleLinkList G_chatList = DOUBLE_LINK_LIST_BAD;
 static T_keyboardEventHandler G_oldKeyHandler = NULL;
 static E_Boolean G_isOnePlayer;
 static E_Boolean G_adventureComplete = FALSE;
-static T_word32 G_timeIDLastUpdated = 0;
 
 /* internal routine prototypes */
 static T_void TownUIUpdateGraphics(T_void);
@@ -303,24 +300,13 @@ T_void TownUIStart(T_word32 formNum)
     // Let everyone know we are here once every so much time
     // If this is not sent enough, we'll be dropped from the list
     ClientSendPlayerIDSelf();
-    G_timeIDLastUpdated = TickerGet();
 
     DebugEnd();
 }
 
 T_void TownUIUpdate(T_void)
 {
-    T_word32 time;
     DebugRoutine("TownUIUpdate");
-
-    // For players sitting in the town ui, send out an player ID
-    // every so often.  If the list is not updated, players will be
-    // dropped.
-    time = TickerGet();
-    if ((time - G_timeIDLastUpdated) >= PLAYER_ID_INTERVAL) {
-        G_timeIDLastUpdated += PLAYER_ID_INTERVAL;
-        ClientSendPlayerIDSelf();
-    }
 
     DebugEnd();
 }
