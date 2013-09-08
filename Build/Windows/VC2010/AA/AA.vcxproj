@@ -128,7 +128,7 @@
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;sdl_net.lib</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
   </ItemDefinitionGroup>
