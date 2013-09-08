@@ -42,6 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
@@ -102,7 +103,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
-      <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>

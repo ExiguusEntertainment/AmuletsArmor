@@ -202,7 +202,7 @@ void PacketPrint(void *aData, unsigned int aSize)
 {
 #if WIN32
     PacketFPrint(stdout, aData, aSize);
-#else
+#elif 0
     FILE *fp;
 
     fp = fopen("packets.txt", "a");
