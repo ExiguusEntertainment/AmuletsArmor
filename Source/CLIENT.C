@@ -1805,26 +1805,26 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
                 if (KeyMapGetScan(KEYMAP_TIME_OF_DAY)==TRUE)
                     MapOutputTimeOfDay();
 
-                if (G_msgOn==FALSE) {
+                if ((G_msgOn == FALSE) && (!ClientIsDead())) {
                     IClientHandleMapKeys(scankey);
-                if (scankey == KeyMap(KEYMAP_OPEN))
-                {
-                     IClientAttemptOpeningForwardWall() ;
-                }
 
-                /* Grab item if relative mode */
-                // TODO: Need to be able to remap key!
-                if ((MouseIsRelativeMode()) && (G_lastDrawTargetItem)) {
-                    if (KeyMapGetScan(KEYMAP_ACTIVATE_OR_TAKE)) {
-                        if (InventoryCanTakeItem(G_lastDrawTargetItem)) {
-                            ClientRequestTake(G_lastDrawTargetItem, TRUE);
+                    if (scankey == KeyMap(KEYMAP_OPEN)) {
+                        IClientAttemptOpeningForwardWall();
+                    }
+
+                    /* Grab item if relative mode */
+                    // TODO: Need to be able to remap key!
+                    if ((MouseIsRelativeMode()) && (G_lastDrawTargetItem)) {
+                        if (KeyMapGetScan(KEYMAP_ACTIVATE_OR_TAKE)) {
+                            if (InventoryCanTakeItem(G_lastDrawTargetItem)) {
+                                ClientRequestTake(G_lastDrawTargetItem, TRUE);
+                            }
                         }
                     }
-                }
 
-                /* Messages are off, update screen buttons */
-                ButtonKeyControl (event,scankey);  //JDA
-            }
+                    /* Messages are off, update screen buttons */
+                    ButtonKeyControl(event, scankey);  //JDA
+                }
             break;
 
 
