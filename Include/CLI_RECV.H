@@ -24,9 +24,6 @@ T_void ClientReceiveTownUIMessagePacket(
 T_void ClientReceivePlayerIDSelf(
            T_packetEitherShortOrLong *p_packet) ;
 
-T_void ClientReceiveRequestPlayerIDPacket(
-           T_packetEitherShortOrLong *p_packet) ;
-
 T_void ClientReceiveGameRequestJoinPacket(
            T_packetEitherShortOrLong *p_packet) ;
 

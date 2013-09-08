@@ -30,6 +30,7 @@
 #include "PROMPT.H"
 #include "SOUND.H"
 #include "STATS.H"
+#include "TICKER.H"
 #include "TOWNUI.H"
 #include "TXTBOX.H"
 
@@ -63,6 +64,7 @@ static T_doubleLinkList G_chatList = DOUBLE_LINK_LIST_BAD;
 static T_keyboardEventHandler G_oldKeyHandler = NULL;
 static E_Boolean G_isOnePlayer;
 static E_Boolean G_adventureComplete = FALSE;
+
 /* internal routine prototypes */
 static T_void TownUIUpdateGraphics(T_void);
 static T_void TownUIGotoPlace(T_buttonID buttonID);
@@ -294,6 +296,10 @@ T_void TownUIStart(T_word32 formNum)
      TownUIAddMessage(NULL, "") ;
      #endif
      */
+
+    // Let everyone know we are here once every so much time
+    // If this is not sent enough, we'll be dropped from the list
+    ClientSendPlayerIDSelf();
 
     DebugEnd();
 }
@@ -682,7 +688,7 @@ static T_void TownUIUpdateQuestInfo(T_void)
     INIFileGetString(idata, "main", "nummaps", stmp, 4096);
     nummaps = atoi(stmp);
     sprintf(stmp2, "^007     Number of maps :\t^009%d\r", nummaps);
-    sprintf(stmp3, "%s%s", stmp3, stmp2);
+    strcat(stmp3, stmp2);
     mapNum = StatsFindPastPlace(G_firstAdventureMap);
 
     if (mapNum == 0) {

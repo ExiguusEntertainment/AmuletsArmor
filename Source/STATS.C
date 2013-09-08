@@ -2381,7 +2381,7 @@ T_void StatsCalcPlayerMovementSpeed (T_void)
 
     DebugRoutine ("StatsCalcPlayerMovementSpeed");
 
-    G_activeStats->MaxVWalking = (StatsGetPlayerAttribute(ATTRIBUTE_SPEED)/2)+10;
+    G_activeStats->MaxVWalking = (StatsGetPlayerAttribute(ATTRIBUTE_SPEED)/5)+10;
 
     /* apply class bonuses */
     if (G_activeStats->ClassType == CLASS_ROGUE)

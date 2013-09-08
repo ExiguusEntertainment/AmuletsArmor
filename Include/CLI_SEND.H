@@ -17,11 +17,7 @@ T_void ClientRequestRetransmit(
         T_gameGroupID groupID,
         T_word16 destination);
 
-T_void ClientSendGotoSucceeded(T_word16 placeNumber, T_word16 startLocation);
-
 T_void ClientSendTownUIAddMessage(T_byte8 *p_msg);
-
-T_void ClientSendRequestPlayerID(T_void);
 
 T_void ClientSendPlayerIDSelf(T_void);
 

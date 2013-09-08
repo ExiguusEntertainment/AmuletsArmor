@@ -146,9 +146,6 @@
     <ClCompile Include="..\..\..\..\Source\LIGHT.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\LL_COMM.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\LOOK.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -239,18 +236,6 @@
     <ClCompile Include="..\..\..\..\Source\SMCCHOOS.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SMCDIS.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SMCLEAVE.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SMCLOGOF.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SMCONNEC.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SMCPLAY.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -336,9 +321,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SERVER.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\CONNUI.C">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -613,18 +595,6 @@
     <ClInclude Include="..\..\..\..\Include\SMCCHOOS.H">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\SMCDIS.H">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\SMCLEAVE.H">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\SMCLOGOF.H">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\SMCONNEC.H">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Include\SMCPLAY.H">
       <Filter>Include</Filter>
     </ClInclude>
@@ -870,6 +840,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Source\Win32\ipx_client.h">
       <Filter>Source Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Include\PACKET.H">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -42,6 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
@@ -102,7 +103,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
-      <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>false</ExceptionHandling>
@@ -127,7 +128,7 @@
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;sdl_net.lib</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
   </ItemDefinitionGroup>
@@ -152,7 +153,6 @@
     <ClCompile Include="..\..\..\..\Source\COLORIZE.C" />
     <ClCompile Include="..\..\..\..\Source\COMWIN.C" />
     <ClCompile Include="..\..\..\..\Source\CONFIG.C" />
-    <ClCompile Include="..\..\..\..\Source\CONNUI.C" />
     <ClCompile Include="..\..\..\..\Source\CONTROL.C" />
     <ClCompile Include="..\..\..\..\Source\CRELOGIC.C" />
     <ClCompile Include="..\..\..\..\Source\CSYNCPCK.C" />
@@ -176,7 +176,6 @@
     <ClCompile Include="..\..\..\..\Source\KEYBOARD.C" />
     <ClCompile Include="..\..\..\..\Source\KEYMAP.C" />
     <ClCompile Include="..\..\..\..\Source\LIGHT.C" />
-    <ClCompile Include="..\..\..\..\Source\LL_COMM.C" />
     <ClCompile Include="..\..\..\..\Source\LOOK.C" />
     <ClCompile Include="..\..\..\..\Source\MAINUI.C" />
     <ClCompile Include="..\..\..\..\Source\MAP.C" />
@@ -209,10 +208,6 @@
     <ClCompile Include="..\..\..\..\Source\SLIDR.C" />
     <ClCompile Include="..\..\..\..\Source\SMACHINE.C" />
     <ClCompile Include="..\..\..\..\Source\SMCCHOOS.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCDIS.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCLEAVE.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCLOGOF.C" />
-    <ClCompile Include="..\..\..\..\Source\SMCONNEC.C" />
     <ClCompile Include="..\..\..\..\Source\SMCPLAY.C" />
     <ClCompile Include="..\..\..\..\Source\SMMAIN.C" />
     <ClCompile Include="..\..\..\..\Source\SOSEZ.C" />
@@ -315,6 +310,7 @@
     <ClInclude Include="..\..\..\..\Include\OPTIONS.H" />
     <ClInclude Include="..\..\..\..\Include\OVERHEAD.H" />
     <ClInclude Include="..\..\..\..\Include\OVERLAY.H" />
+    <ClInclude Include="..\..\..\..\Include\PACKET.H" />
     <ClInclude Include="..\..\..\..\Include\PACKETDT.H" />
     <ClInclude Include="..\..\..\..\Include\PACKLOG.H" />
     <ClInclude Include="..\..\..\..\Include\PEOPHERE.H" />
@@ -335,10 +331,6 @@
     <ClInclude Include="..\..\..\..\Include\SLIDR.H" />
     <ClInclude Include="..\..\..\..\Include\SMACHINE.H" />
     <ClInclude Include="..\..\..\..\Include\SMCCHOOS.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCDIS.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCLEAVE.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCLOGOF.H" />
-    <ClInclude Include="..\..\..\..\Include\SMCONNEC.H" />
     <ClInclude Include="..\..\..\..\Include\SMCPLAY.H" />
     <ClInclude Include="..\..\..\..\Include\SMMAIN.H" />
     <ClInclude Include="..\..\..\..\Include\SOS.H" />

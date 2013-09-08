@@ -1743,7 +1743,8 @@ T_void ReleaseMipMap(T_byte8 *p_mipmap)
  * Routine:  View3dResolveSpecialObjects
  *-------------------------------------------------------------------------*/
 /**
- *  View3dResolveSpecialObjects is used to actually create all the        *//*  was locked into memory must be released when done with the map.
+ *  View3dResolveSpecialObjects is used to actually create all the
+ *  was locked into memory must be released when done with the map.
  *  special effects created by the special objects.  The special objects
  *  list is run through 3 times.  1) to place primary effects (doors,
  *  sector definitions, etc.), 2) to place modifiers/secondary effects

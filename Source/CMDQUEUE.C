@@ -18,7 +18,6 @@
  * @{
  *
  *<!-----------------------------------------------------------------------*/
-#include "COMM.H"
 #include "CMDQUEUE.H"
 #include "GENERAL.H"
 #include "MEMORY.H"
@@ -30,7 +29,7 @@ FILE *G_packetFile ;
 
 typedef enum {
     PACKET_COMMAND_TYPE_LOSSLESS,
-    PACKET_COMMAND_TYPE_LOSSFUL
+    PACKET_COMMAND_TYPE_LOSSY
 } E_packetCommandType ;
 
 typedef T_cmdQActionRoutine *T_comQActionList ;
@@ -38,6 +37,7 @@ typedef T_cmdQActionRoutine *T_comQActionList ;
 typedef struct T_cmdQPacketStructTag {
     struct T_cmdQPacketStructTag *prev ;
     struct T_cmdQPacketStructTag *next ;
+    T_directTalkUniqueAddress destination;
     T_word32 timeToRetry ;
     T_word32 extraData ;
     T_word16 retryTime ;
@@ -55,66 +55,44 @@ typedef struct {
 
 static E_Boolean G_init = FALSE ;
 
-static T_word16 G_activePort = 0xFFFF ;
-
 static T_cmdQStruct *G_activeCmdQList = NULL ;
 
 /** All callbacks are now set dynamically. **/
 static T_cmdQActionRoutine G_cmdQActionList[PACKET_COMMAND_MAX] = {
     NULL,                  /* 0 ACK */
-    NULL,                  /* 1 LOGIN */
-    NULL,                  /* 2 RETRANSMIT */
-    NULL,                  /* 3 TOWN_UI_MESSAGE */
-    NULL,                  /* 4 PLAYER_ID_SELF */
-    NULL,                  /* 5 REQUEST_PLAYER_ID */
-    NULL,                  /* 6 GAME_REQUEST_JOIN */
-    NULL,                  /* 7 GAME_RESPOND_JOIN */
-    NULL,                  /* 8 GAME_START */
-    NULL,                  /* 9 SYNC */
-    NULL,                  /* 10 MESSAGE */
-    NULL,                  /* 16 SC_PLACE_START */
-    NULL,                  /* 17 CSC_GOTO_PLACE */
-    NULL,                  /* 18 CS_GOTO_SUCCEEDED */
+    NULL,                  /* 1 RETRANSMIT */
+    NULL,                  /* 2 TOWN_UI_MESSAGE */
+    NULL,                  /* 3 PLAYER_ID_SELF */
+    NULL,                  /* 4 GAME_REQUEST_JOIN */
+    NULL,                  /* 5 GAME_RESPOND_JOIN */
+    NULL,                  /* 6 GAME_START */
+    NULL,                  /* 7 SYNC */
+    NULL,                  /* 8 MESSAGE */
 } ;
 
 static E_packetCommandType G_CmdQTypeCommand[PACKET_COMMAND_MAX] = {
-    PACKET_COMMAND_TYPE_LOSSFUL,                /* 0 ACK */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 1 LOGIN */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 2 RETRANSMIT */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 4 TOWN_UI_MESSAGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 5 PLAYER_ID_SELF */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 6 REQUEST_PLAYER_ID */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 7 GAME_REQUEST_JOIN */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 8 GAME START */
-    PACKET_COMMAND_TYPE_LOSSFUL,                /* 9 SYNC */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 10 MESSAGE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 16 SC_PLACE_START */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 17 CSC_GOTO_PLACE */
-    PACKET_COMMAND_TYPE_LOSSLESS,               /* 18 CS_GOTO_SUCCEEDED */
+    PACKET_COMMAND_TYPE_LOSSY,                  /* 0 ACK */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 1 RETRANSMIT */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 2 TOWN_UI_MESSAGE */
+    PACKET_COMMAND_TYPE_LOSSY,                  /* 3 PLAYER_ID_SELF */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 4 GAME_REQUEST_JOIN */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 5 GAME_RESPOND_JOIN */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 6 GAME START */
+    PACKET_COMMAND_TYPE_LOSSY,                  /* 7 SYNC */
+    PACKET_COMMAND_TYPE_LOSSLESS,               /* 8 MESSAGE */
 } ;
 
-static T_cmdQStruct G_cmdQueues[MAX_COMM_PORTS][PACKET_COMMAND_MAX];
-
-typedef struct {
-    T_word32 time ;
-    T_word32 throughput ;
-    T_byte8 commandPos ;
-} T_cmdQueueInfo ;
-
-static T_cmdQueueInfo G_cmdQueueInfo[MAX_COMM_PORTS];
-
-static T_cmdQueueInfo *P_activeQueueInfo = NULL ;
+static T_cmdQStruct G_cmdQueue[PACKET_COMMAND_MAX];
 
 /** CMDQUEUE now controls the packet ID's. **/
 static T_word32 G_nextPacketId = 0;
 
 /* Internal prototypes: */
-T_void ICmdQUpdateSendForPort(T_void) ;
-
-T_void ICmdQDiscardPacket(T_byte8 commandNum) ;
+T_void ICmdQDiscardPacket(T_byte8 commandNum, T_cmdQPacketStruct *p_packet) ;
 
 T_void ICmdQSendPacket(
             T_packetEitherShortOrLong *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback) ;
@@ -146,26 +124,16 @@ T_void CmdQInitialize(T_void)
     G_init = TRUE ;
 
 #ifdef COMPILE_OPTION_CREATE_PACKET_DATA_FILE
-    G_packetFile = fopen("packets.dat", "w") ;
+    G_packetFile = fopen("packets.txt", "w") ;
 #endif
 
     /* Clear some of those global variables. */
-    memset(G_cmdQueues, 0, sizeof(G_cmdQueues)) ;
-    memset(G_cmdQueueInfo, 0, sizeof (G_cmdQueueInfo)) ;
+    memset(G_cmdQueue, 0, sizeof(G_cmdQueue)) ;
 
-#if 0
-    /* Let's see how many ports there are. */
-    numPorts = CommGetNumberPorts() ;
+    // Use port 0 (the only port)
 
-    /* Go through to each port and set it up. */
-    for (port=0; port<numPorts; port++)  {
-        /* Set the active port. */
-        CommSetActivePortN(port) ;
-    }
-#endif
-
-    /* Make the active port an illegal port. */
-    G_activePort = 0xFFFF ;
+    /* Declare which list of command queues we want active (for this port). */
+    G_activeCmdQList = &G_cmdQueue[0] ;
 
     DebugEnd() ;
 }
@@ -216,59 +184,6 @@ T_void CmdQFinish(T_void)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  CmdQSetActivePortNum
- *-------------------------------------------------------------------------*/
-/**
- *  CmdQSetActivePortNum sets up the Cmd Queue module for the given
- *  port (and makes the given port the active communications port).
- *
- *  @param num -- Number of port to make active.
- *
- *<!-----------------------------------------------------------------------*/
-T_void CmdQSetActivePortNum(T_word16 num)
-{
-    DebugRoutine("CmdQSetActivePortNum") ;
-    DebugCheck(G_init == TRUE) ;
-
-    /* Go ahead and set the active port. */
-//    CommSetActivePortN(num) ;
-    G_activePort = num ;
-
-    /* Declare which list of command queues we want active (for this port). */
-    G_activeCmdQList = &G_cmdQueues[num][0] ;
-
-    /* Set a poiner to that queue's overall information. */
-    P_activeQueueInfo = &G_cmdQueueInfo[num] ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  CmdQGetActivePortNum
- *-------------------------------------------------------------------------*/
-/**
- *  CmdQGetActivePortNum returns the number of the active port being
- *  used.
- *
- *  @return Number of port.
- *
- *<!-----------------------------------------------------------------------*/
-T_word16 CmdQGetActivePortNum(T_void)
-{
-    T_word16 portNum ;
-
-    DebugRoutine("CmdQGetActivePortNum") ;
-    DebugCheck(G_init == TRUE) ;
-
-    /* Just get it. */
-    portNum = G_activePort ;
-
-    DebugEnd() ;
-
-    return portNum ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  CmdQSendShortPacket
  *-------------------------------------------------------------------------*/
 /**
@@ -276,6 +191,7 @@ T_word16 CmdQGetActivePortNum(T_void)
  *  it over to ICmdQSendPacket for processing.
  *
  *  @param p_packet -- Packet to send
+ *  @param p_destination -- Destination address to receive packet
  *  @param retryTime -- How long to wait for acknowledgement
  *      before trying to send again.
  *  @param extraData -- Extra data for the callback routine.
@@ -285,6 +201,7 @@ T_word16 CmdQGetActivePortNum(T_void)
  *<!-----------------------------------------------------------------------*/
 T_void CmdQSendShortPacket(
             T_packetShort *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback)
@@ -295,6 +212,7 @@ T_void CmdQSendShortPacket(
     p_packet->header.packetLength = SHORT_PACKET_LENGTH ;
     ICmdQSendPacket(
         (T_packetEitherShortOrLong *)p_packet,
+        p_destination,
         retryTime,
         extraData,
         p_callback) ;
@@ -310,6 +228,7 @@ T_void CmdQSendShortPacket(
  *  it over to ICmdQSendPacket for processing.
  *
  *  @param p_packet -- Packet to send
+ *  @param p_destination -- Destination address to receive packet
  *  @param retryTime -- How long to wait for acknowledgement
  *      before trying to send again.
  *  @param extraData -- Extra data for the callback routine.
@@ -319,6 +238,7 @@ T_void CmdQSendShortPacket(
  *<!-----------------------------------------------------------------------*/
 T_void CmdQSendLongPacket(
             T_packetLong *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback)
@@ -329,6 +249,7 @@ T_void CmdQSendLongPacket(
     p_packet->header.packetLength = LONG_PACKET_LENGTH ;
     ICmdQSendPacket(
         (T_packetEitherShortOrLong *)p_packet,
+        p_destination,
         retryTime,
         extraData,
         p_callback) ;
@@ -353,6 +274,7 @@ T_void CmdQSendLongPacket(
  *<!-----------------------------------------------------------------------*/
 T_void ICmdQSendPacket(
             T_packetEitherShortOrLong *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback)
@@ -378,6 +300,8 @@ T_void ICmdQSendPacket(
     /* Allocate a structure to hold the information plus more. */
     p_cmdPacket = MemAlloc(sizeof(T_cmdQPacketStruct)) ;
 
+    // Store the sender in the packet (needed for proper ack packets)
+    DirectTalkGetUniqueAddress(&p_packet->header.sender);
 #ifndef NDEBUG
     G_packetsAlloc++ ;
 #endif
@@ -391,7 +315,7 @@ T_void ICmdQSendPacket(
     /* Copy in the packet data. */
     p_cmdPacket->packet = *((T_packetLong *)p_packet) ;
 
-    /* Now attack this new packet to the appropriate command list. */
+    /* Now attach this new packet to the appropriate command list. */
     p_cmdPacket->next = G_activeCmdQList[command].first ;
 
     /* Update the first and last links. */
@@ -403,6 +327,12 @@ T_void ICmdQSendPacket(
 
     /* Declare this as the new first. */
     G_activeCmdQList[command].first = p_cmdPacket ;
+
+    /* Set the destination */
+    if (p_destination)
+        p_cmdPacket->destination = *p_destination;
+    else
+        memset(&p_cmdPacket->destination, 0xFF, sizeof(p_cmdPacket->destination)); // broadcast
 
     /* Fill in given data. */
     p_cmdPacket->extraData = extraData ;
@@ -419,29 +349,143 @@ T_void ICmdQSendPacket(
  * Routine:  CmdQUpdateAllSends
  *-------------------------------------------------------------------------*/
 /**
- *  CmdQUpdateAllSends goes through all the ports and determines what
- *  data needs to be sent and what should wait.
+ *  CmdQUpdateAllSends updates the sending of all packets.
+ *  Packets that need to be transferred are sent.  Those that don't, don't.
+ *  The amount of packets sent depends on the baud rate and the last time
+ *  this routine was called.
  *
  *<!-----------------------------------------------------------------------*/
 T_void CmdQUpdateAllSends(T_void)
 {
+    T_byte8 currentCmd;
+    T_cmdQPacketStruct *p_packet = NULL;
+    T_cmdQPacketStruct *p_next = NULL;
+    T_byte8 packetLength;
+    T_word32 time;
+    T_sword16 status;
+    T_word16 bytesused;
+    T_word32 maxOutput;
+    E_Boolean onceFlag = FALSE;
+    E_Boolean sentAny;
+
     DebugRoutine("CmdQUpdateAllSends") ;
 
-#if 0
-    /* Let's see how many ports there are. */
-    numPorts = CommGetNumberPorts() ;
+    /* Get the current time. */
+    time = TickerGet();
 
-    /* Go through to each port looking for incoming data. */
-    for (port=0; port<numPorts; port++)  {
-        /* Set the active port (and any additional information). */
-        CmdQSetActivePortNum(port) ;
-
-        ICmdQUpdateSendForPort() ;
-    }
-#else
-    CmdQSetActivePortNum(0) ;
-    ICmdQUpdateSendForPort() ;
+    bytesused = 0;
+    maxOutput = 100;
+    currentCmd = 0;
+    if (bytesused < maxOutput) {
+        do {
+            sentAny = FALSE;
+            p_next = 0;
+            p_packet = G_activeCmdQList[currentCmd].first;
+            do {
+                /* Try sending the command at currentCmd. */
+                /* See if there is anything that needs to be sent. */
+                if ((p_packet != NULL)
+                        && (bytesused < maxOutput)) {
+                    DebugCheck(currentCmd < PACKET_COMMAND_UNKNOWN);
+                    p_next = p_packet->next;
+#ifndef NDEBUG
+                    if (strcmp(p_packet->tag, "CmQ") != 0) {
+                        printf("Bad packet %p\n", p_packet);
+                        DebugCheck(FALSE);
+                    }
 #endif
+
+                    /* See if it is time to send it. */
+                    /** (It's always time to send an ACK.) **/
+                    if ((currentCmd == PACKET_COMMAND_ACK)
+                            || (p_packet->timeToRetry < time)) {
+                        /* Yes, it is time to send it. */
+                        packetLength = p_packet->packet.header.packetLength;
+                        /* Add the count to the output. */
+                        bytesused += packetLength + sizeof(T_packetHeader);
+
+                        /* Make sure this didn't go over the threshold. */
+                        if (bytesused >= maxOutput)
+                            break;
+
+                        /* Let's send that packet to the given destination. */
+                        DirectTalkSetDestination(&p_packet->destination);
+                        status =
+                                PacketSend(
+                                        (T_packetEitherShortOrLong *)(&p_packet->packet));
+                        sentAny = TRUE;
+
+#ifdef COMPILE_OPTION_CREATE_PACKET_DATA_FILE
+                        fprintf(G_packetFile, "S(%d) cmd=%2d, id=%ld, time=%ld\n", CmdQGetActivePortNum (), p_packet->packet.data[0], p_packet->packet.header.id, SyncTimeGet()); fflush(G_packetFile);
+#endif
+                        /* Was the packet actually sent? */
+                        if (status == 0) {
+                            /* Packet was sent correctly (as far as we know). */
+                            /* Is this a lossy or lossless command queue? */
+                            if ((G_CmdQTypeCommand[currentCmd]
+                                    == PACKET_COMMAND_TYPE_LOSSY)
+                                    || (DirectTalkIsBroadcastAddress(
+                                            &p_packet->destination))) {
+                                /* Lossy.  Means we can go ahead and */
+                                /* discard this packet. */
+                                ICmdQDiscardPacket(currentCmd, p_packet);
+                            } else {
+                                /* Lossless.  Means we must wait for an ACK */
+                                /* packet to confirm that we were sent. */
+                                /* Until then, we can't discard the packet. */
+                                /* But we might have to resend latter. */
+                                /* Set up the retry time. */
+                                p_packet->timeToRetry = time
+                                        + p_packet->retryTime;
+                            }
+                        } else {
+                            /* Packet was NOT sent correctly. */
+                            /** -- IFF the packet is lossless... **/
+                            /* We'll have to retry later.  Change the time, */
+                            /* but don't remove it from the linked list. */
+                            if (G_CmdQTypeCommand[currentCmd]
+                                    == PACKET_COMMAND_TYPE_LOSSLESS) {
+                                p_packet->timeToRetry = time
+                                        + p_packet->retryTime;
+                            } else {
+                                /* Waste it!  We can't wait around */
+                                ICmdQDiscardPacket(currentCmd, p_packet);
+                            }
+                        }
+                    } else {
+                        /* Don't loop if it is not time to send. */
+                        break;
+                    }
+
+                    /** Now, if we aren't checking the ACK queue, we need **/
+                    /** to break after the first send.  If we are, we **/
+                    /** want to dump everything in the queue. **/
+                    if (currentCmd != PACKET_COMMAND_ACK)
+                        break;
+                }
+
+                // Move to the next packet (if any)
+                p_packet = p_next;
+
+                while (!p_packet) {
+                    /* Update to the next command. */
+                    currentCmd++;
+                    if (currentCmd < PACKET_COMMAND_MAX) {
+                        // Get the beginning of the list
+                        p_packet = G_activeCmdQList[currentCmd].first;
+                        if (p_packet)
+                            p_next = p_packet->next;
+                        else
+                            p_next = 0;
+                    } else {
+                        break;
+                    }
+                }
+            } while (currentCmd < PACKET_COMMAND_MAX);
+            // Loop back to the start looking for more to send
+            currentCmd = 0;
+        } while ((bytesused < maxOutput) && (sentAny == TRUE));
+    }
 
     DebugEnd() ;
 }
@@ -455,6 +499,7 @@ T_void CmdQUpdateAllSends(T_void)
  *  appropriate action for the command is called.
  *
  *<!-----------------------------------------------------------------------*/
+#include "Message.h"
 T_void CmdQUpdateAllReceives(T_void)
 {
     T_packetLong packet ;
@@ -464,8 +509,7 @@ T_void CmdQUpdateAllReceives(T_void)
     T_word32 packetId ;
     T_packetShort ackPacket ;
     E_Boolean packetOkay;
-    T_word16 port ;
-    T_word16 numPorts ;
+    T_directTalkUniqueAddress uniqueID;
 
     DebugRoutine("CmdQUpdateAllReceives") ;
     INDICATOR_LIGHT(260, INDICATOR_GREEN) ;
@@ -474,19 +518,17 @@ T_void CmdQUpdateAllReceives(T_void)
     /* Let's see how many ports there are. */
     DebugCheckValidStack() ;
 //    numPorts = CommGetNumberPorts() ;
-    numPorts = 1 ;
     DebugCheckValidStack() ;
 
-    /* Go through to each port looking for incoming data. */
-    for (port=0; port<numPorts; port++)  {
         /* Set the active port (and any additional information). */
         DebugCheckValidStack() ;
 
         /* Hunting for a bug... */
         /* ... . */
 
-        CmdQSetActivePortNum(port) ;
         DebugCheckValidStack() ;
+
+        DirectTalkGetUniqueAddress(&uniqueID);
 
         /* Loop while there are packets to get. */
         do {
@@ -507,9 +549,9 @@ T_void CmdQUpdateAllReceives(T_void)
                     /* Is it an ACK packet? */
 
 
-//printf("R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, TickerGet()) ;  fflush(stdout) ;
+                    //printf("R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, TickerGet()) ;  fflush(stdout) ;
 #ifdef COMPILE_OPTION_CREATE_PACKET_DATA_FILE
-fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, SyncTimeGet()) ; fflush(G_packetFile) ;
+                    fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data[0], packet.header.id, SyncTimeGet()) ; fflush(G_packetFile) ;
 #endif
 
                     if (command == PACKET_COMMAND_ACK)  {
@@ -527,13 +569,20 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
                                 packetId = *((T_word32 *)(&(packet.data[2]))) ;
                                 /* Is there a list at that point? */
                                 if (G_activeCmdQList[ackCommand].last != NULL)  {
-                                    /* Yes.  Is the ack for the same packet */
+                                    /* Yes.  Is there an ack for the same packet */
                                     /* waiting? */
-                                    if (G_activeCmdQList[ackCommand].last->packet.header.id == packetId)  {
-                                        /* Yes. We can now discard it. */
-                                        DebugCheckValidStack() ;
-                                        ICmdQDiscardPacket(ackCommand) ;
-                                        DebugCheckValidStack() ;
+                                    T_cmdQPacketStruct *p = G_activeCmdQList[ackCommand].first;
+                                    while (p) {
+                                        // Search for a matching packet id
+                                        if (p->packet.header.id == packetId)  {
+                                            /* Yes. We can now discard it. */
+                                            DebugCheckValidStack() ;
+                                            ICmdQDiscardPacket(ackCommand, p) ;
+                                            DebugCheckValidStack() ;
+                                            break;
+                                        }
+                                        // Walk the complete list of this type of packet
+                                        p = p->next;
                                     }
                                 }
                             }
@@ -542,7 +591,7 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
                     } else {
                         /* No, do the normal action. */
 
-                        /** If this is a lossful packet, always call the **/
+                        /** If this is a lossy packet, always call the **/
                         /** callback routine. **/
                         packetOkay = TRUE;
 
@@ -565,6 +614,7 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
                             DebugCheckValidStack() ;
                             CmdQSendShortPacket(
                                 &ackPacket,
+                                &packet.header.sender,
                                 140,  /* Once two seconds is plenty fast */
                                 0,  /* No extra data since no callback. */
                                 NULL) ;  /* No callback. */
@@ -573,7 +623,7 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
 
                             INDICATOR_LIGHT(268, INDICATOR_RED) ;
                         }
-                        /* IF the packet is a new packet or a lossful one, */
+                        /* IF the packet is a new packet or a lossy one, */
                         /* we'll go ahead and do the appropriate action */
                         /* on this side. */
 //printf("Considering %p [%d]\n", G_cmdQActionList[command], command) ;
@@ -596,145 +646,9 @@ fprintf(G_packetFile, "R(%d) %2d %ld %ld\n", CmdQGetActivePortNum(), packet.data
             }
             DebugCheckValidStack() ;
         } while (status == 0) ;
-    }
     DebugEnd() ;
 
     INDICATOR_LIGHT(260, INDICATOR_RED) ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ICmdQUpdateSendForPort
- *-------------------------------------------------------------------------*/
-/**
- *  ICmdQUpdateSendForPort updates the sending of all packets for this
- *  single port (the currently active port).  Packets that need to be
- *  transferred are sent.  Those that don't, don't.  The amount of packets
- *  sent depends on the baud rate and the last time this routine was
- *  called for this port.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ICmdQUpdateSendForPort(T_void)
-{
-    T_byte8 currentCmd;
-    T_cmdQPacketStruct *p_packet;
-    T_byte8 packetLength;
-    T_word32 time;
-    T_sword16 status;
-    E_Boolean sentOne;
-    T_word16 bytesused;
-    T_word32 maxOutput;
-    E_Boolean onceFlag = FALSE;
-    E_Boolean sentAny;
-
-    DebugRoutine("ICmdQUpdateSendForPort");
-
-    /* Get the current time. */
-    time = TickerGet();
-
-    bytesused = 0;
-    maxOutput = 100;
-    currentCmd = 0;
-    if (bytesused < maxOutput) {
-        do {
-            sentAny = FALSE;
-            do {
-                sentOne = FALSE;
-                /* Try sending the command at currentCmd. */
-                /* See if there is anything that needs to be sent. */
-                while ((G_activeCmdQList[currentCmd].last != NULL)
-                        && (bytesused < maxOutput)) {
-                    DebugCheck(currentCmd < PACKET_COMMAND_UNKNOWN);
-                    /* Yes, there appears to be a packet at the end of the list. */
-                    /* Get a hold on that packet struct. */
-                    p_packet = G_activeCmdQList[currentCmd].last;
-#ifndef NDEBUG
-                    if (strcmp(p_packet->tag, "CmQ") != 0) {
-                        printf("Bad packet %p\n", p_packet);
-                        DebugCheck(FALSE);
-                    }
-#endif
-
-                    /* See if it is time to send it. */
-                    /** (It's always time to send an ACK.) **/
-                    if ((currentCmd == PACKET_COMMAND_ACK)
-                            || (p_packet->timeToRetry < time)) {
-                        /* Yes, it is time to send it. */
-                        packetLength = p_packet->packet.header.packetLength;
-                        /* Add the count to the output. */
-                        bytesused += packetLength + sizeof(T_packetHeader);
-
-                        /* Make sure this didn't go over the threshold. */
-                        if (bytesused >= maxOutput)
-                            break;
-
-                        /* Let's send that packet. */
-                        DirectTalkSetDestinationAll();  //TODO: ?? All??
-                        status =
-                                PacketSend(
-                                        (T_packetEitherShortOrLong *)(&p_packet->packet));
-                        sentAny = TRUE;
-
-#ifdef COMPILE_OPTION_CREATE_PACKET_DATA_FILE
-                        fprintf(G_packetFile, "S(%d) cmd=%2d, id=%ld, time=%ld\n", CmdQGetActivePortNum (), p_packet->packet.data[0], p_packet->packet.header.id, SyncTimeGet()); fflush(G_packetFile);
-#endif
-                        /* Was the packet actually sent? */
-                        if (status == 0) {
-                            /* Packet was sent correctly (as far as we know). */
-                            /* Is this a lossful or lossless command queue? */
-                            if (G_CmdQTypeCommand[currentCmd]
-                                    == PACKET_COMMAND_TYPE_LOSSFUL) {
-                                /* Lossful.  Means we can go ahead and */
-                                /* discard this packet. */
-                                ICmdQDiscardPacket(currentCmd);
-                            } else {
-                                /* Lossless.  Means we must wait for an ACK */
-                                /* packet to confirm that we were sent. */
-                                /* Until then, we can't discard the packet. */
-                                /* But we might have to resend latter. */
-                                /* Set up the retry time. */
-                                p_packet->timeToRetry = time
-                                        + p_packet->retryTime;
-                            }
-
-                            /* Note that we sent the packet (or at least) */
-                            /* gave a good try. */
-                            sentOne = TRUE;
-                        } else {
-                            /* Packet was NOT sent correctly. */
-                            /** -- IFF the packet is lossless... **/
-                            /* We'll have to retry later.  Change the time, */
-                            /* but don't remove it from the linked list. */
-                            if (G_CmdQTypeCommand[currentCmd]
-                                    == PACKET_COMMAND_TYPE_LOSSLESS) {
-                                p_packet->timeToRetry = time
-                                        + p_packet->retryTime;
-                            } else {
-                                /* Waste it!  We can't wait around */
-                                ICmdQDiscardPacket(currentCmd);
-                            }
-                        }
-                    } else {
-                        /* Don't loop if it is not time to send. */
-                        break;
-                    }
-
-                    /** Now, if we aren't checking the ACK queue, we need **/
-                    /** to break after the first send.  If we are, we **/
-                    /** want to dump everything in the queue. **/
-                    if (currentCmd != PACKET_COMMAND_ACK)
-                        break;
-                }
-
-                /* Update to the next command. */
-                currentCmd++;
-            } while (currentCmd < PACKET_COMMAND_MAX);
-
-        } while ((bytesused < maxOutput) && (sentAny == TRUE));
-    }
-
-    P_activeQueueInfo->commandPos = currentCmd;
-
-    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -746,12 +660,12 @@ T_void ICmdQUpdateSendForPort(T_void)
  *
  *  @param commandNum -- Command in command list to do a
  *      packet discard on.
+ *  @param p_packet -- Packet within this command list to remove
  *
  *<!-----------------------------------------------------------------------*/
-T_void ICmdQDiscardPacket(T_byte8 commandNum)
+void ICmdQDiscardPacket(T_byte8 commandNum, T_cmdQPacketStruct *p_packet)
 {
     T_cmdQStruct *p_cmdQ ;
-    T_cmdQPacketStruct *p_packet ;
 
     DebugRoutine("ICmdQDiscardPacket") ;
     DebugCheck(commandNum < PACKET_COMMAND_UNKNOWN) ;
@@ -759,11 +673,7 @@ T_void ICmdQDiscardPacket(T_byte8 commandNum)
     /* Get a quick pointer to the command's queue. */
     p_cmdQ = &G_activeCmdQList[commandNum] ;
 
-    p_packet = p_cmdQ->last ;
-    /* Make sure there is a last entry. */
-    DebugCheck(p_packet != NULL) ;
-
-    if (p_packet != NULL)  {
+    if (p_packet)  {
 #ifndef NDEBUG
         /* Check for the tag. */
         if (strcmp(p_packet->tag, "CmQ") != 0)  {
@@ -772,11 +682,20 @@ T_void ICmdQDiscardPacket(T_byte8 commandNum)
         }
 #endif
         DebugCheck(p_packet->prev != p_packet) ;
-        p_cmdQ->last = p_packet->prev ;
-        if (p_cmdQ->last == NULL)
-            p_cmdQ->first = NULL ;
-        else {
-            p_cmdQ->last->next = NULL ;
+        // Packet is to be removed from double linked list
+        if (p_packet->prev) {
+            // Link previous to next (if any)
+            p_packet->prev->next = p_packet->next;
+        } else {
+            // Link start to next
+            p_cmdQ->first = p_packet->next;
+        }
+        if (p_packet->next) {
+            // Link next to previous (if any)
+            p_packet->next->prev = p_packet->prev;
+        } else {
+            // Packet does to the end
+            p_cmdQ->last = p_packet->prev;
         }
 
         /* Before we free it, we need to call the callback routine for */
@@ -815,6 +734,7 @@ T_void ICmdQDiscardPacket(T_byte8 commandNum)
  *  to either short or long.
  *
  *  @param p_packet -- Packet to send
+ *  @param p_destination -- Destination address to receive packet
  *  @param retryTime -- How long to wait for acknowledgement
  *      before trying to send again.
  *  @param extraData -- Extra data for the callback routine.
@@ -824,6 +744,7 @@ T_void ICmdQDiscardPacket(T_byte8 commandNum)
  *<!-----------------------------------------------------------------------*/
 T_void CmdQSendPacket(
             T_packetEitherShortOrLong *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback)
@@ -833,6 +754,7 @@ T_void CmdQSendPacket(
     /* Looks like we had something to send. */
     ICmdQSendPacket(
         (T_packetEitherShortOrLong *)p_packet,
+        p_destination,
         retryTime,
         extraData,
         p_callback) ;
@@ -855,21 +777,9 @@ T_void CmdQSendPacket(
  *<!-----------------------------------------------------------------------*/
 T_void CmdQClearAllPorts(T_void)
 {
-    T_word16 numPorts ;
-    T_word16 port ;
     DebugRoutine("CmdQClearAllPorts") ;
 
-    /* Let's see how many ports there are. */
-//    numPorts = CommGetNumberPorts() ;
-    numPorts = 1 ;
-
-    /* Go through to each port and set it up. */
-    for (port=0; port<numPorts; port++)  {
-        /* Set the active port. */
-        CmdQSetActivePortNum(port) ;
-
-        ICmdQClearPort() ;
-    }
+    ICmdQClearPort() ;
 
     DebugEnd() ;
 }
@@ -949,8 +859,6 @@ static T_void ICmdQClearPort(T_void)
  *  NOTE: 
  *  NEVER PASS AN ACK PACKET TO THIS ROUTINE.  It does not properly
  *  work with them.
- *  Be sure to make a call to CmdQSetActivePortNum or else this routine
- *  will be unpredictable.
  *
  *  @param p_packet -- Packet being forced in
  *

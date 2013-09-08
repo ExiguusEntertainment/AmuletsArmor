@@ -105,17 +105,12 @@ static E_checkPasswordStatus G_checkPasswordStatus =
 static E_changePasswordStatus G_changePasswordStatus =
                              CHANGE_PASSWORD_STATUS_UNKNOWN ;
 
-static E_clientConnectionType G_clientConnectionType =
-                                  CLIENT_CONNECTION_TYPE_SINGLE ;
-
-
 /* What id does the server know us by? */
 T_word16 G_loginId = 0xFFFF ;
 
 /* Flag noting what direction we are facing. */
 static E_Boolean G_logoutAttempted = FALSE ;
 static E_Boolean G_clientIsActive = FALSE ;
-static E_Boolean G_clientIsLogin = FALSE ;
 
 /* Message being typed in for transmission/talking. */
 static T_byte8 G_message[MAX_MESSAGE_LEN+2] ;
@@ -150,9 +145,6 @@ T_void ClientUpdateHealth(T_void) ;
 
 T_word16 ClientGetDelta(T_void) ;
 
-T_void IClientLoginAck(
-                  T_word32 extraData,
-                  T_packetEitherShortOrLong *p_packet) ;
 T_void ClientGotoForm(T_word32 formNumber) ;
 
 static T_void ClientOverlayDone (T_word16 animnum, T_byte8 flag);
@@ -190,33 +182,11 @@ static T_void IClientDrawStatus(T_word16 left, T_word16 bottom) ;
  *<!-----------------------------------------------------------------------*/
 T_void ClientInitMouseAndColor (T_void)
 {
-    T_word16 numPlayers ;
-    T_word16 playerId ;
-    FILE *fp ;
-
     DebugRoutine ("ClientInitMouseAndColor");
 
-//    ControlInit(); /* Init control routines */
-    /* initialize inventory */
-//    InventoryInit();
-
-    fp = fopen("player.cfg", "r") ;
-    if (fp == NULL)  {
-        printf("Cannot file PLAYER.CFG file!\n") ;
-        exit(1) ;
-    }
-    fscanf(fp, "%d%d", &numPlayers, &playerId) ;
-    fclose(fp) ;
-
-    if (numPlayers == 1)  {
-        G_clientConnectionType = CLIENT_CONNECTION_TYPE_SINGLE ;
-    } else {
-        G_clientConnectionType = CLIENT_CONNECTION_TYPE_SINGLE ;
-//        G_clientConnectionType = CLIENT_CONNECTION_TYPE_DIRECT_IPX ;
-    }
-    ClientSyncSetNumberPlayers((T_byte8)numPlayers) ;
-    ClientSetLoginId(playerId) ;
-
+    // Reset to 1 player with ID 0
+    ClientSyncSetNumberPlayers(1) ;
+    ClientSetLoginId(0) ;
 
     ColorInit(); /* Init color mapping stuff */
 
@@ -334,19 +304,14 @@ T_void ClientInit(T_void)
    T_cmdQActionRoutine callbacks[PACKET_COMMAND_MAX] =
    {
       NULL,                                       /* 0 ACK */
-      NULL,                                       /* 1 LOGIN */
-      ClientSyncReceiveRetransmitPacket,          /* 2 RETRANSMIT */
-      ClientReceiveTownUIMessagePacket,           /* 3 TOWN_UI_MESSAGE */
-      ClientReceivePlayerIDSelf,                  /* 4 PLAYER_ID_SELF */
-      ClientReceiveRequestPlayerIDPacket,         /* 5 REQUEST_PLAYER_ID */
-      ClientReceiveGameRequestJoinPacket,         /* 6 GAME_REQUEST_JOIN */
-      ClientReceiveGameRespondJoinPacket,         /* 7 GAME_RESPOND_JOIN */
-      ClientReceiveGameStartPacket,               /* 8 GAME_START */
-      ClientReceiveSyncPacket,                    /* 9 SYNC */
-      ClientReceiveMessagePacket,                 /* 10 MESSAGE */
-      ClientReceivePlaceStartPacket,              /* 16 SC_PLACE_START */
-      ClientReceiveGotoPlacePacket,               /* 17 CSC_GOTO_PLACE */
-      NULL,                                       /* 18 CS_GOTO_SUCCEEDED */
+      ClientSyncReceiveRetransmitPacket,          /* 1 RETRANSMIT */
+      ClientReceiveTownUIMessagePacket,           /* 2 TOWN_UI_MESSAGE */
+      ClientReceivePlayerIDSelf,                  /* 3 PLAYER_ID_SELF */
+      ClientReceiveGameRequestJoinPacket,         /* 4 GAME_REQUEST_JOIN */
+      ClientReceiveGameRespondJoinPacket,         /* 5 GAME_RESPOND_JOIN */
+      ClientReceiveGameStartPacket,               /* 6 GAME_START */
+      ClientReceiveSyncPacket,                    /* 7 SYNC */
+      ClientReceiveMessagePacket,                 /* 8 MESSAGE */
    };
 
     DebugRoutine("ClientInit") ;
@@ -995,57 +960,6 @@ T_word16 ClientGetDelta(T_void)
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ClientLogin
- *-------------------------------------------------------------------------*/
-/**
- *  ClientLogin requests to login into the server.
- *
- *  NOTE: 
- *  It is assumed that the client has already attached to server and there
- *  is a data communications path open.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientLogin(T_void)
-{
-    T_packetShort packet ;
-    T_loginPacket *p_login;
-
-    DebugRoutine("ClientLogin") ;
-
-    /** Get a quick pointer. **/
-    p_login = (T_loginPacket *)(packet.data);
-
-    G_logoutAttempted = FALSE ;
-
-    /** Request a login as the character of my choice. **/
-    p_login->command = PACKET_COMMAND_LOGIN ;
-    p_login->accountNum = 0; // not used
-
-    CmdQSendShortPacket(&packet, 140, 0, IClientLoginAck) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  IClientLoginAck
- *-------------------------------------------------------------------------*/
-/**
- *  IClientLoginAck notes that the player is successfully connected to
- *  the server.
- *
- *<!-----------------------------------------------------------------------*/
-T_void IClientLoginAck(
-                  T_word32 extraData,
-                  T_packetEitherShortOrLong *p_packet)
-{
-    DebugRoutine("IClientLoginAck") ;
-
-    G_clientIsLogin = TRUE ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  ClientLogoffFinish
  *-------------------------------------------------------------------------*/
 /**
@@ -1060,14 +974,9 @@ T_void ClientLogoffFinish(
     DebugRoutine("ClientLogoffFinish") ;
 
     /* Make sure we are logged on. */
-    if (G_clientIsLogin == TRUE)  {
-        /* We are no longer on. */
-        G_clientIsLogin = FALSE ;
+    KeyboardSetEventHandler(NULL) ;
 
-        KeyboardSetEventHandler(NULL) ;
-
-        ButtonCleanUp() ;
-    }
+    ButtonCleanUp() ;
 
     DebugEnd() ;
 }
@@ -1105,28 +1014,6 @@ T_void ClientLogoff(T_void)
     }
 
     DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientIsLogin
- *-------------------------------------------------------------------------*/
-/**
- *  Simple put, "Am I logged into the server?"
- *
- *  @return FALSE = no, TRUE = yes
- *
- *<!-----------------------------------------------------------------------*/
-E_Boolean ClientIsLogin(T_void)
-{
-    E_Boolean isLogin ;
-
-    DebugRoutine("ClientIsLogin") ;
-
-    isLogin = G_clientIsLogin ;
-
-    DebugEnd() ;
-
-    return isLogin ;
 }
 
 /*-------------------------------------------------------------------------*
@@ -1918,26 +1805,26 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
                 if (KeyMapGetScan(KEYMAP_TIME_OF_DAY)==TRUE)
                     MapOutputTimeOfDay();
 
-                if (G_msgOn==FALSE) {
+                if ((G_msgOn == FALSE) && (!ClientIsDead())) {
                     IClientHandleMapKeys(scankey);
-                if (scankey == KeyMap(KEYMAP_OPEN))
-                {
-                     IClientAttemptOpeningForwardWall() ;
-                }
 
-                /* Grab item if relative mode */
-                // TODO: Need to be able to remap key!
-                if ((MouseIsRelativeMode()) && (G_lastDrawTargetItem)) {
-                    if (KeyMapGetScan(KEYMAP_ACTIVATE_OR_TAKE)) {
-                        if (InventoryCanTakeItem(G_lastDrawTargetItem)) {
-                            ClientRequestTake(G_lastDrawTargetItem, TRUE);
+                    if (scankey == KeyMap(KEYMAP_OPEN)) {
+                        IClientAttemptOpeningForwardWall();
+                    }
+
+                    /* Grab item if relative mode */
+                    // TODO: Need to be able to remap key!
+                    if ((MouseIsRelativeMode()) && (G_lastDrawTargetItem)) {
+                        if (KeyMapGetScan(KEYMAP_ACTIVATE_OR_TAKE)) {
+                            if (InventoryCanTakeItem(G_lastDrawTargetItem)) {
+                                ClientRequestTake(G_lastDrawTargetItem, TRUE);
+                            }
                         }
                     }
-                }
 
-                /* Messages are off, update screen buttons */
-                ButtonKeyControl (event,scankey);  //JDA
-            }
+                    /* Messages are off, update screen buttons */
+                    ButtonKeyControl(event, scankey);  //JDA
+                }
             break;
 
 
@@ -2242,8 +2129,6 @@ T_void ClientCreateGlobalAreaSound(
  *<!-----------------------------------------------------------------------*/
 T_void ClientGotoPlace(T_word32 locationNumber, T_word16 startLocation)
 {
-    T_packetShort packet ;
-    T_gotoPlacePacket *p_packet ;
     E_Boolean isFake ;
 
     DebugRoutine("ClientGotoPlace") ;
@@ -2268,40 +2153,17 @@ T_void ClientGotoPlace(T_word32 locationNumber, T_word16 startLocation)
                 if (!isFake)
                     PlayerSetRealMode() ;
             }
-            if (ClientGetConnectionType() == CLIENT_CONNECTION_TYPE_SINGLE)  {
-                /* If zero, get out of playing the game. */
-                if (locationNumber == 0)  {
-                    /* Leave this place */
-                    ClientForceGotoPlace(locationNumber, startLocation) ;
-                    SMCPlayGameSetFlag(
-                        SMCPLAY_GAME_FLAG_LEAVE_PLACE,
-                        TRUE) ;
-                } else  {
-                    ClientForceGotoPlace(locationNumber, startLocation) ;
+            /* If zero, get out of playing the game. */
+            if (locationNumber == 0)  {
+                /* Leave this place */
+                ClientForceGotoPlace(locationNumber, startLocation) ;
+                SMCPlayGameSetFlag(
+                    SMCPLAY_GAME_FLAG_LEAVE_PLACE,
+                    TRUE) ;
+            } else  {
+                ClientForceGotoPlace(locationNumber, startLocation) ;
 //printf("Starting player at %d\n", G_loginId) ;   fflush(stdout) ;
-                    ClientStartPlayer(9000+G_loginId, G_loginId) ;
-                }
-            } else {
-                /* Get a quick pointer. */
-                p_packet = (T_gotoPlacePacket *)packet.data ;
-
-                p_packet->command = PACKET_COMMANDCSC_GOTO_PLACE ;
-                p_packet->placeNumber = locationNumber ;
-                p_packet->startLocation = startLocation ;
-
-                CmdQSendShortPacket(&packet, 200, 0, NULL) ;
-
-                /* Stop bothering with this level. */
-                G_clientIsActive = FALSE ;
-
-                /* If zero, get out of playing the game. */
-                if (locationNumber == 0)  {
-//puts("bye ... here") ; fflush(stdout) ;
-                    /* Leave this place */
-                    SMCPlayGameSetFlag(
-                        SMCPLAY_GAME_FLAG_LEAVE_PLACE,
-                        TRUE) ;
-                }
+                ClientStartPlayer(9000+G_loginId, G_loginId) ;
             }
         }
     }
@@ -2321,8 +2183,8 @@ T_void ClientGotoPlace(T_word32 locationNumber, T_word16 startLocation)
  *<!-----------------------------------------------------------------------*/
 T_void ClientGotoForm(T_word32 formNumber)
 {
-    T_packetShort packet ;
-    T_gotoSucceededPacket *p_succeed ;
+//    T_packetShort packet ;
+//    T_gotoSucceededPacket *p_succeed ;
 
     DebugRoutine("ClientGotoForm") ;
 
@@ -2331,15 +2193,15 @@ T_void ClientGotoForm(T_word32 formNumber)
         /* This is a hardcoded form. */
         ClientSetMode(CLIENT_MODE_HARD_CODED_FORM) ;
 
-        p_succeed = (T_gotoSucceededPacket *)packet.data;
-        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
-        p_succeed->placeNumber = formNumber;
-
-        CmdQSendShortPacket(
-            &packet,
-            600,
-            0,
-            NULL /* IGotoSucceededForIntro */) ;
+//        p_succeed = (T_gotoSucceededPacket *)packet.data;
+//        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
+//        p_succeed->placeNumber = formNumber;
+//
+//        CmdQSendShortPacket(
+//            &packet,
+//            600,
+//            0,
+//            NULL /* IGotoSucceededForIntro */) ;
 
         HardFormStart(formNumber) ;
     } else {
@@ -2348,15 +2210,15 @@ T_void ClientGotoForm(T_word32 formNumber)
         /* Standard scripting form. */
         ScriptFormStart(formNumber) ;
 
-        p_succeed = (T_gotoSucceededPacket *)packet.data;
-        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
-        p_succeed->placeNumber = formNumber;
-
-        CmdQSendShortPacket(
-            &packet,
-            600,
-            0,
-            NULL /* IGotoSucceededForIntro */) ;
+//        p_succeed = (T_gotoSucceededPacket *)packet.data;
+//        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
+//        p_succeed->placeNumber = formNumber;
+//
+//        CmdQSendShortPacket(
+//            &packet,
+//            600,
+//            0,
+//            NULL /* IGotoSucceededForIntro */) ;
     }
 
     G_clientIsActive = TRUE ;
@@ -2837,24 +2699,6 @@ static T_void IClientAttemptOpeningForwardWall(T_void)
 }
 
 /* LES: 07/23/96 */
-E_clientConnectionType ClientGetConnectionType(T_void)
-{
-    DebugCheck(G_clientConnectionType < CLIENT_CONNECTION_TYPE_UNKNOWN) ;
-    return G_clientConnectionType ;
-}
-
-/* LES: 07/23/96 */
-T_void ClientSetConnectionType(E_clientConnectionType type)
-{
-    DebugRoutine("ClientSetConnectionType") ;
-    DebugCheck(type < CLIENT_CONNECTION_TYPE_UNKNOWN) ;
-
-    G_clientConnectionType = type ;
-
-    DebugEnd() ;
-}
-
-/* LES: 07/23/96 */
 T_void ClientStartPlayer(T_word16 objectId, T_word16 loginId)
 {
     T_3dObject *p_obj;
@@ -2992,9 +2836,6 @@ T_void ClientForceGotoPlace(
             CmdQUpdateAllSends() ;
         } while (TickerGet() <= timeToUpdate) ;
 
-        CmdQSetActivePortNum(0) ;
-//        CommClearPort() ;
-
         previousLocation = ClientGetCurrentPlace() ;
         ClientSetCurrentPlace(placeNumber) ;
         ClientSetCurrentStartLocation(startLocation) ;
@@ -3064,9 +2905,9 @@ T_void ClientForceGotoPlace(
 
                     MapLoad(placeNumber) ;
 
-                    ClientSendGotoSucceeded(
-                         ClientGetCurrentPlace(),
-                         ClientGetCurrentStartLocation()) ;
+//                    ClientSendGotoSucceeded(
+//                         ClientGetCurrentPlace(),
+//                         ClientGetCurrentStartLocation()) ;
                 }
             }
         }

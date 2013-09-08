@@ -8,8 +8,6 @@
 #include "GROUP.H"
 #include "VIEWFILE.H"
 
-#define MAX_SIZE_PASSWORD 12
-
 /* ------------------------------------------------------------------------ */
 
 #define SHORT_PACKET_LENGTH 10
@@ -23,6 +21,7 @@ typedef struct {
     T_byte8    prefix            PACK;
     T_byte8    packetLength      PACK;
     T_word32   id                PACK;
+    T_directTalkUniqueAddress sender PACK;
     T_word16   checksum          PACK;
 } T_packetHeader ;
 
@@ -60,22 +59,9 @@ T_void PacketReceiveData(T_void *p_data, T_word16 size);
 /* !!! Needs to be moved! */
 typedef struct {
     T_byte8 command              PACK;
-    T_byte8 visage               PACK;
-    T_byte8 demeanor             PACK;
-    T_word32 accountNum          PACK ;
-} T_loginPacket;
-
-typedef struct {
-    T_byte8 command              PACK;
     T_word16 player              PACK;
     T_word16 objectId            PACK;
 } T_logoffPacket ;
-
-typedef struct {
-    T_byte8 command              PACK;
-    T_word16 player              PACK;
-    T_word16 weapon              PACK;
-} T_changeWeaponPacket ;
 
 typedef struct {
     T_byte8 command              PACK ;
@@ -99,19 +85,6 @@ typedef struct {
     T_sword16 yPos               PACK ;
     T_byte8 angle                PACK ;
 } T_placeStartPacket ;
-
-typedef struct {
-    T_byte8 command              PACK ;
-    T_word32 placeNumber         PACK ;
-    T_word16 startLocation       PACK ;
-} T_gotoPlacePacket ;
-
-/** This packet now specifies exactly what goto_place it's responding to **/
-typedef struct {
-    T_byte8 command              PACK ;
-    T_word32 placeNumber         PACK;
-    T_word16 startLocation       PACK ;
-} T_gotoSucceededPacket ;
 
 /* ------------------------------------------------------------------------ */
 
@@ -166,7 +139,7 @@ typedef T_byte8 T_playerIDState ;
 #define PLAYER_ID_STATE_JOINING_GAME         2
 #define PLAYER_ID_STATE_UNKNOWN              3
 
-typedef struct {
+typedef struct { //46 bytes
     T_byte8 name[30] ;
     T_directTalkUniqueAddress uniqueAddress ;
     T_playerIDLocation location ;

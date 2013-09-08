@@ -40,30 +40,30 @@
  *<!-----------------------------------------------------------------------*/
 T_void ClientSendMessage(T_byte8 *message)
 {
-    T_packetLong packet ;
-    T_messagePacket *p_msg ;
-    char buffer[100] ;
+    T_packetLong packet;
+    T_messagePacket *p_msg;
+    char buffer[100];
 
-    DebugRoutine("ClientSendMessage") ;
+    DebugRoutine("ClientSendMessage");
 
     /* Get a quick pointer. */
-    p_msg = (T_messagePacket *)packet.data ;
+    p_msg = (T_messagePacket *)packet.data;
 
     /* Put the message in the packet. */
-    p_msg->command = PACKET_COMMAND_MESSAGE ;
-    p_msg->player = ClientGetLoginId() ;
-    p_msg->groupID = ClientSyncGetGameGroupID() ;
+    p_msg->command = PACKET_COMMAND_MESSAGE;
+    p_msg->player = ClientGetLoginId();
+    p_msg->groupID = ClientSyncGetGameGroupID();
 //    strcpy(p_msg->message, message) ;
-    sprintf(buffer, "%s: %s", StatsGetName(), message) ;
-    sprintf(p_msg->message, "%-50.50s", buffer) ;
+    sprintf(buffer, "%s: %s", StatsGetName(), message);
+    sprintf(p_msg->message, "%-50.50s", buffer);
 
-    /* Send the whole packet. */
-    CmdQSendLongPacket(&packet, 280, 0, NULL) ;
+    /* Send the whole packet to several people */
+    PeopleHereSendPacketToGroup(ClientSyncGetGameGroupID(), &packet, 280, 0, NULL);
 
     /* Send it back to ourselves so we have a running log. */
-    ClientReceiveMessagePacket((T_packetEitherShortOrLong *)&packet) ;
+    ClientReceiveMessagePacket((T_packetEitherShortOrLong *)&packet);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -88,45 +88,43 @@ T_void ClientRequestTake(T_3dObject *p_obj, E_Boolean autoStore)
     DebugRoutine("ClientRequestTake");
 
     /* See if the object exists and is grabable. */
-    if ((p_obj != NULL )&&
-    (ObjectGetAttributes (p_obj) & OBJECT_ATTR_GRABABLE)){
-    /* Object is not grabable. */
-    /* Is the object close enough? */
-    if ((dist = CalculateDistance(ObjectGetX16(p_obj),
-                            ObjectGetY16(p_obj),
-                            PlayerGetX16(),
-                            PlayerGetY16())) < PLAYER_GRAB_DISTANCE) {
-        /* Find a mutual z height. */
-        z = ObjectGetZ16(p_obj);
-        if (z < PlayerGetZ16())
-        z += ObjectGetHeight(p_obj);
+    if ((p_obj != NULL)
+            && (ObjectGetAttributes (p_obj) & OBJECT_ATTR_GRABABLE)) {
+        /* Object is not grabable. */
+        /* Is the object close enough? */
+        if ((dist = CalculateDistance(ObjectGetX16(p_obj),
+        ObjectGetY16(p_obj),
+        PlayerGetX16(),
+        PlayerGetY16())) < PLAYER_GRAB_DISTANCE) {
+            /* Find a mutual z height. */
+            z = ObjectGetZ16(p_obj);
+            if (z < PlayerGetZ16())
+                z += ObjectGetHeight(p_obj);
 
-        /* Make sure there is nothing blocking the hit */
-        num = Collide3dFindWallList(
-                PlayerGetX16(),
-                PlayerGetY16(),
-                ObjectGetX16(p_obj),
-                ObjectGetY16(p_obj),
-                z,
-                20,
-                wallList,
-                WALL_LIST_ITEM_MAIN);
-        if (num == 0) {
-            /* No walls are in the way. */
+            /* Make sure there is nothing blocking the hit */
+            num = Collide3dFindWallList(
+            PlayerGetX16(),
+            PlayerGetY16(),
+            ObjectGetX16(p_obj),
+            ObjectGetY16(p_obj), z, 20, wallList,
+            WALL_LIST_ITEM_MAIN);
+            if (num == 0) {
+                /* No walls are in the way. */
 
-            /* Object is close enough.  Attempt to take it. */
-            ClientSyncSendActionPickUpItem(ObjectGetServerId(p_obj), autoStore);
+                /* Object is close enough.  Attempt to take it. */
+                ClientSyncSendActionPickUpItem(ObjectGetServerId(p_obj),
+                        autoStore);
+            } else {
+                MessageAdd("Cannot grab through wall.");
+            }
         } else {
-            MessageAdd("Cannot grab through wall.");
+            /* Object is too far. */
+            MessageAdd("Object too far away to take.");
         }
     } else {
-        /* Object is too far. */
-        MessageAdd ("Object too far away to take.");
+        /* Not grabbable, tell the player. */
+        MessageAdd("Object can not be taken.");
     }
-} else {
-    /* Not grabbable, tell the player. */
-    MessageAdd("Object can not be taken.");
-}
     DebugEnd ();
 }
 
@@ -144,66 +142,30 @@ T_void ClientRequestTake(T_3dObject *p_obj, E_Boolean autoStore)
  *
  *<!-----------------------------------------------------------------------*/
 T_void ClientRequestRetransmit(
-           T_byte8 player,
-           T_byte8 transmitStart,
-           T_gameGroupID groupID,
-           T_word16 destination)
+        T_byte8 player,
+        T_byte8 transmitStart,
+        T_gameGroupID groupID,
+        T_word16 destination)
 {
-    T_packetShort packet ;
-    T_retransmitPacket *p_request ;
+    T_packetShort packet;
+    T_retransmitPacket *p_request;
 
-    DebugRoutine("ClientRequestRetransmit") ;
+    DebugRoutine("ClientRequestRetransmit");
 
     /* Fill out the request. */
-    p_request = (T_retransmitPacket *)(packet.data) ;
-    p_request->command = PACKET_COMMAND_RETRANSMIT ;
-    p_request->fromPlayer = ObjectGetServerId(PlayerGetObject()) - 9000 ;
-    p_request->toPlayer = player ;
-    p_request->transmitStart = transmitStart ;
-    p_request->groupID = groupID ;
+    p_request = (T_retransmitPacket *)(packet.data);
+    p_request->command = PACKET_COMMAND_RETRANSMIT;
+    p_request->fromPlayer = ObjectGetServerId(PlayerGetObject()) - 9000;
+    p_request->toPlayer = player;
+    p_request->transmitStart = transmitStart;
+    p_request->groupID = groupID;
 
     /* Send out the request. */
 //    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-    DirectTalkSetDestination(PeopleHereGetUniqueAddr(destination)) ;
-    PacketSendShort(&packet) ;
+    DirectTalkSetDestination(PeopleHereGetUniqueAddr(destination));
+    PacketSendShort(&packet);
 
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSendGotoSucceeded
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendGotoSucceeded tells the server that the location has been
- *  reached and is now just waiting for the "OK" (PlaceStartPacket).
- *
- *  @param placeNumber -- Place player went to
- *  @param startLocation -- Sub-place player went to
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendGotoSucceeded(
-           T_word16 placeNumber,
-           T_word16 startLocation)
-{
-    T_packetShort packet ;
-    T_gotoSucceededPacket *p_succeed ;
-
-    DebugRoutine("ClientSendGotoSucceeded") ;
-
-    /* If we are not playing by ourselves, tell the others that */
-    /* we made it to the new place. */
-    if (ClientGetConnectionType() != CLIENT_CONNECTION_TYPE_SINGLE)  {
-        /** Prepare and send a GOTO_SUCCEEDED packet. **/
-        p_succeed = (T_gotoSucceededPacket *)packet.data;
-
-        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
-        p_succeed->placeNumber = placeNumber;
-        p_succeed->startLocation = startLocation ;
-
-        CmdQSendShortPacket(&packet, 600, 0, NULL) ;
-    }
-
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -218,21 +180,25 @@ T_void ClientSendGotoSucceeded(
  *<!-----------------------------------------------------------------------*/
 T_void ClientSendTownUIAddMessage(T_byte8 *p_msg)
 {
-    T_townUIMessagePacket *p_msgPacket ;
-    T_packetLong packet ;
+    T_townUIMessagePacket *p_msgPacket;
+    T_packetLong packet;
+    T_directTalkUniqueAddress townGroup;
 
-    DebugRoutine("ClientSendTownUIAddMessage") ;
+    DebugRoutine("ClientSendTownUIAddMessage");
 
-    p_msgPacket = (T_townUIMessagePacket *)(packet.data) ;
-    memset(p_msgPacket, 0, sizeof(T_townUIMessagePacket)) ;
-    p_msgPacket->command = PACKET_COMMAND_TOWN_UI_MESSAGE ;
-    strncpy(p_msgPacket->name, StatsGetName(), 29) ;
-    strncpy(p_msgPacket->msg, p_msg, 39) ;
-    CmdQSendLongPacket(&packet, 600, 0, NULL) ;
+    townGroup = *DirectTalkGetNullBlankUniqueAddress();
 
-    ClientReceiveTownUIMessagePacket((T_packetEitherShortOrLong *)&packet) ;
+    p_msgPacket = (T_townUIMessagePacket *)(packet.data);
+    memset(p_msgPacket, 0, sizeof(T_townUIMessagePacket));
+    p_msgPacket->command = PACKET_COMMAND_TOWN_UI_MESSAGE;
+    strncpy((char *)p_msgPacket->name, (const char *)StatsGetName(), 29);
+    strncpy((char *)p_msgPacket->msg, (char *)p_msg, 39);
+//    CmdQSendLongPacket(&packet, 0, 600, 0, NULL);
+    PeopleHereSendPacketToGroup(townGroup, &packet, 140, 0, NULL);
 
-    DebugEnd() ;
+    ClientReceiveTownUIMessagePacket((T_packetEitherShortOrLong *)&packet);
+
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -255,36 +221,12 @@ T_void ClientSendPlayerIDSelf(T_void)
     PeopleHereGetPlayerIDSelfStruct(&p_self->id);
     p_self->command = PACKET_COMMAND_PLAYER_ID_SELF;
 
-    CmdQSendLongPacket(&packet, 600, 0, NULL);
+    CmdQSendLongPacket(&packet, 0, 600, 0, NULL);
 
+    // Also, put ourself on the list
     ClientReceivePlayerIDSelf((T_packetEitherShortOrLong *)&packet);
 
     DebugEnd();
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ClientSendRequestPlayerID
- *-------------------------------------------------------------------------*/
-/**
- *  ClientSendRequestPlayerID asks that the given player tell what
- *  location and state the player is in.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ClientSendRequestPlayerID(T_void)
-{
-    T_packetShort packet ;
-	memset(&packet, 0, sizeof(packet));
-
-    DebugRoutine("ClientSendRequestPlayerID") ;
-
-    /* Send a short packet with this simple command to get a player id. */
-    packet.data[0] = PACKET_COMMAND_REQUEST_PLAYER_ID ;
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-	// Send out our ID too.
-    ClientReceiveRequestPlayerIDPacket((T_packetEitherShortOrLong *)&packet) ;
-
-    DebugEnd() ;
 }
 
 /*-------------------------------------------------------------------------*
@@ -296,28 +238,28 @@ T_void ClientSendRequestPlayerID(T_void)
  *
  *<!-----------------------------------------------------------------------*/
 T_void ClientSendRespondToJoinPacket(
-           T_directTalkUniqueAddress uniqueAddress,
-           T_gameGroupID groupID,
-           T_word16 adventure,
-           E_respondJoin response)
+        T_directTalkUniqueAddress uniqueAddress,
+        T_gameGroupID groupID,
+        T_word16 adventure,
+        E_respondJoin response)
 {
-    T_packetLong packet ;
-    T_gameRespondJoinPacket *p_respond ;
+    T_packetLong packet;
+    T_gameRespondJoinPacket *p_respond;
 
-    DebugRoutine("ClientSendRespondToJoinPacket") ;
+    DebugRoutine("ClientSendRespondToJoinPacket");
 
     /* Make a packet and fill it out. */
-    p_respond = (T_gameRespondJoinPacket *)packet.data ;
-    p_respond->command = PACKET_COMMAND_GAME_RESPOND_JOIN ;
-    p_respond->uniqueAddress = uniqueAddress ;
-    p_respond->groupID = groupID ;
-    p_respond->adventure = adventure ;
-    p_respond->response = response ;
+    p_respond = (T_gameRespondJoinPacket *)packet.data;
+    p_respond->command = PACKET_COMMAND_GAME_RESPOND_JOIN;
+    p_respond->uniqueAddress = uniqueAddress;
+    p_respond->groupID = groupID;
+    p_respond->adventure = adventure;
+    p_respond->response = response;
 
 //printf("Send respond to join %d\n", response) ;
-    CmdQSendLongPacket(&packet, 140, 0, NULL) ;
+    CmdQSendLongPacket(&packet, &uniqueAddress, 140, 0, NULL);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -328,29 +270,27 @@ T_void ClientSendRespondToJoinPacket(
  *  created.
  *
  *<!-----------------------------------------------------------------------*/
-T_void ClientSendRequestJoin(
-            T_word16 map,
-            T_gameGroupID instance)
+T_void ClientSendRequestJoin(T_word16 map, T_gameGroupID instance)
 {
-    T_packetLong packet ;
-    T_gameRequestJoinPacket *p_request ;
+    T_packetLong packet;
+    T_gameRequestJoinPacket *p_request;
 
-    DebugRoutine("ClientSendRequestJoin") ;
+    DebugRoutine("ClientSendRequestJoin");
 
     /* Fill a packet to request joining a game. */
-    p_request = (T_gameRequestJoinPacket *)packet.data ;
-    p_request->command = PACKET_COMMAND_GAME_REQUEST_JOIN ;
-    DirectTalkGetUniqueAddress(&p_request->uniqueAddress) ;
-    p_request->groupID = instance ;
-    p_request->adventure = map ;
+    p_request = (T_gameRequestJoinPacket *)packet.data;
+    p_request->command = PACKET_COMMAND_GAME_REQUEST_JOIN;
+    DirectTalkGetUniqueAddress(&p_request->uniqueAddress);
+    p_request->groupID = instance;
+    p_request->adventure = map;
 
 //printf("Send request to join %d ", map) ;
 //DirectTalkPrintAddress(stdout, &instance) ;
 //puts(".") ;
 
-    CmdQSendLongPacket(&packet, 140, 0, NULL) ;
+    CmdQSendLongPacket(&packet, &instance, 140, 0, NULL);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -362,38 +302,38 @@ T_void ClientSendRequestJoin(
  *
  *<!-----------------------------------------------------------------------*/
 T_void ClientSendGameStartPacket(
-           T_gameGroupID groupID,
-           T_word16 adventure,
-           T_byte8 numPlayers,
-           T_directTalkUniqueAddress *players,
-           T_word16 firstLevel)
+        T_gameGroupID groupID,
+        T_word16 adventure,
+        T_byte8 numPlayers,
+        T_directTalkUniqueAddress *players,
+        T_word16 firstLevel)
 {
-    T_packetLong packet ;
-    T_gameStartPacket *p_start ;
+    T_packetLong packet;
+    T_gameStartPacket *p_start;
 
-    DebugRoutine("ClientSendRequestJoin") ;
+    DebugRoutine("ClientSendGameStartPacket");
 
-    p_start = (T_gameStartPacket *)(packet.data) ;
+    p_start = (T_gameStartPacket *)(packet.data);
 
-    p_start->command = PACKET_COMMAND_GAME_START ;
-    p_start->groupID = groupID ;
-    p_start->adventure = adventure ;
-    p_start->numPlayers = numPlayers ;
-    p_start->players[0] = players[0] ;
-    p_start->players[1] = players[1] ;
-    p_start->players[2] = players[2] ;
-    p_start->players[3] = players[3] ;
-    p_start->timeOfDay = MapGetDayOffset() ;
+    p_start->command = PACKET_COMMAND_GAME_START;
+    p_start->groupID = groupID;
+    p_start->adventure = adventure;
+    p_start->numPlayers = numPlayers;
+    p_start->players[0] = players[0];
+    p_start->players[1] = players[1];
+    p_start->players[2] = players[2];
+    p_start->players[3] = players[3];
+    p_start->timeOfDay = MapGetDayOffset();
     if (firstLevel == 0)
-        firstLevel = adventure ;
-    p_start->firstLevel = firstLevel ;
+        firstLevel = adventure;
+    p_start->firstLevel = firstLevel;
 
 //printf("Send request to start %d %d\n", groupID, adventure) ;
-    CmdQSendLongPacket(&packet, 140, 0, NULL) ;
+    PeopleHereSendPacketToGroup(groupID, &packet, 140, 0, NULL);
 
-    ClientReceiveGameStartPacket((T_packetEitherShortOrLong *)&packet) ;
+    ClientReceiveGameStartPacket((T_packetEitherShortOrLong *)&packet);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /** @} */

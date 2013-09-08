@@ -75,7 +75,7 @@
 #ifdef COMPILE_OPTION_SHAREWARE_DEMO
     #define VERSION_TEXT "Shareware Demo V1.2"
 #elif defined(COMPILE_OPTION_CLASSIC_VERSION)
-    #define VERSION_TEXT "Classic V1.01"
+    #define VERSION_TEXT "Classic V1.02"
 #else
     #define VERSION_TEXT "Registered V1.0"
 #endif
@@ -171,6 +171,7 @@
 #endif
 
 #define CompareGameGroupIDs(a, b) (((memcmp(&(a), &(b), sizeof(a)))==0)?TRUE:FALSE)
+#define CompareUniqueNetworkIDs(a, b) (((memcmp(&(a), &(b), sizeof(a)))==0)?TRUE:FALSE)
 
 #ifdef WIN32
 	#define far

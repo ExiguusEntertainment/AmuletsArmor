@@ -7,24 +7,20 @@
 
 #include "GENERAL.H"
 #include "PACKET.H"
+#include "DITALK.H"
 
 typedef enum {
     PACKET_COMMAND_ACK,                     /*  0 */
-    PACKET_COMMAND_LOGIN,                   /*  1 */
-    PACKET_COMMAND_RETRANSMIT,              /*  2 */
-    PACKET_COMMAND_TOWN_UI_MESSAGE,         /*  3 */
-    PACKET_COMMAND_PLAYER_ID_SELF,          /*  4 */
-    PACKET_COMMAND_REQUEST_PLAYER_ID,       /*  5 */
-    PACKET_COMMAND_GAME_REQUEST_JOIN,       /*  6 */
-    PACKET_COMMAND_GAME_RESPOND_JOIN,       /*  7 */
-    PACKET_COMMAND_GAME_START,              /*  8 */
-    PACKET_COMMAND_SYNC,                    /*  9 */
-    PACKET_COMMAND_MESSAGE,                 /* 10 */
-    PACKET_COMMANDSC_PLACE_START,           /* 16 */
-    PACKET_COMMANDCSC_GOTO_PLACE,           /* 17 */
-    PACKET_COMMANDCS_GOTO_SUCCEEDED,        /* 18 */
+    PACKET_COMMAND_RETRANSMIT,              /*  1 */
+    PACKET_COMMAND_TOWN_UI_MESSAGE,         /*  2 */
+    PACKET_COMMAND_PLAYER_ID_SELF,          /*  3 */
+    PACKET_COMMAND_GAME_REQUEST_JOIN,       /*  4 */
+    PACKET_COMMAND_GAME_RESPOND_JOIN,       /*  5 */
+    PACKET_COMMAND_GAME_START,              /*  6 */
+    PACKET_COMMAND_SYNC,                    /*  7 */
+    PACKET_COMMAND_MESSAGE,                 /*  8 */
 
-    PACKET_COMMAND_UNKNOWN=19
+    PACKET_COMMAND_UNKNOWN=10
 } E_packetCommand ;
 
 typedef T_void *T_packetHandle ;
@@ -42,24 +38,23 @@ T_void CmdQInitialize(T_void) ;
 
 T_void CmdQFinish(T_void) ;
 
-T_void CmdQSetActivePortNum(T_word16 num) ;
-
-T_word16 CmdQGetActivePortNum(T_void) ;
-
 T_void CmdQSendShortPacket(
             T_packetShort *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback) ;
 
 T_void CmdQSendLongPacket(
             T_packetLong *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback) ;
 
 T_void CmdQSendPacket(
             T_packetEitherShortOrLong *p_packet,
+            T_directTalkUniqueAddress *p_destination,
             T_word16 retryTime,
             T_word32 extraData,
             T_cmdQPacketCallback p_callback) ;

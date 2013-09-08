@@ -554,9 +554,6 @@ T_void SMCPlayGameDoGameIdle(
     DebugCheck(p_data != NULL) ;
 
     /* Update all the regular game stuff. */
-//	CmdQUpdateAllReceives() ;
-//	CmdQUpdateAllSends() ;
-	CmdQSetActivePortNum(0) ;
     if (ClientIsActive())   {
         ClientUpdate() ;
         CreaturesCheck() ;

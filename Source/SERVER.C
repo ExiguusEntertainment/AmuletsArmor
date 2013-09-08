@@ -606,36 +606,36 @@ E_Boolean IServerCheckSectorSoundsForObject(T_3dObject *p_obj, T_word32 data)
  *<!-----------------------------------------------------------------------*/
 T_void ServerGotoPlace(T_word32 placeNumber, T_word16 startLocation)
 {
-    T_packetShort packet ;
-    T_gotoPlacePacket *p_packet ;
-
-    DebugRoutine("ServerGotoPlace") ;
-
-//printf("ServerGotoPlace: %ld %d\n", placeNumber, startLocation) ; fflush(stdout) ;
-
-    /** Normal mode. **/
-    /** Is this a next-map instruction? **/
-//printf("Server attempting to go to %d\n", placeNumber) ;
-
-//printf("Server going to %d (was %d)\n", placeNumber, G_nextMap) ;
-    G_nextMap = placeNumber ;
-
-    /* Mark updates for the current level as inactive. */
-    G_serverActive = FALSE ;
-
-    /** Create a GOTO_PLACE packet. **/
-    packet.header.packetLength = SHORT_PACKET_LENGTH;
-    p_packet = (T_gotoPlacePacket *)packet.data;
-
-    p_packet->command = PACKET_COMMANDCSC_GOTO_PLACE;
-    p_packet->placeNumber = placeNumber;
-    p_packet->startLocation = startLocation ;
-//printf("start location set to %d\n", startLocation) ;
-
-    /** Just send an identical packet to each client. **/
-    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
-
-    DebugEnd() ;
+//    T_packetShort packet ;
+//    T_gotoPlacePacket *p_packet ;
+//
+//    DebugRoutine("ServerGotoPlace") ;
+//
+////printf("ServerGotoPlace: %ld %d\n", placeNumber, startLocation) ; fflush(stdout) ;
+//
+//    /** Normal mode. **/
+//    /** Is this a next-map instruction? **/
+////printf("Server attempting to go to %d\n", placeNumber) ;
+//
+////printf("Server going to %d (was %d)\n", placeNumber, G_nextMap) ;
+//    G_nextMap = placeNumber ;
+//
+//    /* Mark updates for the current level as inactive. */
+//    G_serverActive = FALSE ;
+//
+//    /** Create a GOTO_PLACE packet. **/
+//    packet.header.packetLength = SHORT_PACKET_LENGTH;
+//    p_packet = (T_gotoPlacePacket *)packet.data;
+//
+//    p_packet->command = PACKET_COMMANDCSC_GOTO_PLACE;
+//    p_packet->placeNumber = placeNumber;
+//    p_packet->startLocation = startLocation ;
+////printf("start location set to %d\n", startLocation) ;
+//
+//    /** Just send an identical packet to each client. **/
+//    CmdQSendShortPacket(&packet, 140, 0, NULL) ;
+//
+//    DebugEnd() ;
 }
 
 
@@ -652,112 +652,20 @@ T_void ServerGotoPlace(T_word32 placeNumber, T_word16 startLocation)
  *<!-----------------------------------------------------------------------*/
 T_void ServerReceiveGotoPlacePacket(T_packetEitherShortOrLong *p_gotoPacket)
 {
-    T_gotoPlacePacket *p_packet ;
-
-    DebugRoutine("ServerReceiveGotoPlacePacket") ;
-//puts("ServerReceiveGotoPlacePacket") ;
-
-    /* Get a quick pointer. */
-    p_packet = (T_gotoPlacePacket *)p_gotoPacket->data ;
-
-    ServerGotoPlace(p_packet->placeNumber, p_packet->startLocation);
-
-    if (p_packet->placeNumber == 0)
-        ServerPlayerLeft(CmdQGetActivePortNum()) ;
-
-    DebugEnd() ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  ServerReceiveGotoSucceededPacket
- *-------------------------------------------------------------------------*/
-/**
- *  ServerReceiveGotoSucceededPacket is called when a client has success-
- *  fully complied with a GotoPlace packet.  This lets me know when every-
- *  body is ready.
- *
- *  @param p_packet -- the goto success packet.
- *
- *<!-----------------------------------------------------------------------*/
-T_void ServerReceiveGotoSucceededPacket(T_packetEitherShortOrLong *p_packet)
-{
-    T_word16 player ;
-    T_packetShort startPacket ;
-    T_placeStartPacket *p_start ;
-    T_word16 angle ;
-    T_gotoSucceededPacket *p_succeeded;
-
-    DebugRoutine("ServerReceiveGotoSucceededPacket") ;
-//puts("ServerReceiveGotoSucceededPacket") ;
-
-    /** First! Ensure that this packet corresponds to the place change in **/
-    /** progress. **/
-    p_succeeded = (T_gotoSucceededPacket *)(p_packet->data);
-    G_nextMap = p_succeeded->placeNumber ;
-    if (p_succeeded->placeNumber != G_nextMap)
-    {
-        printf ("Warning: Received incorrect gts packet (gts for %d,"
-                " nextMap = %d\n", p_succeeded->placeNumber, G_nextMap);
-    }
-    else
-    {
-        /* Find which player this is and mark him as active (if inactive). */
-        player = CmdQGetActivePortNum() ;
-
-        /* Clear all past port info. */
-        CmdQClearAllPorts() ;
-
-        if (G_nextMap < 10000)  {
-            /** Yes!  Make the server update loop active again. **/
-            G_serverActive = TRUE;
-
-            /** Yes. **/
-            /** Send everyone a place start packet and positional */
-            /* information based on their login Id. **/
-            p_start = (T_placeStartPacket *)(startPacket.data);
-
-            CmdQSetActivePortNum(1) ;
-
-            /* Set up the command. */
-            p_start->command = PACKET_COMMANDSC_PLACE_START ;
-
-            /* What is the client to be known by. */
-            p_start->loginId = player ;
-
-            /* What is the object's id. */
-            p_start->objectId = 9000 ;
-
-            /* Where is the player to start? */
-            MapGetStartLocation(
-                p_succeeded->startLocation,
-                &p_start->xPos,
-                &p_start->yPos,
-                &angle) ;
-            p_start->angle = angle>>8 ;
-
-            CmdQSendShortPacket(&startPacket, 210, 0, NULL) ;
-        } else {
-            /* Must be doing a form. */
-            /* Just send a place succeeded packet. */
-            p_start = (T_placeStartPacket *)(startPacket.data);
-
-            CmdQSetActivePortNum(1) ;
-
-            /* Set up the command. */
-            p_start->command = PACKET_COMMANDSC_PLACE_START ;
-
-            /* What is the client to be known by. */
-            p_start->loginId = player ;
-
-            /* What is the object's id. */
-            /* (No object id) */
-            p_start->objectId = 0 ;
-
-            CmdQSendShortPacket(&startPacket, 210, 0, NULL) ;
-        }
-    }
-
-    DebugEnd() ;
+//    T_gotoPlacePacket *p_packet ;
+//
+//    DebugRoutine("ServerReceiveGotoPlacePacket") ;
+////puts("ServerReceiveGotoPlacePacket") ;
+//
+//    /* Get a quick pointer. */
+//    p_packet = (T_gotoPlacePacket *)p_gotoPacket->data ;
+//
+//    ServerGotoPlace(p_packet->placeNumber, p_packet->startLocation);
+//
+//    if (p_packet->placeNumber == 0)
+//        ServerPlayerLeft(CmdQGetActivePortNum()) ;
+//
+//    DebugEnd() ;
 }
 
 /*-------------------------------------------------------------------------*
@@ -826,7 +734,7 @@ T_void ServerReceiveSyncPacket(T_packetEitherShortOrLong *p_packet)
 
     /* For the self server, just send it back. */
 //    ServerSendToAll(p_packet) ;
-    CmdQSendPacket(p_packet, 140, 0, NULL) ;
+    CmdQSendPacket(p_packet, &p_packet->header.sender, 140, 0, NULL) ;
 
     DebugEnd() ;
 }

@@ -54,6 +54,9 @@ T_sword16 PacketSendShort(T_packetShort *p_shortPacket)
     /* Put the id for this packet in the packet. */
     p_shortPacket->header.id = G_packetID++ ;
 
+    // Store the sender in the packet (needed for proper ack packets)
+    DirectTalkGetUniqueAddress(&p_shortPacket->header.sender);
+
     /* Compute the checksum for this packet. */
     p_shortPacket->header.checksum =
         IPacketComputeChecksum((T_packetEitherShortOrLong *)p_shortPacket) ;
@@ -96,6 +99,9 @@ T_sword16 PacketSendLong(T_packetLong *p_longPacket)
 
     /* Put the id for this packet in the packet. */
     p_longPacket->header.id = G_packetID++ ;
+
+    // Store the sender in the packet (needed for proper ack packets)
+    DirectTalkGetUniqueAddress(&p_longPacket->header.sender);
 
     /* Compute the checksum for this packet. */
     p_longPacket->header.checksum =
@@ -141,6 +147,9 @@ T_sword16 PacketSendAnyLength(T_packetEitherShortOrLong *p_anyPacket)
 
     /* Put the id for this packet in the packet. */
     p_anyPacket->header.id = G_packetID++ ;
+
+    // Store the sender in the packet (needed for proper ack packets)
+    DirectTalkGetUniqueAddress(&p_anyPacket->header.sender);
 
     /* Compute the checksum for this packet. */
     p_anyPacket->header.checksum = IPacketComputeChecksum(p_anyPacket) ;
@@ -308,6 +317,7 @@ T_void PacketCloseReceiveFile(T_void)
 
 T_void PacketReceiveData(T_void *p_data, T_word16 size)
 {
+    void PacketPrint(void *aData, unsigned int aSize);
     DebugRoutine("ConnectReceiveData") ;
     DebugCheck(p_data != NULL) ;
 
@@ -325,6 +335,7 @@ T_void PacketReceiveData(T_void *p_data, T_word16 size)
 
     memcpy(&newPacket, p_data, size) ;
     newPacketFilled = TRUE ;
+    PacketPrint(p_data, size);
 
     DebugEnd() ;
 }

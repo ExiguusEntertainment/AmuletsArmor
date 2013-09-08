@@ -269,8 +269,12 @@ T_word32 FileGetSize(T_byte8 *p_filename)
 
     DebugRoutine("FileGetSize");
     fp = fopen(p_filename, "rb");
-    size = filelength(fileno(fp));
-    fclose(fp);
+    if (fp) {
+        size = filelength(fileno(fp));
+        fclose(fp);
+    } else {
+        size = 0;
+    }
     DebugEnd() ;
 #else
     struct find_t fileinfo ;
