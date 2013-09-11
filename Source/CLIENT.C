@@ -124,6 +124,7 @@ static T_3dObject *G_lastDrawTargetItem;
 static E_Boolean G_attackComplete = TRUE ;
 
 static E_Boolean G_pressedCastButton = FALSE;
+static E_Boolean G_pressedUseButton = FALSE;
 
 /* Note if the fps is on or off */
 static E_Boolean G_fpsOn = FALSE ;
@@ -1256,8 +1257,16 @@ T_void ClientUpdate(T_void)
                 // Look mode
                 if (MouseGetButtonStatus() & MOUSE_BUTTON_LEFT) {
                     // Player clicked left mouse button.  Use item in hand
-                    if (InventoryCanUseItemInReadyHand())
+                    if (InventoryCanUseItemInReadyHand()) {
                         InventoryUseItemInReadyHand(NULL);
+                        G_pressedUseButton = TRUE;
+                    }
+                } else {
+                    if (G_pressedUseButton) {
+                        /* reset held ctrl key */
+                        InventoryResetUse();
+                        G_pressedUseButton = FALSE;
+                    }
                 }
                 if (MouseGetButtonStatus() & MOUSE_BUTTON_RIGHT) {
                     // But only if we have release the mouse button at some point
@@ -1829,8 +1838,9 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
 
 
             case KEYBOARD_EVENT_RELEASE:
-            if (scankey == KEY_SCAN_CODE_LEFT_CTRL ||
-                scankey == KEY_SCAN_CODE_RIGHT_CTRL)
+//            if (scankey == KEY_SCAN_CODE_LEFT_CTRL ||
+//                scankey == KEY_SCAN_CODE_RIGHT_CTRL)
+            if (KeyMap(KEYMAP_USE))
             {
                 /* reset held ctrl key */
                 InventoryResetUse();
@@ -1988,13 +1998,13 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
         /*******************************/
         switch (event) {
             case KEYBOARD_EVENT_HELD:
-                if (!MouseIsRelativeMode()) {
+//                if (!MouseIsRelativeMode()) {
                     /* use item in inventory */
                     if (scankey == KeyMap(KEYMAP_USE)) {
                         if (InventoryCanUseItemInReadyHand())
                             InventoryUseItemInReadyHand(temp);
                     }
-                }
+//                }
                 break;
 
             case KEYBOARD_EVENT_BUFFERED:
@@ -2069,6 +2079,13 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
                     }
                 }
 
+                if (!MouseIsRelativeMode()) {
+                    /* use item in inventory */
+                    if (scankey == KeyMap(KEYMAP_USE)) {
+                        if (InventoryCanUseItemInReadyHand())
+                            InventoryUseItemInReadyHand(temp);
+                    }
+                }
                 break;
 
             case KEYBOARD_EVENT_RELEASE:

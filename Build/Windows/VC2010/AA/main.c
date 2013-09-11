@@ -241,7 +241,7 @@ int SDL_main(int argc, char *argv[])
     int x, y;
     SDL_Color black = { 0, 0, 0, 0 };
     SDL_Color white = { 255, 255, 255, 0 };
-    SDL_Surface* icon;
+    //SDL_Surface* icon;
 
     if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0)
     {
