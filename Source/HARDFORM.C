@@ -197,6 +197,10 @@ static T_void HardFormExit(T_buttonID buttonID)
     ButtonDelete(G_closeButton);
     G_closeButton = NULL;
     if (TownUIIsOpen()) {
+        // Save the character!
+        StatsSaveCharacter(StatsGetActive());
+
+        // Exit town
         ClientSetNextPlace(0, 0);
     } else {
         ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);

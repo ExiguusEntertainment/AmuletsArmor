@@ -2881,6 +2881,8 @@ T_void ClientForceGotoPlace(
                     StatsUpdatePastPlace(
                         G_adventureNumber,
                         0) ;
+                    // Save the character!
+                    StatsSaveCharacter(StatsGetActive());
                     TownUISetAdventureCompleted() ;
                 }
 
@@ -2895,6 +2897,9 @@ T_void ClientForceGotoPlace(
                         G_adventureNumber,
                         G_currentPlace) ;
 
+                    // Save the character!
+                    StatsSaveCharacter(StatsGetActive());
+
                     if (previousLocation < 10000)
                         goToTown = TownUICompletedMapLevel(previousLocation) ;
                 }
@@ -2904,6 +2909,9 @@ T_void ClientForceGotoPlace(
                     G_adventureNumber = 0 ;
 
                     MouseRelativeModeOff();
+
+                    // Save the character!
+                    StatsSaveCharacter(StatsGetActive());
 
                     ClientSetCurrentPlace(HARD_FORM_TOWN+HARDFORM_GOTO_PLACE_OFFSET) ;
                     ClientSetCurrentStartLocation(0) ;

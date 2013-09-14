@@ -329,6 +329,9 @@ T_void TownUIEnd(T_void)
         G_menuButtons[i] = NULL;
     }
 
+    // Save the character!
+    StatsSaveCharacter(StatsGetActive());
+
     if (G_isOnePlayer == FALSE) {
         /* clean up chat area */
 
