@@ -579,30 +579,35 @@ T_void ClientMakeObjectGoSplat(
             if (numSplats > 20)
                 numSplats=20;
 
-    //printf("Object %d go splat for %d splats from %s\n", ObjectGetServerId(p_obj), numSplats, DebugGetCallerName()) ;
-            /* add effects based on damage type */
-            if (typeCount==1)
-            {
-                EfxCreate (splatTypes[0],
-                           x,
-                           y,
-                           ObjectGetZ(p_obj)+(ObjectGetHeight(p_obj)<<15),
-                           numSplats,
-                           isTranslucent,
-                           0);
-            }
-            else while (numSplats > 0)
-            {
-                numSplatsThisTime=rand()%3+1;
-                splatType=rand()%typeCount;
-                EfxCreate (splatTypes[splatType],
-                           x,
-                           y,
-                           ObjectGetZ(p_obj)+(ObjectGetHeight(p_obj)<<15),
-                           numSplatsThisTime,
-                           isTranslucent,
-                           0);
-                numSplats-=numSplatsThisTime;
+            // Any type of effects at all?  None?  Okay.
+            if (typeCount > 0) {
+                //printf("Object %d go splat for %d splats from %s\n", ObjectGetServerId(p_obj), numSplats, DebugGetCallerName()) ;
+                /* add effects based on damage type */
+                if (typeCount==1)
+                {
+                    // Output one type of effect
+                    EfxCreate (splatTypes[0],
+                               x,
+                               y,
+                               ObjectGetZ(p_obj)+(ObjectGetHeight(p_obj)<<15),
+                               numSplats,
+                               isTranslucent,
+                               0);
+                }
+                else while (numSplats > 0)
+                {
+                    // Randomly output a mix of effects
+                    numSplatsThisTime=rand()%3+1;
+                    splatType=rand()%typeCount;
+                    EfxCreate (splatTypes[splatType],
+                               x,
+                               y,
+                               ObjectGetZ(p_obj)+(ObjectGetHeight(p_obj)<<15),
+                               numSplatsThisTime,
+                               isTranslucent,
+                               0);
+                    numSplats-=numSplatsThisTime;
+                }
             }
         }
     }
