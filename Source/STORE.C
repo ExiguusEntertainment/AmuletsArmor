@@ -264,8 +264,8 @@ T_void StoreConfirmSellItem (T_void)
             InventoryDoEffect(EFFECT_TRIGGER_GET,EQUIP_LOCATION_MOUSE_HAND);
         }
 
-        /* identify object type for player */
-        StatsPlayerIdentify(ObjectGetType(p_obj));
+        /* identify arrow type for player */
+        StatsPlayerIdentify(ObjectGetType(G_itemToSell->object));
 
         /* force mouse hand picture update */
 //      ControlSetObjectPointer (p_inv->object);
