@@ -1689,11 +1689,16 @@ T_void ObjMoveUpdateZVel(
                         {
                             square = (-ObjMoveStruct->ZV - StatsGetMaxFallV())>>6 ;
                             square += ((square * square) / 100) ;
-                            if (square > 32000)
-                                square = 32000 ;
-                            StatsTakeDamage (
-                                 EFFECT_DAMAGE_NORMAL,
-                                 square) ;
+
+                            // Ignore small amounts of damage from falling
+                            // to avoid little spills.
+                            if (square > 50) {
+                                if (square > 32000)
+                                    square = 32000 ;
+                                StatsTakeDamage (
+                                     EFFECT_DAMAGE_NORMAL,
+                                     square) ;
+                            }
                         }
                     }
                 } else if (ObjectIsCreature((T_3dObject *)ObjMoveStruct))  {
