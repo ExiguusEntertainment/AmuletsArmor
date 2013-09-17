@@ -85,11 +85,6 @@ T_void MouseSetDefaultBitmap(
 
 T_void MouseUseDefaultBitmap(void) ;
 
-T_void MouseSetPicture(
-          T_word16 hot_spot_x,
-          T_word16 hot_spot_y,
-          T_mousePicture picture) ;
-
 T_void MouseBlockEvents(T_void) ;
 
 T_void MouseAllowEvents(T_void) ;

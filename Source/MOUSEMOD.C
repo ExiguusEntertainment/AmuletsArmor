@@ -411,65 +411,6 @@ T_void MouseSetBounds(
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  MouseSetPicture
- *-------------------------------------------------------------------------*/
-/**
- *  MouseSetPicture is used to change the look of the mouse cursor
- *  and where it's hot spot (pointing spot) is located.  Just pass to
- *  it a mouse shape pointer and the position of the hot spot.
- *
- *  NOTE: 
- *  None.  Just make sure the hot spot is within the cursor.
- *
- *  @param hot_spot_x -- left to right position of hot spot
- *  @param hot_spot_y -- top to bottom position of hot spot
- *  @param picture -- Mouse picture to use
- *
- *<!-----------------------------------------------------------------------*/
-T_void MouseSetPicture(
-          T_word16 hot_spot_x,
-          T_word16 hot_spot_y,
-          T_mousePicture picture)
-{
-#ifdef DOS32
-//    union REGPACK regs;
-    struct SREGS sregs ;
-    union REGS inregs ;
-
-    DebugRoutine("MouseSetPicture") ;
-    DebugCheck(F_MouseIsInitialized == TRUE) ;
-    DebugCheck(hot_spot_x < 16) ;
-    DebugCheck(hot_spot_y < 16) ;
-    DebugCheck(picture != NULL) ;
-
-/*
-    memset(&regs,0,sizeof(union REGPACK));
-    regs.w.ax = 9;
-    regs.w.dx = FP_OFF(picture) ;
-    regs.w.es = FP_SEG(picture) ;
-    regs.w.bx = hot_spot_x ;
-    regs.w.cx = hot_spot_y ;
-    intr(0x33,&regs);
-*/
-    segread(&sregs) ;
-
-    inregs.w.ax = 0x09 ;
-    inregs.w.bx = hot_spot_x ;
-    inregs.w.cx = hot_spot_y ;
-    sregs.es = FP_SEG(picture) ;
-#ifdef __386__
-    inregs.x.edx = FP_OFF(picture) ;
-    int386x(0x33, &inregs, &inregs, &sregs) ;
-#else
-    inregs.x.dx = FP_OFF(picture) ;
-    int86x(0x33, &inregs, &inregs, &sregs) ;
-#endif
-
-    DebugEnd() ;
-#endif
-}
-
-/*-------------------------------------------------------------------------*
  * Routine:  MouseBlockEvents
  *-------------------------------------------------------------------------*/
 /**
@@ -859,25 +800,27 @@ T_void MouseDraw(T_void)
 //    DebugCheck(G_bitmap != NULL) ;
 
     // Draw if we have a bitmap AND we are not in relative mouse mode
-    if ((G_bitmap) && (MouseIsRelativeMode() == FALSE))  {
+    if (G_bitmap)  {
         IMouseGetUpperLeft(&mx, &my) ;
 
         /* First, save what is behind the mouse. */
         IMouseTransfer(mx, my, GRAPHICS_ACTUAL_SCREEN, G_mouseScreen) ;
 
-        was = GrScreenGet() ;
-        GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
+        if (MouseIsRelativeMode() == FALSE) {
+            was = GrScreenGet() ;
+            GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
 
-        GrDrawCompressedBitmapAndClipAndColor(
-            PictureToBitmap((T_byte8 *)G_bitmap),
-            mx,
-            my,
-            G_colorTable) ;
+            GrDrawCompressedBitmapAndClipAndColor(
+                PictureToBitmap((T_byte8 *)G_bitmap),
+                mx,
+                my,
+                G_colorTable) ;
 
-        G_lastDrawX = mx ;
-        G_lastDrawY = my ;
+            G_lastDrawX = mx ;
+            G_lastDrawY = my ;
 
-        GrScreenSet(was) ;
+            GrScreenSet(was) ;
+        }
     }
 
     DebugEnd() ;
@@ -894,10 +837,12 @@ T_void MouseErase(T_void)
 {
     DebugRoutine("MouseErase") ;
 
-    if (G_bitmap != NULL)
-        /* Draw what was behind the mouse back on the screen. */
-        IMouseTransfer(G_lastDrawX, G_lastDrawY, G_mouseScreen, GRAPHICS_ACTUAL_SCREEN) ;
-
+    if (G_bitmap != NULL) {
+        if (MouseIsRelativeMode() == FALSE) {
+            /* Draw what was behind the mouse back on the screen. */
+            IMouseTransfer(G_lastDrawX, G_lastDrawY, G_mouseScreen, GRAPHICS_ACTUAL_SCREEN) ;
+        }
+    }
     DebugEnd() ;
 }
 
