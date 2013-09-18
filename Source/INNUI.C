@@ -17,6 +17,8 @@
 #include "MESSAGE.H"
 #include "STATS.H"
 #include "TXTBOX.H"
+#include "HARDFORM.H"
+#include "PROMPT.H"
 
 static T_graphicID G_backgroundPic = NULL;
 static T_buttonID G_rentButtons[4];
@@ -126,7 +128,20 @@ static T_void InnUIRent(T_buttonID buttonID)
 
     switch (whichRoom) {
         case INN_ROOM_COMMONS:
-            ClientSetNextPlace(0, 0);
+            MessageAdd("^004Good night!");
+            switch (rand() % 3) {
+                case 0:
+                    PromptDisplayMessage("You enjoy an uncomfortable night on the floor.");
+                    break;
+                case 1:
+                    PromptDisplayMessage("The only warmth here is from the next body over.");
+                    break;
+                case 2:
+                    PromptDisplayMessage("I think I got fleas now.");
+                    break;
+            }
+            /* Go back to town */
+            ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
             break;
 
         case INN_ROOM_SMALL:
@@ -148,8 +163,21 @@ static T_void InnUIRent(T_buttonID buttonID)
                 StatsSetPlayerHealth(newhealth);
                 StatsSetPlayerMana(newmana);
 
-                /* log off */
-                ClientSetNextPlace(0, 0);
+                MessageAdd("^00425% Health/Mana + 50% Food/Water");
+                switch (rand() % 3) {
+                    case 0:
+                        PromptDisplayMessage("A tight fit in a small room, but it'll do.");
+                        break;
+                    case 1:
+                        PromptDisplayMessage("Don't let the bedbugs bite!");
+                        break;
+                    case 2:
+                        PromptDisplayMessage("The only thing smaller than this room ... is the bed.");
+                        break;
+                }
+
+                /* Go back to town */
+                ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
             } else {
                 MessageAdd("^005Gotta have the money first, pal.");
             }
@@ -176,8 +204,22 @@ static T_void InnUIRent(T_buttonID buttonID)
 
                 /* Halve Poison */
                 StatsSetPlayerPoisonLevel(StatsGetPlayerPoisonLevel()/2);
-                /* log off */
-                ClientSetNextPlace(0, 0);
+
+                MessageAdd("^00433% H/M + 100% F/W - 50% Poison");
+                switch (rand() % 3) {
+                    case 0:
+                        PromptDisplayMessage("Bigger is better!");
+                        break;
+                    case 1:
+                        PromptDisplayMessage("Make my bed a double!");
+                        break;
+                    case 2:
+                        PromptDisplayMessage("Nothing like enjoying some time off!");
+                        break;
+                }
+
+                /* Go back to town */
+                ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
             } else {
                 MessageAdd("^005You don't look like you can afford it.");
             }
@@ -192,14 +234,6 @@ static T_void InnUIRent(T_buttonID buttonID)
                 StatsChangePlayerFood(2000);
                 StatsChangePlayerWater(2000);
 
-//            newhealth=StatsGetPlayerHealth();
-//            newhealth+=StatsGetPlayerMaxHealth();
-//            if (newhealth > StatsGetPlayerMaxHealth())
-//              newhealth=StatsGetPlayerMaxHealth();
-//            newmana=StatsGetPlayerMana();
-//            newmana+=StatsGetPlayerMaxMana()/4;
-//            if (newmana > StatsGetPlayerMaxMana())
-//              newmana=StatsGetPlayerMaxMana();
                 newhealth = StatsGetPlayerMaxHealth();
                 newmana = StatsGetPlayerMaxMana();
                 StatsSetPlayerHealth(newhealth);
@@ -208,8 +242,21 @@ static T_void InnUIRent(T_buttonID buttonID)
                 /* Cure poison */
                 StatsSetPlayerPoisonLevel(0);
 
-                /* log off */
-                ClientSetNextPlace(0, 0);
+                MessageAdd("^004100% H/M + 100% F/W - 100% Poision");
+                switch (rand() % 3) {
+                    case 0:
+                        PromptDisplayMessage("Now this is living the life!");
+                        break;
+                    case 1:
+                        PromptDisplayMessage("I always wanted to live rich.  Now I am.");
+                        break;
+                    case 2:
+                        PromptDisplayMessage("Oh yeah!  I feel MUCH better now.");
+                        break;
+                }
+
+                /* Go back to town */
+                ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
             } else {
                 MessageAdd("^005What, are you kidding??");
             }
