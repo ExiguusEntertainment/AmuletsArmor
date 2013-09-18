@@ -337,8 +337,8 @@ T_void MouseMoveTo(T_word16 x, T_word16 y)
 
     DebugRoutine("MouseMoveTo") ;
     DebugCheck(F_MouseIsInitialized == TRUE) ;
-    DebugCheck(x < 320) ;
-    DebugCheck(y < 200) ;
+    DebugCheck(x < SCREEN_WIDTH) ;
+    DebugCheck(y < SCREEN_HEIGHT) ;
 
     /* Move the mouse. */
     memset(&regs,0,sizeof(union REGPACK));
@@ -387,9 +387,9 @@ T_void MouseSetBounds(
 
     DebugRoutine("MouseSetBounds") ;
     DebugCheck(F_MouseIsInitialized == TRUE) ;
-    DebugCheck(right < 320) ;
+    DebugCheck(right < SCREEN_WIDTH) ;
     DebugCheck(left <= right) ;
-    DebugCheck(bottom < 200) ;
+    DebugCheck(bottom < SCREEN_HEIGHT) ;
     DebugCheck(top <= bottom ) ;
 
     /* Declare the left and right edge. */
@@ -635,7 +635,7 @@ T_void MouseReleaseBounds(T_void)
     DebugCheck(F_MouseIsInitialized == TRUE) ;
 
     /* Set the bounds to the size of the screen. */
-    MouseSetBounds(0, 0, 319, 199) ;
+    MouseSetBounds(0, 0, SCREEN_WIDTH-1, SCREEN_HEIGHT-1) ;
 
     DebugEnd() ;
 }
@@ -872,12 +872,12 @@ T_void IMouseTransfer(T_word16 x, T_word16 y, T_screen from, T_screen to)
 
     if (top < 0)
         top = 0 ;
-    if (bottom >= 200)
-        bottom = 199 ;
+    if (bottom >= SCREEN_HEIGHT)
+        bottom = SCREEN_HEIGHT-1 ;
     if (left < 0)
         left = 0 ;
-    if (right >= 320)
-        right = 319 ;
+    if (right >= SCREEN_WIDTH)
+        right = SCREEN_WIDTH-1 ;
 
     GrTransferRectangle(
            to,
@@ -915,23 +915,23 @@ T_void IMouseGetUpperLeft(T_word16 *p_x, T_word16 *p_y)
 /*
     if (gx < 0)
         gx = 0 ;
-    else if (gx+sx >= 320)
-        gx = 319-sx ;
+    else if (gx+sx >= SCREEN_WIDTH)
+        gx = SCREEN_WIDTH-1-sx ;
 
     if (gy < 0)
         gy = 0 ;
-    else if (gy+sy >= 200)
-        gy = 199-sy ;
+    else if (gy+sy >= SCREEN_HEIGHT)
+        gy = SCREEN_HEIGHT-1-sy ;
 */
 
     *p_x = gx ;
     *p_y = gy ;
 
 /*
-    DebugCheck(gx < 320) ;
-    DebugCheck(gy < 200) ;
-    DebugCheck(gx+sx < 320) ;
-    DebugCheck(gy+sy < 200) ;
+    DebugCheck(gx < SCREEN_WIDTH) ;
+    DebugCheck(gy < SCREEN_HEIGHT) ;
+    DebugCheck(gx+sx < SCREEN_WIDTH) ;
+    DebugCheck(gy+sy < SCREEN_HEIGHT) ;
 */
 
     DebugEnd() ;

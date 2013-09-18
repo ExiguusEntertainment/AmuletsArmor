@@ -13,12 +13,14 @@ static T_word16 G_mouseY = 0 ;
 
 T_void DirectMouseSet(T_word16 newX, T_word16 newY)
 {
+#if (SCREEN_WIDTH <= 640)
 newX >>= 1;
 newY >>= 1; // scale for large screen
-    if (newX > 319)
-        newX = 319  ;
-    if (newY > 199)
-        newY = 199 ;
+#endif
+    if (newX > SCREEN_WIDTH-1)
+        newX = (SCREEN_WIDTH-1)  ;
+    if (newY > SCREEN_HEIGHT-1)
+        newY = SCREEN_HEIGHT-1 ;
     G_mouseX = newX ;
     G_mouseY = newY ;
 }
@@ -32,7 +34,11 @@ void OutsideMouseDriverGet(T_word16 *xPos, T_word16 *yPos)
 
 void OutsideMouseDriverSet(T_word16 xPos, T_word16 yPos)
 {
+#if (SCREEN_WIDTH <= 640)
     SDL_WarpMouse(xPos*2, yPos*2);
+#else
+    SDL_WarpMouse(xPos, yPos);
+#endif
 }
 
 T_void DirectMouseSetButton(T_buttonClick click)

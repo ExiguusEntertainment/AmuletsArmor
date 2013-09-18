@@ -74,7 +74,7 @@ static T_textID TextInit (T_word16 lx,
 	T_textStruct *myID;
 
 	DebugRoutine ("TextInit");
-	DebugCheck (lx<=320 && ly<=200);
+	DebugCheck (lx<=SCREEN_WIDTH && ly<=SCREEN_HEIGHT);
 	DebugCheck (string!=NULL);
 
 	size=sizeof(T_textStruct);

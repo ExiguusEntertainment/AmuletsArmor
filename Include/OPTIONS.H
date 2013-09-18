@@ -15,6 +15,17 @@
 #define _DEBUG
 #endif
 
+#if 0
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 200
+#elif 0
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+#else
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 960
+#endif
+
 /* Flag that determines if this is the shareware version */
 //#define COMPILE_OPTION_SHAREWARE_DEMO
 #define COMPILE_OPTION_CLASSIC_VERSION
@@ -88,8 +99,8 @@
 {       \
     ((char *)0xA0000)[p] = (c) ; \
     ((char *)0xA0000)[p+1] = (c)+4 ; \
-    ((char *)0xA0000)[p+320] = (c)+4 ; \
-    ((char *)0xA0000)[p+321] = (c)+4 ; \
+    ((char *)0xA0000)[p+SCREEN_WIDTH] = (c)+4 ; \
+    ((char *)0xA0000)[p+SCREEN_WIDTH+1] = (c)+4 ; \
 }
 #else
 #define INDICATOR_LIGHT(p, c)

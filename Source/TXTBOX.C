@@ -12,6 +12,7 @@
  * @{
  *
  *<!-----------------------------------------------------------------------*/
+#include "GENERAL.H"
 #include "FORM.H"
 #include "MEMORY.H"
 #include "MESSAGE.H"
@@ -413,7 +414,7 @@ T_void TxtboxCursEnd  (T_TxtboxID TxtboxID)
     if (p_Txtbox->mode < Txtbox_MODE_VIEW_SCROLL_FORM ||
         p_Txtbox->mode == Txtbox_MODE_FIXED_WIDTH_FIELD)
     /* move cursor to the rightmost screen position possible */
-    p_Txtbox->cursorl=TxtboxScanRow(TxtboxID, 0, 320);
+    p_Txtbox->cursorl=TxtboxScanRow(TxtboxID, 0, SCREEN_WIDTH);
 
     /* update the view */
     TxtboxUpdate(TxtboxID);

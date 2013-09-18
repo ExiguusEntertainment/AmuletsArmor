@@ -3,7 +3,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)\..\..\..\..\..\Exe</LocalDebuggerWorkingDirectory>
-    <LocalDebuggerCommandArguments>127.0.0.1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommandArguments>

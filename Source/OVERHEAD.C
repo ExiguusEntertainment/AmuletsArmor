@@ -21,10 +21,10 @@
 #include "PLAYER.H"
 #include "VIEW.H"
 
-#define INTERNAL_MAX_OFFSET_Y 200
-#define INTERNAL_MAX_OFFSET_X 320
-#define INTERNAL_MAX_SIZE_X 320
-#define INTERNAL_MAX_SIZE_Y 200
+#define INTERNAL_MAX_OFFSET_Y SCREEN_HEIGHT
+#define INTERNAL_MAX_OFFSET_X SCREEN_WIDTH
+#define INTERNAL_MAX_SIZE_X SCREEN_WIDTH
+#define INTERNAL_MAX_SIZE_Y SCREEN_HEIGHT
 
 #define OVERHEAD_SOLID_LINE   31
 #define OVERHEAD_PASSIBLE_LINE   47
@@ -767,26 +767,26 @@ static T_void IOverheadDisplay(T_word16 left, T_word16 top)
 
     /* Where do we draw? */
     p_screen = (T_byte8 *)GrScreenGet() ;
-    p_screen += (top * 320) + left ;
+    p_screen += (top * SCREEN_WIDTH) + left ;
 
     p_from = G_workingPage ;
 
     if (OverheadGetFeatures() & OVERHEAD_FEATURE_TRANSPARENT)  {
         if (OverheadGetFeatures() & OVERHEAD_FEATURE_TRANSLUCENT)  {
-            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=320)  {
+            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=SCREEN_WIDTH)  {
                 DrawTranslucentSeeThroughAsm(p_from, p_screen, G_sizeX) ;
             }
         } else {
-            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=320)
+            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=SCREEN_WIDTH)
                 DrawSeeThroughAsm(p_from, p_screen, G_sizeX) ;
         }
     } else {
         if (OverheadGetFeatures() & OVERHEAD_FEATURE_TRANSLUCENT)  {
-            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=320)  {
+            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=SCREEN_WIDTH)  {
                 DrawTranslucentAsm(p_from, p_screen, G_sizeX) ;
             }
         } else {
-            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=320)
+            for (i=0; i<G_sizeY; i++, p_from += G_sizeX, p_screen+=SCREEN_WIDTH)
                 memcpy(p_screen, p_from, G_sizeX) ;
         }
     }

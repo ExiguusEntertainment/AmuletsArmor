@@ -1684,7 +1684,7 @@ static T_void IShrinkTexture(
 
     for (y=0; y<sizeY; y++)  {
         for (x=0; x<sizeX; x++)  {
-            p_screen[y*320+x] = p_from[y*sizeX+x] ;
+            p_screen[y*SCREEN_WIDTH+x] = p_from[y*sizeX+x] ;
         }
     }
 #endif
@@ -1704,7 +1704,7 @@ static T_void IShrinkTexture(
 #endif
         }
 #ifdef SHRINK_SHOWS_AND_WAITS
-        p_screen += 320 ;
+        p_screen += SCREEN_WIDTH ;
 #endif
     }
 

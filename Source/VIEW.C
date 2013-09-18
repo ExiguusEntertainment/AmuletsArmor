@@ -91,7 +91,9 @@ T_void ViewInitialize(T_void)
     View3dInitialize() ;
     ObjectsInitialize() ;
 
-    View3dSetSize(312, 148) ;
+//TESTING    View3dSetSize(312, 148) ;
+//    View3dSetSize(312*2, 148*2) ;
+    View3dSetSize(312*2*2, 198*2*2) ;
 
     MapInitialize() ;
     OverheadInitialize() ;

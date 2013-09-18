@@ -3438,7 +3438,7 @@ T_void IDrawColumn(
 
 //    p_pixel = &P_doubleBuffer[((top << 6) + (top << 8)) + x] ;
     p_pixel = G_doublePtrLookup[top] + x ;
-    for (y=top; y<bottom; y++, p_pixel += 320)
+    for (y=top; y<bottom; y++, p_pixel += SCREEN_WIDTH)
         *p_pixel = color ;
 }
 
@@ -4090,13 +4090,13 @@ c = *((T_byte8 *)G_colorizedObject) ;
 
 DebugCheck(bottom >= 0) ;
 DebugCheck(top >= 0) ;
-DebugCheck(bottom < 200) ;
-DebugCheck(top < 200) ;
-DebugCheck(x < 320) ;
+DebugCheck(bottom < SCREEN_HEIGHT) ;
+DebugCheck(top < SCREEN_HEIGHT) ;
+DebugCheck(x < SCREEN_WIDTH) ;
 DebugCheck(bottom > top) ;
 DebugCheck(p_shade != NULL) ;
 DebugCheck(p_pixel != NULL) ;
-DebugCheck(((T_word32)p_pixel) < (((T_word32)P_doubleBuffer)+64000)) ;
+//DebugCheck(((T_word32)p_pixel) < (((T_word32)P_doubleBuffer)+64000)) ;
 DebugCheck(((T_word32)p_pixel) >= ((T_word32)P_doubleBuffer)) ;
 
             if (ObjectGetAttributes(p_run->p_runInfo->p_obj) &
@@ -4585,7 +4585,7 @@ DebugCheck(leftTop <= VIEW3D_HEIGHT) ;
 DebugCheck(leftBottom <= VIEW3D_HEIGHT) ;
                 for (y=leftTop; y<leftBottom; y++)  {
                     floor[y].right = x ;
-DebugCheck(y < 200) ;
+DebugCheck(y < SCREEN_HEIGHT) ;
                     IDrawFloorRun(y, floor+y) ;
                 }
                 /* end this left strip. */
@@ -4601,7 +4601,7 @@ DebugCheck(y < 200) ;
                     /* are ending run. */
                     for (y=leftTop; (y<rightTop)&&(y<leftBottom); y++)  {
                         floor[y].right = x ;
-DebugCheck(y < 200) ;
+DebugCheck(y < SCREEN_HEIGHT) ;
                         IDrawFloorRun(y, floor+y) ;
                     }
                     leftTop = y ;
@@ -4623,7 +4623,7 @@ DebugCheck(y < 200) ;
                         for (y=leftTop; (y<leftBottom) && (y<rightBottom); y++)  {
                             /* End the left. */
                             floor[y].right = x ;
-DebugCheck(y < 200) ;
+DebugCheck(y < SCREEN_HEIGHT) ;
                             IDrawFloorRun(y, floor+y) ;
 
                             /* Start the right. */
@@ -4695,7 +4695,7 @@ T_void IDrawFloorRun(T_word16 y, T_horzFloorInfo *p_floor)
         p_floor->left,
         p_floor->right) ;
 */
-    memset(P_doubleBuffer+y*320+p_floor->left, p_floor->sector, p_floor->right-p_floor->left) ;
+    memset(P_doubleBuffer+y*SCREEN_WIDTH+p_floor->left, p_floor->sector, p_floor->right-p_floor->left) ;
 }
 #endif
 
@@ -4738,8 +4738,8 @@ DebugCheck(p_texture != NULL) ;
     end = p_run->right ;
     delta = 1+end-start ;
 
-DebugCheck(row < 200) ;
-DebugCheck(start < 320) ;
+DebugCheck(row < SCREEN_HEIGHT) ;
+DebugCheck(start < SCREEN_WIDTH) ;
     p_pixel = G_doublePtrLookup[row] + start ;
 
     /* If sizeY = 0, then we must be drawing the sky. */
@@ -5287,7 +5287,7 @@ T_void View3dInitialize(T_void)
 ////    P_doubleBuffer = MemAlloc(MAX_VIEW3D_WIDTH * MAX_VIEW3D_HEIGHT) ;
 //    P_doubleBuffer = GRAPHICS_ACTUAL_SCREEN ;
 
-P_doubleBuffer = GRAPHICS_ACTUAL_SCREEN+3*320+4 ;
+P_doubleBuffer = GRAPHICS_ACTUAL_SCREEN+3*SCREEN_WIDTH+4 ;
 
 //P_doubleBuffer = ((char *)0xA0000) ;
     /* Set up a lookup table that is a pointer to each of the lines */
@@ -6937,7 +6937,7 @@ T_void DrawObjectColumnAsm(
         x = ((textureOffset>>16) & 0xFFFF);
         if (x >= G_objColumnStart)
             break;
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
         count--;
     }
@@ -6948,7 +6948,7 @@ T_void DrawObjectColumnAsm(
         c = G_CurrentTexturePos[x];
         if (c)
             *p_pixel = p_shade[c];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
         count--;
     }
@@ -6968,7 +6968,7 @@ T_void DrawTranslucentObjectColumnAsm(
         x = ((textureOffset>>16) & 0xFFFF);
         if (x >= G_objColumnStart)
             break;
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
         count--;
     }
@@ -6979,7 +6979,7 @@ T_void DrawTranslucentObjectColumnAsm(
         c = G_CurrentTexturePos[x];
         if (c)
             *p_pixel = G_translucentTable[p_shade[c]][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
         count--;
     }
@@ -6996,7 +6996,7 @@ T_void DrawTextureColumnAsm1(
     c = p_shade[G_CurrentTexturePos[0]];
     while (count--) {
         *p_pixel = c;
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
     }
 }
 
@@ -7009,7 +7009,7 @@ T_void DrawTextureColumnAsm2(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x01]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7023,7 +7023,7 @@ T_void DrawTextureColumnAsm4(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x03]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7037,7 +7037,7 @@ T_void DrawTextureColumnAsm8(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x07]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7051,7 +7051,7 @@ T_void DrawTextureColumnAsm16(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x0F]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7065,7 +7065,7 @@ T_void DrawTextureColumnAsm32(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x1F]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7079,7 +7079,7 @@ T_void DrawTextureColumnAsm64(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x3F]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7093,7 +7093,7 @@ T_void DrawTextureColumnAsm128(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x7F]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7107,7 +7107,7 @@ T_void DrawTextureColumnAsm256(
 {
     while (count--) {
         *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0xFF]];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7125,7 +7125,7 @@ T_void DrawTransparentColumnAsm1(
         c = p_shade[c];
         while (count--) {
             *(p_pixel) = c;
-            p_pixel+=320;
+            p_pixel+=SCREEN_WIDTH;
             textureOffset += textureStep;
         }
     }
@@ -7144,7 +7144,7 @@ T_void DrawTransparentColumnAsm2(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x01];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7162,7 +7162,7 @@ T_void DrawTransparentColumnAsm4(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x03];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7180,7 +7180,7 @@ T_void DrawTransparentColumnAsm8(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x07];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7198,7 +7198,7 @@ T_void DrawTransparentColumnAsm16(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x0F];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7216,7 +7216,7 @@ T_void DrawTransparentColumnAsm32(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x1F];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7234,7 +7234,7 @@ T_void DrawTransparentColumnAsm64(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x3F];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7252,7 +7252,7 @@ T_void DrawTransparentColumnAsm128(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x7F];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7270,7 +7270,7 @@ T_void DrawTransparentColumnAsm256(
         c = G_CurrentTexturePos[(textureOffset>>16) & 0xFF];
         if (c)
             *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+        p_pixel+=SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7288,7 +7288,7 @@ T_void DrawTranslucentColumnAsm1(
     if (c) {
         while (count--) {
             *p_pixel = G_translucentTable[c][*p_pixel];
-            p_pixel += 320;
+            p_pixel += SCREEN_WIDTH;
             textureOffset += textureStep;
         }
     }
@@ -7307,7 +7307,7 @@ T_void DrawTranslucentColumnAsm2(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x01];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7325,7 +7325,7 @@ T_void DrawTranslucentColumnAsm4(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x03];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7343,7 +7343,7 @@ T_void DrawTranslucentColumnAsm8(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x07];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7361,7 +7361,7 @@ T_void DrawTranslucentColumnAsm16(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x0F];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7379,7 +7379,7 @@ T_void DrawTranslucentColumnAsm32(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x1F];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7397,7 +7397,7 @@ T_void DrawTranslucentColumnAsm64(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x3F];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7415,7 +7415,7 @@ T_void DrawTranslucentColumnAsm128(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x7F];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }
@@ -7433,7 +7433,7 @@ T_void DrawTranslucentColumnAsm256(
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0xFF];
         if (c)
             *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        p_pixel += SCREEN_WIDTH;
         textureOffset += textureStep;
     }
 }

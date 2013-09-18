@@ -57,8 +57,8 @@ typedef struct {
 extern T_screen GRAPHICS_ACTUAL_SCREEN ;
 #define SCREEN_BAD NULL
 
-#define SCREEN_SIZE_X 320
-#define SCREEN_SIZE_Y 200
+#define SCREEN_SIZE_X SCREEN_WIDTH
+#define SCREEN_SIZE_Y SCREEN_HEIGHT
 
 T_screen GrScreenAlloc(T_void) ;
 

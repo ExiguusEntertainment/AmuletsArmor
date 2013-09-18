@@ -16,16 +16,27 @@ static SDL_Surface* surface;
 static SDL_Surface* largesurface;
 static SDL_Rect srcrect = {
         0, 0,
-        320, 240
+        SCREEN_WIDTH, SCREEN_HEIGHT
     };
+#if (SCREEN_WIDTH>640)
 static SDL_Rect largesrcrect = {
         0, 0,
-        640, 480
+        SCREEN_WIDTH, SCREEN_WIDTH
     };
 static SDL_Rect destrect = {
         0, 0,
-        640, 480
+        SCREEN_WIDTH, SCREEN_WIDTH
     };
+#else
+static SDL_Rect largesrcrect = {
+        0, 0,
+        SCREEN_WIDTH*2, SCREEN_WIDTH*2
+    };
+static SDL_Rect destrect = {
+        0, 0,
+        SCREEN_WIDTH*2, SCREEN_WIDTH*2
+    };
+#endif
 extern T_void KeyboardUpdate(E_Boolean updateBuffers);
 
 void SleepMS(T_word32 aMS)
@@ -167,7 +178,9 @@ void WindowsUpdate(char *p_screen, unsigned char *palette)
     T_word32 tick = clock();
     static T_word32 lastTick = 0xFFFFEEEE;
     static double movingAverage = 0;
+#if (SCREEN_WIDTH<=640)
     T_word32 v;
+#endif
     T_word32 frac;
 
 #if CAP_SPEED_TO_FPS
@@ -189,25 +202,45 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
     //SDL_SetColors(surface, colors, 0, 256);
     SDL_SetColors(largesurface, colors, 0, 256);
 
-    // Blit the current surface from 320x200 to 640x480
+#if (SCREEN_WIDTH>640)
+    // Blit the current surface from SCREEN_WIDTHx200 to 640x480
     line = src;
-    for (y=0, frac=0; y<200; y++, line+=320) {
-//        for (x=0; x<320; x++) {
-//            *(dst++) = *src;
-//            *(dst++) = *(src++);
-//        }
-        while (frac < 400) {
+    for (y=0, frac=0; y<SCREEN_HEIGHT; y++, line+=SCREEN_WIDTH) {
+        while (frac < SCREEN_HEIGHT) {
             src = line;
-            Copy2x_320times(dst, src);
-            frac += 200;
+            memcpy(dst, src, SCREEN_WIDTH);
+            dst += SCREEN_WIDTH;
+//            Copy2x_320times(dst, src);
+            frac += SCREEN_HEIGHT;
         }
-        frac -= 400;
-//        for (x=0; x<320; x++) {
+        frac -= SCREEN_HEIGHT;
+    }
+#else
+    // Blit the current surface from SCREEN_WIDTHx200 to 640x480
+    line = src;
+    for (y=0, frac=0; y<SCREEN_HEIGHT; y++, line+=SCREEN_WIDTH) {
+//        for (x=0; x<SCREEN_WIDTH; x++) {
 //            *(dst++) = *src;
 //            *(dst++) = *(src++);
 //        }
-//        Copy2x_320times(dst, src);
+        while (frac < (SCREEN_HEIGHT*2)) {
+            src = line;
+#if (SCREEN_WIDTH==640)
+            Copy2x_320times(dst, src);
+            Copy2x_320times(dst, src);
+#else
+            Copy2x_320times(dst, src);
+#endif
+            frac += SCREEN_HEIGHT;
+        }
+        frac -= SCREEN_HEIGHT*2;
+//        for (x=0; x<SCREEN_WIDTH; x++) {
+//            *(dst++) = *src;
+//            *(dst++) = *(src++);
+//        }
+//        Copy2x_SCREEN_WIDTHtimes(dst, src);
     }
+#endif
 
     if (SDL_BlitSurface(largesurface, &largesrcrect, screen, &destrect)) {
         printf("Failed blit: %s\n", SDL_GetError());
@@ -251,11 +284,17 @@ int SDL_main(int argc, char *argv[])
 
     atexit(SDL_Quit);
 
-#ifdef NDEBUG
-    screen = SDL_SetVideoMode(640, 400, 32, SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
+
+#if (SCREEN_WIDTH>640)
+    screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE|SDL_DOUBLEBUF
 #else
-    screen = SDL_SetVideoMode(640, 400, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+    screen = SDL_SetVideoMode(SCREEN_WIDTH*2, SCREEN_HEIGHT*2, 32, SDL_HWSURFACE|SDL_DOUBLEBUF
 #endif
+#ifdef NDEBUG
+            |SDL_FULLSCREEN
+#endif
+            );
+
     SDL_WM_SetCaption("Amulets & Armor", "Amulets & Armor");
     SDL_ShowCursor( SDL_DISABLE ); 
 
@@ -265,12 +304,16 @@ int SDL_main(int argc, char *argv[])
           return 1;
     }
 
-    surface = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 8, 0, 0, 0, 0);
+    surface = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 8, 0, 0, 0, 0);
     if (surface == NULL) {
         printf("Could not create overlay: %s\n", SDL_GetError());
         return 1;
     }
-    largesurface = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 400, 8, 0, 0, 0, 0);
+#if (SCREEN_WIDTH>640)
+    largesurface = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH, SCREEN_HEIGHT, 8, 0, 0, 0, 0);
+#else
+    largesurface = SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, 8, 0, 0, 0, 0);
+#endif
     if (largesurface == NULL) {
         printf("Could not create overlay: %s\n", SDL_GetError());
         return 1;
@@ -279,9 +322,9 @@ int SDL_main(int argc, char *argv[])
     SDL_SetColors(surface, &white, 255, 1);
     pixels = (char *)surface->pixels;
     GRAPHICS_ACTUAL_SCREEN = (void *)pixels;
-    for (y=0; y<240; y++) {
-        for (x=0; x<320; x++, pixels++) {
-            if ((x == 0) || (x == 319) || (y == 0) || (y == 239))
+    for (y=0; y<SCREEN_HEIGHT; y++) {
+        for (x=0; x<SCREEN_WIDTH; x++, pixels++) {
+            if ((x == 0) || (x == (SCREEN_WIDTH-1)) || (y == 0) || (y == (SCREEN_HEIGHT-1)))
                 *pixels = 255;
             else
                 *pixels = 0;
