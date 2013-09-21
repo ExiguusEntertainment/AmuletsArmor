@@ -15,7 +15,7 @@
 #define _DEBUG
 #endif
 
-#if 0
+#if 1
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 200
 #elif 0

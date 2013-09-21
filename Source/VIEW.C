@@ -91,9 +91,13 @@ T_void ViewInitialize(T_void)
     View3dInitialize() ;
     ObjectsInitialize() ;
 
-//TESTING    View3dSetSize(312, 148) ;
-//    View3dSetSize(312*2, 148*2) ;
+#if (SCREEN_WIDTH==320)
+    View3dSetSize(312, 148) ;
+#elif (SCREEN_WIDTH==640)
+    View3dSetSize(312*2, 148*2) ;
+#else
     View3dSetSize(312*2*2, 198*2*2) ;
+#endif
 
     MapInitialize() ;
     OverheadInitialize() ;

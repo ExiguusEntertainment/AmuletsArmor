@@ -293,9 +293,13 @@ T_void BannerOpenForm(E_bannerFormType formtype)
     FormSetCallbackRoutine(BannerFormControl);
 
     /* set the window to half screen view */
-//TESTING    View3dClipCenter(205);
-//    View3dClipCenter(205*2);
+#if (SCREEN_WIDTH==320)
+    View3dClipCenter(205);
+#elif (SCREEN_WIDTH==640)
+    View3dClipCenter(205*2);
+#else
     View3dClipCenter(205*2*2);
+#endif
 //    GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
 
     /* update the graphics */
@@ -524,9 +528,13 @@ T_void BannerCloseForm(T_void)
     FormSetCallbackRoutine(NULL);
     /* restore the display screen to full view */
 
-//TESTING    View3dClipCenter(312);
-//    View3dClipCenter(312*2);
+#if (SCREEN_WIDTH==320)
+    View3dClipCenter(312);
+#elif (SCREEN_WIDTH==640)
+    View3dClipCenter(312*2);
+#else
     View3dClipCenter(312*2*2);
+#endif
     if (HardFormIsOpen() == TRUE) {
         graphic = GraphicCreate(209, 0, "UI/3DUI/CLOSEDBA");
         GraphicUpdateAllGraphics();
