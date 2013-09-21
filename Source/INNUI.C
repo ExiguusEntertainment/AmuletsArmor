@@ -140,8 +140,9 @@ static T_void InnUIRent(T_buttonID buttonID)
                     PromptDisplayMessage("I think I got fleas now.");
                     break;
             }
-            /* Go back to town */
-            ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
+            /* Go back to character selection screen */
+            StatsSaveCharacter(StatsGetActive());
+            ClientSetNextPlace(0, 0);
             break;
 
         case INN_ROOM_SMALL:
@@ -176,8 +177,9 @@ static T_void InnUIRent(T_buttonID buttonID)
                         break;
                 }
 
-                /* Go back to town */
-                ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
+                /* Go back to character selection screen */
+                StatsSaveCharacter(StatsGetActive());
+                ClientSetNextPlace(0, 0);
             } else {
                 MessageAdd("^005Gotta have the money first, pal.");
             }
@@ -218,8 +220,9 @@ static T_void InnUIRent(T_buttonID buttonID)
                         break;
                 }
 
-                /* Go back to town */
-                ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
+                /* Go back to character selection screen */
+                StatsSaveCharacter(StatsGetActive());
+                ClientSetNextPlace(0, 0);
             } else {
                 MessageAdd("^005You don't look like you can afford it.");
             }
@@ -255,8 +258,9 @@ static T_void InnUIRent(T_buttonID buttonID)
                         break;
                 }
 
-                /* Go back to town */
-                ClientSetNextPlace(HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN, 0);
+                /* Go back to character selection screen */
+                StatsSaveCharacter(StatsGetActive());
+                ClientSetNextPlace(0, 0);
             } else {
                 MessageAdd("^005What, are you kidding??");
             }
