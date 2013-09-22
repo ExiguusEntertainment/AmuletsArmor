@@ -69,12 +69,10 @@ void WindowsUpdateEvents(void)
                     altPressed = TRUE;
                 } else if ((event.key.keysym.sym == SDLK_RETURN) && (altPressed)) {
                     // ALT-Enter toggles full screen
-#if 1
                     flags = screen->flags; /* Save the current flags in case toggling fails */
                     screen = SDL_SetVideoMode(0, 0, 0, screen->flags ^ SDL_FULLSCREEN); /*Toggles FullScreen Mode */
                     if(screen == NULL) screen = SDL_SetVideoMode(0, 0, 0, flags); /* If toggle FullScreen failed, then switch back */
                     if(screen == NULL) exit(1); /* If you can't switch back for some reason, then epic fail */                    
-#endif
                 }
                 break;
             case SDL_KEYUP:
@@ -83,31 +81,8 @@ void WindowsUpdateEvents(void)
                     altPressed = FALSE;
                 }
                 break;
-#if 0
-            case SDL_MOUSEMOTION:
-            case SDL_MOUSEBUTTONDOWN:
-            case SDL_MOUSEBUTTONUP:
-                DirectMouseSet(event.motion.x, event.motion.y);
-                flags = 0;
-                if (event.motion.state & SDL_BUTTON_LMASK)
-                    flags |= MOUSE_BUTTON_LEFT;
-                if (event.motion.state & SDL_BUTTON_RMASK)
-                    flags |= MOUSE_BUTTON_RIGHT;
-                if (event.motion.state & SDL_BUTTON_MMASK)
-                    flags |= MOUSE_BUTTON_MIDDLE;
-                DirectMouseSetButton(flags);
-                break;
-#endif
         }    
         SDL_GetKeyState(NULL);
-        //keys = SDL_GetKeyState(NULL);
-        
-//        if ( keys[SDLK_UP] )    ypos -= 1;
-//        if ( keys[SDLK_DOWN] )  ypos += 1;
-//        if ( keys[SDLK_LEFT] )  xpos -= 1;
-//        if ( keys[SDLK_RIGHT] ) xpos += 1;
-
-//        DrawScene();
     }
 }
 
@@ -178,7 +153,6 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
 #endif
     {
         lastTick = tick;
-//printf("Update: %d (%d)\n", clock(), TickerGet());
 
     // Setup the color palette for this update
     for (i=0; i<256; i++) {
@@ -192,21 +166,12 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
     // Blit the current surface from 320x200 to 640x480
     line = src;
     for (y=0, frac=0; y<200; y++, line+=320) {
-//        for (x=0; x<320; x++) {
-//            *(dst++) = *src;
-//            *(dst++) = *(src++);
-//        }
         while (frac < 400) {
             src = line;
             Copy2x_320times(dst, src);
             frac += 200;
         }
         frac -= 400;
-//        for (x=0; x<320; x++) {
-//            *(dst++) = *src;
-//            *(dst++) = *(src++);
-//        }
-//        Copy2x_320times(dst, src);
     }
 
     if (SDL_BlitSurface(largesurface, &largesrcrect, screen, &destrect)) {
