@@ -38,9 +38,6 @@
     <ClCompile Include="..\..\..\..\Source\3D_TRIG.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\3D_VIEW.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\ACTIVITY.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -322,6 +319,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SERVER.C">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\Win32\3D_OpenGL.C">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="test_main.c">
+      <Filter>Source Files\Win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
