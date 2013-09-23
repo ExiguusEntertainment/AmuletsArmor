@@ -15,6 +15,9 @@
 #define _DEBUG
 #endif
 
+#define WINDOW_WIDTH    ((320*4)/2)
+#define WINDOW_HEIGHT   ((200*4)/2)
+
 /* Flag that determines if this is the shareware version */
 //#define COMPILE_OPTION_SHAREWARE_DEMO
 #define COMPILE_OPTION_CLASSIC_VERSION

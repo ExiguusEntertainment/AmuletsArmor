@@ -10,9 +10,6 @@
 #include <GL/GL.h>
 #include <gl/GLU.h>
 
-#define WINDOW_WIDTH    ((320*5)/2)
-#define WINDOW_HEIGHT   ((200*5)/2)
-
 extern int test_main( int argc, char* argv[] );
 
 #define CAP_SPEED_TO_FPS       0 // 70 // 0
@@ -348,7 +345,6 @@ void WindowsRenderOpenGL(char *p_screen, unsigned char *palette)
 #endif
     }
 #endif
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     glEnable (GL_DEPTH_TEST);
     glEnable (GL_TEXTURE_2D);
@@ -362,7 +358,7 @@ void WindowsRenderOpenGL(char *p_screen, unsigned char *palette)
     glEnable( GL_TEXTURE_2D );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
-#if 0
+#if 1
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 #else
@@ -407,6 +403,8 @@ glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     SDL_GL_SwapBuffers( );
 
     SDL_UpdateRect(screen, 0, 0, 0, 0);
+
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 void WindowsUpdate(char *p_screen, unsigned char *palette)

@@ -30,6 +30,7 @@
 #include <GL/glu.h>
 
 static T_word16 G_fromSector ;
+static GLuint G_texture;
 
 typedef struct {
     T_word16 offset ;
@@ -1425,6 +1426,271 @@ T_void View3dUpdateSectorLightAnimation(T_void)
    DebugEnd ();
 }
 
+void PunchOut(void)
+{
+    unsigned char *p_where;
+    int i;
+
+    for (i=0; i<MAX_VIEW3D_HEIGHT; i++)  {
+        p_where = G_doublePtrLookup[i];
+        memset(p_where, 0x255, MAX_VIEW3D_WIDTH);
+    }
+}
+
+void IRender(void)
+{
+    /* Our angle of rotation. */
+    static float angle = 0.0f;
+
+    /*
+     * EXERCISE:
+     * Replace this awful mess with vertex
+     * arrays and a call to glDrawElements.
+     *
+     * EXERCISE:
+     * After completing the above, change
+     * it to use compiled vertex arrays.
+     *
+     * EXERCISE:
+     * Verify my windings are correct here ;).
+     */
+    static GLfloat v0[] = { -1.0f, -1.0f,  1.0f };
+    static GLfloat v1[] = {  1.0f, -1.0f,  1.0f };
+    static GLfloat v2[] = {  1.0f,  1.0f,  1.0f };
+    static GLfloat v3[] = { -1.0f,  1.0f,  1.0f };
+    static GLfloat v4[] = { -1.0f, -1.0f, -1.0f };
+    static GLfloat v5[] = {  1.0f, -1.0f, -1.0f };
+    static GLfloat v6[] = {  1.0f,  1.0f, -1.0f };
+    static GLfloat v7[] = { -1.0f,  1.0f, -1.0f };
+    static GLubyte red[]    = { 255,   0,   0, 255 };
+    static GLubyte green[]  = {   0, 255,   0, 255 };
+    static GLubyte blue[]   = {   0,   0, 255, 255 };
+    static GLubyte white[]  = { 255, 255, 255, 255 };
+    static GLubyte yellow[] = {   0, 255, 255, 255 };
+    static GLubyte black[]  = {   0,   0,   0, 255 };
+    static GLubyte orange[] = { 255, 255,   0, 255 };
+    static GLubyte purple[] = { 255,   0, 255, 255 };
+
+    /* Clear the color and depth buffers. */
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    glEnable (GL_DEPTH_TEST);
+    glEnable (GL_TEXTURE_2D);
+
+    /* We don't want to modify the projection matrix. */
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity( );
+    gluPerspective(90,1.0,1,512.0);
+    //glRotatef( angle, 0.0, 1.0, 0.0 );
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity( );
+
+    /* Move down the z-axis. */
+    glTranslatef( 0.0, 0.0, -3.0 );
+
+    /* Rotate. */
+    glRotatef( angle, 0.0, 1.0, 0.0 );
+
+    if( 1 /*should_rotate*/ ) {
+
+        if( ++angle > 360.0f ) {
+            angle = 0.0f;
+        }
+
+    }
+
+    /* Send our triangle data to the pipeline. */
+    glPushAttrib(GL_CURRENT_BIT);
+    glBindTexture (GL_TEXTURE_2D, G_texture);
+    glBegin( GL_TRIANGLES );
+
+#if 0
+    glColor4ubv( red );
+    glVertex3fv( v0 );
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( blue );
+    glVertex3fv( v2 );
+
+    glColor4ubv( red );
+    glVertex3fv( v0 );
+    glColor4ubv( blue );
+    glVertex3fv( v2 );
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+    glColor4ubv( blue );
+    glVertex3fv( v2 );
+
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( red );
+    glVertex3fv( v0 );
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+    glColor4ubv( blue );
+    glVertex3fv( v2 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( red );
+    glVertex3fv( v0 );
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+#else
+#if 1
+    glTexCoord2f (0.0f, 1.0f);
+    glVertex3fv( v0 );
+    glTexCoord2f (1.0f, 1.0f);
+    glVertex3fv( v1 );
+    glTexCoord2f (1.0f, 0.0f);
+    glVertex3fv( v2 );
+    glEnd( );
+#endif
+    glBegin( GL_TRIANGLES );
+#if 1
+    glTexCoord2f (0.0f, 1.0f);
+    //glColor4ubv( red );
+    glVertex3fv( v0 );
+    glTexCoord2f (1.0f, 0.0f);
+    //glColor4ubv( blue );
+    glVertex3fv( v2 );
+    glTexCoord2f (0.0f, 0.0f);
+    //glColor4ubv( white );
+    glVertex3fv( v3 );
+#endif
+    glEnd();
+
+    glPopAttrib();
+    glBegin( GL_TRIANGLES );
+#if 0
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+    glColor4ubv( blue );
+    glVertex3fv( v2 );
+
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( red );
+    glVertex3fv( v0 );
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+    glColor4ubv( blue );
+    glVertex3fv( v2 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+
+    glColor4ubv( white );
+    glVertex3fv( v3 );
+    glColor4ubv( orange );
+    glVertex3fv( v6 );
+    glColor4ubv( purple );
+    glVertex3fv( v7 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( red );
+    glVertex3fv( v0 );
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+
+    glColor4ubv( green );
+    glVertex3fv( v1 );
+    glColor4ubv( yellow );
+    glVertex3fv( v4 );
+    glColor4ubv( black );
+    glVertex3fv( v5 );
+#endif
+#endif
+    glEnd( );
+    glFlush();
+}
+
 /*-------------------------------------------------------------------------*
  * Routine:  View3dDrawView
  *-------------------------------------------------------------------------*/
@@ -1502,15 +1768,20 @@ INDICATOR_LIGHT(114, INDICATOR_GREEN) ;
 
         INDICATOR_LIGHT(122, INDICATOR_GREEN) ;
         /* Compute all the visible walls and floors starting at the root node. */
+///        PunchOut();
+        GrDrawRectangle(4+0, 3+0, 4+(VIEW3D_CLIP_RIGHT - VIEW3D_CLIP_LEFT)-1, 3+VIEW3D_HEIGHT-1, 255) ;
         IDrawNode(G_3dRootBSPNode) ;
+
+        IRender();
+
         INDICATOR_LIGHT(122, INDICATOR_RED) ;
 
         INDICATOR_LIGHT(126, INDICATOR_GREEN) ;
-        IConvertVertToHorzAndDraw() ;
+        ///IConvertVertToHorzAndDraw() ;
         INDICATOR_LIGHT(126, INDICATOR_RED) ;
 
         INDICATOR_LIGHT(130, INDICATOR_GREEN) ;
-        IDrawObjectAndWallRuns() ;
+        ///IDrawObjectAndWallRuns() ;
         INDICATOR_LIGHT(130, INDICATOR_RED) ;
     } else {
         GrDrawRectangle(4+0, 3+0, 4+VIEW3D_WIDTH-1, 3+VIEW3D_HEIGHT-1, 15) ;
@@ -5262,6 +5533,88 @@ T_void IDumpVertFloor(T_void)
 
 #endif /** SERVER_ONLY **/
 
+#define TEXTURE_WIDTH   32
+#define TEXTURE_HEIGHT  32
+
+static unsigned char G_bytes32[TEXTURE_HEIGHT][TEXTURE_WIDTH][4];
+static void *create_texture_32bit(void)
+{
+    unsigned char *p_bytes = G_bytes32[0][0];
+    unsigned char *p = p_bytes;
+    int x, y;
+
+    for (y=0; y<TEXTURE_HEIGHT; y++) {
+        for (x=0; x<TEXTURE_WIDTH; x++, p+=4) {
+            if ((x==0) || (x==(TEXTURE_WIDTH-1)) || (y==0) || (y==(TEXTURE_HEIGHT-1))) {
+                //edge of square
+                // red
+                p[0] = 255;
+                p[1] = 255;
+                p[2] = 255;
+                p[3] = 255;
+            } else {
+                // internal of square
+                // black
+                p[0] = 0;
+                p[1] = 0;
+                p[2] = 0;
+                p[3] = 255;
+            }
+        }
+    }
+    G_bytes32[0][0][1] = 0;
+    G_bytes32[0][0][2] = 0;
+    G_bytes32[1][0][1] = 0;
+    G_bytes32[1][0][2] = 0;
+    G_bytes32[0][1][1] = 0;
+    G_bytes32[0][1][2] = 0;
+
+    G_bytes32[0][31][1] = 0;
+    G_bytes32[0][31][2] = 0;
+
+    G_bytes32[TEXTURE_HEIGHT-1][TEXTURE_WIDTH-1][1] = 0;
+    G_bytes32[TEXTURE_HEIGHT-1][TEXTURE_WIDTH-1][2] = 255;
+
+    return p_bytes;
+}
+
+static void create_texture(void)
+{
+    void *p_texture = create_texture_32bit();
+
+    // Create an unpacked alignment 1 structure
+    glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+    glGenTextures (1, &G_texture);
+    glBindTexture (GL_TEXTURE_2D, G_texture);
+
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+#if 0
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST /* GL_NEAREST */);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST /* GL_NEAREST */);
+#elif 0
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR /* GL_NEAREST */);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR /* GL_NEAREST */);
+#elif 0
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
+#else
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+#endif
+
+//    gluBuild2DMipmaps (GL_TEXTURE_2D, 4, TEXTURE_WIDTH, TEXTURE_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, p_texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_texture);
+    glTexEnvi (GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void View3DInitOpenGL(void)
+{
+    create_texture();
+}
+
 /*-------------------------------------------------------------------------*
  * Routine:  View3dInitialize
  *-------------------------------------------------------------------------*/
@@ -5287,6 +5640,9 @@ T_void View3dInitialize(T_void)
     G_3dBlockMapArray = NULL ;
     G_3dBlockMapHeader = NULL ;
 
+#if AA_OPENGL
+    View3DInitOpenGL();
+#endif
 /** Server-only build doesn't need graphics. **/
 #ifndef SERVER_ONLY
 ////    P_doubleBuffer = MemAlloc(MAX_VIEW3D_WIDTH * MAX_VIEW3D_HEIGHT) ;
