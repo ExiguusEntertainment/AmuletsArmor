@@ -1492,7 +1492,7 @@ void IRender(void)
     px = PlayerGetX()/65536.0f;
     py = PlayerGetY()/65536.0f;
     pz = PlayerGetZ()/65536.0f;
-    glTranslatef( -py, -pz-(G_eyeLevel32/65536.0f), -px );
+    glTranslatef( -py, -(G_eyeLevel32/65536.0f), -px );
 //    glTranslatef( -2416-py, pz, 2208-256-px );
 MessagePrintf("%f, %f, %f %d", px, py, pz, PlayerGetAngle());
 
@@ -1525,7 +1525,7 @@ T_void View3dDrawView(T_void)
     TICKER_TIME_ROUTINE_START() ;
     DebugRoutine("View3dDrawView") ;
     INDICATOR_LIGHT(42, INDICATOR_GREEN) ;
-/*.*/printf("\n\n------------------------------------------------\n") ;
+//./printf("\n\n------------------------------------------------\n") ;
     /* Initialize and clear all the needed variables. */
     G_colCount = 0 ;
     G_wallCount = 0 ;
@@ -1805,7 +1805,7 @@ T_void IDrawSegment(T_word16 segmentIndex)
     INDICATOR_LIGHT(800, INDICATOR_GREEN) ;
 G_wallAttempt++ ;
 ITestMinMax(1010) ;
-/*.*/printf("  IDrawSegment %3d", segmentIndex) ;
+//./printf("  IDrawSegment %3d", segmentIndex) ;
     /* Calculate the matrix */
     ICalculateWallMatrix() ;
 
@@ -1939,12 +1939,12 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
 
     /* Get a quick pointer to the segment. */
     P_segment = &G_3dSegArray[segmentIndex] ;
-/*.*/printf("  Line #%4d -- side %d  ", P_segment->line, P_segment->lineSide) ;
+//./printf("  Line #%4d -- side %d  ", P_segment->line, P_segment->lineSide) ;
     /* Determine what vertices this segment travels between. */
 
     to = P_segment->to ;
     from = P_segment->from ;
-/*.*/printf("draw. (%d, %d)\n", to, from) ;
+//./printf("draw. (%d, %d)\n", to, from) ;
 
     /* Compute the relative angle to the view. */
     G_wall.angle = angle = P_segment->angle - G_3dPlayerAngle ;
@@ -2005,7 +2005,7 @@ G_relativeToZ <<= 16 ;
 
     /* If the segment is behind us, then stop processing. */
     if ((G_relativeFromZ < ZMIN) && (G_relativeToZ < ZMIN))  {
-/*.*/printf("behind.\n") ;
+//./printf("behind.\n") ;
 //TESTING        return FALSE ;
     }
 
@@ -2057,14 +2057,14 @@ G_relativeToX <<= 16 ;
     /* See if the whole line (both ends) is outside the view to the right. */
     if ((G_relativeFromX > G_relativeFromZ) &&
         (G_relativeToX > G_relativeToZ))  {
-/*.*/printf("Too far right.\n") ;
+//./printf("Too far right.\n") ;
 //TESTING        return FALSE ;
     }
 
     /* See if the line is outside the view to the left. */
     if ((G_relativeFromX < (-G_relativeFromZ)) &&
         (G_relativeToX < (-G_relativeToZ)))  {
-/*.*/printf("Too far left.\n") ;
+//./printf("Too far left.\n") ;
 //TESTING        return FALSE ;
     }
 
@@ -2081,7 +2081,7 @@ G_relativeFromZOld = G_relativeFromZ ;
         /* Clip along the x = z line. */
         /* check if edge is facing us, then don't draw. */
         if (tanAngle == ((T_sword32)65536))  {
-/*.*/printf("edge.\n") ;
+//./printf("edge.\n") ;
 //TESTING            return FALSE ;
         }
     }
@@ -2143,13 +2143,13 @@ if (G_screenXLeft > 0)
     /* Make sure the wall is on the screen, or we'll just quit. */
     /* Nothing off the left. */
     if (G_screenXRight <= VIEW3D_CLIP_LEFT)  {
-/*.*/printf("Off left.\n") ;
+//./printf("Off left.\n") ;
         return FALSE ;
     }
 
     /* Nothing off the right. */
     if (G_screenXLeft >= VIEW3D_CLIP_RIGHT)  {
-/*.*/printf("Off right.\n") ;
+//./printf("Off right.\n") ;
         return FALSE ;
     }
 
@@ -2174,7 +2174,7 @@ DebugCheck(G_xRight <= VIEW3D_WIDTH) ;
             break ;
 
     if (x == G_xRight)  {
-/*.*/printf("blocked from view\n") ;
+//./printf("blocked from view\n") ;
         /* None of the columns were free, quit bothering with */
         /* this segment. */
         return FALSE ;
@@ -2771,13 +2771,13 @@ if (G_wall.p_texture)  {
     glVertex3i( p_from->y, absoluteTop, p_from->x);
     glEnd();
     //glColor4ubv( white );
-printf("Seg %d: (%d,%d,%d) -> (%d,%d,%d)\n", P_segment-G_3dSegArray, p_from->x, absoluteBottom, p_from->y, p_to->x, absoluteTop, p_to->y);
+//printf("Seg %d: (%d,%d,%d) -> (%d,%d,%d)\n", P_segment-G_3dSegArray, p_from->x, absoluteBottom, p_from->y, p_to->x, absoluteTop, p_to->y);
 #endif
 
 }
 
 #if 0
-/*.*/printf("    IAddWall\n") ;
+//./printf("    IAddWall\n") ;
     /* LES:  Calculate the real world height values that we will be */
     /* storing in the wall runs.  These are pretty much constants */
     /* throughout this routine. */
