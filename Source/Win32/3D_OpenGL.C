@@ -24,6 +24,8 @@
 #include "TICKER.H"
 #include "VIEW.H"
 
+#include "MESSAGE.H"
+
 #include <Windows.h>
 #include <SDL.h>
 #include <GL/gl.h>
@@ -1440,7 +1442,8 @@ void PunchOut(void)
 void IRender(void)
 {
     /* Our angle of rotation. */
-    static float angle = 0.0f;
+    //static float angle = 0.0f;
+    float px, py, pz;
 
     /*
      * EXERCISE:
@@ -1454,14 +1457,14 @@ void IRender(void)
      * EXERCISE:
      * Verify my windings are correct here ;).
      */
-    static GLfloat v0[] = { -1.0f, -1.0f,  1.0f };
-    static GLfloat v1[] = {  1.0f, -1.0f,  1.0f };
-    static GLfloat v2[] = {  1.0f,  1.0f,  1.0f };
-    static GLfloat v3[] = { -1.0f,  1.0f,  1.0f };
-    static GLfloat v4[] = { -1.0f, -1.0f, -1.0f };
-    static GLfloat v5[] = {  1.0f, -1.0f, -1.0f };
-    static GLfloat v6[] = {  1.0f,  1.0f, -1.0f };
-    static GLfloat v7[] = { -1.0f,  1.0f, -1.0f };
+    static GLfloat v0[] = { -128.0f, -128.0f,  128.0f };
+    static GLfloat v1[] = {  128.0f, -128.0f,  128.0f };
+    static GLfloat v2[] = {  128.0f,  128.0f,  128.0f };
+    static GLfloat v3[] = { -128.0f,  128.0f,  128.0f };
+    static GLfloat v4[] = { -128.0f, -128.0f, -128.0f };
+    static GLfloat v5[] = {  128.0f, -128.0f, -128.0f };
+    static GLfloat v6[] = {  128.0f,  128.0f, -128.0f };
+    static GLfloat v7[] = { -128.0f,  128.0f, -128.0f };
     static GLubyte red[]    = { 255,   0,   0, 255 };
     static GLubyte green[]  = {   0, 255,   0, 255 };
     static GLubyte blue[]   = {   0,   0, 255, 255 };
@@ -1473,6 +1476,7 @@ void IRender(void)
 
     /* Clear the color and depth buffers. */
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glDisable(GL_CULL_FACE); // testing
 
     glEnable (GL_DEPTH_TEST);
     glEnable (GL_TEXTURE_2D);
@@ -1480,215 +1484,27 @@ void IRender(void)
     /* We don't want to modify the projection matrix. */
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
-    gluPerspective(90,1.0,1,512.0);
-    //glRotatef( angle, 0.0, 1.0, 0.0 );
+    gluPerspective(90,1.0,1,15120.0);
+
+    glRotatef( 180.0f+(PlayerGetAngle() * -360.0f)/65536.0f, 0.0, 1.0, 0.0 );
+
+    /* Move down the z-axis. */
+    px = PlayerGetX()/65536.0f;
+    py = PlayerGetY()/65536.0f;
+    pz = PlayerGetZ()/65536.0f;
+    glTranslatef( -py, -pz-(G_eyeLevel32/65536.0f), -px );
+//    glTranslatef( -2416-py, pz, 2208-256-px );
+MessagePrintf("%f, %f, %f %d", px, py, pz, PlayerGetAngle());
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity( );
-
-    /* Move down the z-axis. */
-    glTranslatef( 0.0, 0.0, -3.0 );
-
     /* Rotate. */
-    glRotatef( angle, 0.0, 1.0, 0.0 );
-
-    if( 1 /*should_rotate*/ ) {
-
-        if( ++angle > 360.0f ) {
-            angle = 0.0f;
-        }
-
-    }
-
-    /* Send our triangle data to the pipeline. */
-    glPushAttrib(GL_CURRENT_BIT);
-    glBindTexture (GL_TEXTURE_2D, G_texture);
-    glBegin( GL_TRIANGLES );
-
-#if 0
-    glColor4ubv( red );
-    glVertex3fv( v0 );
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( blue );
-    glVertex3fv( v2 );
-
-    glColor4ubv( red );
-    glVertex3fv( v0 );
-    glColor4ubv( blue );
-    glVertex3fv( v2 );
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-    glColor4ubv( blue );
-    glVertex3fv( v2 );
-
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( red );
-    glVertex3fv( v0 );
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-    glColor4ubv( blue );
-    glVertex3fv( v2 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( red );
-    glVertex3fv( v0 );
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-#else
-#if 1
-    glTexCoord2f (0.0f, 1.0f);
-    glVertex3fv( v0 );
-    glTexCoord2f (1.0f, 1.0f);
-    glVertex3fv( v1 );
-    glTexCoord2f (1.0f, 0.0f);
-    glVertex3fv( v2 );
-    glEnd( );
-#endif
-    glBegin( GL_TRIANGLES );
-#if 1
-    glTexCoord2f (0.0f, 1.0f);
-    //glColor4ubv( red );
-    glVertex3fv( v0 );
-    glTexCoord2f (1.0f, 0.0f);
-    //glColor4ubv( blue );
-    glVertex3fv( v2 );
-    glTexCoord2f (0.0f, 0.0f);
-    //glColor4ubv( white );
-    glVertex3fv( v3 );
-#endif
-    glEnd();
-
-    glPopAttrib();
-    glBegin( GL_TRIANGLES );
-#if 0
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-    glColor4ubv( blue );
-    glVertex3fv( v2 );
-
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( red );
-    glVertex3fv( v0 );
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-    glColor4ubv( blue );
-    glVertex3fv( v2 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-
-    glColor4ubv( white );
-    glVertex3fv( v3 );
-    glColor4ubv( orange );
-    glVertex3fv( v6 );
-    glColor4ubv( purple );
-    glVertex3fv( v7 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( red );
-    glVertex3fv( v0 );
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-
-    glColor4ubv( green );
-    glVertex3fv( v1 );
-    glColor4ubv( yellow );
-    glVertex3fv( v4 );
-    glColor4ubv( black );
-    glVertex3fv( v5 );
-#endif
-#endif
-    glEnd( );
-    glFlush();
+//    if( 1 /*should_rotate*/ ) {
+//        if( angle > 360.0f ) {
+//            angle = 0.0f;
+//        }
+//    }
+//    glRotatef( angle, 0.0, 1.0, 0.0 );
 }
 
 /*-------------------------------------------------------------------------*
@@ -1709,7 +1525,7 @@ T_void View3dDrawView(T_void)
     TICKER_TIME_ROUTINE_START() ;
     DebugRoutine("View3dDrawView") ;
     INDICATOR_LIGHT(42, INDICATOR_GREEN) ;
-//.printf("\n\n------------------------------------------------\n") ;
+/*.*/printf("\n\n------------------------------------------------\n") ;
     /* Initialize and clear all the needed variables. */
     G_colCount = 0 ;
     G_wallCount = 0 ;
@@ -1763,16 +1579,16 @@ INDICATOR_LIGHT(114, INDICATOR_GREEN) ;
         INDICATOR_LIGHT(114, INDICATOR_RED) ;
         INDICATOR_LIGHT(118, INDICATOR_GREEN) ;
         /* Find all the possible objects and sort them. */
-        IFindObjects() ;
+//        IFindObjects() ;
         INDICATOR_LIGHT(118, INDICATOR_RED) ;
 
         INDICATOR_LIGHT(122, INDICATOR_GREEN) ;
         /* Compute all the visible walls and floors starting at the root node. */
 ///        PunchOut();
         GrDrawRectangle(4+0, 3+0, 4+(VIEW3D_CLIP_RIGHT - VIEW3D_CLIP_LEFT)-1, 3+VIEW3D_HEIGHT-1, 255) ;
-        IDrawNode(G_3dRootBSPNode) ;
-
         IRender();
+
+        IDrawNode(G_3dRootBSPNode) ;
 
         INDICATOR_LIGHT(122, INDICATOR_RED) ;
 
@@ -1807,21 +1623,11 @@ INDICATOR_LIGHT(114, INDICATOR_GREEN) ;
  *  View3dDisplayView actually draws/flips to the actual screen to use.
  *
  *<!-----------------------------------------------------------------------*/
-//typedef T_void (*voidfunc)() ;
-//extern T_byte8 ClearVar1 ;
-
 T_void View3dDisplayView(T_void)
 {
-//static E_Boolean didit=FALSE ;
-//static voidfunc selfProg ;
-//static T_byte8 selfProgData[50] ;
-//T_word16 i ;
-
     DebugRoutine("View3dDisplayView") ;
 
-//MessagePrintf("%d obj depth", G_allocatedColRun) ;
 #ifndef NDEBUG
-
 /*
     MessagePrintf(
         "attempt: %04d, drawn: %04d, nodes: %04d/%04d, segs: %04d",
@@ -1831,64 +1637,7 @@ T_void View3dDisplayView(T_void)
         G_Num3dNodes,
         G_segCount) ;
 */
-
 #endif
-/*
-if (didit == FALSE)  {
-  didit = TRUE ;
-  selfProg = (voidfunc)selfProgData ;
-  for(i=0; i<50; i++)
-    selfProgData[i] = ((T_byte8 *)ClearSampleAsm)[i] ;
-}
-*/
-    /* Set the active screen to the buffer. */
-//    GrScreenSet((T_screen)P_doubleBuffer) ;
-///GrScreenSet((T_screen)(P_doubleBuffer-VIEW3D_CLIP_LEFT)) ;
-    /* Transfer the screen over. */
-
-//selfProg() ;
-//selfProgData[((T_byte8 *)&ClearVar1) - ((T_byte8 *)ClearSampleAsm)]++ ;
-
-
-/*
-    GrTransferRectangle(
-        GRAPHICS_ACTUAL_SCREEN,
-        0, 0,
-        VIEW3D_WIDTH-1, VIEW3D_HEIGHT-1,
-        10, 10) ;
-*/
-
-/**
-    GrTransferRectangle(
-        GRAPHICS_ACTUAL_SCREEN,
-        VIEW3D_CLIP_LEFT, 0,
-        VIEW3D_CLIP_RIGHT-1, VIEW3D_HEIGHT-1,
-		4, 3) ;
-**/
-
-/*
-    GrDoubleSizeTransfer(
-        GRAPHICS_ACTUAL_SCREEN,
-        0, 0,
-        VIEW3D_WIDTH-1, VIEW3D_HEIGHT-1,
-        0, 0) ;
-*/
-
-/*
-if (didit==FALSE)  {
- fp = fopen("floor.lst", "wb") ;
- fwrite(G_floorList, sizeof(G_floorList), 1, fp) ;
- fclose(fp) ;
- didit = TRUE ;
-}
-*/
-/*
-        (MAX_VIEW3D_WIDTH-VIEW3D_WIDTH)>>1,
-        (MAX_VIEW3D_HEIGHT - VIEW3D_HEIGHT)>>1) ;
-*/
-
-//IDumpVertFloor() ;
-//exit(FALSE) ;
     DebugEnd() ;
 }
 
@@ -2056,7 +1805,7 @@ T_void IDrawSegment(T_word16 segmentIndex)
     INDICATOR_LIGHT(800, INDICATOR_GREEN) ;
 G_wallAttempt++ ;
 ITestMinMax(1010) ;
-//.printf("  IDrawSegment %3d", segmentIndex) ;
+/*.*/printf("  IDrawSegment %3d", segmentIndex) ;
     /* Calculate the matrix */
     ICalculateWallMatrix() ;
 
@@ -2188,14 +1937,14 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
     G_segCount++ ;
 #endif
 
-//.printf("draw. (%d, %d)\n", to, from) ;
     /* Get a quick pointer to the segment. */
     P_segment = &G_3dSegArray[segmentIndex] ;
-//.printf("  Line #%4d -- side %d  ", P_segment->line, P_segment->lineSide) ;
+/*.*/printf("  Line #%4d -- side %d  ", P_segment->line, P_segment->lineSide) ;
     /* Determine what vertices this segment travels between. */
 
     to = P_segment->to ;
     from = P_segment->from ;
+/*.*/printf("draw. (%d, %d)\n", to, from) ;
 
     /* Compute the relative angle to the view. */
     G_wall.angle = angle = P_segment->angle - G_3dPlayerAngle ;
@@ -2256,9 +2005,11 @@ G_relativeToZ <<= 16 ;
 
     /* If the segment is behind us, then stop processing. */
     if ((G_relativeFromZ < ZMIN) && (G_relativeToZ < ZMIN))  {
-//.printf("behind.\n") ;
-        return FALSE ;
+/*.*/printf("behind.\n") ;
+//TESTING        return FALSE ;
     }
+
+return TRUE ;
 
     /* Finish rotating the X coodinates (the above rotated the Z) */
     /* coordinates. */
@@ -2306,15 +2057,15 @@ G_relativeToX <<= 16 ;
     /* See if the whole line (both ends) is outside the view to the right. */
     if ((G_relativeFromX > G_relativeFromZ) &&
         (G_relativeToX > G_relativeToZ))  {
-//.printf("Too far right.\n") ;
-        return FALSE ;
+/*.*/printf("Too far right.\n") ;
+//TESTING        return FALSE ;
     }
 
     /* See if the line is outside the view to the left. */
     if ((G_relativeFromX < (-G_relativeFromZ)) &&
         (G_relativeToX < (-G_relativeToZ)))  {
-//.printf("Too far left.\n") ;
-        return FALSE ;
+/*.*/printf("Too far left.\n") ;
+//TESTING        return FALSE ;
     }
 
     G_wall.fromZ = (G_relativeFromZ>>16) ;
@@ -2330,8 +2081,8 @@ G_relativeFromZOld = G_relativeFromZ ;
         /* Clip along the x = z line. */
         /* check if edge is facing us, then don't draw. */
         if (tanAngle == ((T_sword32)65536))  {
-//.printf("edge.\n") ;
-            return FALSE ;
+/*.*/printf("edge.\n") ;
+//TESTING            return FALSE ;
         }
     }
 
@@ -2392,13 +2143,13 @@ if (G_screenXLeft > 0)
     /* Make sure the wall is on the screen, or we'll just quit. */
     /* Nothing off the left. */
     if (G_screenXRight <= VIEW3D_CLIP_LEFT)  {
-//.printf("Off left.\n") ;
+/*.*/printf("Off left.\n") ;
         return FALSE ;
     }
 
     /* Nothing off the right. */
     if (G_screenXLeft >= VIEW3D_CLIP_RIGHT)  {
-//.printf("Off right.\n") ;
+/*.*/printf("Off right.\n") ;
         return FALSE ;
     }
 
@@ -2423,7 +2174,7 @@ DebugCheck(G_xRight <= VIEW3D_WIDTH) ;
             break ;
 
     if (x == G_xRight)  {
-//.printf("blocked from view\n") ;
+/*.*/printf("blocked from view\n") ;
         /* None of the columns were free, quit bothering with */
         /* this segment. */
         return FALSE ;
@@ -2939,39 +2690,48 @@ T_void IAddWall(
            T_sword16 relativeToZ)
 {
     /* Texture variables. */
-    T_sword32 topu, topv, bottomCalc ;
-    T_sword32 u, v ;
-    T_sword32 du;
-    T_sword32 y1, y2, dy1, dy2 ;
-    T_sword32 scrYBottomLeft ;  // 1
-    T_sword32 scrYBottomRight ; // 2
-    T_sword32 scrYTopRight ;    // 3
-    T_sword32 scrYTopLeft ;     // 4
-    T_sword32 interZ ;   /* Intersection of view line to wall. */
-    T_sword32 cosineAngle ;
-    T_sword32 invDFromZ ;
-    T_sword32 invDToZ ;
-    T_sword16 top ;
-    T_sword16 bottom ;
-    T_sword16 minY ;
-    T_sword16 maxY ;
-    T_sword16 x ;
-    T_sword32 halfOffX ;
+//    T_sword32 topu, topv, bottomCalc ;
+//    T_sword32 u, v ;
+//    T_sword32 du;
+//    T_sword32 y1, y2, dy1, dy2 ;
+//    T_sword32 scrYBottomLeft ;  // 1
+//    T_sword32 scrYBottomRight ; // 2
+//    T_sword32 scrYTopRight ;    // 3
+//    T_sword32 scrYTopLeft ;     // 4
+//    T_sword32 interZ ;   /* Intersection of view line to wall. */
+//    T_sword32 cosineAngle ;
+//    T_sword32 invDFromZ ;
+//    T_sword32 invDToZ ;
+//    T_sword16 top ;
+//    T_sword16 bottom ;
+//    T_sword16 minY ;
+//    T_sword16 maxY ;
+//    T_sword16 x ;
+//    T_sword32 halfOffX ;
     T_sword16 absoluteTop ;
     T_sword16 absoluteBottom ;
-    T_word16 sizeX, sizeY ;
-    T_sword16 dx ;
-    T_sword16 leftEdge ;
-    T_byte8 shift ;
-    T_byte8 shiftOrig ;
-    T_word16 sizeXX, sizeYY ;
-    T_byte8 mipShift ;
-    T_byte8 mipLevel ;
+//    T_word16 sizeX, sizeY ;
+//    T_sword16 dx ;
+//    T_sword16 leftEdge ;
+//    T_byte8 shift ;
+//    T_byte8 shiftOrig ;
+//    T_word16 sizeXX, sizeYY ;
+//    T_byte8 mipShift ;
+//    T_byte8 mipLevel ;
+    T_3dVertex *p_from;
+    T_3dVertex *p_to;
+    static GLubyte blue[]   = {   0,   0, 255, 255 };
+    static GLubyte white[]   = {   255,   255, 255, 255 };
+    static GLubyte gray[]   = {   128,   128, 128, 255 };
+    static GLfloat v0[] = { -128.0f, -128.0f,  128.0f };
+    static GLfloat v1[] = {  128.0f, -128.0f,  128.0f };
+    static GLfloat v2[] = {  128.0f,  128.0f,  128.0f };
+    static GLfloat v3[] = { -128.0f,  128.0f,  128.0f };
 
-T_sword32 testa, testb, testc, testd, teste ;
+//T_sword32 testa, testb, testc, testd, teste ;
 
-T_sword32 relBot32 ;
-T_sword32 relTop32 ;
+//T_sword32 relBot32 ;
+//T_sword32 relTop32 ;
 
 INDICATOR_LIGHT(821, INDICATOR_GREEN) ;
 
@@ -2980,7 +2740,44 @@ if (G_wall.p_texture)  {
 //  PictureCheck(G_wall.p_texture) ;
   DebugEnd() ;
 }
-//.printf("    IAddWall\n") ;
+
+{
+    float tw, th;
+    float dx, dy;
+    absoluteTop = G_eyeLevel - relativeTop ;
+    absoluteBottom = G_eyeLevel - relativeBottom ;
+    p_from = G_3dVertexArray+P_segment->from;
+    p_to = G_3dVertexArray+P_segment->to;
+    glEnable (GL_DEPTH_TEST);
+    glEnable (GL_TEXTURE_2D);
+    glBindTexture (GL_TEXTURE_2D, G_texture);
+
+#if 1
+    glBegin( GL_QUADS );
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    dx = (float)p_from->x - (float)p_to->x;
+    dy = (float)p_from->y - (float)p_to->y;
+    tw = (float)sqrt(dx*dx + dy*dy)/32.0f;
+    th = (float)fabs(absoluteBottom - absoluteTop)/32.0f;
+    //glColor4ubv( blue );
+    glTexCoord2f (0.0f, th);
+    glVertex3i( p_from->y, absoluteBottom, p_from->x);
+    glTexCoord2f (tw, th);
+    glVertex3i( p_to->y, absoluteBottom, p_to->x);
+    glTexCoord2f (tw, 0.0f);
+    glVertex3i( p_to->y, absoluteTop, p_to->x);
+    glTexCoord2f (0.0f, 0.0f);
+    glVertex3i( p_from->y, absoluteTop, p_from->x);
+    glEnd();
+    //glColor4ubv( white );
+printf("Seg %d: (%d,%d,%d) -> (%d,%d,%d)\n", P_segment-G_3dSegArray, p_from->x, absoluteBottom, p_from->y, p_to->x, absoluteTop, p_to->y);
+#endif
+
+}
+
+#if 0
+/*.*/printf("    IAddWall\n") ;
     /* LES:  Calculate the real world height values that we will be */
     /* storing in the wall runs.  These are pretty much constants */
     /* throughout this routine. */
@@ -3525,6 +3322,7 @@ INDICATOR_LIGHT(841, INDICATOR_RED) ;
 
 ITestMinMax(1001) ;
 INDICATOR_LIGHT(821, INDICATOR_RED) ;
+#endif
 }
 
 
@@ -4101,7 +3899,7 @@ E_Boolean IFindObject(T_3dObject *p_obj)
     if (relativeZ < 0)  {
         /* Yeah, well ... don't do this one. */
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     /* Hmmm, well, where is it left to right? */
@@ -4119,14 +3917,14 @@ E_Boolean IFindObject(T_3dObject *p_obj)
     if ((relativeX-width) > relativeZ)  {
         /* Nope.  This one's no good. */
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     /* See if the right edge is on the screen. */
     if ((relativeX+width) < (-relativeZ))  {
         /* Nope.  This one's no good. */
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     /* Get the height of the object. */
@@ -4154,13 +3952,13 @@ E_Boolean IFindObject(T_3dObject *p_obj)
     /* Are we too far to the left? */
     if ((screenRightX < VIEW3D_CLIP_LEFT) || (screenRightX < 0))  {
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     /* Are we too far to the right? */
     if ((screenLeftX >= VIEW3D_CLIP_RIGHT) || (screenLeftX >= VIEW3D_WIDTH))  {
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     /* Calculate where the bottom edge is. */
@@ -4194,13 +3992,13 @@ E_Boolean IFindObject(T_3dObject *p_obj)
     if (screenTopY >= VIEW3D_HEIGHT)  {
         /* Top is below screen. */
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     if (screenBottomY < 0)  {
         /* Bottom is above the top of the screen. */
         DebugEnd() ;
-        return FALSE ;
+//TESTING        return FALSE ;
     }
 
     if (screenTopY == screenBottomY)  {
@@ -4758,7 +4556,7 @@ E_Boolean ICheckValidRow2(T_word16 row, T_word16 run)
          }
 
          if (!((start >= rend) || (end <= rstart)))
-            return FALSE ;
+;//TESTING            return FALSE ;
     }
 
 //    return TRUE ;
