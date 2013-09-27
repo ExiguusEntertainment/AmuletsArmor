@@ -236,6 +236,9 @@ static void create_texture(void)
 #elif 0
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
+#elif 1
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
 #else
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -278,7 +281,7 @@ static void setup_opengl( int width, int height )
      * EXERCISE:
      * Replace this with a call to glFrustum.
      */
-    gluPerspective( 60.0, ratio, 1.0, 1024.0 );
+    gluPerspective( 90.0, ratio, 1.0, 1024.0 );
 }
 
 

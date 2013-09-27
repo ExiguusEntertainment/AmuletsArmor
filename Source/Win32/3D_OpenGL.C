@@ -705,7 +705,6 @@ static E_Boolean G_newLine ;
 /* Internal prototypes: */
 E_Boolean IIsSegmentGood(T_word16 segmentIndex) ;
 T_void ICalculateWallMatrix(T_void) ;
-T_void IMarkOffWall(T_void) ;
 T_void IAddMainWall(T_void) ;
 T_void IAddLowerWall(T_void) ;
 T_void IAddUpperWall(T_void) ;
@@ -926,19 +925,9 @@ T_word16 *G_remapSectorCeilingArray ;
 /* contains all the visible wall columns for this single viewing. */
 //T_3dWallRun G_wallRuns[MAX_WALL_RUNS] ;
 
-/* Like walls, there are also floor runs.  However, these go from */
-/* left to right instead of up and down the screen. */
-/*
-T_3dFloorRun G_floorList[MAX_VIEW3D_HEIGHT][MAX_FLOOR_INDEXES] ;
-T_word16 G_runCount[MAX_VIEW3D_HEIGHT] ;
-*/
 /* Keep track of the objects */
 T_word16 G_objectCount ;
 T_3dObjectRun G_objectRun[MAX_OBJECTS] ;
-
-/* Keep track of the object columns. */
-//T_3dObjectColRun G_objectColRun[MAX_VIEW3D_WIDTH][MAX_OBJECT_COLUMNS] ;
-//T_word16 G_objectColCount[MAX_VIEW3D_WIDTH] ;
 
 /* 0xFFFF means no objects in that column. */
 T_word16 G_objectColStart[MAX_VIEW3D_WIDTH] ;
@@ -975,15 +964,9 @@ T_word16 G_wallRunCount ;
 /* Keep track of the first segment sector. */
 T_word16 G_firstSSector ;
 
-/* Keep track if a screen column has been completely drawn. */
-T_byte8 G_colDone[MAX_VIEW3D_WIDTH] ;
-
 /* Keep a list of indexes into the wall run array, this way we can */
 /* have multiple walls on one screen column. */
 T_word16 G_intersections[MAX_INTERSECTIONS][MAX_VIEW3D_WIDTH] ;
-
-/* How many wall runs are stored in the above columns. */
-T_word16 G_intCount[MAX_VIEW3D_WIDTH] ;
 
 /* Each column must keep track of the greatest and lowest Y that has */
 /* been drawn -- and they are stored here. */
@@ -1475,6 +1458,7 @@ void IRender(void)
     static GLubyte purple[] = { 255,   0, 255, 255 };
 
     /* Clear the color and depth buffers. */
+    glViewport( -100, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glDisable(GL_CULL_FACE); // testing
 
@@ -1518,7 +1502,6 @@ MessagePrintf("%f, %f, %f %d", px, py, pz, PlayerGetAngle());
 T_void View3dDrawView(T_void)
 {
     T_word16 i ;
-//static T_byte8 flippy = 0 ;
 
     TICKER_TIME_ROUTINE_PREPARE() ;
 
@@ -1557,23 +1540,11 @@ INDICATOR_LIGHT(114, INDICATOR_GREEN) ;
     G_numVertFloor = 1 ;   /* Always start at 1 */
     memset(G_vertFloorStarts, 0, sizeof(G_vertFloorStarts)) ;
 
-    memset(G_colDone, 0, sizeof(G_colDone)) ;
-//walls:    memset(G_intCount, 0, sizeof(G_intCount)) ;
     memset(G_minY, 0, sizeof(G_minY)) ;
-//floors:    memset(G_runCount, 0, sizeof(G_runCount)) ;
-//    memset(G_objectColCount, 0, sizeof(G_objectColCount)) ;
-//memset(P_doubleBuffer, flippy^=15, VIEW3D_HEIGHT*MAX_VIEW3D_WIDTH) ;
     memset(G_numWallSlices, 0, sizeof(G_numWallSlices)) ;
 
     for (i=0; i<MAX_VIEW3D_WIDTH; i++)
         G_maxY[i] = VIEW3D_HEIGHT ;
-
-/*
-    for (i=0; i<MAX_VIEW3D_HEIGHT; i++)  {
-        G_floorList[i][0].end = 0 ;
-        G_floorList[i][0].start = MAX_VIEW3D_WIDTH ;
-    }
-*/
 
     if (G_fromSector != 0xFFFF)  {
         INDICATOR_LIGHT(114, INDICATOR_RED) ;
@@ -1589,6 +1560,8 @@ INDICATOR_LIGHT(114, INDICATOR_GREEN) ;
         IRender();
 
         IDrawNode(G_3dRootBSPNode) ;
+
+        glViewport( 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         INDICATOR_LIGHT(122, INDICATOR_RED) ;
 
@@ -1845,8 +1818,6 @@ G_didDrawWall = FALSE ;
             /* If it is, mark off this section as drawn. */
             INDICATOR_LIGHT(808, INDICATOR_GREEN) ;
             G_wall.opaque = 1 ;
-ITestMinMax(1013) ;
-            IMarkOffWall() ;
 ITestMinMax(1011) ;
             IAddMainWall() ;
 
@@ -1916,12 +1887,6 @@ if (G_didDrawWall)
  *<!-----------------------------------------------------------------------*/
 E_Boolean IIsSegmentGood(T_word16 segmentIndex)
 {
-/*LES2
-    T_sword16 worldToX ;
-    T_sword16 worldToY ;
-    T_sword16 worldFromX ;
-    T_sword16 worldFromY ;
-*/
     T_sword32 worldToX ;
     T_sword32 worldToY ;
     T_sword32 worldFromX ;
@@ -1931,7 +1896,6 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
     T_sword16 from ;
     T_3dVertex *p_vertex ;
     T_word16 angle ;
-    T_sword16 x ;
 
 #ifndef NDEBUG
     G_segCount++ ;
@@ -1963,31 +1927,6 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
     /* to the direction the player is facing. */
     /* Note that we are now translating from world (x,y) coordinates */
     /* to relative (x, z) coordinates */
-/*LES2
-    G_relativeFromZ = (((worldFromX - G_3dPlayerX)*G_3dCosPlayerAngle) -
-                     ((worldFromY - G_3dPlayerY)*G_3dSinPlayerAngle)) >> 16 ;
-    G_relativeToZ = (((worldToX - G_3dPlayerX)*G_3dCosPlayerAngle) -
-                   ((worldToY - G_3dPlayerY)*G_3dSinPlayerAngle)) >> 16 ;
-G_relativeFromZ <<= 16 ;
-G_relativeToZ <<= 16 ;
-*/
-
-/*
-    G_relativeFromZ =
-        MultAndShift16(
-            ((worldFromX<<16) + 0x8000L - PlayerGetX()),
-            G_3dCosPlayerAngle) -
-        MultAndShift16(
-            ((worldFromY<<16) + 0x8000L - PlayerGetY()),
-            G_3dSinPlayerAngle) ;
-    G_relativeToX =
-        MultAndShift16(
-            ((worldToX<<16) + 0x8000L - PlayerGetX()),
-            G_3dCosPlayerAngle) -
-        MultAndShift16(
-            ((worldToY<<16) + 0x8000L - PlayerGetY()),
-            G_3dSinPlayerAngle) ;
-*/
     G_relativeFromZ =
         MultAndShift16(
             ((worldFromX<<16) + 0x8000L - PlayerGetX()),
@@ -2006,39 +1945,11 @@ G_relativeToZ <<= 16 ;
     /* If the segment is behind us, then stop processing. */
     if ((G_relativeFromZ < ZMIN) && (G_relativeToZ < ZMIN))  {
 //./printf("behind.\n") ;
-//TESTING        return FALSE ;
+        return FALSE ;
     }
-
-return TRUE ;
 
     /* Finish rotating the X coodinates (the above rotated the Z) */
     /* coordinates. */
-/*LES2
-    G_relativeFromX =
-        (((worldFromX - G_3dPlayerX)*G_3dSinPlayerAngle) +
-         ((worldFromY - G_3dPlayerY)*G_3dCosPlayerAngle)) >> 16 ;
-    G_relativeToX =
-        (((worldToX - G_3dPlayerX)*G_3dSinPlayerAngle) +
-         ((worldToY - G_3dPlayerY)*G_3dCosPlayerAngle)) >> 16 ;
-G_relativeFromX <<= 16 ;
-G_relativeToX <<= 16 ;
-*/
-/*
-    G_relativeFromX =
-        MultAndShift16(
-            ((worldFromX<<16) + 0x8000L - PlayerGetX()),
-            G_3dSinPlayerAngle) +
-        MultAndShift16(
-            ((worldFromY<<16) + 0x8000L - PlayerGetY()),
-            G_3dCosPlayerAngle) ;
-    G_relativeToX =
-        MultAndShift16(
-            ((worldToX<<16) + 0x8000L - PlayerGetX()),
-            G_3dSinPlayerAngle) +
-        MultAndShift16(
-            ((worldToY<<16) + 0x8000L - PlayerGetY()),
-            G_3dCosPlayerAngle) ;
-*/
     G_relativeFromX =
         MultAndShift16(
             ((worldFromX<<16) + 0x8000L - PlayerGetX()),
@@ -2058,20 +1969,20 @@ G_relativeToX <<= 16 ;
     if ((G_relativeFromX > G_relativeFromZ) &&
         (G_relativeToX > G_relativeToZ))  {
 //./printf("Too far right.\n") ;
-//TESTING        return FALSE ;
+        return FALSE ;
     }
 
     /* See if the line is outside the view to the left. */
     if ((G_relativeFromX < (-G_relativeFromZ)) &&
         (G_relativeToX < (-G_relativeToZ)))  {
 //./printf("Too far left.\n") ;
-//TESTING        return FALSE ;
+        return FALSE ;
     }
 
     G_wall.fromZ = (G_relativeFromZ>>16) ;
 
-G_relativeFromXOld = G_relativeFromX ;
-G_relativeFromZOld = G_relativeFromZ ;
+    G_relativeFromXOld = G_relativeFromX ;
+    G_relativeFromZOld = G_relativeFromZ ;
 
     /* Do Z-clipping. */
     tanAngle = MathTangentLookup(angle) ;
@@ -2082,16 +1993,12 @@ G_relativeFromZOld = G_relativeFromZ ;
         /* check if edge is facing us, then don't draw. */
         if (tanAngle == ((T_sword32)65536))  {
 //./printf("edge.\n") ;
-//TESTING            return FALSE ;
+            return FALSE ;
         }
     }
 
     /* Clip if z is too close for FROM coordinate. */
     if (G_relativeFromZ < ZMIN)  {
-/*LES2
-         G_relativeFromX = G_relativeFromX +
-                         (((ZMIN - G_relativeFromZ) * tanAngle) >> 16) ;
-*/
          G_relativeFromX += MultAndShift16(
                                 (ZMIN - G_relativeFromZ),
                                 tanAngle) ;
@@ -2100,10 +2007,6 @@ G_relativeFromZOld = G_relativeFromZ ;
 
     /* Clip if z is too close for TO coordinate. */
     if (G_relativeToZ < ZMIN)  {
-/*LES2
-        G_relativeToX = G_relativeToX +
-                      (((ZMIN - G_relativeToZ) * tanAngle) >> 16) ;
-*/
         G_relativeToX += MultAndShift16(
                              (ZMIN - G_relativeToZ),
                              tanAngle) ;
@@ -2118,22 +2021,12 @@ G_relativeFromZOld = G_relativeFromZ ;
 
     /* Now that all the clipping has been done, we can now compute */
     /* the X screen coordinates. */
-/*LES2
-    G_screenXLeft = G_xLeft = (T_sword16)(VIEW3D_HALF_WIDTH -
-                  ((G_relativeFromX * MathInvDistanceLookup(G_relativeFromZ))
-                      >> 16)) ;
-
-    G_screenXRight = G_xRight = (T_sword16)(VIEW3D_HALF_WIDTH -
-                  ((G_relativeToX * MathInvDistanceLookup(G_relativeToZ))
-                      >> 16)) ;
-*/
     G_screenXLeft = G_xLeft = (T_sword16)(VIEW3D_HALF_WIDTH -
                   (MultAndShift16(
                       G_relativeFromX,
                       MathInvDistanceLookup(G_relativeFromZ>>16)) >> 16)) ;
-/* TESTING */
-if (G_screenXLeft > 0)
-  G_screenXLeft-- ;
+    if (G_screenXLeft > 0)
+      G_screenXLeft-- ;
 
     G_screenXRight = G_xRight = (T_sword16)(VIEW3D_HALF_WIDTH -
                   (MultAndShift16(
@@ -2144,13 +2037,13 @@ if (G_screenXLeft > 0)
     /* Nothing off the left. */
     if (G_screenXRight <= VIEW3D_CLIP_LEFT)  {
 //./printf("Off left.\n") ;
-        return FALSE ;
+//        return FALSE ;
     }
 
     /* Nothing off the right. */
     if (G_screenXLeft >= VIEW3D_CLIP_RIGHT)  {
 //./printf("Off right.\n") ;
-        return FALSE ;
+//        return FALSE ;
     }
 
     /* Clip to the screen edges. */
@@ -2161,22 +2054,6 @@ if (G_screenXLeft > 0)
 
     /* Nothing paper thin. */
     if (G_screenXLeft==G_screenXRight)  {
-        return FALSE ;
-    }
-
-    /* Now we need to see if any part of this wall can be seen. */
-    /* If any part can, we will draw it.  If not, there is no */
-    /* need to try drawing it. */
-DebugCheck(G_xLeft <= VIEW3D_WIDTH) ;
-DebugCheck(G_xRight <= VIEW3D_WIDTH) ;
-    for (x=G_xLeft; x<G_xRight; x++)
-        if (G_colDone[x] == 0)
-            break ;
-
-    if (x == G_xRight)  {
-//./printf("blocked from view\n") ;
-        /* None of the columns were free, quit bothering with */
-        /* this segment. */
         return FALSE ;
     }
 
@@ -2295,62 +2172,6 @@ G_wall.By = By ;
     G_wall.eprime = G_wall.e * (-VIEW3D_HALF_HEIGHT) ;
 
     G_wall.By = By ;
-*/
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  IMarkOffWall
- *-------------------------------------------------------------------------*/
-/**
- *  IMarkOffWall goes through all the columns in a wall and marks off
- *  any empty slots.  This signifies that the column is done and is
- *  no longer going to have anything drawn onto it.
- *
- *<!-----------------------------------------------------------------------*/
-T_void IMarkOffWall(T_void)
-{
-    T_word16 x ;
-    T_byte8 *p_column ;
-
-if (G_xLeft > G_xRight)  {
-/*
-    printf("Backwards on line %d\n", P_segment->line) ;
-    fprintf(stderr, "Backwards on line %d\n", P_segment->line) ;
-    DebugCheck(FALSE) ;
-*/
-    return ;
-}
-DebugCheck(G_xLeft <= G_xRight) ;
-DebugCheck(G_xLeft >= 0) ;
-DebugCheck(G_xRight >= 0) ;
-DebugCheck(G_xLeft <= VIEW3D_WIDTH) ;
-DebugCheck(G_xRight <= VIEW3D_WIDTH) ;
-    x = G_xLeft ;
-DebugCheck(x <= VIEW3D_WIDTH) ;
-    p_column = G_colDone+x ;
-    x = G_xRight-x ;
-
-    for (; (x!=0); x--, p_column++)  {
-ITestMinMax(2000+x+G_xLeft) ;
-        if (*p_column == 0)  {
-            G_colCount++ ;
-            *p_column = 1 ;
-        }
-    }
-
-/*
-DebugCheck(G_xLeft <= G_xRight) ;
-DebugCheck(G_xLeft >= 0) ;
-DebugCheck(G_xRight >= 0) ;
-DebugCheck(G_xLeft <= VIEW3D_WIDTH) ;
-DebugCheck(G_xRight <= VIEW3D_WIDTH) ;
-    for (x=G_xLeft; x<G_xRight; x++)  {
-ITestMinMax(2000+x) ;
-        if (G_colDone[x] == 0)  {
-            G_colDone[x] = 1 ;
-            G_colCount++ ;
-        }
-    }
 */
 }
 
@@ -2656,12 +2477,6 @@ ITestMinMax(1005) ;
         (G_relativeFromZ>>16),
         (G_relativeToZ>>16)) ;
 
-//    if (G_3dSectorArray[P_sideBack->sector].floorHt >=
-//        G_3dSectorArray[P_sideBack->sector].ceilingHt)  {
-            /* If it is, mark off this section as drawn. */
-//            G_wall.opaque = 1 ;
-//            IMarkOffWall() ;
-//    }
     DebugEnd() ;
 }
 
@@ -2756,6 +2571,10 @@ if (G_wall.p_texture)  {
     glBegin( GL_QUADS );
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR /* GL_NEAREST */);
+//    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR /* GL_NEAREST */);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
     dx = (float)p_from->x - (float)p_to->x;
     dy = (float)p_from->y - (float)p_to->y;
     tw = (float)sqrt(dx*dx + dy*dy)/32.0f;
@@ -3066,49 +2885,6 @@ DebugCheck(maxY <= VIEW3D_HEIGHT) ;
                     bottom = maxY ;
 
                 if (top < bottom)  {
-#if 0
-
-                    /* Store the wall run information for later. */
-                    G_wallRuns[G_wallRunCount].top = top ;
-                    G_wallRuns[G_wallRunCount].bottom = bottom ;
-
-                    /* LES:  Store the real world heights of the wall */
-                    /* so we can correctly map the texture. */
-                    G_wallRuns[G_wallRunCount].absoluteTop =
-                        absoluteTop ;
-
-                    G_wallRuns[G_wallRunCount].absoluteBottom =
-                        absoluteBottom ;
-
-                    /* LES:  Also note where the top and bottom */
-                    /* pixel would have been if not clipped. */
-
-                    G_wallRuns[G_wallRunCount].realPixelTop =
-                        y1 >> 16 ;
-                    G_wallRuns[G_wallRunCount].realPixelBottom =
-                        y2 >> 16 ;
-
-                    /* Store the distance to the wall segment. */
-                    G_wallRuns[G_wallRunCount].distance = interZ ;
-
-                    /* LES:  Store where along the texture we are located. */
-                    G_wallRuns[G_wallRunCount].textureColumn =
-                        G_wall.offX - v ;
-
-                    G_wallRuns[G_wallRunCount].p_texture = G_wall.p_texture ;
-                    G_wallRuns[G_wallRunCount].maskX = sizeX ;
-                    G_wallRuns[G_wallRunCount].maskY = sizeY ;
-                    G_wallRuns[G_wallRunCount].shift = shift ;
-                    G_wallRuns[G_wallRunCount].offY = G_wall.offY ;
-                    G_wallRuns[G_wallRunCount].u = -(u+0x8000) ;
-                    G_wallRuns[G_wallRunCount].du = -du ;
-
-                    G_wallRuns[G_wallRunCount].shadeIndex =
-                        G_wall.shadeIndex ;
-
-                    G_intersections[G_intCount[x]][x] = G_wallRunCount ;
-                    G_intCount[x]++ ;
-#endif
                     G_textureAndY = sizeY ;
                     G_CurrentTexturePos =
                         G_wall.p_texture2 +
@@ -4243,7 +4019,6 @@ T_void IAddObjectSlice(
                 }
 
                 if (p_objRun->runInfo.top != p_objRun->runInfo.bottom)  {
-//                    count = G_objectColCount[x]++ ;
                     count = G_allocatedColRun++ ;
 
                     /* Make sure our depth of objects is not too long. */
@@ -4452,118 +4227,6 @@ T_void View3dClipCenter(T_word16 centerWidth)
     DebugEnd() ;
 }
 
-#if 0
-E_Boolean ICheckValidRow(T_word16 row, T_word16 run)
-{
-    T_word16 i ;
-    E_Boolean status = TRUE ;
-    T_word16 start, end ;
-
-    start = G_floorList[row][run].start ;
-    end = G_floorList[row][run].end ;
-
-    for (i=0; i<run; i++)  {
-/*
-             if (((start >= G_floorList[row][i].start) &&
-                  (start <= (G_floorList[row][i].end-1))) ||
-                 (((end-1) >= G_floorList[row][i].start) &&
-                  ((end-1) <= (G_floorList[row][i].end-1))) ||
-                 ((start >= G_floorList[row][i].start) &&
-                  ((end-1) <= G_floorList[row][i].end-1)))
-*/
-             if (!((start >= G_floorList[row][i].end) ||
-                 (end <= G_floorList[row][i].start)))
-             {
-            G_floorList[row][run].start = 0x7FFF ;
-            G_floorList[row][run].end = 0x7FFF ;
-            status = FALSE ;
-            break ;
-        }
-    }
-
-    return status ;
-}
-
-E_Boolean ICheckValidRow2(T_word16 row, T_word16 run)
-{
-    T_word16 i ;
-    T_word16 start, end ;
-    T_word16 rstart, rend ;
-    T_3dFloorRun *p_new ;
-    T_3dFloorRun *p_old ;
-    E_Boolean status = TRUE ;
-
-    p_new = &G_floorList[row][run] ;
-    start = p_new->start ;
-    end = p_new->end ;
-
-    for (i=0; i<run; i++)  {
-         p_old = &G_floorList[row][i] ;
-         rstart = p_old->start ;
-         rend = p_old->end ;
-
-
-         if (start == rend)  {
-             if ((p_new->height == p_old->height) &&
-                 (p_new->shadeIndex == p_old->shadeIndex) &&
-                 (p_new->transparentFlag == p_old->transparentFlag))  {
-                 if (row < VIEW3D_HALF_HEIGHT)  {
-                     if (p_new->textureCeiling == p_old->textureCeiling)  {
-                         /* Combine these two. */
-                         p_old->end = p_new->end ;
-//                         return FALSE ;
-                         status = FALSE ;
-                         p_new->start = p_new->end+1 ;
-                         p_new = p_old ;
-                     }
-                 } else {
-                     if (p_new->textureFloor == p_old->textureFloor)  {
-                         /* Combine these two. */
-                         p_old->end = p_new->end ;
-//                         return FALSE ;
-                         status = FALSE ;
-                         p_new->start = p_new->end+1 ;
-                         p_new = p_old ;
-                     }
-                 }
-             }
-         }
-
-         if (end == rstart)  {
-             if ((p_new->height == p_old->height) &&
-                 (p_new->shadeIndex == p_old->shadeIndex) &&
-                 (p_new->transparentFlag == p_old->transparentFlag))  {
-                 if (row < VIEW3D_HALF_HEIGHT)  {
-                     if (p_new->textureCeiling == p_old->textureCeiling)  {
-                         /* Combine these two. */
-                         p_old->start = p_new->start ;
-//                         return FALSE ;
-                         status = FALSE ;
-                         p_new->start = p_new->end+1 ;
-                         p_new = p_old ;
-                     }
-                 } else {
-                     if (p_new->textureFloor == p_old->textureFloor)  {
-                         /* Combine these two. */
-                         p_old->start = p_new->start ;
-//                         return FALSE ;
-                         status = FALSE ;
-                         p_new->start = p_new->end+1 ;
-                         p_new = p_old ;
-                     }
-                 }
-             }
-         }
-
-         if (!((start >= rend) || (end <= rstart)))
-;//TESTING            return FALSE ;
-    }
-
-//    return TRUE ;
-    return status ;
-}
-#endif
-
 static T_void IConvertVertToHorzAndDraw(T_void)
 {
     T_horzFloorInfo floor[MAX_VIEW3D_HEIGHT] ;
@@ -4759,19 +4422,6 @@ DebugCheck(y < 200) ;
 
     DebugEnd() ;
 }
-
-#if 0
-T_void IDrawFloorRun(T_word16 y, T_horzFloorInfo *p_floor)
-{
-/*    printf("drw: %d %d %d %d\n",
-        y,
-        p_floor->sector,
-        p_floor->left,
-        p_floor->right) ;
-*/
-    memset(P_doubleBuffer+y*320+p_floor->left, p_floor->sector, p_floor->right-p_floor->left) ;
-}
-#endif
 
 T_void IDrawFloorRun(
            T_word16 row,
@@ -5393,7 +5043,7 @@ static void create_texture(void)
 #elif 0
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR /* GL_NEAREST */);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR /* GL_NEAREST */);
-#elif 0
+#elif 1
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
 #else
@@ -5401,8 +5051,8 @@ static void create_texture(void)
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 #endif
 
-//    gluBuild2DMipmaps (GL_TEXTURE_2D, 4, TEXTURE_WIDTH, TEXTURE_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, p_texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_texture);
+    gluBuild2DMipmaps (GL_TEXTURE_2D, 4, TEXTURE_WIDTH, TEXTURE_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, p_texture);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_texture);
     glTexEnvi (GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
