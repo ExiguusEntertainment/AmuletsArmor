@@ -30,6 +30,9 @@
 #include "OBJGEN.H"
 #include "PICS.H"
 #include "PROMPT.H"
+#ifdef AA_OPENGL
+#include "AAGL\AAGLTexture.h"
+#endif
 
 #define OBJECT_TYPE_LIGHT   924
 
@@ -938,6 +941,7 @@ static T_void ILockPictures(T_void)
     T_byte8 name[20] ;
     T_3dSide *p_side ;
     T_3dSector *p_sector ;
+    T_byte8 *p_pic;
 
     DebugRoutine("ILockPictures") ;
 
@@ -956,139 +960,86 @@ static T_void ILockPictures(T_void)
     G_3dCeilingResourceArray = (T_resource *)
         MemAlloc(sizeof(T_resource) * G_Num3dSectors) ;
 
-//#ifdef MIP_MAPPING_ON
-#if 0
-    DebugCheck(G_textureHash == HASH32_BAD) ;
-    G_textureHash = Hash32Create(256) ;
-
     /* Look for textures on sides. */
     for (i=0; i<G_Num3dSides; i++)  {
         p_side = &G_3dSideArray[i] ;
 
-        if (p_side->upperTx[0] != '-')  {
-            strncpy(name, p_side->upperTx, 8) ;
-            p_texture =
-                PictureLock(name, &G_3dUpperResourceArray[i]) ;
-            *((T_byte8 **)(&p_side->upperTx[1])) =
-                MipMap(p_texture) ;
-        } else {
-            G_3dUpperResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->upperTx[1])) = G_textureNone+4 ;
-        }
-
-        if (p_side->lowerTx[0] != '-')  {
-            strncpy(name, p_side->lowerTx, 8) ;
-            p_texture =
-                PictureLock(name, &G_3dLowerResourceArray[i]) ;
-            *((T_byte8 **)(&p_side->lowerTx[1])) =
-                MipMap(p_texture) ;
-        } else {
-            G_3dLowerResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->lowerTx[1])) = G_textureNone+4 ;
-        }
-
-        if (p_side->mainTx[0] != '-')  {
-            strncpy(name, p_side->mainTx, 8) ;
-            p_texture =
-                PictureLock(name, &G_3dMainResourceArray[i]) ;
-            *((T_byte8 **)(&p_side->mainTx[1])) =
-                MipMap(p_texture) ;
-        } else {
-            G_3dMainResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->mainTx[1])) = G_textureNone+4 ;
-        }
-    }
-
-    /* Look for all the textures on the sectors. */
-    for (i=0; i<G_Num3dSectors; i++)  {
-        p_sector = &G_3dSectorArray[i] ;
-
-        if (p_sector->floorTx[0] != '-')  {
-            strncpy(name, p_sector->floorTx, 8) ;
-            p_texture =
-                PictureLock(name, &G_3dFloorResourceArray[i]) ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) =
-                MipMap(p_texture) ;
-        } else {
-            G_3dFloorResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) = G_textureNone+4 ;
-        }
-        if (p_sector->ceilingTx[0] != '-')  {
-            strncpy(name, p_sector->ceilingTx, 8) ;
-            p_texture =
-                PictureLock(name, &G_3dCeilingResourceArray[i]) ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) =
-                MipMap(p_texture) ;
-        } else {
-            G_3dCeilingResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) = G_textureNone+4 ;
-        }
-    }
-#else
-    /* Look for textures on sides. */
-    for (i=0; i<G_Num3dSides; i++)  {
-        p_side = &G_3dSideArray[i] ;
-
-        if (p_side->upperTx[0] != '-')  {
-            strncpy(name, p_side->upperTx, 8) ;
-            *((T_byte8 **)(&p_side->upperTx[1])) =
-                PictureLock(name, &G_3dUpperResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dUpperResourceArray[i]), name) ;
-        } else {
-            G_3dUpperResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->upperTx[1])) = G_textureNone+4 ;
-        }
-
-        if (p_side->lowerTx[0] != '-')  {
-            strncpy(name, p_side->lowerTx, 8) ;
-            *((T_byte8 **)(&p_side->lowerTx[1])) =
-                PictureLock(name, &G_3dLowerResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dLowerResourceArray[i]), name) ;
-        } else {
-            G_3dLowerResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->lowerTx[1])) = G_textureNone+4 ;
-        }
-
-        if (p_side->mainTx[0] != '-')  {
-            strncpy(name, p_side->mainTx, 8) ;
-            *((T_byte8 **)(&p_side->mainTx[1])) =
-                PictureLock(name, &G_3dMainResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dMainResourceArray[i]), name) ;
-        } else {
-            G_3dMainResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->mainTx[1])) = G_textureNone+4 ;
-        }
-    }
-
-    /* Look for all the textures on the sectors. */
-    for (i=0; i<G_Num3dSectors; i++)  {
-        p_sector = &G_3dSectorArray[i] ;
-
-        if (p_sector->floorTx[0] != '-')  {
-            strncpy(name, p_sector->floorTx, 8) ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) =
-                PictureLock(name, &G_3dFloorResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dFloorResourceArray[i]), name) ;
-        } else {
-            G_3dFloorResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) = G_textureNone+4 ;
-        }
-        if (p_sector->ceilingTx[0] != '-')  {
-            strncpy(name, p_sector->ceilingTx, 8) ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) =
-                PictureLock(name, &G_3dCeilingResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dCeilingResourceArray[i]), name) ;
-        } else {
-            G_3dCeilingResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) = G_textureNone+4 ;
-        }
-    }
+        if (p_side->upperTx[0] != '-') {
+            strncpy(name, p_side->upperTx, 8);
+            p_pic = PictureLock(name, &G_3dUpperResourceArray[i]);
+            *((T_byte8 **)(&p_side->upperTx[1])) = p_pic;
+#ifdef AA_OPENGL
+            // Check to see if this is a new picture and create a GLTexture mip map
+            // from t picture
+            AAGLTextureCreateMipMapFromPIC(p_pic);
 #endif
+        } else {
+            G_3dUpperResourceArray[i] = RESOURCE_BAD;
+            *((T_byte8 **)(&p_side->upperTx[1])) = G_textureNone + 4;
+#ifdef AA_OPENGL
+            // Ensure we have the 'none' texture created
+            AAGLTextureCreateMipMapFromPIC(G_textureNone+4);
+#endif
+        }
+
+        if (p_side->lowerTx[0] != '-') {
+            strncpy(name, p_side->lowerTx, 8);
+            p_pic = PictureLock(name, &G_3dLowerResourceArray[i]);
+            *((T_byte8 **)(&p_side->lowerTx[1])) = p_pic;
+#ifdef AA_OPENGL
+            // Check to see if this is a new picture and create a GLTexture mip map
+            // from t picture
+            AAGLTextureCreateMipMapFromPIC(p_pic);
+#endif
+        } else {
+            G_3dLowerResourceArray[i] = RESOURCE_BAD;
+            *((T_byte8 **)(&p_side->lowerTx[1])) = G_textureNone + 4;
+#ifdef AA_OPENGL
+            // Ensure we have the 'none' texture created
+            AAGLTextureCreateMipMapFromPIC(G_textureNone+4);
+#endif
+        }
+
+        if (p_side->mainTx[0] != '-') {
+            strncpy(name, p_side->mainTx, 8);
+            p_pic = PictureLock(name, &G_3dMainResourceArray[i]);
+            *((T_byte8 **)(&p_side->mainTx[1])) = p_pic;
+#ifdef AA_OPENGL
+            // Check to see if this is a new picture and create a GLTexture mip map
+            // from t picture
+            AAGLTextureCreateMipMapFromPIC(p_pic);
+#endif
+        } else {
+            G_3dMainResourceArray[i] = RESOURCE_BAD;
+            *((T_byte8 **)(&p_side->mainTx[1])) = G_textureNone + 4;
+#ifdef AA_OPENGL
+            // Ensure we have the 'none' texture created
+            AAGLTextureCreateMipMapFromPIC(G_textureNone+4);
+#endif
+        }
+    }
+
+    /* Look for all the textures on the sectors. */
+    for (i=0; i<G_Num3dSectors; i++)  {
+        p_sector = &G_3dSectorArray[i] ;
+
+        if (p_sector->floorTx[0] != '-')  {
+            strncpy(name, p_sector->floorTx, 8) ;
+            *((T_byte8 **)(&p_sector->floorTx[1])) =
+                PictureLock(name, &G_3dFloorResourceArray[i]) ;
+        } else {
+            G_3dFloorResourceArray[i] = RESOURCE_BAD ;
+            *((T_byte8 **)(&p_sector->floorTx[1])) = G_textureNone+4 ;
+        }
+        if (p_sector->ceilingTx[0] != '-')  {
+            strncpy(name, p_sector->ceilingTx, 8) ;
+            *((T_byte8 **)(&p_sector->ceilingTx[1])) =
+                PictureLock(name, &G_3dCeilingResourceArray[i]) ;
+        } else {
+            G_3dCeilingResourceArray[i] = RESOURCE_BAD ;
+            *((T_byte8 **)(&p_sector->ceilingTx[1])) = G_textureNone+4 ;
+        }
+    }
 
     DebugEnd() ;
 }
@@ -1111,53 +1062,6 @@ static T_void IUnlockPictures(T_void)
 
     DebugRoutine("IUnlockPictures") ;
 
-//#ifdef MIP_MAPPING_ON
-#if 0
-    /* Look for textures on sides. */
-    for (i=0; i<G_Num3dSides; i++)  {
-        p_side = &G_3dSideArray[i] ;
-
-        if (p_side->upperTx[0] != '-')  {
-            p_res = PictureLockQuick(G_3dUpperResourceArray[i]) ;
-            PictureUnlock(G_3dUpperResourceArray[i]) ;
-            PictureUnlockAndUnfind(G_3dUpperResourceArray[i]) ;
-            ReleaseMipMap(p_res) ;
-        }
-        if (p_side->lowerTx[0] != '-')  {
-            p_res = PictureLockQuick(G_3dLowerResourceArray[i]) ;
-            PictureUnlock(G_3dLowerResourceArray[i]) ;
-            PictureUnlockAndUnfind(G_3dLowerResourceArray[i]) ;
-            ReleaseMipMap(p_res) ;
-        }
-        if (p_side->mainTx[0] != '-')  {
-            p_res = PictureLockQuick(G_3dMainResourceArray[i]) ;
-            PictureUnlock(G_3dMainResourceArray[i]) ;
-            PictureUnlockAndUnfind(G_3dMainResourceArray[i]) ;
-            ReleaseMipMap(p_res) ;
-        }
-    }
-
-    /* Look for all the textures on the sectors. */
-    for (i=0; i<G_Num3dSectors; i++)  {
-        p_sector = &G_3dSectorArray[i] ;
-
-        if (p_sector->floorTx[0] != '-')  {
-            p_res = PictureLockQuick(G_3dFloorResourceArray[i]) ;
-            PictureUnlock(G_3dFloorResourceArray[i]) ;
-            PictureUnlockAndUnfind(G_3dFloorResourceArray[i]) ;
-            ReleaseMipMap(p_res) ;
-        }
-        if (p_sector->ceilingTx[0] != '-')  {
-            p_res = PictureLockQuick(G_3dCeilingResourceArray[i]) ;
-            PictureUnlock(G_3dCeilingResourceArray[i]) ;
-            PictureUnlockAndUnfind(G_3dCeilingResourceArray[i]) ;
-            ReleaseMipMap(p_res) ;
-        }
-    }
-
-    Hash32Destroy(G_textureHash) ;
-    G_textureHash = HASH32_BAD ;
-#else
     /* Look for textures on sides. */
     for (i=0; i<G_Num3dSides; i++)  {
         p_side = &G_3dSideArray[i] ;
@@ -1179,7 +1083,6 @@ static T_void IUnlockPictures(T_void)
         if (p_sector->ceilingTx[0] != '-')
             PictureUnlockAndUnfind(G_3dCeilingResourceArray[i]) ;
     }
-#endif
 
     MemFree(G_3dUpperResourceArray) ;
     MemFree(G_3dLowerResourceArray) ;

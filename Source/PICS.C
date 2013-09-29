@@ -13,6 +13,7 @@
  *
  *<!-----------------------------------------------------------------------*/
 #include "PICS.H"
+#include "IRESOURC.H"
 
 static T_resourceFile G_pictureResFile ;
 static E_Boolean G_picturesActive = FALSE ;
@@ -68,26 +69,13 @@ T_void PicturesFinish(T_void)
 /**
  *  PictureLock locks a picture out of the picture database into memory.
  *
- *  @param name -- Name of picture to load
- *  @param res -- Pointer to resource to record where
- *      the picture came from.  Is used
- *      by PictureUnlock.
+ *  @param [in] name -- Name of picture to load
+ *  @param [out] res -- Pointer to resource to record where
+ *      the picture came from.  Is used by PictureUnlock.
  *
  *  @return Pointer to picture data.
  *
  *<!-----------------------------------------------------------------------*/
-typedef struct {
-    T_byte8 resID[4] ;         /* Should contain "ReS"+'\0' id */
-    T_byte8 p_resourceName[14] ; /* Case sensitive, 13 characters + '\0' */
-    T_word32 fileOffset ;
-    T_word32 size ;              /* Size in bytes. */
-    T_word16 lockCount ;         /* 0 = unlocked. */
-    T_byte8 resourceType ;
-    T_byte8 *p_data ;
-    T_resourceFile resourceFile ;      /* Resource file this is from. */
-    T_void *ownerDir ;        /* Locked in owner directory (or NULL) */
-} T_resourceEntry ;
-
 T_byte8 *PictureLock(T_byte8 *name, T_resource *res)
 {
     T_resource found ;
@@ -188,7 +176,6 @@ T_void PictureUnlock(T_resource res)
     DebugCheck(res != RESOURCE_BAD) ;
     DebugCheck(G_picturesActive == TRUE) ;
 
-//printf("Unlock %s (%p) by %s\n", ((T_resourceEntry *)res)->p_resourceName, res, DebugGetCallerName()) ;
     /* All we need to do at this point is unlock the resource. */
     ResourceUnlock(res) ;
 

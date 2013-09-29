@@ -2419,28 +2419,9 @@ ITestMinMax(1003) ;
     /* is a texture on the lower part (thus, we have a lower part) */
     /* and thus, do we use the floor height on this side, or on */
     /* the other side. */
-#if 0
-    if (P_sideFront->lowerTx[0] != '-')  {
-#endif
         /* In addition, if there are two lower textures on both */
         /* sides of the wall, only the higher (taller floor) is the one */
         /* that is shown. */
-#if 0
-        if (P_sideBack->lowerTx[0] != '-')  {
-            if (G_3dSectorArray[P_sideBack->sector].floorHt <=
-                G_3dSectorArray[P_sideFront->sector].floorHt)  {
-                G_relativeTop = G_eyeLevel - G_3dFloorHeight ;
-                G_wall.opaque = 0 ;
-            } else {
-                G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
-                DebugCheck(G_wall.p_texture != NULL) ;
-//PictureCheck(G_wall.p_texture) ;
-                G_relativeTop = G_eyeLevel -
-                              G_3dSectorArray[P_sideBack->sector].floorHt ;
-                G_wall.opaque = 1 ;
-            }
-        } else {
-#endif
             G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
 //PictureCheck(G_wall.p_texture) ;
             DebugCheck(G_wall.p_texture != NULL) ;
@@ -2457,9 +2438,6 @@ ITestMinMax(1003) ;
                               G_3dSectorArray[P_sideFront->sector].floorHt ;
                 G_wall.opaque = 0 ;
             }
-#if 0
-        }
-#endif
 
         G_wall.By = -G_relativeTop ;
         G_wall.By <<= 16 ;
@@ -2469,34 +2447,21 @@ ITestMinMax(1003) ;
         else
             G_wall.By += ((-G_eyeLevel32) & 0xFFFF) ;
 
-dVx = G_wall.Vx ;
-dVz = G_wall.Vz ;
-calc = -(((double)G_wall.By) * dVz) ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.d = (T_sword32)calc ;
-//        G_wall.d = -(G_wall.By*G_wall.Vz) ;
-//        G_wall.d = -MultAndShift6(G_wall.By, G_wall.Vz) ;
-calc = ((double)G_wall.By) * dVx ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.f = (T_sword32)calc ;
-G_wall.f *= VIEW3D_HALF_WIDTH ;
-//        G_wall.f = (G_wall.Vx*G_wall.By) ;
-//        G_wall.f = MultAndShift6(G_wall.Vx, G_wall.By) ;
-//        G_wall.f *= VIEW3D_HALF_WIDTH ;
+        dVx = G_wall.Vx ;
+        dVz = G_wall.Vz ;
+        calc = -(((double)G_wall.By) * dVz) ;
+        calc /= 64.0 ;
+        calc /= 65536.0 ;
+        G_wall.d = (T_sword32)calc ;
+        calc = ((double)G_wall.By) * dVx ;
+        calc /= 64.0 ;
+        calc /= 65536.0 ;
+        G_wall.f = (T_sword32)calc ;
+        G_wall.f *= VIEW3D_HALF_WIDTH ;
 
         /* Fix the top edge if it is above the ceiling on this side. */
         if (G_relativeTop < G_eyeLevel - G_3dSectorArray[P_sideFront->sector].ceilingHt)
              G_relativeTop = G_eyeLevel - G_3dSectorArray[P_sideFront->sector].ceilingHt ;
-#if 0
-    }  else  {
-//        G_relativeTop = G_eyeLevel - G_3dFloorHeight ;
-        G_relativeTop = G_relativeBottom ;
-        G_wall.opaque = 0 ;
-        G_wall.p_texture = NULL ;
-    }
-#endif
 
 //printf("Seg %4d - Line %4d - Side %d - ", segmentIndex, P_segment->line, P_segment->lineSide) ;
     /* Add this wall section. */

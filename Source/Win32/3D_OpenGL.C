@@ -30,6 +30,7 @@
 #include <SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <AAGL/AAGLTexture.h>
 
 static T_word16 G_fromSector ;
 static GLuint G_texture;
@@ -1026,10 +1027,9 @@ T_void IDrawSegment(T_word16 segmentIndex) ;
 T_void IAddWall(
            T_sword16 sx1,
            T_sword16 sx2,
-           T_sword16 relativeBottom,
-           T_sword16 relativeTop,
-           T_sword16 relativeFromZ,
-           T_sword16 relativeToZ) ;
+           T_sword16 bottom,
+           T_sword16 top,
+           T_sword32 textureZeroY) ;
 T_void IDrawRuns(T_void) ;
 T_void IDrawObjectAndWallRuns(T_void) ;
 
@@ -1458,7 +1458,7 @@ void IRender(void)
     static GLubyte purple[] = { 255,   0, 255, 255 };
 
     /* Clear the color and depth buffers. */
-    glViewport( -100, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glViewport( 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glDisable(GL_CULL_FACE); // testing
 
@@ -2078,9 +2078,9 @@ T_void ICalculateWallMatrix(T_void)
     T_sword32 Bx, By, Bz ;
     T_sword32 Vx, Vz ;
     T_sword16 angle ;
-double dangle ;
-double dVx, dVz ;
-double calc, calc2 ;
+    double dangle ;
+    double dVx, dVz ;
+    double calc, calc2 ;
 
     Bx = G_relativeFromXOld ;
     By = -G_eyeLevel32 ;
@@ -2088,79 +2088,43 @@ double calc, calc2 ;
 
     angle = G_wall.angle ;
 
-//    Vx = MathSineLookup(angle) ;
-//    Vx = -Vx ;
-//    Vz = MathCosineLookup(angle) ;
+    /* Get radians from our angle notation */
+    //dangle = angle & 0xFF00 ;
+    dangle = angle ;
+    dangle *= 2 * M_PI ;
+    dangle /= 65536 ;
 
-/* Get radians from our angle notation */
-//dangle = angle & 0xFF00 ;
-dangle = angle ;
-dangle *= 2 * M_PI ;
-dangle /= 65536 ;
+    dVx = 65536 * sin(-dangle) ;
+    dVz = 65536 * cos(dangle) ;
+    Vx = (T_sword32)dVx ;
+    Vz = (T_sword32)dVz ;
 
-dVx = 65536 * sin(-dangle) ;
-dVz = 65536 * cos(dangle) ;
-Vx = (T_sword32)dVx ;
-Vz = (T_sword32)dVz ;
+     dVx = Vx ;
+     dVz = Vz ;
 
- dVx = Vx ;
- dVz = Vz ;
+    G_wall.Vx = (T_sword32)dVx ;
+    G_wall.Vz = (T_sword32)dVz ;
 
-G_wall.Vx = (T_sword32)dVx ;
-G_wall.Vz = (T_sword32)dVz ;
+    calc = 65536 * cos(dangle) ;
+    G_wall.a = (T_sword32)calc ;
+    calc = 65536 * sin(dangle) ;
+    G_wall.c = (T_sword32)calc ;
 
-calc = 65536 * cos(dangle) ;
-G_wall.a = (T_sword32)calc ;
-calc = 65536 * sin(dangle) ;
-G_wall.c = (T_sword32)calc ;
+    calc = -(((double)By) * dVz) ;
+    calc /= 64.0 ;
+    calc /= 65536.0 ;
+    G_wall.d = (T_sword32)calc ;
 
-calc = -(((double)By) * dVz) ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.d = (T_sword32)calc ;
+    calc = ((double)Bx) * dVz ;
+    calc2 = ((double)Bz) * dVx ;
+    calc -= calc2 ;
+    calc /= 4194304.0 ;
+    G_wall.e = (T_sword32)calc ;
 
-calc = ((double)Bx) * dVz ;
-calc2 = ((double)Bz) * dVx ;
-calc -= calc2 ;
-calc /= 4194304.0 ;
-G_wall.e = (T_sword32)calc ;
-
-calc = ((double)By) * dVx ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.f = (T_sword32)calc ;
-
-/*
-calc = -Bz ;
-calc /= 1024.0 ;
-G_wall.g = calc ;
-
-calc = Bx ;
-calc /= 1024.0 ;
-G_wall.i = calc ;
-*/
-G_wall.g = -(Bz >> 10) ;
-G_wall.i = Bx >> 10 ;
-
-G_wall.c *= VIEW3D_HALF_WIDTH ;
-G_wall.i *= VIEW3D_HALF_WIDTH ;
-G_wall.f *= VIEW3D_HALF_WIDTH ;
-
-G_wall.eprime = G_wall.e * (-VIEW3D_HALF_HEIGHT) ;
-
-G_wall.By = By ;
-
-/* ORIG
-    G_wall.Vx = Vx ;
-    G_wall.Vz = Vz ;
-
-    G_wall.a = MathCosineLookup(angle) ;
-    G_wall.c = MathSineLookup(angle) ;
-
-    G_wall.d = -MultAndShift6(By, Vz) ;
-    G_wall.e = MultAndShift6(((Bx+0x8000)>>16), Vz) -
-                   MultAndShift6(Vx, ((Bz+0x8000)>>16)) ;
-    G_wall.f = MultAndShift6(Vx, By) ;
+    calc = ((double)By) * dVx ;
+    calc /= 64.0 ;
+    calc /= 65536.0 ;
+    G_wall.f = (T_sword32)calc ;
 
     G_wall.g = -(Bz >> 10) ;
     G_wall.i = Bx >> 10 ;
@@ -2172,7 +2136,6 @@ G_wall.By = By ;
     G_wall.eprime = G_wall.e * (-VIEW3D_HALF_HEIGHT) ;
 
     G_wall.By = By ;
-*/
 }
 
 /*-------------------------------------------------------------------------*
@@ -2185,12 +2148,11 @@ G_wall.By = By ;
 T_void IAddMainWall(T_void)
 {
     T_sword16 backTop, backBottom ;
+    T_sword16 bottom, top;
 
     DebugRoutine("IAddMainWall") ;
 
-ITestMinMax(1002) ;
     G_wall.p_texture = *((T_byte8 **)(&P_sideFront->mainTx[1])) ;
-//PictureCheck(G_wall.p_texture) ;
     DebugCheck(G_wall.p_texture != NULL) ;
 
     /* What are the relative position of the heights? */
@@ -2198,8 +2160,8 @@ ITestMinMax(1002) ;
     /* use the floor and ceiling height in front of the wall. */
 
     if (G_wall.opaque == 1)  {
-        G_relativeBottom = G_eyeLevel - G_3dFloorHeight ;
-        G_relativeTop = G_eyeLevel - G_3dCeilingHeight ;
+        bottom = G_3dFloorHeight ;
+        top = G_3dCeilingHeight ;
     } else {
         /* If we are transparent or translucent, we compare the floor */
         /* and ceiling heights of the front and back sectors. */
@@ -2209,21 +2171,21 @@ ITestMinMax(1002) ;
 
         /* Take the lower of the ceilings. */
         if (backTop > G_3dCeilingHeight)  {
-            G_relativeTop = G_eyeLevel - G_3dCeilingHeight ;
+            top = G_3dCeilingHeight ;
         } else {
-            G_relativeTop = G_eyeLevel - backTop ;
+            top = backTop ;
         }
 
         /* Take the higher of the floors. */
         if (backBottom < G_3dFloorHeight)  {
-            G_relativeBottom = G_eyeLevel - G_3dFloorHeight ;
+            bottom = G_3dFloorHeight ;
         } else {
-            G_relativeBottom = G_eyeLevel - backBottom ;
+            bottom = backBottom ;
         }
 
         /* One last check to make sure the heights are valid. */
         /* Floors cannot be higher than the ceiling. */
-        if (G_relativeBottom <= G_relativeTop)  {
+        if (bottom >= top)  {
             DebugEnd() ;
             return ;
         }
@@ -2234,14 +2196,12 @@ ITestMinMax(1002) ;
 
     /* Add the wall to the drawing buffers (run lists) */
 //printf("Seg %4d - Line %4d - Side %d - ", segmentIndex, P_segment->line, P_segment->lineSide) ;
-ITestMinMax(1007) ;
     IAddWall(
         G_screenXLeft,
         G_screenXRight,
-        G_relativeBottom,
-        G_relativeTop,
-        (G_relativeFromZ>>16),
-        (G_relativeToZ>>16)) ;
+        bottom,
+        top,
+        0) ;
 
     DebugEnd() ;
 }
@@ -2255,108 +2215,47 @@ ITestMinMax(1007) ;
  *<!-----------------------------------------------------------------------*/
 T_void IAddLowerWall(T_void)
 {
-double calc, dVx, dVz ;
+    T_sword16 bottom, top;
+    T_sword16 floorHt;
     DebugRoutine("IAddLowerWall") ;
 
-ITestMinMax(1003) ;
     /* Since we are doing the lower part, the relative bottom is */
     /* equal to our current floor height. */
-    G_relativeBottom = G_eyeLevel - G_3dFloorHeight ;
+    bottom = G_3dFloorHeight ;
 
     /* Determine where the top is depending on wheter or not there */
     /* is a texture on the lower part (thus, we have a lower part) */
     /* and thus, do we use the floor height on this side, or on */
     /* the other side. */
-#if 0
-    if (P_sideFront->lowerTx[0] != '-')  {
-#endif
-        /* In addition, if there are two lower textures on both */
-        /* sides of the wall, only the higher (taller floor) is the one */
-        /* that is shown. */
-#if 0
-        if (P_sideBack->lowerTx[0] != '-')  {
-            if (G_3dSectorArray[P_sideBack->sector].floorHt <=
-                G_3dSectorArray[P_sideFront->sector].floorHt)  {
-                G_relativeTop = G_eyeLevel - G_3dFloorHeight ;
-                G_wall.opaque = 0 ;
-            } else {
-                G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
-                DebugCheck(G_wall.p_texture != NULL) ;
-//PictureCheck(G_wall.p_texture) ;
-                G_relativeTop = G_eyeLevel -
-                              G_3dSectorArray[P_sideBack->sector].floorHt ;
-                G_wall.opaque = 1 ;
-            }
-        } else {
-#endif
-            G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
-//PictureCheck(G_wall.p_texture) ;
-            DebugCheck(G_wall.p_texture != NULL) ;
-//            G_relativeTop = G_eyeLevel -
-//                          G_3dSectorArray[P_sideBack->sector].floorHt ;
-//            G_wall.opaque = 1 ;
-            if (G_3dSectorArray[P_sideBack->sector].floorHt >
-                G_3dSectorArray[P_sideFront->sector].floorHt)  {
-                G_relativeTop = G_eyeLevel -
-                              G_3dSectorArray[P_sideBack->sector].floorHt ;
-                G_wall.opaque = 1 ;
-            } else {
-                G_relativeTop = G_eyeLevel -
-                              G_3dSectorArray[P_sideFront->sector].floorHt ;
-                G_wall.opaque = 0 ;
-            }
-#if 0
-        }
-#endif
-
-        G_wall.By = -G_relativeTop ;
-        G_wall.By <<= 16 ;
-
-        if (G_eyeLevel32 > 0)
-            G_wall.By -= (G_eyeLevel32 & 0xFFFF) ;
-        else
-            G_wall.By += ((-G_eyeLevel32) & 0xFFFF) ;
-
-dVx = G_wall.Vx ;
-dVz = G_wall.Vz ;
-calc = -(((double)G_wall.By) * dVz) ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.d = (T_sword32)calc ;
-//        G_wall.d = -(G_wall.By*G_wall.Vz) ;
-//        G_wall.d = -MultAndShift6(G_wall.By, G_wall.Vz) ;
-calc = ((double)G_wall.By) * dVx ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.f = (T_sword32)calc ;
-G_wall.f *= VIEW3D_HALF_WIDTH ;
-//        G_wall.f = (G_wall.Vx*G_wall.By) ;
-//        G_wall.f = MultAndShift6(G_wall.Vx, G_wall.By) ;
-//        G_wall.f *= VIEW3D_HALF_WIDTH ;
-
-        /* Fix the top edge if it is above the ceiling on this side. */
-        if (G_relativeTop < G_eyeLevel - G_3dSectorArray[P_sideFront->sector].ceilingHt)
-             G_relativeTop = G_eyeLevel - G_3dSectorArray[P_sideFront->sector].ceilingHt ;
-#if 0
-    }  else  {
-//        G_relativeTop = G_eyeLevel - G_3dFloorHeight ;
-        G_relativeTop = G_relativeBottom ;
+    /* In addition, if there are two lower textures on both */
+    /* sides of the wall, only the higher (taller floor) is the one */
+    /* that is shown. */
+    G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
+    DebugCheck(G_wall.p_texture != NULL) ;
+    if (G_3dSectorArray[P_sideBack->sector].floorHt >
+        G_3dSectorArray[P_sideFront->sector].floorHt)  {
+        floorHt = G_3dSectorArray[P_sideBack->sector].floorHt;
+        top = floorHt ;
+        G_wall.opaque = 1 ;
+    } else {
+        floorHt = G_3dSectorArray[P_sideFront->sector].floorHt ;
+        top = floorHt;
         G_wall.opaque = 0 ;
-        G_wall.p_texture = NULL ;
     }
-#endif
+
+    /* Fix the top edge if it is above the ceiling on this side. */
+    if (top > G_3dSectorArray[P_sideFront->sector].ceilingHt)
+         top = G_3dSectorArray[P_sideFront->sector].ceilingHt ;
 
 //printf("Seg %4d - Line %4d - Side %d - ", segmentIndex, P_segment->line, P_segment->lineSide) ;
     /* Add this wall section. */
     G_wall.type = LOWER_TYPE ;
-ITestMinMax(1006) ;
     IAddWall(
         G_screenXLeft,
         G_screenXRight,
-        G_relativeBottom,
-        G_relativeTop,
-        (G_relativeFromZ>>16),
-        (G_relativeToZ>>16)) ;
+        bottom,
+        top,
+        top) ;
 
     DebugEnd() ;
 }
@@ -2371,113 +2270,42 @@ ITestMinMax(1006) ;
  *<!-----------------------------------------------------------------------*/
 T_void IAddUpperWall(T_void)
 {
-double calc, dVx, dVz ;
-    DebugRoutine("IAddUpperWall") ;
+    T_sword16 top, bottom;
+    DebugRoutine("IAddUpperWall");
 
-ITestMinMax(1004) ;
-    G_wall.type = UPPER_TYPE ;
-    G_relativeTop = G_eyeLevel - G_3dCeilingHeight ;
+    G_wall.type = UPPER_TYPE;
+    top = G_3dCeilingHeight;
 
-#if 1
-    if (P_sideFront->upperTx[0] != '-')  {
-#endif
+    if (P_sideFront->upperTx[0] != '-') {
         /* In addition, if there are two lower textures on both */
         /* sides of the wall, only the higher (taller floor) is the one */
         /* that is shown. */
-#if 0
-        if (P_sideBack->upperTx[0] != '-')  {
-            if (G_3dSectorArray[P_sideBack->sector].ceilingHt <=
-                G_3dSectorArray[P_sideFront->sector].ceilingHt)  {
-                G_relativeBottom = G_eyeLevel - G_3dCeilingHeight ;
-                G_wall.opaque = 0 ;
-            } else {
-                G_wall.p_texture = *((T_byte8 **)(&P_sideFront->upperTx[1])) ;
-//PictureCheck(G_wall.p_texture) ;
-                DebugCheck(G_wall.p_texture != NULL) ;
-                G_relativeBottom = G_eyeLevel -
-                              G_3dSectorArray[P_sideBack->sector].ceilingHt ;
-                G_wall.opaque = 1 ;
-            }
+        G_wall.p_texture = *((T_byte8 **)(&P_sideFront->upperTx[1]));
+        DebugCheck(G_wall.p_texture != NULL);
+        if (G_3dSectorArray[P_sideBack->sector].ceilingHt
+                < G_3dSectorArray[P_sideFront->sector].ceilingHt) {
+            G_wall.opaque = 1;
+            bottom = G_3dSectorArray[P_sideBack->sector].ceilingHt;
         } else {
-#endif
-            G_wall.p_texture = *((T_byte8 **)(&P_sideFront->upperTx[1])) ;
-//PictureCheck(G_wall.p_texture) ;
-            DebugCheck(G_wall.p_texture != NULL) ;
-//            G_relativeBottom = G_eyeLevel -
-//                          G_3dSectorArray[P_sideBack->sector].ceilingHt ;
-//            G_wall.opaque = 1 ;
-            if (G_3dSectorArray[P_sideBack->sector].ceilingHt <
-                G_3dSectorArray[P_sideFront->sector].ceilingHt)  {
-                G_wall.opaque = 1 ;
-                G_relativeBottom = G_eyeLevel -
-                              G_3dSectorArray[P_sideBack->sector].ceilingHt ;
-            } else {
-                G_wall.opaque = 0 ;
-                G_relativeBottom = G_eyeLevel -
-                              G_3dSectorArray[P_sideFront->sector].ceilingHt ;
-            }
-#if 0
+            G_wall.opaque = 0;
+            bottom = G_3dSectorArray[P_sideFront->sector].ceilingHt;
         }
-#endif
 
-//        G_wall.By = -G_relativeBottom ;
-//        G_wall.By <<= 16 ;
-/*
-        if (G_eyeLevel32 > 0)
-            G_wall.By += (G_eyeLevel32 & 0xFFFF) ;
-        else
-            G_wall.By -= ((-G_eyeLevel32) & 0xFFFF) ;
-*/
-//LES1        G_wall.d = -(G_wall.By*G_wall.Vz) ;
-//        G_wall.d = -MultAndShift6(G_wall.By, G_wall.Vz) ;
-//LES1        G_wall.f = (G_wall.Vx*G_wall.By) ;
-//        G_wall.f = MultAndShift6(G_wall.Vx, G_wall.By) ;
-//        G_wall.f *= VIEW3D_HALF_WIDTH ;
-
-        G_wall.By = -G_relativeBottom ;
-        G_wall.By <<= 16 ;
-
-        if (G_eyeLevel32 > 0)
-            G_wall.By -= (G_eyeLevel32 & 0xFFFF) ;
-        else
-            G_wall.By += ((-G_eyeLevel32) & 0xFFFF) ;
-
-dVx = G_wall.Vx ;
-dVz = G_wall.Vz ;
-calc = -(((double)G_wall.By) * dVz) ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.d = (T_sword32)calc ;
-//        G_wall.d = -(G_wall.By*G_wall.Vz) ;
-//        G_wall.d = -MultAndShift6(G_wall.By, G_wall.Vz) ;
-calc = ((double)G_wall.By) * dVx ;
-calc /= 64.0 ;
-calc /= 65536.0 ;
-G_wall.f = (T_sword32)calc ;
-G_wall.f *= VIEW3D_HALF_WIDTH ;
         /* Fix the bottom edge if it is behind the floor on this side. */
-        if (G_relativeBottom > G_eyeLevel - G_3dSectorArray[P_sideFront->sector].floorHt)
-             G_relativeBottom = G_eyeLevel - G_3dSectorArray[P_sideFront->sector].floorHt ;
-
-#if 1
-    }  else  {
-        G_relativeBottom = G_relativeTop ;
-        G_wall.opaque = 0 ;
-        G_wall.p_texture = NULL ;
+        if (bottom < G_3dSectorArray[P_sideFront->sector].floorHt)
+            bottom = G_3dSectorArray[P_sideFront->sector].floorHt;
+    } else {
+        bottom = top;
+        G_wall.opaque = 0;
+        G_wall.p_texture = NULL;
     }
-#endif
 
-ITestMinMax(1005) ;
+    ITestMinMax(1005);
 //printf("Seg %4d - Line %4d - Side %d - ", segmentIndex, P_segment->line, P_segment->lineSide) ;
-    IAddWall(
-        G_screenXLeft,
-        G_screenXRight,
-        G_relativeBottom,
-        G_relativeTop,
-        (G_relativeFromZ>>16),
-        (G_relativeToZ>>16)) ;
+    IAddWall(G_screenXLeft, G_screenXRight, bottom, top,
+            bottom);
 
-    DebugEnd() ;
+    DebugEnd();
 }
 
 /*-------------------------------------------------------------------------*
@@ -2490,49 +2318,18 @@ ITestMinMax(1005) ;
  *
  *  @param sx1 -- Screen X1 coordinate
  *  @param sx2 -- Screen X2 coordinate
- *  @param relativeBottom -- Height of the wall at base
- *  @param relativeTop -- Height of the wall at top
- *  @param relativeFromZ -- Distance to first coordinate along Z
- *  @param relativeToZ -- Distance to second coordinate along Z
+ *  @param bottom -- Height of the wall at base
+ *  @param top -- Height of the wall at top
  *
  *<!-----------------------------------------------------------------------*/
 T_void IAddWall(
            T_sword16 sx1,
            T_sword16 sx2,
-           T_sword16 relativeBottom,
-           T_sword16 relativeTop,
-           T_sword16 relativeFromZ,
-           T_sword16 relativeToZ)
+           T_sword16 absoluteBottom,
+           T_sword16 absoluteTop,
+           T_sword32 textureZeroY)
 {
     /* Texture variables. */
-//    T_sword32 topu, topv, bottomCalc ;
-//    T_sword32 u, v ;
-//    T_sword32 du;
-//    T_sword32 y1, y2, dy1, dy2 ;
-//    T_sword32 scrYBottomLeft ;  // 1
-//    T_sword32 scrYBottomRight ; // 2
-//    T_sword32 scrYTopRight ;    // 3
-//    T_sword32 scrYTopLeft ;     // 4
-//    T_sword32 interZ ;   /* Intersection of view line to wall. */
-//    T_sword32 cosineAngle ;
-//    T_sword32 invDFromZ ;
-//    T_sword32 invDToZ ;
-//    T_sword16 top ;
-//    T_sword16 bottom ;
-//    T_sword16 minY ;
-//    T_sword16 maxY ;
-//    T_sword16 x ;
-//    T_sword32 halfOffX ;
-    T_sword16 absoluteTop ;
-    T_sword16 absoluteBottom ;
-//    T_word16 sizeX, sizeY ;
-//    T_sword16 dx ;
-//    T_sword16 leftEdge ;
-//    T_byte8 shift ;
-//    T_byte8 shiftOrig ;
-//    T_word16 sizeXX, sizeYY ;
-//    T_byte8 mipShift ;
-//    T_byte8 mipLevel ;
     T_3dVertex *p_from;
     T_3dVertex *p_to;
     static GLubyte blue[]   = {   0,   0, 255, 255 };
@@ -2543,29 +2340,30 @@ T_void IAddWall(
     static GLfloat v2[] = {  128.0f,  128.0f,  128.0f };
     static GLfloat v3[] = { -128.0f,  128.0f,  128.0f };
 
-//T_sword32 testa, testb, testc, testd, teste ;
-
-//T_sword32 relBot32 ;
-//T_sword32 relTop32 ;
 
 INDICATOR_LIGHT(821, INDICATOR_GREEN) ;
-
-if (G_wall.p_texture)  {
-  DebugRoutine("IAddWall") ;
-//  PictureCheck(G_wall.p_texture) ;
-  DebugEnd() ;
-}
 
 {
     float tw, th;
     float dx, dy;
-    absoluteTop = G_eyeLevel - relativeTop ;
-    absoluteBottom = G_eyeLevel - relativeBottom ;
+    float tx, ty;
+    GLuint textureID;
+    T_sword16 sizeX, sizeY;
+
+    DebugRoutine("IAddWall");
+
+    textureID = AAGLFindTexture(G_wall.p_texture);
+    if (!textureID) {
+        DebugEnd();
+        return;
+    }
+    AAGLTextureGetSize(textureID, &sizeX, &sizeY);
+
     p_from = G_3dVertexArray+P_segment->from;
     p_to = G_3dVertexArray+P_segment->to;
     glEnable (GL_DEPTH_TEST);
     glEnable (GL_TEXTURE_2D);
-    glBindTexture (GL_TEXTURE_2D, G_texture);
+    glBindTexture (GL_TEXTURE_2D, textureID);
 
 #if 1
     glBegin( GL_QUADS );
@@ -2577,22 +2375,27 @@ if (G_wall.p_texture)  {
     glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
     dx = (float)p_from->x - (float)p_to->x;
     dy = (float)p_from->y - (float)p_to->y;
-    tw = (float)sqrt(dx*dx + dy*dy)/32.0f;
-    th = (float)fabs(absoluteBottom - absoluteTop)/32.0f;
+    // Determine the texture's width and height for this angle
+    tw = (float)sqrt(dx*dx + dy*dy)/((float)sizeX);
+    th = (float)fabs(absoluteTop - absoluteBottom)/((float)sizeY);
+    // Determine the texture's origin
+    tx = -((float)p_from->x)+(float)G_wall.offX/(float)sizeX;
+    ty = ((float)((textureZeroY-absoluteBottom)+G_wall.offY))/((float)sizeY);
     //glColor4ubv( blue );
-    glTexCoord2f (0.0f, th);
+    glTexCoord2f (tx+0.0f, ty+0.0f);
     glVertex3i( p_from->y, absoluteBottom, p_from->x);
-    glTexCoord2f (tw, th);
+    glTexCoord2f (tx+tw, ty+0.0f);
     glVertex3i( p_to->y, absoluteBottom, p_to->x);
-    glTexCoord2f (tw, 0.0f);
+    glTexCoord2f (tx+tw, ty-th);
     glVertex3i( p_to->y, absoluteTop, p_to->x);
-    glTexCoord2f (0.0f, 0.0f);
+    glTexCoord2f (tx+0.0f, ty-th);
     glVertex3i( p_from->y, absoluteTop, p_from->x);
     glEnd();
     //glColor4ubv( white );
 //printf("Seg %d: (%d,%d,%d) -> (%d,%d,%d)\n", P_segment-G_3dSegArray, p_from->x, absoluteBottom, p_from->y, p_to->x, absoluteTop, p_to->y);
 #endif
 
+    DebugEnd();
 }
 
 #if 0
@@ -2889,19 +2692,6 @@ DebugCheck(maxY <= VIEW3D_HEIGHT) ;
                     G_CurrentTexturePos =
                         G_wall.p_texture2 +
                             ((((G_wall.offX - v)>>mipShift)&(sizeX))<<(shift)) ;
-#if 0
-#ifndef NDEBUG
-//PictureCheck(G_wall.p_texture) ;
-offsetCheck = ((((G_wall.offX - v)>>mipShift)&(sizeX))<<(shift)) ;
-maxOffset = (PictureGetWidth(G_wall.p_texture2) * PictureGetHeight(G_wall.p_texture2)) ;
-if (offsetCheck >= maxOffset)  {
-    printf("offsetCheck = %d\nmaxOffset = %d\n", offsetCheck, maxOffset) ;
-    printf("Texture name: '%s'\n", PictureGetName(G_wall.p_texture2)) ;
-    fflush(stdout) ;
-}
-DebugCheck(offsetCheck < maxOffset) ;
-#endif
-#endif
 
 G_3dLineArray[P_segment->line].flags |= 0x8000 ;
 #ifndef NDEBUG

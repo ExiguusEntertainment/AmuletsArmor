@@ -17,6 +17,7 @@
  * @{
  *
  *<!-----------------------------------------------------------------------*/
+#include <ctype.h>
 #include "MEMORY.H"
 #include "RESOURCE.H"
 #include "PICS.H"

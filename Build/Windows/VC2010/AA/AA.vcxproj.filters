@@ -326,6 +326,9 @@
     <ClCompile Include="test_main.c">
       <Filter>Source Files\Win32</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\AAGLTexture.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Include\3D_COLLI.H">

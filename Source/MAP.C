@@ -1443,9 +1443,10 @@ T_void MapSetMainTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 
     p_side->mainTx[0] = p_textureName[0] ;
 
-    if (p_textureName[0] != '-')
+    if (p_textureName[0] != '-') {
         *((T_byte8 **)(&p_side->mainTx[1])) =
                 PictureLock(p_textureName, &G_3dMainResourceArray[sideNum]) ;
+    }
     DebugEnd() ;
 }
 
