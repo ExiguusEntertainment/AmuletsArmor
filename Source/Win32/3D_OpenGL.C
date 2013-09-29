@@ -1456,9 +1456,13 @@ void IRender(void)
     static GLubyte black[]  = {   0,   0,   0, 255 };
     static GLubyte orange[] = { 255, 255,   0, 255 };
     static GLubyte purple[] = { 255,   0, 255, 255 };
+    GLfloat portWidth;
+    GLfloat portHeight;
 
     /* Clear the color and depth buffers. */
-    glViewport( 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    portWidth = WINDOW_WIDTH;
+    portHeight = (WINDOW_HEIGHT*78)/100;
+    glViewport( 0, WINDOW_HEIGHT-(int)portHeight, WINDOW_WIDTH, (WINDOW_HEIGHT*78)/100);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glDisable(GL_CULL_FACE); // testing
 
@@ -1468,7 +1472,7 @@ void IRender(void)
     /* We don't want to modify the projection matrix. */
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
-    gluPerspective(90,1.0,1,15120.0);
+    gluPerspective(53,portWidth/portHeight,1,15120.0);
 
     glRotatef( 180.0f+(PlayerGetAngle() * -360.0f)/65536.0f, 0.0, 1.0, 0.0 );
 
