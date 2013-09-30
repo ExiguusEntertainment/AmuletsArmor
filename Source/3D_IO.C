@@ -86,11 +86,6 @@ T_word16             G_3dPlayerRightAngle ;
 T_sword32            G_3dCosPlayerAngle ;
 T_sword32            G_3dSinPlayerAngle ;
 
-/* Temporary variables to record the current height of the floor */
-/* and ceiling. */
-T_sword16            G_3dFloorHeight ;
-T_sword16            G_3dCeilingHeight ;
-
 /* Keep track of information about a sector */
 T_3dSectorInfo      *G_3dSectorInfoArray ;
 

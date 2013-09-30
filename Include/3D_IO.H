@@ -64,11 +64,6 @@ extern T_word16             G_3dPlayerRightAngle ;
 extern T_sword32            G_3dCosPlayerAngle ;
 extern T_sword32            G_3dSinPlayerAngle ;
 
-/* Temporary variables to record the current height of the floor */
-/* and ceiling. */
-extern T_sword16            G_3dFloorHeight ;
-extern T_sword16            G_3dCeilingHeight ;
-
 extern T_resource          *G_3dUpperResourceArray ;
 extern T_resource          *G_3dLowerResourceArray ;
 extern T_resource          *G_3dMainResourceArray ;

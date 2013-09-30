@@ -783,6 +783,8 @@ typedef struct  {
     T_byte8 opaque ;
     T_byte8 transFlag ;
     T_byte8 reserved[3] ;              /* Makes 32 bit aligned. */
+    T_sword16 floorZ;
+    T_sword16 ceilingZ;
 } T_3dWall;
 
 typedef struct  {
@@ -1727,8 +1729,8 @@ INDICATOR_LIGHT(148, INDICATOR_GREEN) ;
 
     p_sector = &G_3dSectorArray[sector] ;
 
-    G_3dFloorHeight = p_sector->floorHt ;
-    G_3dCeilingHeight = p_sector->ceilingHt ;
+    G_wall.floorZ = p_sector->floorHt ;
+    G_wall.ceilingZ = p_sector->ceilingHt ;
     G_wall.shadeIndex = (p_sector->light>>2) ;
     G_wall.textureFloor = *((T_byte8 **)&p_sector->floorTx[1]) ;
     G_wall.textureCeiling = *((T_byte8 **)&p_sector->ceilingTx[1]) ;
@@ -2350,8 +2352,8 @@ ITestMinMax(1002) ;
     /* use the floor and ceiling height in front of the wall. */
 
     if (G_wall.opaque == 1)  {
-        G_relativeBottom = G_eyeLevel - G_3dFloorHeight ;
-        G_relativeTop = G_eyeLevel - G_3dCeilingHeight ;
+        G_relativeBottom = G_eyeLevel - G_wall.floorZ ;
+        G_relativeTop = G_eyeLevel - G_wall.ceilingZ ;
     } else {
         /* If we are transparent or translucent, we compare the floor */
         /* and ceiling heights of the front and back sectors. */
@@ -2360,15 +2362,15 @@ ITestMinMax(1002) ;
         backBottom = G_3dSectorArray[G_wall.sectorBack].floorHt ;
 
         /* Take the lower of the ceilings. */
-        if (backTop > G_3dCeilingHeight)  {
-            G_relativeTop = G_eyeLevel - G_3dCeilingHeight ;
+        if (backTop > G_wall.ceilingZ)  {
+            G_relativeTop = G_eyeLevel - G_wall.ceilingZ ;
         } else {
             G_relativeTop = G_eyeLevel - backTop ;
         }
 
         /* Take the higher of the floors. */
-        if (backBottom < G_3dFloorHeight)  {
-            G_relativeBottom = G_eyeLevel - G_3dFloorHeight ;
+        if (backBottom < G_wall.floorZ)  {
+            G_relativeBottom = G_eyeLevel - G_wall.floorZ ;
         } else {
             G_relativeBottom = G_eyeLevel - backBottom ;
         }
@@ -2413,7 +2415,7 @@ double calc, dVx, dVz ;
 ITestMinMax(1003) ;
     /* Since we are doing the lower part, the relative bottom is */
     /* equal to our current floor height. */
-    G_relativeBottom = G_eyeLevel - G_3dFloorHeight ;
+    G_relativeBottom = G_eyeLevel - G_wall.floorZ ;
 
     /* Determine where the top is depending on wheter or not there */
     /* is a texture on the lower part (thus, we have a lower part) */
@@ -2493,7 +2495,7 @@ double calc, dVx, dVz ;
 
 ITestMinMax(1004) ;
     G_wall.type = UPPER_TYPE ;
-    G_relativeTop = G_eyeLevel - G_3dCeilingHeight ;
+    G_relativeTop = G_eyeLevel - G_wall.ceilingZ ;
 
 #if 1
     if (P_sideFront->upperTx[0] != '-')  {
@@ -2505,7 +2507,7 @@ ITestMinMax(1004) ;
         if (P_sideBack->upperTx[0] != '-')  {
             if (G_3dSectorArray[P_sideBack->sector].ceilingHt <=
                 G_3dSectorArray[P_sideFront->sector].ceilingHt)  {
-                G_relativeBottom = G_eyeLevel - G_3dCeilingHeight ;
+                G_relativeBottom = G_eyeLevel - G_wall.ceilingZ ;
                 G_wall.opaque = 0 ;
             } else {
                 G_wall.p_texture = *((T_byte8 **)(&P_sideFront->upperTx[1])) ;
