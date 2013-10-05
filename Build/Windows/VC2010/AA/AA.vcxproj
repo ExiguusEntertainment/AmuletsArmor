@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Source\3D_COLLI.C" />
     <ClCompile Include="..\..\..\..\Source\3D_IO.C" />
+    <ClCompile Include="..\..\..\..\Source\3D_Occlusion.c" />
     <ClCompile Include="..\..\..\..\Source\3D_TRIG.C" />
     <ClCompile Include="..\..\..\..\Source\AAGLTexture.c" />
     <ClCompile Include="..\..\..\..\Source\ACTIVITY.C" />
@@ -302,6 +303,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Include\3D_COLLI.H" />
     <ClInclude Include="..\..\..\..\Include\3D_IO.H" />
+    <ClInclude Include="..\..\..\..\Include\3D_Occlusion.h" />
     <ClInclude Include="..\..\..\..\Include\3D_TRIG.H" />
     <ClInclude Include="..\..\..\..\Include\3D_VIEW.H" />
     <ClInclude Include="..\..\..\..\Include\ACTIVITY.H" />

@@ -31,6 +31,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <AAGL/AAGLTexture.h>
+#include <3D_Occlusion.h>
 
 static T_word16 G_fromSector ;
 static GLuint G_texture;
@@ -1693,6 +1694,7 @@ T_void View3dDrawView(T_void)
         GrDrawRectangle(4 + 0, 3 + 0,
                 4 + (VIEW3D_CLIP_RIGHT - VIEW3D_CLIP_LEFT) - 1,
                 3 + VIEW3D_HEIGHT - 1, 255);
+        OcclusionInit();
         IRender();
 
         IDrawNode(G_3dRootBSPNode);
@@ -1782,7 +1784,8 @@ T_void IDrawNode(T_word16 nodeIndex)
 #ifdef INDICATOR_LIGHTS
         INDICATOR_LIGHT(indicatorLevel, INDICATOR_GREEN) ;
 #endif
-        if (G_colCount < count+100/*TESTING*/)  {
+//        if (G_colCount < count+100/*TESTING*/)  {
+        if (OcclusionIsVisible(0, MAX_VIEW3D_WIDTH-1)) {
             /* Are we on the right side of this node? */
             if (!View3dOnRightByNode(nodeIndex))  {
                 /* Yes, we are.  Draw the left side first, and then */
@@ -2004,51 +2007,50 @@ if (G_didDrawWall)
  *<!-----------------------------------------------------------------------*/
 E_Boolean IIsSegmentGood(T_word16 segmentIndex)
 {
-    GLdouble worldToX ;
-    GLdouble worldToY ;
-    GLdouble worldFromX ;
-    GLdouble worldFromY ;
-    T_sword16 to ;
-    T_sword16 from ;
-    T_3dVertex *p_vertex ;
+    GLdouble worldToX;
+    GLdouble worldToY;
+    GLdouble worldFromX;
+    GLdouble worldFromY;
+    T_sword16 to;
+    T_sword16 from;
+    T_3dVertex *p_vertex;
     T_3dVertex *p_from;
     T_3dVertex *p_to;
-    T_word16 angle ;
-    T_word16 x;
-    T_sword32 xl, xr;
+    T_word16 angle;
+//    T_sword32 xl, xr;
     GLfloat eye;
     GLdouble fromNearDistance;
     GLdouble toNearDistance;
     GLdouble ratio;
 
 #ifndef NDEBUG
-    G_segCount++ ;
+    G_segCount++;
 #endif
 
     /* Get a quick pointer to the segment. */
-    P_segment = &G_3dSegArray[segmentIndex] ;
+    P_segment = &G_3dSegArray[segmentIndex];
 //./printf("  Line #%4d -- side %d  ", P_segment->line, P_segment->lineSide) ;
     /* Determine what vertices this segment travels between. */
 
-    to = P_segment->to ;
-    from = P_segment->from ;
+    to = P_segment->to;
+    from = P_segment->from;
 //./printf("draw. (%d, %d)\n", to, from) ;
 
 #if DEBUG_IS_SEGMENT_GOOD_PRINTF
-    printf("%d: \n", P_segment->line) ;
+    printf("%d: \n", P_segment->line);
 #endif
     /* Compute the relative angle to the view. */
-    G_wall.angle = angle = P_segment->angle - G_3dPlayerAngle ;
+    G_wall.angle = angle = P_segment->angle - G_3dPlayerAngle;
 
     /* Get the coordinates of the TO vertex. */
-    p_to = p_vertex = &G_3dVertexArray[to] ;
-    worldToX = p_vertex->x ;
-    worldToY = p_vertex->y ;
+    p_to = p_vertex = &G_3dVertexArray[to];
+    worldToX = p_vertex->x;
+    worldToY = p_vertex->y;
 
     /* Get the coordinates of the FROM vertex. */
-    p_from = p_vertex = &G_3dVertexArray[from] ;
-    worldFromX = p_vertex->x ;
-    worldFromY = p_vertex->y ;
+    p_from = p_vertex = &G_3dVertexArray[from];
+    worldFromX = p_vertex->x;
+    worldFromY = p_vertex->y;
 
     eye = G_eyeLevel32 / 65535.0f;
 
@@ -2096,17 +2098,26 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
             // We can stop here
 
 #if DEBUG_IS_SEGMENT_GOOD_PRINTF
-            printf("behind.\n", P_segment->line) ;
+            printf("behind.\n", P_segment->line);
 #endif
-                    return FALSE ;
+            return FALSE;
         }
     }
-    gluProject(worldFromY, eye /*absoluteBottom*/, worldFromX, G_AAGLModelView, G_AAGLProjection, G_AAGLViewport, &G_wall.fromX, &G_wall.fromY, &G_wall.fromZ);
-    gluProject(worldToY, eye /*absoluteTop*/, worldToX, G_AAGLModelView, G_AAGLProjection, G_AAGLViewport, &G_wall.toX, &G_wall.toY, &G_wall.toZ);
+    gluProject(worldFromY, eye, worldFromX, G_AAGLModelView,
+            G_AAGLProjection, G_AAGLViewport, &G_wall.fromX, &G_wall.fromY,
+            &G_wall.fromZ);
+    gluProject(worldToY, eye, worldToX, G_AAGLModelView,
+            G_AAGLProjection, G_AAGLViewport, &G_wall.toX, &G_wall.toY,
+            &G_wall.toZ);
 
 #if DEBUG_IS_SEGMENT_GOOD_PRINTF
     printf("[v%d->v%d] (%g, %g) -> (%g, %g) ", from, to, G_wall.fromX, G_wall.fromY, G_wall.toX, G_wall.toY);
 #endif
+
+    if (G_wall.fromX < 0)
+        G_wall.fromX = 0;
+    if (G_wall.toX > MAX_VIEW3D_WIDTH-1)
+        G_wall.toX = MAX_VIEW3D_WIDTH-1;
 
     G_xLeft = (T_sword32)G_wall.fromX;
     G_xRight = (T_sword32)G_wall.toX;
@@ -2124,189 +2135,42 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
         return FALSE;
     }
 
-#if 0
-    /* Rotate these world coodinates to get coordinates relative */
-    /* to the direction the player is facing. */
-    /* Note that we are now translating from world (x,y) coordinates */
-    /* to relative (x, z) coordinates */
-    G_relativeFromZ =
-        MultAndShift16(
-            ((worldFromX<<16) + 0x8000L - PlayerGetX()),
-            G_3dCosPlayerAngle) -
-        MultAndShift16(
-            ((worldFromY<<16) + 0x8000L - PlayerGetY()),
-            G_3dSinPlayerAngle) ;
-    G_relativeToZ =
-        MultAndShift16(
-            ((worldToX<<16) + 0x8000L - PlayerGetX()),
-            G_3dCosPlayerAngle) -
-        MultAndShift16(
-            ((worldToY<<16) + 0x8000L - PlayerGetY()),
-            G_3dSinPlayerAngle) ;
-
-    /* If the segment is behind us, then stop processing. */
-    if ((G_relativeFromZ < ZMIN) && (G_relativeToZ < ZMIN))  {
-printf("behind.\n") ;
-        return FALSE ;
-    }
-
-    /* Finish rotating the X coodinates (the above rotated the Z) */
-    /* coordinates. */
-    G_relativeFromX =
-        MultAndShift16(
-            ((worldFromX<<16) + 0x8000L - PlayerGetX()),
-            G_3dSinPlayerAngle) +
-        MultAndShift16(
-            ((worldFromY<<16) + 0x8000L - PlayerGetY()),
-            G_3dCosPlayerAngle) ;
-    G_relativeToX =
-        MultAndShift16(
-            ((worldToX<<16) + 0x8000L - PlayerGetX()),
-            G_3dSinPlayerAngle) +
-        MultAndShift16(
-            ((worldToY<<16) + 0x8000L - PlayerGetY()),
-            G_3dCosPlayerAngle) ;
-
-    /* See if the whole line (both ends) is outside the view to the right. */
-    if ((G_relativeFromX > G_relativeFromZ) &&
-        (G_relativeToX > G_relativeToZ))  {
-printf("Too far right.\n") ;
-        return FALSE ;
-    }
-
-    /* See if the line is outside the view to the left. */
-    if ((G_relativeFromX < (-G_relativeFromZ)) &&
-        (G_relativeToX < (-G_relativeToZ)))  {
-printf("Too far left.\n") ;
-        return FALSE ;
-    }
-
-    //G_wall.fromZ = (G_relativeFromZ>>16) ;
-
-    G_relativeFromXOld = G_relativeFromX ;
-    G_relativeFromZOld = G_relativeFromZ ;
-
-    /* Do Z-clipping. */
-    tanAngle = MathTangentLookup(angle) ;
-
-    /* Check to see if it needs to be clipped. */
-    if (G_relativeFromX > G_relativeFromZ)  {
-        /* Clip along the x = z line. */
-        /* check if edge is facing us, then don't draw. */
-        if (tanAngle == ((T_sword32)65536))  {
-//./printf("edge.\n") ;
-            return FALSE ;
-        }
-    }
-
-    /* Clip if z is too close for FROM coordinate. */
-    if (G_relativeFromZ < ZMIN)  {
-         G_relativeFromX += MultAndShift16(
-                                (ZMIN - G_relativeFromZ),
-                                tanAngle) ;
-         G_relativeFromZ = ZMIN ;
-    }
-
-    /* Clip if z is too close for TO coordinate. */
-    if (G_relativeToZ < ZMIN)  {
-        G_relativeToX += MultAndShift16(
-                             (ZMIN - G_relativeToZ),
-                             tanAngle) ;
-        G_relativeToZ = ZMIN ;
-    }
-
-    /* Make sure we stay in bounds. */
-    if (G_relativeFromZ > ((T_sword32)9999 << 16))
-        G_relativeFromZ = ((T_sword32)9999 << 16) ;
-    if (G_relativeToZ > ((T_sword32)9999 << 16))
-        G_relativeToZ = ((T_sword32)9999 << 16);
-
-    /* Now that all the clipping has been done, we can now compute */
-    /* the X screen coordinates. */
-    G_screenXLeft = G_xLeft = (T_sword16)(VIEW3D_HALF_WIDTH -
-                  (MultAndShift16(
-                      G_relativeFromX,
-                      MathInvDistanceLookup(G_relativeFromZ>>16)) >> 16)) ;
-//    if (G_screenXLeft > 0)
-//      G_screenXLeft-- ;
-
-    G_screenXRight = G_xRight = (T_sword16)(VIEW3D_HALF_WIDTH -
-                  (MultAndShift16(
-                      G_relativeToX,
-                      MathInvDistanceLookup(G_relativeToZ>>16)) >> 16)) ;
-#endif
-
-#if 0
-    /* Make sure the wall is on the screen, or we'll just quit. */
-    /* Nothing off the left. */
-    if (G_xRight <= VIEW3D_CLIP_LEFT)  {
-//./printf("Off left.\n") ;
-        return FALSE ;
-    }
-
-    /* Nothing off the right. */
-    if (G_xLeft >= VIEW3D_CLIP_RIGHT)  {
-//./printf("Off right.\n") ;
-        return FALSE ;
-    }
-#endif
-
-//return TRUE;
     /* Clip to the screen edges. */
-    if (G_xLeft < 0)
-        G_xLeft = 0;
-    if (G_xRight >= MAX_VIEW3D_WIDTH)
-        G_xRight = MAX_VIEW3D_WIDTH-1;
-    //if (G_xLeft < VIEW3D_CLIP_LEFT)
-    //    G_xLeft = VIEW3D_CLIP_LEFT ;
-    //if (G_xRight > VIEW3D_CLIP_RIGHT)
-    //    G_xRight = VIEW3D_CLIP_RIGHT ;
-    xl = G_xLeft;
-    xr = G_xRight;
-    if (xl > xr) {
-        xl = G_xRight;
-        xr = G_xLeft;
-    }
-
-#if 0
-    if (G_xLeft >= MAX_VIEW3D_WIDTH)
-        return FALSE;
-    if (G_xRight < 0)
-        return FALSE;
-#endif
-
-    /* Nothing paper thin. */
-//    if (G_screenXLeft==G_screenXRight)  {
-//        return FALSE ;
+//    if (G_xLeft < 0)
+//        G_xLeft = 0;
+//    if (G_xRight > (MAX_VIEW3D_WIDTH-1))
+//        G_xRight = MAX_VIEW3D_WIDTH-1;
+//    xl = G_xLeft;
+//    xr = G_xRight;
+//    if (xl > xr) {
+//        xl = G_xRight;
+//        xr = G_xLeft;
 //    }
 
     /* Now we need to see if any part of this wall can be seen. */
     /* If any part can, we will draw it.  If not, there is no */
     /* need to try drawing it. */
-    DebugCheck(xl < MAX_VIEW3D_WIDTH);
-    DebugCheck(xr < MAX_VIEW3D_WIDTH);
-    DebugCheck(xl <= xr);
-//    if (xl == xr)
-//        return TRUE;
-    for (x = xl; x <= xr; x++)
-        if (G_colDone[x] == 0)
-            break;
-
-    if (x > xr) {
+//    DebugCheck(xl < MAX_VIEW3D_WIDTH);
+//    DebugCheck(xr < MAX_VIEW3D_WIDTH);
+//    DebugCheck(xl <= xr);
+    if (G_wall.fromX > G_wall.toX) {
 #if DEBUG_IS_SEGMENT_GOOD_PRINTF
-        printf("blocked from view\n") ;
+        printf("back culled\n");
 #endif
-        /* None of the columns were free, quit bothering with */
-        /* this segment. */
+        return FALSE;
+    }
+    if (!OcclusionIsVisible(G_wall.fromX, G_wall.toX)) {
+#if DEBUG_IS_SEGMENT_GOOD_PRINTF
+        printf("blocked from view\n");
+#endif
         return FALSE;
     }
 
 #if DEBUG_IS_SEGMENT_GOOD_PRINTF
     printf("OK\n");
 #endif
-    return TRUE ;
+    return TRUE;
 }
-
 
 /*-------------------------------------------------------------------------*
  * Routine:  ICalculateWallMatrix
@@ -7599,9 +7463,9 @@ T_void DrawTransRowAsm256(
  *<!-----------------------------------------------------------------------*/
 T_void IMarkOffWall(T_void)
 {
+#if 0
     T_word16 x;
     T_byte8 *p_column;
-
     if (G_xLeft > G_xRight)
         return;
     DebugCheck(G_xLeft <= G_xRight);
@@ -7620,6 +7484,10 @@ T_void IMarkOffWall(T_void)
             *p_column = 1;
         }
     }
+#else
+//    printf("%d) v%d->v%d: ", P_segment->line, P_segment->from, P_segment->to);
+    OcclusionAdd(G_wall.fromX, G_wall.toX);
+#endif
 }
 
 /** @} */
