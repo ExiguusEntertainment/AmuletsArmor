@@ -1857,7 +1857,7 @@ T_void IDrawSSector(T_word16 ssectorIndex)
     p_sector = &G_3dSectorArray[sector];
     G_wall.floorZ = p_sector->floorHt;
     G_wall.ceilingZ = p_sector->ceilingHt;
-    G_wall.shadeIndex = (p_sector->light >> 2);
+    G_wall.shadeIndex = p_sector->light;
     G_wall.textureFloor = *((T_byte8 **)&p_sector->floorTx[1]);
     G_wall.textureCeiling = *((T_byte8 **)&p_sector->ceilingTx[1]);
     G_wall.transFlag = p_sector->trigger & 1;
@@ -2500,6 +2500,7 @@ INDICATOR_LIGHT(821, INDICATOR_GREEN) ;
     ty = ((float)((textureZeroY-absoluteBottom)+G_wall.offY))/((float)sizeY);
     //glColor4ubv( blue );
     glTexCoord2f (tx+0.0f, ty+0.0f);
+    glColor3ub((GLbyte)G_wall.shadeIndex, (GLbyte)G_wall.shadeIndex, (GLbyte)G_wall.shadeIndex);
     glVertex3i( p_from->y, absoluteBottom, p_from->x);
     glTexCoord2f (tx+tw, ty+0.0f);
     glVertex3i( p_to->y, absoluteBottom, p_to->x);
@@ -2508,6 +2509,7 @@ INDICATOR_LIGHT(821, INDICATOR_GREEN) ;
     glTexCoord2f (tx+0.0f, ty-th);
     glVertex3i( p_from->y, absoluteTop, p_from->x);
     glEnd();
+    glColor3ub(255, 255, 255);
     //glColor4ubv( white );
 //printf("Seg %d: (%d,%d,%d) -> (%d,%d,%d)\n", P_segment-G_3dSegArray, p_from->x, absoluteBottom, p_from->y, p_to->x, absoluteTop, p_to->y);
 #endif
@@ -2828,7 +2830,7 @@ G_didDrawWall = TRUE ;
                     if (G_wall.opaque == 1)  {
                         IDrawTextureColumnNew(
                             /* Shade pointer */
-                            IDetermineShade(interZ, G_wall.shadeIndex),
+                            IDetermineShade(interZ, (G_wall.shadeIndex>>2)),
                             /* number pixels. */
                             bottom - top,
                             /* texture step. */
@@ -2844,7 +2846,7 @@ G_didDrawWall = TRUE ;
                         IDrawTextureColumnLater(
                             x,
                             /* Shade pointer */
-                            IDetermineShade(interZ, G_wall.shadeIndex),
+                            IDetermineShade(interZ, (G_wall.shadeIndex>>2)),
                             /* number pixels. */
                             bottom - top,
                             /* texture step. */
