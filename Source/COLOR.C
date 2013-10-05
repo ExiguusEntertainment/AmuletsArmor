@@ -224,7 +224,6 @@ T_void ColorUpdate (T_word16 delta)
     static T_word32 lastTime = 0 ;
 
 	DebugRoutine ("ColorUpdate") ;
-    INDICATOR_LIGHT(933, INDICATOR_GREEN) ;
 
     delta = TickerGet() - lastTime ;
     lastTime = TickerGet() ;
@@ -274,7 +273,6 @@ T_void ColorUpdate (T_word16 delta)
 		ColorGlowUpdate();
 		glowupdatetime=0;
 	 }
-    INDICATOR_LIGHT(936, INDICATOR_GREEN) ;
 	for (i=0;i<768;i+=3)
 	{
 /* TESTING!!! Color is getting in the way */
@@ -298,14 +296,9 @@ T_void ColorUpdate (T_word16 delta)
 		tempcolors[i+1]=(T_byte8)tempg;
 		tempcolors[i+2]=(T_byte8)tempb;
 	 }
-    INDICATOR_LIGHT(936, INDICATOR_RED) ;
-    INDICATOR_LIGHT(939, INDICATOR_GREEN) ;
 
 	GrSetPalette (0,256, (T_palette *)&tempcolors);
 
-    INDICATOR_LIGHT(939, INDICATOR_RED) ;
-
-    INDICATOR_LIGHT(933, INDICATOR_RED) ;
 	DebugEnd();
 }
 

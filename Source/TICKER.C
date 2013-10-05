@@ -261,18 +261,14 @@ static T_void __interrupt __far ITickerInterrupt(T_void)
  *<!-----------------------------------------------------------------------*/
 static T_void __interrupt __far ITickerInterruptSimple(T_void)
 {
-    INDICATOR_LIGHT(0, INDICATOR_GREEN) ;
     /* Go ahead and increment the tick count. */
     G_tickCount++ ;
 
-    INDICATOR_LIGHT(0, INDICATOR_YELLOW) ;
     /* Do the old interrupt. */
     IOldTickerInterrupt() ;
-    INDICATOR_LIGHT(0, INDICATOR_BLUE) ;
 
     /* Note that we are done. */
     outp(0x20, 0x20) ;
-    INDICATOR_LIGHT(0, INDICATOR_RED) ;
 }
 
 /*-------------------------------------------------------------------------*
@@ -343,11 +339,9 @@ T_void TickerInc(T_void)
 #else
 T_void TickerInc(T_void)
 {
-    INDICATOR_LIGHT(0, INDICATOR_GREEN) ;
     if (G_pauseLevel <= 0)
         G_tickCount++ ;
 //    ((char *)0xA0000)[288+(G_tickCount & 0x1F)]+=3 ;
-    INDICATOR_LIGHT(0, INDICATOR_RED) ;
 }
 #endif
 

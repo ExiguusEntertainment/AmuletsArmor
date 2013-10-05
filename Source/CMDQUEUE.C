@@ -512,7 +512,6 @@ T_void CmdQUpdateAllReceives(T_void)
     T_directTalkUniqueAddress uniqueID;
 
     DebugRoutine("CmdQUpdateAllReceives") ;
-    INDICATOR_LIGHT(260, INDICATOR_GREEN) ;
     DebugCheck(G_init == TRUE) ;
 
     /* Let's see how many ports there are. */
@@ -561,7 +560,6 @@ T_void CmdQUpdateAllReceives(T_void)
 
                         /* Is that a valid command? */
                         if (ackCommand < PACKET_COMMAND_UNKNOWN)  {
-                            INDICATOR_LIGHT(264, INDICATOR_GREEN) ;
                             /* Yes.  But is it a lossless command? */
                             if (G_CmdQTypeCommand[ackCommand] ==
                                 PACKET_COMMAND_TYPE_LOSSLESS)  {
@@ -586,7 +584,6 @@ T_void CmdQUpdateAllReceives(T_void)
                                     }
                                 }
                             }
-                            INDICATOR_LIGHT(264, INDICATOR_RED) ;
                         }
                     } else {
                         /* No, do the normal action. */
@@ -598,7 +595,6 @@ T_void CmdQUpdateAllReceives(T_void)
                         /* Is this a lossless command? */
                         if (G_CmdQTypeCommand[command] ==
                                 PACKET_COMMAND_TYPE_LOSSLESS)  {
-                            INDICATOR_LIGHT(268, INDICATOR_GREEN) ;
                             memset(&ackPacket, 0xFF, sizeof(ackPacket));
                             /* Yes, it is.  We need to send an ACK that */
                             /* we got it. */
@@ -610,7 +606,6 @@ T_void CmdQUpdateAllReceives(T_void)
                                 packet.header.id ;
                             /* Send it!  Note that we go through our */
                             /* routines. */
-                            INDICATOR_LIGHT(272, INDICATOR_GREEN) ;
                             DebugCheckValidStack() ;
                             CmdQSendShortPacket(
                                 &ackPacket,
@@ -618,10 +613,7 @@ T_void CmdQUpdateAllReceives(T_void)
                                 140,  /* Once two seconds is plenty fast */
                                 0,  /* No extra data since no callback. */
                                 NULL) ;  /* No callback. */
-                            INDICATOR_LIGHT(272, INDICATOR_RED) ;
                             DebugCheckValidStack() ;
-
-                            INDICATOR_LIGHT(268, INDICATOR_RED) ;
                         }
                         /* IF the packet is a new packet or a lossy one, */
                         /* we'll go ahead and do the appropriate action */
@@ -630,13 +622,11 @@ T_void CmdQUpdateAllReceives(T_void)
                         if ((G_cmdQActionList[command] != NULL) &&
                             (packetOkay == TRUE))  {
                             /* Call the appropriate action item. */
-                            INDICATOR_LIGHT(276, INDICATOR_GREEN) ;
 //printf("Did go: (%d) %d, %p\n", command, packetOkay, G_cmdQActionList[command]) ; fflush(stdout) ;
                             DebugCheckValidStack() ;
                             G_cmdQActionList[command]
                                    ((T_packetEitherShortOrLong *)&packet) ;
                             DebugCheckValidStack() ;
-                            INDICATOR_LIGHT(276, INDICATOR_RED) ;
                             DebugCompare("CmdQUpdateAllReceives") ;
                         } else {
 //printf("Didn't go: (%d) %d, %p\n", command, packetOkay, G_cmdQActionList[command]) ; fflush(stdout) ;
@@ -647,8 +637,6 @@ T_void CmdQUpdateAllReceives(T_void)
             DebugCheckValidStack() ;
         } while (status == 0) ;
     DebugEnd() ;
-
-    INDICATOR_LIGHT(260, INDICATOR_RED) ;
 }
 
 /*-------------------------------------------------------------------------*

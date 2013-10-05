@@ -1007,7 +1007,6 @@ T_void GrSetPalette(
     TICKER_TIME_ROUTINE_START() ;
 
     DebugRoutine("GrSetPalette") ;
-    INDICATOR_LIGHT(943, INDICATOR_GREEN) ;
     DebugCheck(number_colors <= 256) ;
     DebugCheck(start_color + number_colors <= 256) ;
     /* Set the index color to start chaning. */
@@ -1036,63 +1035,16 @@ T_void GrSetPalette(
     /* Multiply number of colors by 3 to get red, green, and blue */
     number_colors += (number_colors<<1) ;
 
-    INDICATOR_LIGHT(946, INDICATOR_GREEN) ;
     if (needSync)
         ColorChangeFastAsm(0x03C9, p_color, number_colors) ;
-    INDICATOR_LIGHT(946, INDICATOR_RED) ;
-    INDICATOR_LIGHT(949, INDICATOR_GREEN) ;
 
     MouseDisallowUpdate() ;
     MouseDraw() ;
-    INDICATOR_LIGHT(949, INDICATOR_RED) ;
-    INDICATOR_LIGHT(952, INDICATOR_GREEN) ;
-#ifndef INDICATOR_LIGHTS
-//    memcpy((char *)0xA0000, GRAPHICS_ACTUAL_SCREEN, 64000) ;
     ITransferScreen() ;
-#else
-    if (TickerGet() & 64)  {
-        GRAPHICS_ACTUAL_SCREEN[1280] = 25 ;
-        GRAPHICS_ACTUAL_SCREEN[1281] = 25 ;
-        GRAPHICS_ACTUAL_SCREEN[1282] = 25 ;
-        GRAPHICS_ACTUAL_SCREEN[1283] = 25 ;
-    } else {
-        GRAPHICS_ACTUAL_SCREEN[1280] = 0 ;
-        GRAPHICS_ACTUAL_SCREEN[1281] = 0 ;
-        GRAPHICS_ACTUAL_SCREEN[1282] = 0 ;
-        GRAPHICS_ACTUAL_SCREEN[1283] = 0 ;
-    }
-    testvalue++ ;
-    if (testvalue & 1)  {
-        GRAPHICS_ACTUAL_SCREEN[1284] = 25 ;
-        GRAPHICS_ACTUAL_SCREEN[1285] = 25 ;
-        GRAPHICS_ACTUAL_SCREEN[1286] = 25 ;
-        GRAPHICS_ACTUAL_SCREEN[1287] = 25 ;
-    } else {
-        GRAPHICS_ACTUAL_SCREEN[1284] = 0 ;
-        GRAPHICS_ACTUAL_SCREEN[1285] = 0 ;
-        GRAPHICS_ACTUAL_SCREEN[1286] = 0 ;
-        GRAPHICS_ACTUAL_SCREEN[1287] = 0 ;
-    }
-    memcpy((char *)0xA0000+1280, GRAPHICS_ACTUAL_SCREEN+1280, 62720) ;
-
-    /* Check if we have been stuck in time */
-    if (TickerGet() == lastTime)  {
-        countTime++ ;
-        if (countTime == 20)
-            DebugCheck(FALSE) ;
-    } else {
-        lastTime = TickerGet() ;
-        countTime = 0 ;
-    }
-#endif
-    INDICATOR_LIGHT(952, INDICATOR_RED) ;
-    INDICATOR_LIGHT(955, INDICATOR_GREEN) ;
 
     MouseErase() ;
     MouseAllowUpdate() ;
     DebugEnd() ;
-    INDICATOR_LIGHT(955, INDICATOR_RED) ;
-    INDICATOR_LIGHT(943, INDICATOR_RED) ;
     TICKER_TIME_ROUTINE_ENDM("GrSetPalette", 1000)
 #endif
 

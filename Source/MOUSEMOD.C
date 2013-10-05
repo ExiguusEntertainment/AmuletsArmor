@@ -1033,10 +1033,8 @@ fflush(stdout) ;
 //static T_void __interrupt __far IMouseCallback(T_word32 max, T_word32 mcx, T_word32 mdx)
 static T_void _loadds __far IMouseCallback(T_word32 max, T_word32 mcx, T_word32 mdx)
 {
-    INDICATOR_LIGHT(281, INDICATOR_GREEN) ;
     G_interX = mcx>>1 ;
     G_interY = mdx ;
-    INDICATOR_LIGHT(281, INDICATOR_RED) ;
 //    if (G_mouseShowLevel > 0)  {
 /*
     if (G_allowUpdate)  {

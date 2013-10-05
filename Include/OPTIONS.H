@@ -15,8 +15,8 @@
 #define _DEBUG
 #endif
 
-#define WINDOW_WIDTH    ((320*8)/2)
-#define WINDOW_HEIGHT   ((200*8)/2)
+#define WINDOW_WIDTH    ((320*6)/2)
+#define WINDOW_HEIGHT   ((200*6)/2)
 
 /* Flag that determines if this is the shareware version */
 //#define COMPILE_OPTION_SHAREWARE_DEMO
@@ -82,29 +82,6 @@
 #else
     #define VERSION_TEXT "Registered V1.0"
 #endif
-
-#ifndef SERVER_ONLY
-//#define INDICATOR_LIGHTS
-
-#ifdef INDICATOR_LIGHTS
-#define INDICATOR_LIGHT(p, c)       \
-{       \
-    ((char *)0xA0000)[p] = (c) ; \
-    ((char *)0xA0000)[p+1] = (c)+4 ; \
-    ((char *)0xA0000)[p+320] = (c)+4 ; \
-    ((char *)0xA0000)[p+321] = (c)+4 ; \
-}
-#else
-#define INDICATOR_LIGHT(p, c)
-#endif
-#endif
-
-#define INDICATOR_GRAY         16
-#define INDICATOR_GREEN        128
-#define INDICATOR_RED          144
-#define INDICATOR_YELLOW       160
-#define INDICATOR_BLUE         48
-#define INDICATOR_PURPLE       112
 
 #define OPTIONS_COLORON
 //#define OPTIONS_DARKCOLOR

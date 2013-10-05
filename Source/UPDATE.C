@@ -408,22 +408,16 @@ T_void UpdateOften(T_void)
     TICKER_TIME_ROUTINE_START() ;
     DebugRoutine("UpdateOften") ;
 
-    INDICATOR_LIGHT(921, INDICATOR_GREEN) ;
     time = TickerGet() ;
     delta = time - G_lastOftenTime ;
     G_lastOftenTime = time ;
 
 #ifndef SERVER_ONLY
-    INDICATOR_LIGHT(925, INDICATOR_GREEN) ;
     SoundUpdate() ;
-    INDICATOR_LIGHT(925, INDICATOR_RED) ;
-    INDICATOR_LIGHT(929, INDICATOR_GREEN) ;
     ColorUpdate(delta) ;
-    INDICATOR_LIGHT(929, INDICATOR_RED) ;
 #endif
     /* New routines go here. */
 
-    INDICATOR_LIGHT(921, INDICATOR_RED) ;
     DebugEnd() ;
     TICKER_TIME_ROUTINE_ENDM("UpdateOften", 500) ;
 }

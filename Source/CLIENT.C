@@ -1048,7 +1048,6 @@ T_void ClientUpdate(T_void)
     TICKER_TIME_ROUTINE_START() ;
 
     DebugRoutine("ClientUpdate") ;
-    INDICATOR_LIGHT(34, INDICATOR_GREEN) ;
     DebugTime(3) ;
 
     DebugCompare("ClientUpdate") ;
@@ -1367,7 +1366,6 @@ T_void ClientUpdate(T_void)
     DebugCompare("ClientUpdate") ;
     DebugEnd() ;
 
-    INDICATOR_LIGHT(34, INDICATOR_RED) ;
     TICKER_TIME_ROUTINE_ENDM("ClientUpdate", 500) ;
 }
 

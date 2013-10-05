@@ -588,7 +588,6 @@ static T_void __interrupt __far IKeyboardInterrupt(T_void)
     T_word16 next ;
     T_word16 c ;
 
-    INDICATOR_LIGHT(8, INDICATOR_GREEN) ;
     /* We first must disable any new key strokes from occuring. */
     IKeyboardSendCommand(DISABLE_KEYBOARD) ;
 
@@ -719,24 +718,8 @@ static T_void __interrupt __far IKeyboardInterrupt(T_void)
 
     /* If keyboard buffer is on, go ahead and let the BIOS also */
     /* process this keystroke. */
-#if 0
-    if ((F_keyboardBufferOn) &&
-        (G_pauseLevel == 0) &&
-        (G_keyTable[KEY_SCAN_CODE_LEFT_CTRL] == FALSE) &&
-        (G_keyTable[KEY_SCAN_CODE_PAUSE] == FALSE) &&
-        (G_keyTable[KEY_SCAN_CODE_RIGHT_CTRL] == FALSE))  {
-        /* Call old interrupt. */
-        INDICATOR_LIGHT(8, INDICATOR_YELLOW) ;
-//!!!Never call the old interrupt.  Don't want it! ///
-//        IOldKeyboardInterrupt() ;
-        INDICATOR_LIGHT(8, INDICATOR_BLUE) ;
-    } else  {
-#endif
         /* Otherwise, signify end of interrupt */
-	    outp(0x20,0x20) ;
-#if 0
-    }
-#endif
+    outp(0x20,0x20) ;
 
     if (G_pauseLevel == 3)
         G_pauseLevel = 0 ;
@@ -763,7 +746,6 @@ static T_void __interrupt __far IKeyboardInterrupt(T_void)
         DebugStop() ;
     }
 #endif
-    INDICATOR_LIGHT(8, INDICATOR_RED) ;
 }
 #endif
 

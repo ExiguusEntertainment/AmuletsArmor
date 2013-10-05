@@ -146,13 +146,10 @@ T_void ViewDraw(T_void)
 
     DebugCheck(G_viewInitialized == TRUE) ;
 
-INDICATOR_LIGHT(93, INDICATOR_GREEN) ;
     /* Have the map change lighting accordingly. */
     if (!ClientIsPaused())
         MapUpdateLighting() ;
-INDICATOR_LIGHT(93, INDICATOR_RED) ;
 
-INDICATOR_LIGHT(97, INDICATOR_GREEN) ;
     if ((ViewIsEarthquakeOn()) && (!ClientIsPaused()))  {
         IViewUpdateEarthquake() ;
         View3dGetView(&x, &y, &height, &angle) ;
@@ -161,15 +158,9 @@ INDICATOR_LIGHT(97, INDICATOR_GREEN) ;
         height += (MathSineLookup(G_earthquakeRollZ) * 5) ;
         View3dSetView(x, y, height, angle) ;
     }
-INDICATOR_LIGHT(97, INDICATOR_RED) ;
 
-
-
-INDICATOR_LIGHT(101, INDICATOR_GREEN) ;
     UpdateFrame() ;
-INDICATOR_LIGHT(101, INDICATOR_RED) ;
 
-INDICATOR_LIGHT(105, INDICATOR_GREEN) ;
     /* Do an offset of the view if applicable. */
     if ((G_viewOffsetView != 0) && (!ClientIsPaused()))  {
         View3dGetView(&x, &y, &height, &angle) ;
@@ -182,9 +173,7 @@ INDICATOR_LIGHT(105, INDICATOR_GREEN) ;
 
     /* Draw the current 3d view. */
     View3dDrawView() ;
-INDICATOR_LIGHT(105, INDICATOR_RED) ;
 
-INDICATOR_LIGHT(109, INDICATOR_GREEN) ;
     OverheadSetCenterPoint(PlayerGetX16(), PlayerGetY16()) ;
     OverheadDraw(0, 0, VIEW3D_CLIP_RIGHT-VIEW3D_CLIP_LEFT-1, VIEW3D_HEIGHT-1) ;
 
@@ -204,7 +193,6 @@ INDICATOR_LIGHT(109, INDICATOR_GREEN) ;
 
     TICKER_TIME_ROUTINE_ENDM("ViewDraw", 100) ;
 
-INDICATOR_LIGHT(109, INDICATOR_RED) ;
     DebugEnd() ;
 }
 

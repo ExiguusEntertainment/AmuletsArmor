@@ -327,7 +327,6 @@ T_void ServerUpdate(T_void)
 
     TICKER_TIME_ROUTINE_START() ;
     DebugRoutine("ServerUpdate") ;
-    INDICATOR_LIGHT(38, INDICATOR_GREEN) ;
 
     /* Don't do any actions if the server is in a state where the level */
     /* is not ready. */
@@ -364,7 +363,6 @@ T_void ServerUpdate(T_void)
     }
 
     DebugEnd() ;
-    INDICATOR_LIGHT(38, INDICATOR_RED) ;
     TICKER_TIME_ROUTINE_END(stdout, "ServerUpdate", 500) ;
 }
 

@@ -45,12 +45,6 @@ typedef struct {
 /** BEGIN VIEW-DRAWING-SPECIFIC BLOCK **/
 #ifndef SERVER_ONLY
 
-#ifndef NDEBUG
-static T_void ITestMinMax(T_word16 where) ;
-#else
-#define ITestMinMax(where)
-#endif
-
 #ifdef COMPILE_OPTION_ALLOW_SHIFT_TEXTURES
 /* Coordinates of where the mouse is. */
 static T_sword16 G_mouseAtX ;
@@ -1021,8 +1015,6 @@ T_sword32 G_duArray[MAX_VIEW3D_WIDTH+10] ;
 #define P_vgaBuffer ((T_byte8 *)0xA0000)
 
 /* Internal prototypes: */
-T_byte8 View3dRightSideInCone(T_word16 nodeIndex) ;
-T_byte8 View3dLeftSideInCone(T_word16 nodeIndex) ;
 T_byte8 View3dOnRightByVertices(T_word16 from, T_word16 to) ;
 T_byte8 View3dOnRightByVerticesXY(
             T_word16 from,
@@ -1160,72 +1152,6 @@ T_void View3dGetView(
     *p_y = G_3dPlayerY ;
     *p_height = G_3dPlayerHeight ;
     *p_angle = G_3dPlayerAngle ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  View3dRightSideInCone
- *-------------------------------------------------------------------------*/
-/**
- *  View3dRightSideInCone checks to see if the given node (a right
- *  child node) is in the current viewing cone.
- *
- *  @param nodeIndex -- Number of node to check
- *
- *  @return TRUE if on right, FALSE if not
- *
- *<!-----------------------------------------------------------------------*/
-T_byte8 View3dRightSideInCone(T_word16 nodeIndex)
-{
-    /* Determine what quadrant the player is facing.  This is far */
-    /* faster than getting exact angles ... but less nodes are */
-    /* removed. */
-    if (G_3dPlayerLeftAngle < 0x4000)  {
-        if (G_3dPNodeArray[nodeIndex]->rx2 > G_3dPlayerX)
-            return 1 ;
-    } else if (G_3dPlayerLeftAngle < 0x8000)  {
-        if (G_3dPNodeArray[nodeIndex]->ry2 > G_3dPlayerY)
-            return 1 ;
-    } else if (G_3dPlayerLeftAngle < 0xC000)  {
-        if (G_3dPNodeArray[nodeIndex]->rx1 < G_3dPlayerX)
-            return 1 ;
-    } else {
-        if (G_3dPNodeArray[nodeIndex]->ry1 < G_3dPlayerY)
-            return 1 ;
-    }
-    return 0 ;
-}
-
-/*-------------------------------------------------------------------------*
- * Routine:  View3dLeftSideInCone
- *-------------------------------------------------------------------------*/
-/**
- *  View3dLeftSideInCone checks to see if the given node (a left
- *  child node) is in the current viewing cone.
- *
- *  @param nodeIndex -- Number of node to check
- *
- *  @return TRUE if on right, FALSE if not
- *
- *<!-----------------------------------------------------------------------*/
-T_byte8 View3dLeftSideInCone(T_word16 nodeIndex)
-{
-    /* Determine what quadrant the player is facing.  This is far */
-    /* faster than getting exact angles ... but less nodes are */
-    /* removed. */
-    if (G_3dPlayerLeftAngle < 0x4000)  {
-        if (G_3dPNodeArray[nodeIndex]->lx2 > G_3dPlayerX)
-            return 1 ;
-    } else if (G_3dPlayerLeftAngle < 0x8000)  {
-        if (G_3dPNodeArray[nodeIndex]->ly2 > G_3dPlayerY)
-            return 1;
-    } else if (G_3dPlayerLeftAngle < 0xC000)  {
-        if (G_3dPNodeArray[nodeIndex]->lx1 < G_3dPlayerX)
-            return 1;
-    } else {
-        if (G_3dPNodeArray[nodeIndex]->ly1 < G_3dPlayerY)
-            return 1;
-    }
-    return 0 ;
 }
 
 /*-------------------------------------------------------------------------*
@@ -1658,7 +1584,6 @@ T_void View3dDrawView(T_void)
 
     TICKER_TIME_ROUTINE_START() ;
     DebugRoutine("View3dDrawView");
-    INDICATOR_LIGHT(42, INDICATOR_GREEN) ;
 //printf("\f\n\n------------------------------------------------\n") ;
     /* Initialize and clear all the needed variables. */
     G_colCount = 0;
@@ -1756,23 +1681,10 @@ T_void IDrawNode(T_word16 nodeIndex)
 {
     T_word16 count ;
 
-#ifdef INDICATOR_LIGHTS
-    static T_word16 indicatorLevel = 636 ;
-
-    indicatorLevel+=4 ;
-#endif
-
-#ifdef INDICATOR_LIGHTS
-    INDICATOR_LIGHT(indicatorLevel, INDICATOR_RED) ;
-#endif
-
 //    count = VIEW3D_CLIP_RIGHT - VIEW3D_CLIP_LEFT ;
     count = WINDOW_WIDTH;
     if (nodeIndex & 0x8000)  {
         /* Found a segment sector, draw that sector. */
-#ifdef INDICATOR_LIGHTS
-        INDICATOR_LIGHT(indicatorLevel, INDICATOR_BLUE) ;
-#endif
         IDrawSSector(nodeIndex & 0x7fff) ;
     } else {
         /* Still traveling nodes.  Keep going until enough columns  */
@@ -1781,34 +1693,22 @@ T_void IDrawNode(T_word16 nodeIndex)
 #ifndef NDEBUG
     G_nodeCount++ ;
 #endif
-#ifdef INDICATOR_LIGHTS
-        INDICATOR_LIGHT(indicatorLevel, INDICATOR_GREEN) ;
-#endif
 //        if (G_colCount < count+100/*TESTING*/)  {
         if (OcclusionIsVisible(0, MAX_VIEW3D_WIDTH-1)) {
             /* Are we on the right side of this node? */
             if (!View3dOnRightByNode(nodeIndex))  {
                 /* Yes, we are.  Draw the left side first, and then */
                 /* right (given that they are in the view). */
-//                if (View3dLeftSideInCone(nodeIndex))
-                    IDrawNode(G_3dPNodeArray[nodeIndex]->left) ;
-//                if (View3dRightSideInCone(nodeIndex))
-                    IDrawNode(G_3dPNodeArray[nodeIndex]->right) ;
+                IDrawNode(G_3dPNodeArray[nodeIndex]->left) ;
+                IDrawNode(G_3dPNodeArray[nodeIndex]->right) ;
             } else {
                 /* No, we are not.  Draw the right side first, and then */
                 /* left (given that they are in the view). */
-//                if (View3dRightSideInCone(nodeIndex))
-                    IDrawNode(G_3dPNodeArray[nodeIndex]->right) ;
-//                if (View3dLeftSideInCone(nodeIndex))
-                    IDrawNode(G_3dPNodeArray[nodeIndex]->left) ;
+                IDrawNode(G_3dPNodeArray[nodeIndex]->right) ;
+                IDrawNode(G_3dPNodeArray[nodeIndex]->left) ;
             }
         }
     }
-
-#ifdef INDICATOR_LIGHTS
-    INDICATOR_LIGHT(indicatorLevel, INDICATOR_GRAY) ;
-    indicatorLevel-=4 ;
-#endif
 }
 
 /*-------------------------------------------------------------------------*
@@ -1893,9 +1793,7 @@ T_void IDrawSegment(T_word16 segmentIndex)
     T_3dLine *p_line ;
 
 
-    INDICATOR_LIGHT(800, INDICATOR_GREEN) ;
 G_wallAttempt++ ;
-ITestMinMax(1010) ;
 //./printf("  IDrawSegment %3d", segmentIndex) ;
     /* Calculate the matrix */
     ICalculateWallMatrix() ;
@@ -1930,19 +1828,14 @@ G_didDrawWall = FALSE ;
     /* Check to see if there is a main texture.  If there is, */
     /* there won't be an upper and lower, and we can exit then. */
 //    if (P_sideFront->mainTx[0] != '-')  {
-        INDICATOR_LIGHT(804, INDICATOR_GREEN) ;
         /* Check if it is single sided. */
         if (!(G_3dLineArray[P_segment->line].flags & LINE_IS_TWO_SIDED))  {
             /* If it is, mark off this section as drawn. */
-            INDICATOR_LIGHT(808, INDICATOR_GREEN) ;
             G_wall.opaque = 1 ;
             IMarkOffWall() ;
             IAddMainWall() ;
 
             /* Done. */
-            INDICATOR_LIGHT(808, INDICATOR_RED) ;
-            INDICATOR_LIGHT(800, INDICATOR_RED) ;
-            INDICATOR_LIGHT(804, INDICATOR_RED) ;
 #ifndef NDEBUG
 if (G_didDrawWall)
    G_wallCount++ ;
@@ -1956,11 +1849,9 @@ if (G_didDrawWall)
                     G_wall.opaque = 2 ;
                 }
 
-                ITestMinMax(1012) ;
                 IAddMainWall() ;
             }
         }
-        INDICATOR_LIGHT(804, INDICATOR_RED) ;
 //    }
 
     /* If there is actually two sides to this side, */
@@ -1977,15 +1868,9 @@ if (G_didDrawWall)
     /* If it doesn't have a main wall, then you can consider */
     /* it as having both an upper and lower wall -- its */
     /* just that they might be flat. */
-    INDICATOR_LIGHT(812, INDICATOR_GREEN) ;
     IAddUpperWall() ;
-    INDICATOR_LIGHT(812, INDICATOR_RED) ;
 
-    INDICATOR_LIGHT(816, INDICATOR_GREEN) ;
     IAddLowerWall() ;
-    INDICATOR_LIGHT(816, INDICATOR_RED) ;
-
-    INDICATOR_LIGHT(800, INDICATOR_RED) ;
 
 #ifndef NDEBUG
 if (G_didDrawWall)
@@ -2411,7 +2296,6 @@ T_void IAddUpperWall(T_void)
         G_wall.p_texture = NULL;
     }
 
-    ITestMinMax(1005);
 //printf("Seg %4d - Line %4d - Side %d - ", segmentIndex, P_segment->line, P_segment->lineSide) ;
     IAddWall(G_screenXLeft, G_screenXRight, bottom, top,
             bottom);
@@ -2451,8 +2335,6 @@ T_void IAddWall(
     static GLfloat v2[] = {  128.0f,  128.0f,  128.0f };
     static GLfloat v3[] = { -128.0f,  128.0f,  128.0f };
 
-
-INDICATOR_LIGHT(821, INDICATOR_GREEN) ;
 
 {
     float tw, th;
@@ -2528,7 +2410,6 @@ INDICATOR_LIGHT(821, INDICATOR_GREEN) ;
 relBot32 = (relativeBottom<<16) + (G_eyeLevel32 & 0xFFFF) ;
 relTop32 = (relativeTop<<16) + (G_eyeLevel32 & 0xFFFF) ;
 
-INDICATOR_LIGHT(825, INDICATOR_GREEN) ;
     /* Project the coordinates to determine the four y screen coordinates. */
     invDFromZ = MathInvDistanceLookup(relativeFromZ) ;
     invDToZ = MathInvDistanceLookup(relativeToZ) ;
@@ -2536,24 +2417,19 @@ INDICATOR_LIGHT(825, INDICATOR_GREEN) ;
 //    scrYBottomRight = VIEW3D_HALF_HEIGHT + ((relativeBottom*invDToZ)>>16) ;
 scrYBottomLeft = (VIEW3D_HALF_HEIGHT<<16) + MultAndShift16(relBot32, invDFromZ) ;
 scrYBottomRight = (VIEW3D_HALF_HEIGHT<<16) + MultAndShift16(relBot32, invDToZ) ;
-INDICATOR_LIGHT(825, INDICATOR_RED) ;
     /* Don't do any wall pieces that are above the screen. */
     if ((scrYBottomLeft < 0) && (scrYBottomRight < 0))  {
-        INDICATOR_LIGHT(821, INDICATOR_RED) ;
         return ;
     }
 
-INDICATOR_LIGHT(829, INDICATOR_GREEN) ;
 //    scrYTopLeft = VIEW3D_HALF_HEIGHT + ((relativeTop*invDFromZ)>>16) ;
 //    scrYTopRight = VIEW3D_HALF_HEIGHT + ((relativeTop*invDToZ)>>16) ;
 scrYTopLeft = (VIEW3D_HALF_HEIGHT<<16) + MultAndShift16(relTop32, invDFromZ) ;
 scrYTopRight = (VIEW3D_HALF_HEIGHT<<16) + MultAndShift16(relTop32, invDToZ) ;
-INDICATOR_LIGHT(829, INDICATOR_RED) ;
 
     /* Don't do any wall pieces that are below the screen. */
     if ((scrYTopLeft >= (VIEW3D_HEIGHT<<16)) &&
              (scrYTopRight >= (VIEW3D_HEIGHT<<16)))  {
-        INDICATOR_LIGHT(821, INDICATOR_RED) ;
         return ;
     }
 
@@ -2565,13 +2441,10 @@ INDICATOR_LIGHT(829, INDICATOR_RED) ;
 y1 = scrYTopLeft ;
 y2 = scrYBottomLeft ;
 
-INDICATOR_LIGHT(833, INDICATOR_GREEN) ;
 //    dy1 = Div32by32To1616Asm(scrYTopRight - scrYTopLeft, dx) ;
 //    dy2 = Div32by32To1616Asm(scrYBottomRight - scrYBottomLeft, dx) ;
 dy1 = Div32by32To1616Asm(((scrYTopRight - scrYTopLeft)>>16), dx) ;
 dy2 = Div32by32To1616Asm(((scrYBottomRight - scrYBottomLeft)>>16), dx) ;
-INDICATOR_LIGHT(833, INDICATOR_RED) ;
-INDICATOR_LIGHT(837, INDICATOR_GREEN) ;
     /* If we are off the egde, skip enough to get the right starting */
     /* location. */
     if (sx1 < VIEW3D_CLIP_LEFT)  {
@@ -2597,7 +2470,6 @@ INDICATOR_LIGHT(837, INDICATOR_GREEN) ;
     }
     sizeXX = sizeX ;
     sizeYY = sizeY ;
-INDICATOR_LIGHT(837, INDICATOR_RED) ;
 
     /* Small speed up for calculations. */
     cosineAngle = MathCosineLookup(G_wall.angle) ;
@@ -2617,18 +2489,13 @@ INDICATOR_LIGHT(837, INDICATOR_RED) ;
 
 //    }
 
-/* TESTING */
-ITestMinMax(1000) ;
-
     for (x=sx1;
          x<sx2;
          x++, halfOffX++, y1 += dy1, y2 += dy2)  {
         sizeX = sizeXX ;
         sizeY = sizeYY ;
         shift = shiftOrig ;
-INDICATOR_LIGHT(841, INDICATOR_GREEN) ;
 /* TESTING */
-//ITestMinMax(x) ;
 /*
         if (G_newLine)  {
 */
@@ -2651,7 +2518,6 @@ INDICATOR_LIGHT(841, INDICATOR_GREEN) ;
             u = v = 0 ;
         }
 
-INDICATOR_LIGHT(845, INDICATOR_GREEN) ;
         if (G_wall.opaque)  {
             if (bottomCalc>>4)  {
 //                    topu = G_wall.d*halfOffX + G_wall.eprime + G_wall.f ;
@@ -2709,8 +2575,6 @@ printf("e: %08X  b: %08X  du: %08X\n",
                 du = 0 ;
             }
         }
-INDICATOR_LIGHT(845, INDICATOR_RED) ;
-INDICATOR_LIGHT(849, INDICATOR_GREEN) ;
 //            G_duArray[x] = du ;
 //            G_bottomArray[x] = bottomCalc ;
 //            G_vArray[x] = v ;
@@ -2761,9 +2625,6 @@ DebugCheck(maxY <= VIEW3D_HEIGHT) ;
             /* slice.  Also pass the clipping parameters. */
             IAddObjectSlice(interZ, x, minY, maxY) ;
         }
-        INDICATOR_LIGHT(849, INDICATOR_RED) ;
-
-        INDICATOR_LIGHT(853, INDICATOR_GREEN) ;
 
         G_wall.p_texture2 = G_wall.p_texture ;
 #ifdef MIP_MAPPING_ON
@@ -2878,8 +2739,6 @@ G_didDrawWall = TRUE ;
         if (bottom < 0)
             bottom = 0 ;
 
-INDICATOR_LIGHT(853, INDICATOR_RED) ;
-INDICATOR_LIGHT(857, INDICATOR_GREEN) ;
         /* Update the edges and color for the upper type wall. */
         switch(G_wall.type)  {
             case UPPER_TYPE:
@@ -2995,18 +2854,14 @@ DebugCheck(G_maxY[x] <= VIEW3D_HEIGHT) ;
 
                 break ;
         }
-INDICATOR_LIGHT(857, INDICATOR_RED) ;
 
         G_wallRunCount++ ;
-INDICATOR_LIGHT(841, INDICATOR_RED) ;
     }
 
     /* Note that we have drawn a wall and we can re-use many of our */
     /* calculations for similar walls. */
     G_newLine = FALSE ;
 
-ITestMinMax(1001) ;
-INDICATOR_LIGHT(821, INDICATOR_RED) ;
 #endif
 }
 
@@ -4009,7 +3864,6 @@ T_void IDrawObjectAndWallRuns(T_void)
     TICKER_TIME_ROUTINE_PREPARE() ;
 
     TICKER_TIME_ROUTINE_START() ;
-    INDICATOR_LIGHT(862, INDICATOR_GREEN) ;
 
     for (x=0; x<VIEW3D_WIDTH; x++)  {
         /* How many wall slices are at this column? */
@@ -4021,15 +3875,11 @@ T_void IDrawObjectAndWallRuns(T_void)
         while ((j) || (i != 0xFFFF))  {
             if (!j)  {
                 /* Only objects. */
-                INDICATOR_LIGHT(866, INDICATOR_GREEN) ;
                 IDrawObjectColumn(x, &G_objectColRunList[i]) ;
                 i = G_objectColRunList[i].next ;
-                INDICATOR_LIGHT(866, INDICATOR_RED) ;
             } else if (i == 0xFFFF) {
                 /* Only walls. */
-                INDICATOR_LIGHT(870, INDICATOR_GREEN) ;
                 IDrawWallSliceColumn(&G_wallSlices[x][--j]) ;
-                INDICATOR_LIGHT(870, INDICATOR_RED) ;
             } else {
                 /* Both */
                 /* Which is further? */
@@ -4037,21 +3887,16 @@ T_void IDrawObjectAndWallRuns(T_void)
                 distObj = G_objectColRunList[i].p_runInfo->distance ;
                 if (distWall >= distObj)  {
                     /* Wall is further--draw it first */
-                    INDICATOR_LIGHT(874, INDICATOR_GREEN) ;
                     IDrawWallSliceColumn(&G_wallSlices[x][--j]) ;
-                    INDICATOR_LIGHT(874, INDICATOR_RED) ;
                 } else {
                     /* Object is further--draw it first. */
-                    INDICATOR_LIGHT(878, INDICATOR_GREEN) ;
                     IDrawObjectColumn(x, &G_objectColRunList[i]) ;
-                    i = G_objectColRunList[i].next
-                    INDICATOR_LIGHT(878, INDICATOR_RED) ;
+                    i = G_objectColRunList[i].next;
                 }
             }
         }
     }
 
-    INDICATOR_LIGHT(862, INDICATOR_RED) ;
     TICKER_TIME_ROUTINE_ENDM("IDrawObjectAndWallRuns", 500) ;
 }
 
@@ -6420,34 +6265,6 @@ static T_void IAddChainedObjects(T_void)
 
     DebugEnd() ;
 }
-
-#ifndef NDEBUG
-/* TESTING */
-static T_void ITestMinMax(T_word16 where)
-{
-#if 0
-    T_word16 x ;
-    DebugRoutine("ITestMinMax") ;
-
-    for (x=0; x<VIEW3D_WIDTH; x++)  {
-        if (G_minY[x] > VIEW3D_HEIGHT)  {
-            printf("%d) G_minY[%d] = %d, out of bounds!\n", where, x, G_minY[x]) ;
-            fprintf(stderr, "%d) G_minY[%d] = %d, out of bounds!\n", where, x, G_minY[x]) ;
-            fflush(stdout) ;
-            DebugCheck(FALSE) ;
-        }
-        if (G_maxY[x] > VIEW3D_HEIGHT)  {
-            printf("%d) G_maxY[%d] = %d, out of bounds!", where, x, G_maxY[x]) ;
-            fprintf(stderr, "%d) G_maxY[%d] = %d, out of bounds!", where, x, G_maxY[x]) ;
-            fflush(stdout) ;
-            DebugCheck(FALSE) ;
-        }
-    }
-
-    DebugEnd() ;
-#endif
-}
-#endif
 
 /*-------------------------------------------------------------------------*
  * Routine:  View3dSetDarknessAdjustment
