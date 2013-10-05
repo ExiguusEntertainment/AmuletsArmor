@@ -45,13 +45,6 @@ typedef struct {
 /** BEGIN VIEW-DRAWING-SPECIFIC BLOCK **/
 #ifndef SERVER_ONLY
 
-#ifdef COMPILE_OPTION_ALLOW_SHIFT_TEXTURES
-/* Coordinates of where the mouse is. */
-static T_sword16 G_mouseAtX ;
-static T_sword16 G_mouseAtY ;
-static T_word16 G_textureSideNum ;
-#endif
-
 #if defined(WIN32)
 /*
 T_sword32 MultAndShift4(
@@ -133,23 +126,14 @@ T_sword32 MultAndShift32(
             modify [eax edx] ;
 #endif
 
-#if defined(WATCOM)
-#pragma aux FindInterXAsm parm [EDI]
-#endif
 T_void ClearSampleAsm(T_byte8 *ptr) ;
 
-#if defined(WATCOM)
-#pragma aux FindInterXAsm parm [ESI] [EAX] [EBX] [EDI]
-#endif
 T_sword32 FindInterXAsm(
              T_sword32 deltaX,
              T_sword32 deltaZ,
              T_sword32 tanViewAngle,
              T_sword32 zTop) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawObjectColumnAsm   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawObjectColumnAsm(
            T_byte8 *p_shade,
            T_word32 count,
@@ -157,9 +141,6 @@ T_void DrawObjectColumnAsm(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentObjectColumnAsm   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentObjectColumnAsm(
            T_byte8 *p_shade,
            T_word32 count,
@@ -167,9 +148,6 @@ T_void DrawTranslucentObjectColumnAsm(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm1   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm1(
            T_byte8 *p_shade,
            T_word32 count,
@@ -177,9 +155,6 @@ T_void DrawTextureColumnAsm1(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm2   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm2(
            T_byte8 *p_shade,
            T_word32 count,
@@ -187,9 +162,6 @@ T_void DrawTextureColumnAsm2(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm4   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm4(
            T_byte8 *p_shade,
            T_word32 count,
@@ -197,9 +169,6 @@ T_void DrawTextureColumnAsm4(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm8   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm8(
            T_byte8 *p_shade,
            T_word32 count,
@@ -207,9 +176,6 @@ T_void DrawTextureColumnAsm8(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm16   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm16(
            T_byte8 *p_shade,
            T_word32 count,
@@ -217,9 +183,6 @@ T_void DrawTextureColumnAsm16(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm32   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm32(
            T_byte8 *p_shade,
            T_word32 count,
@@ -227,9 +190,6 @@ T_void DrawTextureColumnAsm32(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm64   parm	[EBX] [ECX] [EDX] [ESI] [EDI] modify [ecx esi]
-#endif
 T_void DrawTextureColumnAsm64(
            T_byte8 *p_shade,
            T_word32 count,
@@ -237,9 +197,6 @@ T_void DrawTextureColumnAsm64(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm128   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm128(
            T_byte8 *p_shade,
            T_word32 count,
@@ -247,9 +204,6 @@ T_void DrawTextureColumnAsm128(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureColumnAsm256   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTextureColumnAsm256(
            T_byte8 *p_shade,
            T_word32 count,
@@ -257,9 +211,6 @@ T_void DrawTextureColumnAsm256(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm1   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm1(
            T_byte8 *p_shade,
            T_word32 count,
@@ -267,9 +218,6 @@ T_void DrawTransparentColumnAsm1(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm2   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm2(
            T_byte8 *p_shade,
            T_word32 count,
@@ -277,9 +225,6 @@ T_void DrawTransparentColumnAsm2(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm4   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm4(
            T_byte8 *p_shade,
            T_word32 count,
@@ -287,9 +232,6 @@ T_void DrawTransparentColumnAsm4(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm8   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm8(
            T_byte8 *p_shade,
            T_word32 count,
@@ -297,9 +239,6 @@ T_void DrawTransparentColumnAsm8(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm16   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm16(
            T_byte8 *p_shade,
            T_word32 count,
@@ -307,9 +246,6 @@ T_void DrawTransparentColumnAsm16(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm32   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm32(
            T_byte8 *p_shade,
            T_word32 count,
@@ -317,9 +253,6 @@ T_void DrawTransparentColumnAsm32(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm64   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm64(
            T_byte8 *p_shade,
            T_word32 count,
@@ -327,9 +260,6 @@ T_void DrawTransparentColumnAsm64(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm128   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm128(
            T_byte8 *p_shade,
            T_word32 count,
@@ -337,9 +267,6 @@ T_void DrawTransparentColumnAsm128(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransparentColumnAsm256   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransparentColumnAsm256(
            T_byte8 *p_shade,
            T_word32 count,
@@ -347,9 +274,6 @@ T_void DrawTransparentColumnAsm256(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm1   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm1(
            T_byte8 *p_shade,
            T_word32 count,
@@ -357,9 +281,6 @@ T_void DrawTranslucentColumnAsm1(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm2   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm2(
            T_byte8 *p_shade,
            T_word32 count,
@@ -367,9 +288,6 @@ T_void DrawTranslucentColumnAsm2(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm4   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm4(
            T_byte8 *p_shade,
            T_word32 count,
@@ -377,9 +295,6 @@ T_void DrawTranslucentColumnAsm4(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm8   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm8(
            T_byte8 *p_shade,
            T_word32 count,
@@ -387,9 +302,6 @@ T_void DrawTranslucentColumnAsm8(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm16   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm16(
            T_byte8 *p_shade,
            T_word32 count,
@@ -397,9 +309,6 @@ T_void DrawTranslucentColumnAsm16(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm32   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm32(
            T_byte8 *p_shade,
            T_word32 count,
@@ -407,9 +316,6 @@ T_void DrawTranslucentColumnAsm32(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm64   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm64(
            T_byte8 *p_shade,
            T_word32 count,
@@ -417,9 +323,6 @@ T_void DrawTranslucentColumnAsm64(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm128   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm128(
            T_byte8 *p_shade,
            T_word32 count,
@@ -427,9 +330,6 @@ T_void DrawTranslucentColumnAsm128(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTranslucentColumnAsm256   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTranslucentColumnAsm256(
            T_byte8 *p_shade,
            T_word32 count,
@@ -437,9 +337,6 @@ T_void DrawTranslucentColumnAsm256(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm(
            T_byte8 *p_shade,
            T_word32 count,
@@ -447,9 +344,6 @@ T_void DrawTextureRowAsm(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm1   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm1(
            T_byte8 *p_shade,
            T_word32 count,
@@ -457,9 +351,6 @@ T_void DrawTextureRowAsm1(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm2   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm2(
            T_byte8 *p_shade,
            T_word32 count,
@@ -467,9 +358,6 @@ T_void DrawTextureRowAsm2(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm4   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm4(
            T_byte8 *p_shade,
            T_word32 count,
@@ -477,9 +365,6 @@ T_void DrawTextureRowAsm4(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm8   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm8(
            T_byte8 *p_shade,
            T_word32 count,
@@ -487,9 +372,6 @@ T_void DrawTextureRowAsm8(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm16   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm16(
            T_byte8 *p_shade,
            T_word32 count,
@@ -497,9 +379,6 @@ T_void DrawTextureRowAsm16(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm32   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm32(
            T_byte8 *p_shade,
            T_word32 count,
@@ -507,9 +386,6 @@ T_void DrawTextureRowAsm32(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm64   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm64(
            T_byte8 *p_shade,
            T_word32 count,
@@ -517,9 +393,6 @@ T_void DrawTextureRowAsm64(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm128   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm128(
            T_byte8 *p_shade,
            T_word32 count,
@@ -527,9 +400,6 @@ T_void DrawTextureRowAsm128(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTextureRowAsm256   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTextureRowAsm256(
            T_byte8 *p_shade,
            T_word32 count,
@@ -537,9 +407,6 @@ T_void DrawTextureRowAsm256(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransColumnAsm   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawTransColumnAsm(
            T_byte8 *p_shade,
            T_word32 count,
@@ -547,9 +414,6 @@ T_void DrawTransColumnAsm(
            T_sword32 textureOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm(
            T_byte8 *p_shade,
            T_word32 count,
@@ -557,9 +421,6 @@ T_void DrawTransRowAsm(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm1   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm1(
            T_byte8 *p_shade,
            T_word32 count,
@@ -567,9 +428,6 @@ T_void DrawTransRowAsm1(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm2   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm2(
            T_byte8 *p_shade,
            T_word32 count,
@@ -577,9 +435,6 @@ T_void DrawTransRowAsm2(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm4   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm4(
            T_byte8 *p_shade,
            T_word32 count,
@@ -587,9 +442,6 @@ T_void DrawTransRowAsm4(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm8   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm8(
            T_byte8 *p_shade,
            T_word32 count,
@@ -597,9 +449,6 @@ T_void DrawTransRowAsm8(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm16   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm16(
            T_byte8 *p_shade,
            T_word32 count,
@@ -607,9 +456,6 @@ T_void DrawTransRowAsm16(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm32   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm32(
            T_byte8 *p_shade,
            T_word32 count,
@@ -617,9 +463,6 @@ T_void DrawTransRowAsm32(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm64   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm64(
            T_byte8 *p_shade,
            T_word32 count,
@@ -627,9 +470,6 @@ T_void DrawTransRowAsm64(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm128   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm128(
            T_byte8 *p_shade,
            T_word32 count,
@@ -637,9 +477,6 @@ T_void DrawTransRowAsm128(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-#pragma aux  DrawTransRowAsm256   parm	[EBX] [ECX] [ESI] [EDX] [EDI]
-#endif
 T_void DrawTransRowAsm256(
            T_byte8 *p_shade,
            T_word32 count,
@@ -647,35 +484,10 @@ T_void DrawTransRowAsm256(
            T_sword32 yOffset,
            T_byte8 *p_pixel) ;
 
-#if defined(WATCOM)
-//#pragma aux Div32by32To1616Asm parm [EAX] [EBX]
-#endif
-#if defined(WATCOM)
-T_sword32 Div32by32To1616Asm(
-           T_sword32 dividend,
-           T_sword32 divider) ;
-#pragma aux Div32by32To1616Asm = \
-            "cdq" \
-            "shld edx, eax, 16" \
-            "sal eax, 16" \
-            "idiv ebx" \
-            parm [eax] [ebx] \
-            value [eax] \
-            modify [edx] ;
-#endif
-
 T_sword32 MultAndDivideAsm(
               T_sword32 multA,
               T_sword32 multB,
               T_sword32 divC) ;
-#if defined(WATCOM)
-#pragma aux MultAndDivideAsm = \
-                "imul ecx" \
-                "idiv ebx" \
-                parm [eax] [ecx] [ebx] \
-                value [eax] \
-                modify [edx] ;
-#endif
 
 #endif /** SERVER_ONLY **/
 
@@ -2676,17 +2488,6 @@ DebugCheck(maxY <= VIEW3D_HEIGHT) ;
 G_3dLineArray[P_segment->line].flags |= 0x8000 ;
 #ifndef NDEBUG
 G_didDrawWall = TRUE ;
-#endif
-#ifdef COMPILE_OPTION_ALLOW_SHIFT_TEXTURES
-                    if ((G_mouseAtX == x) &&
-                        (G_mouseAtY >= top) &&
-                        (G_mouseAtY <= bottom))  {
-                        if (G_textureSideNum == 0xFFFF)  {
-                            G_textureSideNum =
-                                G_3dLineArray[P_segment->line].side[
-                                    P_segment->lineSide] ;
-                        }
-                    }
 #endif
                     if (G_wall.opaque == 1)  {
                         IDrawTextureColumnNew(
@@ -6372,19 +6173,6 @@ T_word32 IDetermineDistToLine(T_sword16 x, T_sword16 y, T_word16 lineNum)
     return dist ;
 }
 
-#ifdef COMPILE_OPTION_ALLOW_SHIFT_TEXTURES
-T_void View3dTellMouseAt(T_sword16 x, T_sword16 y)
-{
-    G_mouseAtX = x - VIEW3D_UPPER_LEFT_X ;
-    G_mouseAtY = y - VIEW3D_UPPER_LEFT_Y ;
-}
-
-T_word16 View3dGetTextureSideNum(T_void)
-{
-    return G_textureSideNum ;
-}
-#endif
-
 T_word16 View3dGetSectorSide(T_word16 lineNum, T_sword16 x, T_sword16 y)
 {
     T_3dLine *p_line ;
@@ -6446,9 +6234,6 @@ T_word16 View3dFindSide(T_sword16 x, T_sword16 y)
     return View3dGetSide(line, x, y) ;
 }
 
-#if defined(WATCOM)
-#pragma aux  DrawObjectColumnAsm   parm	[EBX] [ECX] [EDX] [ESI] [EDI]
-#endif
 T_void DrawObjectColumnAsm(
            T_byte8 *p_shade, // ebx
            T_word32 count, // ecx
