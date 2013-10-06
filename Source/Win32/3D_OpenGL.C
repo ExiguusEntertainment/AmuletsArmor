@@ -32,6 +32,7 @@
 #include <GL/glu.h>
 #include <AAGL/AAGLTexture.h>
 #include <3D_Occlusion.h>
+#include <2D_Polygon.h>
 
 static T_word16 G_fromSector ;
 static GLuint G_texture;
@@ -553,6 +554,9 @@ T_byte8 View3dOnRightByNodeWithXY(
             T_word16 nodeIndex,
             T_sword16 x,
             T_sword16 y) ;
+static T_void IDrawSectorSegmentFloor(
+        T_3dSector *p_sector,
+        T_word16 ssectorIndex);
 
 /* Internal Defines: */
 #define VIEW_3D_LEFT_ANGLE 0x2000
@@ -563,8 +567,6 @@ T_byte8 View3dOnRightByNodeWithXY(
 //#define MAX_INTERSECTIONS 100
 #define MAX_WALL_RUNS     8000
 //#define MAX_WALL_RUNS     16000
-#define MAX_FLOOR_INDEXES 40
-//#define MAX_FLOOR_INDEXES 100
 #define MAX_OBJECTS       500
 #define MAX_OBJECT_COLUMNS 50
 
@@ -813,6 +815,8 @@ T_sword32 G_textureStepY ;
 
 T_word32 G_textureAndX=63, G_textureAndY=63 ;
 T_word16 G_textureShift=6 ;
+
+static T_2DPolygon **G_3dSSectorPolygonArray;
 
 /* Arrays to record current wall information. */
 /*
@@ -1523,6 +1527,129 @@ T_void IDrawNode(T_word16 nodeIndex)
     }
 }
 
+static T_void IDrawSectorSegmentFloor(
+        T_3dSector *p_sector,
+        T_word16 ssectorIndex)
+{
+    GLuint textureID;
+    GLdouble z;
+    T_word16 sizeX, sizeY;
+    T_2DPolygon *p;
+    T_2DPolygonPoint *pp;
+    GLdouble tx, ty;
+    T_3dSectorInfo *p_info;
+
+    DebugRoutine("IDrawSectorSegmentFloor");
+
+//    p_segment = &G_3dSegArray[firstSeg];
+    p = View3dPolygonGet(ssectorIndex);
+    if (!p) {
+        // No polygon, ignore
+        DebugEnd();
+        return;
+    }
+    pp = p->iFirst;
+    if (!pp) {
+        DebugEnd();
+        return;
+    }
+    z = p_sector->floorHt;//G_wall.floorZ;
+
+    textureID = AAGLFindTexture(G_wall.textureFloor);
+    if (!textureID) {
+        DebugEnd();
+        return;
+    }
+    AAGLTextureGetSize(textureID, &sizeX, &sizeY);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    /* Draw each of the segments in the sector. */
+    glBegin( GL_POLYGON);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
+    glColor3ub((GLbyte)G_wall.shadeIndex, (GLbyte)G_wall.shadeIndex, (GLbyte)G_wall.shadeIndex);
+    p_info = &G_3dSectorInfoArray[p_sector-G_3dSectorArray];
+//    printf("Floor(%d, %d):", ssectorIndex, p_sector-G_3dSectorArray);
+    while (pp) {
+        tx = (GLdouble)pp->iCoord.iX;
+        tx -= p_info->textureXOffset;
+        tx /= sizeX;
+        ty = (GLdouble)pp->iCoord.iY;
+        ty -= p_info->textureYOffset;
+        ty /= sizeY;
+//        printf(" (%g, %g)", pp->iCoord.iX, pp->iCoord.iY);
+        glTexCoord2d(tx, ty);
+        glVertex3f( (GLfloat)pp->iCoord.iY, (GLfloat)z, (GLfloat)pp->iCoord.iX);
+        pp = pp->iNext;
+    }
+    glEnd();
+    glColor3ub(255, 255, 255);
+//    printf("END\n");
+    DebugEnd();
+}
+
+static T_void IDrawSectorSegmentCeiling(
+        T_3dSector *p_sector,
+        T_word16 ssectorIndex)
+{
+    GLuint textureID;
+    GLdouble z;
+    T_word16 sizeX, sizeY;
+    T_2DPolygon *p;
+    T_2DPolygonPoint *pp;
+
+    DebugRoutine("IDrawSectorSegmentCeiling");
+
+//    p_segment = &G_3dSegArray[firstSeg];
+    p = View3dPolygonGet(ssectorIndex);
+    if (!p) {
+        // No polygon, ignore
+        DebugEnd();
+        return;
+    }
+    pp = p->iFirst;
+    if (!pp) {
+        DebugEnd();
+        return;
+    }
+    z = p_sector->ceilingHt;//G_wall.floorZ;
+
+    textureID = AAGLFindTexture(G_wall.textureCeiling);
+    if (!textureID) {
+        DebugEnd();
+        return;
+    }
+    AAGLTextureGetSize(textureID, &sizeX, &sizeY);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    /* Draw each of the segments in the sector. */
+    glBegin( GL_POLYGON);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR /* GL_NEAREST */);
+    glColor3ub((GLbyte)G_wall.shadeIndex, (GLbyte)G_wall.shadeIndex, (GLbyte)G_wall.shadeIndex);
+//    printf("Ceilng(%d, %d):", ssectorIndex, p_sector-G_3dSectorArray);
+    while (pp) {
+//        printf(" (%g, %g)", pp->iCoord.iX, pp->iCoord.iY);
+        glTexCoord2f((GLfloat)pp->iCoord.iX/sizeX, (GLfloat)pp->iCoord.iY/sizeY);
+        glVertex3f( (GLfloat)pp->iCoord.iY, (GLfloat)z, (GLfloat)pp->iCoord.iX);
+        pp = pp->iNext;
+    }
+    glEnd();
+    glColor3ub(255, 255, 255);
+//    printf("END\n");
+    DebugEnd();
+}
+
 /*-------------------------------------------------------------------------*
  * Routine:  IDrawSSector
  *-------------------------------------------------------------------------*/
@@ -1573,6 +1700,12 @@ T_void IDrawSSector(T_word16 ssectorIndex)
     G_wall.textureFloor = *((T_byte8 **)&p_sector->floorTx[1]);
     G_wall.textureCeiling = *((T_byte8 **)&p_sector->ceilingTx[1]);
     G_wall.transFlag = p_sector->trigger & 1;
+
+    /* Draw the floor segments of this sector segment */
+    IDrawSectorSegmentFloor(p_sector, ssectorIndex);
+
+    /* Draw the ceiling segments of this sector segment */
+    IDrawSectorSegmentCeiling(p_sector, ssectorIndex);
 
     /* Draw each of the segments in the sector. */
     for (; segCount; segCount--, p_segment++, firstSeg++) {
@@ -1832,24 +1965,8 @@ E_Boolean IIsSegmentGood(T_word16 segmentIndex)
         return FALSE;
     }
 
-    /* Clip to the screen edges. */
-//    if (G_xLeft < 0)
-//        G_xLeft = 0;
-//    if (G_xRight > (MAX_VIEW3D_WIDTH-1))
-//        G_xRight = MAX_VIEW3D_WIDTH-1;
-//    xl = G_xLeft;
-//    xr = G_xRight;
-//    if (xl > xr) {
-//        xl = G_xRight;
-//        xr = G_xLeft;
-//    }
-
-    /* Now we need to see if any part of this wall can be seen. */
     /* If any part can, we will draw it.  If not, there is no */
     /* need to try drawing it. */
-//    DebugCheck(xl < MAX_VIEW3D_WIDTH);
-//    DebugCheck(xr < MAX_VIEW3D_WIDTH);
-//    DebugCheck(xl <= xr);
     if (G_wall.fromX > G_wall.toX) {
 #if DEBUG_IS_SEGMENT_GOOD_PRINTF
         printf("back culled\n");
@@ -7067,31 +7184,115 @@ T_void DrawTransRowAsm256(
  *<!-----------------------------------------------------------------------*/
 T_void IMarkOffWall(T_void)
 {
-#if 0
-    T_word16 x;
-    T_byte8 *p_column;
-    if (G_xLeft > G_xRight)
-        return;
-    DebugCheck(G_xLeft <= G_xRight);
-    DebugCheck(G_xLeft >= 0);
-    DebugCheck(G_xRight >= 0);
-    DebugCheck(G_xLeft < MAX_VIEW3D_WIDTH);
-    DebugCheck(G_xRight < MAX_VIEW3D_WIDTH);
-    x = G_xLeft;
-//    DebugCheck(x <= VIEW3D_WIDTH);
-    p_column = G_colDone + x;
-    x = G_xRight - x;
-
-    for (; (x != 0); x--, p_column++) {
-        if (*p_column == 0) {
-            G_colCount++;
-            *p_column = 1;
-        }
-    }
-#else
 //    printf("%d) v%d->v%d: ", P_segment->line, P_segment->from, P_segment->to);
     OcclusionAdd(G_wall.fromX, G_wall.toX);
+}
+
+void View3dSubsectorPolygonsBuild(T_word16 nodeIndex, T_2DPolygon *aPolygon)
+{
+    T_2DPolygon *p;
+    T_3dNode *p_node;
+    T_2DVector v;
+//    T_2DPolygonPoint *pv;
+
+    if (nodeIndex & 0x8000)  {
+        /* Found a segment sector, assign a polygon to that sub sector */
+        nodeIndex &= 0x7FFF;
+        if (PolygonGetNumPoints(aPolygon) > 2) {
+            G_3dSSectorPolygonArray[nodeIndex] = PolygonCopy(aPolygon);
+        } else {
+            // Don't use this less than 3 point polygon
+            G_3dSSectorPolygonArray[nodeIndex] = 0;
+        }
+#if 0 // DEBUG ONLY
+        printf("SSector %d) ", nodeIndex);
+        p = aPolygon;
+        pv = p->iFirst;
+        while (pv) {
+            if (pv != p->iFirst)
+                printf(" -> ");
+            printf("(%g, %g)", pv->iCoord.iX, pv->iCoord.iY);
+            pv = pv->iNext;
+        }
+        printf(".\n");
 #endif
+    } else {
+        p_node = G_3dNodeArray + nodeIndex;
+        // Process left side
+        v.iStart.iX = p_node->x;
+        v.iStart.iY = p_node->y;
+        v.iDelta.iX = -p_node->dx;
+        v.iDelta.iY = -p_node->dy;
+        p = PolygonClip(aPolygon, &v);
+        View3dSubsectorPolygonsBuild(G_3dPNodeArray[nodeIndex]->left, p) ;
+        PolygonDestroy(p);
+
+        // Now go down the right side
+        v.iStart.iX = p_node->x;
+        v.iStart.iY = p_node->y;
+        v.iDelta.iX = p_node->dx;
+        v.iDelta.iY = p_node->dy;
+        p = PolygonClip(aPolygon, &v);
+        View3dSubsectorPolygonsBuild(G_3dPNodeArray[nodeIndex]->right, p) ;
+        PolygonDestroy(p);
+    }
+}
+
+
+void View3dPolygonsCreate(void)
+{
+    T_3dNode *p_root;
+    T_2DPolygon *p;
+    T_2DCoord c;
+
+    DebugRoutine("View3dPolygonsBuild");
+
+    // Allocate an array of pointers to polygons
+    G_3dSSectorPolygonArray = MemAlloc(G_Num3dSSectors * sizeof(T_2DPolygon *));
+    memset(G_3dSSectorPolygonArray, 0, G_Num3dSSectors * sizeof(T_2DPolygon *));
+
+    // Create a polygon that's the whole map
+    p = PolygonCreate();
+    p_root = G_3dNodeArray + G_3dRootBSPNode;
+    c.iX = -65535.0;
+    c.iY = 65535.0;
+    PolygonAddPoint(p, c);
+    c.iX = 65535.0;
+    c.iY = 65535.0;
+    PolygonAddPoint(p, c);
+    c.iX = 65535.0;
+    c.iY = -65535.0;
+    PolygonAddPoint(p, c);
+    c.iX = -65535.0;
+    c.iY = -65535.0;
+    PolygonAddPoint(p, c);
+    // Subdivide the polygon into the subsectors
+    View3dSubsectorPolygonsBuild(G_3dRootBSPNode, p);
+    PolygonDestroy(p);
+
+    DebugEnd();
+}
+
+void View3dPolygonsDestroy(void)
+{
+    T_word16 i;
+    DebugRoutine("View3dPolygonsDestroy");
+    DebugCheck(G_3dSSectorPolygonArray != NULL);
+    if (G_3dSSectorPolygonArray) {
+        for (i=0; i<G_Num3dSSectors; i++) {
+            PolygonDestroy(G_3dSSectorPolygonArray[i]);
+            G_3dSSectorPolygonArray[i] = 0;
+        }
+        G_3dSSectorPolygonArray = NULL;
+    }
+    DebugEnd();
+}
+
+T_2DPolygon *View3dPolygonGet(T_word16 aSSectorIndex)
+{
+    if (aSSectorIndex >= G_Num3dSSectors)
+        return 0;
+    return G_3dSSectorPolygonArray[aSSectorIndex];
 }
 
 /** @} */

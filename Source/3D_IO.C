@@ -123,6 +123,7 @@ static T_void ILoadSegmentSectors(
 static T_void ILoadReject(
                   T_file file,
                   T_directoryEntry *p_dir) ;
+
 static T_void IDumpData(T_void) ;
 static T_void IPrepareObjects(T_void) ;
 static T_void ILoadBlockMap(
@@ -273,6 +274,11 @@ puts("Not a valid file!\n") ;
     /* Load in any other sector information that is needed. */
 //    ILoadSectorInfo(newname) ;
 
+#ifdef AA_OPENGL
+    // Compute the polygons for the subsectors
+    View3dPolygonsCreate();
+#endif
+
 //puts("Remapping sectors") ;
     View3dRemapSectors() ;
 
@@ -340,6 +346,10 @@ T_void View3dUnloadMap(T_void)
     }
     DebugCheck(G_Num3dObjects == 0) ;
     G_First3dObject = G_Last3dObject = NULL ;
+#endif
+
+#ifdef AA_OPENGL
+    View3dPolygonsDestroy();
 #endif
 
 //puts("Unmapping sectors") ;
@@ -956,8 +966,8 @@ static T_void ILockPictures(T_void)
         MemAlloc(sizeof(T_resource) * G_Num3dSectors) ;
 
     /* Look for textures on sides. */
-    for (i=0; i<G_Num3dSides; i++)  {
-        p_side = &G_3dSideArray[i] ;
+    for (i = 0; i < G_Num3dSides; i++) {
+        p_side = &G_3dSideArray[i];
 
         if (p_side->upperTx[0] != '-') {
             strncpy(name, p_side->upperTx, 8);
@@ -973,7 +983,7 @@ static T_void ILockPictures(T_void)
             *((T_byte8 **)(&p_side->upperTx[1])) = G_textureNone + 4;
 #ifdef AA_OPENGL
             // Ensure we have the 'none' texture created
-            AAGLTextureCreateMipMapFromPIC(G_textureNone+4);
+            AAGLTextureCreateMipMapFromPIC(G_textureNone + 4);
 #endif
         }
 
@@ -991,7 +1001,7 @@ static T_void ILockPictures(T_void)
             *((T_byte8 **)(&p_side->lowerTx[1])) = G_textureNone + 4;
 #ifdef AA_OPENGL
             // Ensure we have the 'none' texture created
-            AAGLTextureCreateMipMapFromPIC(G_textureNone+4);
+            AAGLTextureCreateMipMapFromPIC(G_textureNone + 4);
 #endif
         }
 
@@ -1009,7 +1019,7 @@ static T_void ILockPictures(T_void)
             *((T_byte8 **)(&p_side->mainTx[1])) = G_textureNone + 4;
 #ifdef AA_OPENGL
             // Ensure we have the 'none' texture created
-            AAGLTextureCreateMipMapFromPIC(G_textureNone+4);
+            AAGLTextureCreateMipMapFromPIC(G_textureNone + 4);
 #endif
         }
     }
@@ -1018,21 +1028,39 @@ static T_void ILockPictures(T_void)
     for (i=0; i<G_Num3dSectors; i++)  {
         p_sector = &G_3dSectorArray[i] ;
 
-        if (p_sector->floorTx[0] != '-')  {
-            strncpy(name, p_sector->floorTx, 8) ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) =
-                PictureLock(name, &G_3dFloorResourceArray[i]) ;
+        if (p_sector->floorTx[0] != '-') {
+            strncpy(name, p_sector->floorTx, 8);
+            p_pic = PictureLock(name, &G_3dFloorResourceArray[i]);
+            *((T_byte8 **)(&p_sector->floorTx[1])) = p_pic;
+#ifdef AA_OPENGL
+            // Check to see if this is a new picture and create a GLTexture mip map
+            // from t picture
+            AAGLTextureCreateMipMapFromPIC(p_pic);
+#endif
         } else {
-            G_3dFloorResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) = G_textureNone+4 ;
+            G_3dFloorResourceArray[i] = RESOURCE_BAD;
+            *((T_byte8 **)(&p_sector->floorTx[1])) = G_textureNone + 4;
+#ifdef AA_OPENGL
+            // Ensure we have the 'none' texture created
+            AAGLTextureCreateMipMapFromPIC(G_textureNone + 4);
+#endif
         }
-        if (p_sector->ceilingTx[0] != '-')  {
-            strncpy(name, p_sector->ceilingTx, 8) ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) =
-                PictureLock(name, &G_3dCeilingResourceArray[i]) ;
+        if (p_sector->ceilingTx[0] != '-') {
+            strncpy(name, p_sector->ceilingTx, 8);
+            p_pic = PictureLock(name, &G_3dCeilingResourceArray[i]);
+            *((T_byte8 **)(&p_sector->ceilingTx[1])) = p_pic;
+#ifdef AA_OPENGL
+            // Check to see if this is a new picture and create a GLTexture mip map
+            // from t picture
+            AAGLTextureCreateMipMapFromPIC(p_pic);
+#endif
         } else {
-            G_3dCeilingResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) = G_textureNone+4 ;
+            G_3dCeilingResourceArray[i] = RESOURCE_BAD;
+            *((T_byte8 **)(&p_sector->ceilingTx[1])) = G_textureNone + 4;
+#ifdef AA_OPENGL
+            // Ensure we have the 'none' texture created
+            AAGLTextureCreateMipMapFromPIC(G_textureNone + 4);
+#endif
         }
     }
 

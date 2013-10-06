@@ -123,7 +123,7 @@ GLuint AAGLTextureCreateMipMapFromPIC(T_byte8 *aPicture)
     return textureID;
 }
 
-void AAGLTextureGetSize(GLuint textureID, T_sword16 *sizeX, T_sword16 *sizeY)
+void AAGLTextureGetSize(GLuint textureID, T_word16 *sizeX, T_word16 *sizeY)
 {
     T_AAGLTexture *p = G_AAGLTextures;
     DebugRoutine("AAGLTextureGetSize");

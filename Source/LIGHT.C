@@ -214,9 +214,11 @@ T_void LightTableRecalculate(T_lightTable light, T_byte8 outsideLighting)
                             value = sourceReg & 0x3FFF ;
                         } else {
                             /* It is a sector based light. */
-                            DebugCheck(sourceReg < G_Num3dSectors) ;
+                            //DebugCheck(sourceReg < G_Num3dSectors) ;
+                            if (sourceReg < G_Num3dSectors)  {
     //                        value = G_preLightCalculations[sourceReg] ;
-                            value = MapGetSectorLighting(sourceReg) ;
+                                value = MapGetSectorLighting(sourceReg) ;
+                            }
                         }
 
                         /* Get a multiplier. */
@@ -254,8 +256,10 @@ T_void LightTableRecalculate(T_lightTable light, T_byte8 outsideLighting)
                             registers[storageReg] = total ;
                     } else {
                         /* Must be a sector. */
-                        DebugCheck(storageReg < G_Num3dSectors) ;
-                        G_lightCalculations[storageReg] = total ;
+                        //DebugCheck(storageReg < G_Num3dSectors) ;
+                        if (storageReg < G_Num3dSectors) {
+                            G_lightCalculations[storageReg] = total ;
+                        }
                     }
                 }
 

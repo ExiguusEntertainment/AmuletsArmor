@@ -7,6 +7,7 @@
 
 #include "GENERAL.H"
 #include "VIEWFILE.H"
+#include <2D_Polygon.h>
 
 /*
 #define VIEW3D_WIDTH 300
@@ -130,6 +131,10 @@ T_void View3dRemapSectors(T_void);
 
 T_void View3dUnmapSectors(T_void);
 
+void View3dPolygonsCreate(void);
+void View3dPolygonsDestroy(void);
+void View3dSubsectorPolygonsBuild(T_word16 nodeIndex, T_2DPolygon *aPolygon);
+T_2DPolygon *View3dPolygonGet(T_word16 aSSectorIndex);
 
 #endif
 
