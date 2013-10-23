@@ -320,19 +320,22 @@
     <ClCompile Include="..\..\..\..\Source\SERVER.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\Win32\3D_OpenGL.C">
-      <Filter>Source Files\Win32</Filter>
-    </ClCompile>
     <ClCompile Include="test_main.c">
       <Filter>Source Files\Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\AAGLTexture.c">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\3D_Occlusion.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\2D_Polygon.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\Win32\3D_OpenGL.C">
+      <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\AAGLTexture.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\3D_VIEW.C">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
