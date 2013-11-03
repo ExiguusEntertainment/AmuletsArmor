@@ -1531,6 +1531,7 @@ T_void StatsUpdatePlayerStatistics (T_void)
                     StatsChangePlayerWater (-1);
                 }
             }
+
     //        sprintf (stmp,"regen: M=%d H=%d\n",(T_sword16)mregen,(T_sword16)hregen);
     //        MessageAdd (stmp);
 
@@ -1558,6 +1559,9 @@ T_void StatsUpdatePlayerStatistics (T_void)
             /* modify last update by remainder */
             delta-=420;
             lastupdate-=delta;
+
+            // Always update the banner status
+            BannerStatusBarUpdate();
         }
     }
     else
