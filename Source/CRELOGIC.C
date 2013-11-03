@@ -1089,11 +1089,6 @@ T_sword32 lx, ly, lz ;
                 DebugCheck(p_obj != NULL) ;
                 DebugCheck(ObjectGetServerId(p_obj) != 0) ;
                 DebugCheck(ObjectIsCreature(p_obj) == TRUE) ;
-#if 0
-lx = ObjectGetX(p_obj) ;
-ly = ObjectGetY(p_obj) ;
-lz = ObjectGetZ(p_obj) ;
-#endif
 #ifndef NDEBUG
                 SyncMemAdd("Creature %d at %d %d\n", ObjectGetServerId(p_obj), ObjectGetX16(p_obj), ObjectGetY16(p_obj)) ;
                 if (p_creature->targetID != 0)
@@ -1219,8 +1214,6 @@ lz = ObjectGetZ(p_obj) ;
                         p_creature->lastUpdateTime = time ;
 #endif
 
-//                    updateCount = 0 ;
-
                     updateTime = p_logic->updateTime ;
 /* TESTING */
 updateTime += (updateTime>>1) ;
@@ -1238,10 +1231,7 @@ updateTime += (updateTime>>1) ;
                         updateTime -= (updateTime>>2) ;
 
                     /* Check to see if it is time to update this creature. */
-//                    while (time > (p_creature->lastUpdateTime + updateTime))  {
-/* TESTING */
                     if (time >= (p_creature->lastUpdateTime + updateTime))  {
-//printf("%d Creature %d updates\n", SyncTimeGet(), ObjectGetServerId(p_obj)) ;
                         /* Yes, it is time to update the creature. */
                         /* Update the creature based on which logic package */
                         /* it is using. */
@@ -1277,14 +1267,6 @@ updateTime += (updateTime>>1) ;
                             (!ObjectIsFullyPassable(p_obj))) {
                                 /* The creature was blocked.  Handle that. */
                             if (p_logic->explodeOnCollision)  {
-/*
-if (p_creature->moveBlocked)
-  puts("move blocked") ;
-if (ObjectWasBlocked(p_obj))
-  puts("object was blocked") ;
-if (p_creature->blockCount != 0)
-  puts("block count") ;
-*/
                                 IExplodeSelf(
                                     p_creature,
                                     p_logic,
@@ -1323,8 +1305,6 @@ if (p_creature->blockCount != 0)
 
                         if (!isGone)  {
                             /* Step along the updates. */
-//                            p_creature->lastUpdateTime += updateTime ;
-/* TESTING */
                             p_creature->lastUpdateTime = time ;
 
                             /* Regenerate the creature */
@@ -1333,20 +1313,9 @@ if (p_creature->blockCount != 0)
                                 regenValue = p_logic->hitPoints ;
                             p_creature->health = regenValue ;
 
-                            /* If a long time has occured, update per instance up to */
-                            /* 3 times. (usually 1/4 a second) */
-//                            updateCount++ ;
-//                            if (updateCount > MAX_CREATURE_MOVES_PER_UPDATE)  {
-                                /* Force the creature to think it moved during that */
-                                /* whole time. */
-//                                p_creature->lastUpdateTime = time ;
-//                                break ;
-//                            }
-
                             /* Update the stance based on the movement. */
                             /* But only do this if the creature is already in a walking */
                             /* or standing stance. */
-
                             if ((ObjectGetStance(p_obj) == STANCE_WALK) ||
                                 (ObjectGetStance(p_obj) == STANCE_STAND))  {
                                 if ((ObjectGetX(p_obj) != oldX) ||
@@ -1359,12 +1328,6 @@ if (p_creature->blockCount != 0)
                                     ObjectSetStance(p_obj, STANCE_STAND) ;
                                 }
                             }
-                            /* If the update time is set to 0, it just means to */
-                            /* update as fast as possible, but no particular rate. */
-                            /* This is useful for missiles that just want to know */
-                            /* if they hit a wall. */
-//                            if (p_logic->updateTime == 0)
-//                                break ;
                         } else {
                             /* If the creature is gone, don't try to loop. */
 //                            break ;
@@ -2276,14 +2239,6 @@ static T_void IUpdateTarget(T_creatureState *p_creature)
             }
         }
     }
-
-#if 0 /* should not need */
-    /* Find the target by its id. */
-    if (p_creature->targetID != 0)
-        p_target = ObjectFind((T_word16)p_creature->targetID) ;
-    else
-        p_target = NULL ;
-#endif
 
     /* Is the object still existing? */
     if (p_target)  {
