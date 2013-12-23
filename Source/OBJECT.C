@@ -615,7 +615,7 @@ T_void ObjectDeclareStatic(
         ObjectSetAngle(p_obj, 0) ;
         ObjectSetType(p_obj, 0) ;
         ObjectSetAttributes(p_obj, 0) ;
-        ObjectSetZ16(p_obj, MapGetWalkingFloorHeight(sector)) ;
+        ObjectSetZ16(p_obj, MapGetWalkingFloorHeight(&p_obj->objMove, sector));
         ObjectSetRadius(p_obj, 32) ;
         ObjectSetUpSectors(p_obj) ;
     }
@@ -657,7 +657,7 @@ T_void ObjectDeclareMoveable(
         ObjectSetAngle(p_obj, 0) ;
         ObjectSetType(p_obj, 0) ;
         ObjectSetAttributes(p_obj, 0) ;
-        ObjectSetZ16(p_obj, MapGetWalkingFloorHeight(sector)) ;
+        ObjectSetZ16(p_obj, MapGetWalkingFloorHeight(&p_obj->objMove, sector)) ;
         ObjectSetRadius(p_obj, 32) ;
         ObjectSetUpSectors(p_obj) ;
     }
@@ -695,7 +695,7 @@ T_void ObjectTeleport(T_3dObject *p_obj, T_sword16 x, T_sword16 y)
 
     /* Only teleport if going to a valid sector. */
     if (sector != 0xFFFF)  {
-        z = MapGetWalkingFloorHeight(sector) ;
+        z = MapGetWalkingFloorHeight(&p_obj->objMove, sector) ;
         View3dSetExceptObjectByPtr(NULL) ;
 
         /* Make sure no objects are in the way at that location. */
@@ -2063,7 +2063,7 @@ E_Boolean ObjectCheckIfCollide(
 
         /* Check to see if the sectors are too high */
         for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
-            if ((z>>16) < MapGetWalkingFloorHeight(ObjectGetNthAreaSector(p_obj, i)))  {
+            if ((z>>16) < MapGetWalkingFloorHeight(&p_obj->objMove, ObjectGetNthAreaSector(p_obj, i)))  {
                 status = TRUE ;
                 ObjectSetMoveFlags(p_obj, OBJMOVE_FLAG_BLOCKED) ;
 //printf("nth sector %d %d %d\n", i, ObjectGetNthAreaSector(p_obj, i), z>>16) ;

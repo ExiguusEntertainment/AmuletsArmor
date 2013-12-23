@@ -94,7 +94,7 @@ static T_word16 G_wallDefinition = LINE_IS_IMPASSIBLE ;
 
 E_Boolean IIsFloorAndCeilingOk(T_word16 lineNum, E_Boolean f_add, T_3dObject *p_obj) ;
 
-T_void IUpdateSectorHeights(T_word16 sector) ;
+T_void IUpdateSectorHeights(T_3dObject *p_obj, T_word16 sector);
 
 E_Boolean MoveToFast(
          T_sword32 *oldX,
@@ -166,17 +166,19 @@ static E_Boolean IWallTouchInBlock(
                     T_word16 *p_walls) ;
 
 static E_Boolean ICanSqueezeThrough(
-                     T_sword16 zPos,
-                     T_sword16 height,
-                     T_word16 numSectors,
-                     T_word16 *p_sectorList) ;
+        T_3dObject *p_obj,
+		T_sword16 zPos,
+		T_sword16 height,
+		T_word16 numSectors,
+		T_word16 *p_sectorList);
 
 static E_Boolean ICanSqueezeThroughWithClimb(
-                     T_sword16 *zPos,
-                     T_sword16 climbHeight,
-                     T_sword16 height,
-                     T_word16 numSectors,
-                     T_word16 *p_sectorList) ;
+        T_3dObject *p_obj,
+        T_sword16 *zPos,
+        T_sword16 climbHeight,
+        T_sword16 height,
+        T_word16 numSectors,
+        T_word16 *p_sectorList);
 
 /*****************************/
 /*    ASSEMBLY DEFINES       */
@@ -402,14 +404,14 @@ E_Boolean IIsFloorAndCeilingOk(
     /* Find the floor and ceiling heights of both sides of */
     /* a line. */
     if (side1 != -1)  {
-        floorHeight1 = MapGetWalkingFloorHeight(sector1) ;
+        floorHeight1 = MapGetWalkingFloorHeight(&p_obj->objMove, sector1) ;
         ceilingHeight1 = G_3dSectorArray[sector1].ceilingHt ;
         if (G_3dSectorInfoArray[sector1].ceilingLimit < ceilingHeight1)
             ceilingHeight1 = G_3dSectorInfoArray[sector1].ceilingLimit ;
     }
 
     if (side2 != -1)  {
-        floorHeight2 = MapGetWalkingFloorHeight(sector2) ;
+        floorHeight2 = MapGetWalkingFloorHeight(&p_obj->objMove, sector2) ;
         ceilingHeight2 = G_3dSectorArray[sector2].ceilingHt ;
         if (G_3dSectorInfoArray[sector2].ceilingLimit < ceilingHeight2)
             ceilingHeight2 = G_3dSectorInfoArray[sector2].ceilingLimit ;
@@ -426,7 +428,7 @@ E_Boolean IIsFloorAndCeilingOk(
                     fflush(stdout) ;
                 }
 #endif
-                IUpdateSectorHeights(sector1) ;
+                IUpdateSectorHeights(p_obj, sector1) ;
 //            }
         }
 
@@ -440,7 +442,7 @@ E_Boolean IIsFloorAndCeilingOk(
                     fflush(stdout) ;
                 }
 #endif
-                IUpdateSectorHeights(sector2) ;
+                IUpdateSectorHeights(p_obj, sector2) ;
 //            }
         }
     }
@@ -975,10 +977,10 @@ static T_sword32 IGetBlock(T_sword16 x, T_sword16 y)
  *  Allow the next collisions to consider water dipping.
  *
  *<!-----------------------------------------------------------------------*/
-T_void View3dAllowDip(T_void)
-{
-    G_allowDip = TRUE ;
-}
+//T_void View3dAllowDip(T_void)
+//{
+//    G_allowDip = TRUE ;
+//}
 
 /*-------------------------------------------------------------------------*
  * Routine:  View3dDisallowDip
@@ -987,15 +989,15 @@ T_void View3dAllowDip(T_void)
  *  Disallow the next collisions to consider water dipping.
  *
  *<!-----------------------------------------------------------------------*/
-T_void View3dDisallowDip(T_void)
-{
-    G_allowDip = FALSE ;
-}
-
-E_Boolean View3dIsAllowDip(T_void)
-{
-    return G_allowDip ;
-}
+//T_void View3dDisallowDip(T_void)
+//{
+//    G_allowDip = FALSE ;
+//}
+//
+//E_Boolean View3dIsAllowDip(T_void)
+//{
+//    return G_allowDip ;
+//}
 
 /*-------------------------------------------------------------------------*
  * Routine:  IUpdateSectorHeights
@@ -1005,14 +1007,15 @@ E_Boolean View3dIsAllowDip(T_void)
  *  tell what are the heightest and lowest sectors in a square and what
  *  their values are.
  *
+ *  @param p_obj -- Object viewing the sector heights
  *  @param sector -- sector to update
  *
  *<!-----------------------------------------------------------------------*/
-T_void IUpdateSectorHeights(T_word16 sector)
+T_void IUpdateSectorHeights(T_3dObject *p_obj, T_word16 sector)
 {
     T_sword16 floor, ceiling, limit ;
 
-    floor = MapGetWalkingFloorHeight(sector) ;
+    floor = MapGetWalkingFloorHeight(&p_obj->objMove, sector) ;
 //    floor = G_3dSectorArray[sector].floorHt ;
 //    if ((G_allowDip) &&
 //        (G_3dSectorArray[sector].trigger & SECTOR_DIP_FLAG))
@@ -2796,6 +2799,7 @@ E_Boolean MoveTo(
         }
         z = ObjectGetZ16(p_obj) ;
         if (ICanSqueezeThroughWithClimb(
+                p_obj,
                 &z,
                 ObjectGetClimbHeight(p_obj),
                 ObjectGetHeight(p_obj),
@@ -3150,6 +3154,7 @@ E_Boolean Collide3dGetSectorsInBox(
  *  in the given list of sectors (typically returned via
  *  Collide3dGetSectorsInBox).
  *
+ *  @param p_obj -- Object being moved
  *  @param zPos -- Z height of check
  *  @param climbHeight -- Height to attempt to stepping up to
  *  @param height -- Vertical height required
@@ -3160,10 +3165,11 @@ E_Boolean Collide3dGetSectorsInBox(
  *
  *<!-----------------------------------------------------------------------*/
 static E_Boolean ICanSqueezeThrough(
-                     T_sword16 zPos,
-                     T_sword16 height,
-                     T_word16 numSectors,
-                     T_word16 *p_sectorList)
+        T_3dObject *p_obj,
+		T_sword16 zPos,
+		T_sword16 height,
+		T_word16 numSectors,
+		T_word16 *p_sectorList)
 {
     E_Boolean canSqueeze = TRUE ;
     T_word16 i ;
@@ -3209,7 +3215,7 @@ static E_Boolean ICanSqueezeThrough(
     ceiling = 32767 ;
     for (i=0; i<numSectors; i++)  {
         sector = p_sectorList[i] ;
-        floor2 = MapGetWalkingFloorHeight(sector) ;
+        floor2 = MapGetWalkingFloorHeight(&p_obj->objMove, sector) ;
         if (floor2 > floor)
             floor = floor2 ;
         ceiling2 = G_3dSectorArray[sector].ceilingHt ;
@@ -3236,13 +3242,14 @@ static E_Boolean ICanSqueezeThrough(
 }
 
 /*-------------------------------------------------------------------------*
- * Routine:  ICanSqueezeThrough
+ * Routine:  ICanSqueezeThroughWithClimb
  *-------------------------------------------------------------------------*/
 /**
  *  ICanSqueezeThrough checks to see if the given parameters will fit
  *  in the given list of sectors (typically returned via
  *  Collide3dGetSectorsInBox).
  *
+ *  @param p_obj -- ObjMove being moved
  *  @param zPos -- Z height of check
  *  @param climbHeight -- Height to attempt to stepping up to
  *  @param height -- Vertical height required
@@ -3253,11 +3260,12 @@ static E_Boolean ICanSqueezeThrough(
  *
  *<!-----------------------------------------------------------------------*/
 static E_Boolean ICanSqueezeThroughWithClimb(
-                     T_sword16 *zPos,
-                     T_sword16 climbHeight,
-                     T_sword16 height,
-                     T_word16 numSectors,
-                     T_word16 *p_sectorList)
+        T_3dObject *p_obj,
+		T_sword16 *zPos,
+		T_sword16 climbHeight,
+		T_sword16 height,
+		T_word16 numSectors,
+		T_word16 *p_sectorList)
 {
     E_Boolean canSqueeze = TRUE ;
     T_word16 i ;
@@ -3315,7 +3323,7 @@ static E_Boolean ICanSqueezeThroughWithClimb(
     ceiling = 32767 ;
     for (i=0; i<numSectors; i++)  {
         sector = p_sectorList[i] ;
-        floor2 = MapGetWalkingFloorHeight(sector) ;
+        floor2 = MapGetWalkingFloorHeight(&p_obj->objMove, sector) ;
         if (floor2 > floor)
             floor = floor2 ;
         ceiling2 = G_3dSectorArray[sector].ceilingHt ;
@@ -3467,6 +3475,7 @@ E_Boolean Collide3dMoveToXYZ(
             /* Can we fit in the new area? */
 //puts("\n\ncheck") ;  fflush(stdout) ;
             if (!ICanSqueezeThrough(
+                    p_obj,
                     (T_sword16)(newZ >> 16),
                     ObjectGetHeight(p_obj),
                     G_numSurroundingSectors,
@@ -3478,6 +3487,7 @@ E_Boolean Collide3dMoveToXYZ(
 #else
                 newZ16 = newZ >> 16 ;
                 if (!ICanSqueezeThroughWithClimb(
+                    p_obj,
                     &newZ16,
                     (T_word16)(8+ObjectGetClimbHeight(p_obj)),
                     (T_word16)(ObjectGetHeight(p_obj)),

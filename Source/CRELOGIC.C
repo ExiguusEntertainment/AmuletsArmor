@@ -1006,7 +1006,7 @@ T_sword32 lx, ly, lz ;
 #   endif
 
     /* Always allow dipping. */
-    View3dAllowDip() ;
+//    View3dAllowDip() ;
 
     /* Walls are creature based. */
     Collide3dSetWallDefinition(
@@ -1126,24 +1126,25 @@ T_sword32 lx, ly, lz ;
                         CreatureTakeSectorDamage(p_logic, p_obj) ;
 
                     /* First, update gravity if the creature cannot fly. */
-                    if (p_logic->canFly == FALSE)  {
-                        if (ObjectGetZ(p_obj) >
-                                (MapGetWalkingFloorHeight(ObjectGetAreaSector(p_obj))<<16))
+                    if (p_logic->canFly == FALSE) {
+                        if (ObjectGetZ(p_obj)
+                                > (MapGetWalkingFloorHeight(&p_obj->objMove,
+                                        ObjectGetAreaSector(p_obj)) << 16))
                             if (p_creature->allowFall == TRUE)
-                                ObjectUpdateZVel(p_obj, delta) ;
+                                ObjectUpdateZVel(p_obj, delta);
                     } else {
-                        if (p_creature->isEarthbound)  {
-                            if (time > p_creature->timeEarthboundEnds)  {
+                        if (p_creature->isEarthbound) {
+                            if (time > p_creature->timeEarthboundEnds) {
                                 /* Stop being earthbound. */
-                                p_creature->isEarthbound = FALSE ;
+                                p_creature->isEarthbound = FALSE;
                                 ObjectSetMoveFlags(
-                                    p_obj,
-                                    OBJMOVE_FLAG_IGNORE_GRAVITY) ;
+                                        p_obj,
+                                        OBJMOVE_FLAG_IGNORE_GRAVITY);
                             }
                         } else {
                             ObjectClearMoveFlags(
-                                p_obj,
-                                OBJMOVE_FLAG_IGNORE_MAX_VELOCITY) ;
+                                    p_obj,
+                                    OBJMOVE_FLAG_IGNORE_MAX_VELOCITY);
                         }
                     }
 
@@ -1851,7 +1852,7 @@ static T_void INavTeleporter(
                 ObjectTeleport(p_obj, x, y) ;
 
                 /* Where is the floor at the new position? */
-                floor = MapGetWalkingFloorHeightAtXY(x, y) ;
+                floor = MapGetWalkingFloorHeightAtXY(&p_obj->objMove, x, y) ;
 
                 /* Check to see if our feet is on the ground. */
                 if (floor != ObjectGetZ16(p_obj))  {
@@ -2841,11 +2842,11 @@ static T_void IStepForward(
     for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
          areaSector = ObjectGetNthAreaSector(p_obj, i) ;
          /* Check the floor under each sector we are now standing on. */
-         if (MapGetWalkingFloorHeight(areaSector) <= lowestFloor)  {
-             /* Floor we just stepped on is TOO far below ... */
-             stuckOnEdge = TRUE ;
-             break ;
-         }
+        if (MapGetWalkingFloorHeight(&p_obj->objMove, areaSector) <=lowestFloor)  {
+            /* Floor we just stepped on is TOO far below ... */
+            stuckOnEdge = TRUE ;
+            break ;
+        }
 
          /* If the creature is in a sector type that he is not supposed */
          /* to be in, use the same "stuck on edge" logic. */
@@ -2912,7 +2913,7 @@ stepSize += (stepSize>>1) ;
                 lowestFloor = (newZ >> 16) - ObjectGetHeight(p_obj) ;
                 for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
                      /* Check the floor under each sector we are now standing on. */
-                     if (MapGetWalkingFloorHeight(
+                     if (MapGetWalkingFloorHeight(&p_obj->objMove,
                              ObjectGetNthAreaSector(p_obj, i)) <= lowestFloor)  {
                          /* Floor we just stepped on is TOO far below ... */
                          canWalkThere = FALSE ;
@@ -3214,7 +3215,7 @@ static T_void IMoveForwardViaFlying(
 
                 for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
                     sector = ObjectGetNthAreaSector(p_obj, i) ;
-                    h = MapGetWalkingFloorHeight(sector) ;
+                    h = MapGetWalkingFloorHeight(&p_obj->objMove, sector) ;
                     if (h > floor)
                         floor = h ;
                     h = MapGetCeilingHeight(sector) ;
@@ -3557,7 +3558,7 @@ static E_Boolean ITargetSummonCreature(
                     ObjectSetUpSectors(p_summoned) ;
                     ObjectSetZ16(
                         p_summoned,
-                        MapGetWalkingFloorHeight(
+                        MapGetWalkingFloorHeight(&p_obj->objMove,
                             ObjectGetAreaSector(p_summoned))) ;
 
                     if ((ObjectCheckIfCollide(
@@ -4281,7 +4282,7 @@ static T_void ICreatureDip(
     /* Stop moving so we can dip correctly. */
     ObjectStopMoving(p_obj) ;
 
-    floor = MapGetWalkingFloorHeight(ObjectGetAreaSector(p_obj)) ;
+    floor = MapGetWalkingFloorHeight(&p_obj->objMove, ObjectGetAreaSector(p_obj));
     creatureHeight = ObjectGetHeight(p_obj) ;
     creatureZ = ObjectGetZ16(p_obj) ;
 
@@ -4332,8 +4333,8 @@ static T_void ICreatureUndip(
 
     DebugRoutine("ICreatureUndip") ;
 
-    targetZ = MapGetWalkingFloorHeight(ObjectGetAreaSector(p_obj)) ;
-    creatureZ = ObjectGetZ16(p_obj) ;
+    targetZ = MapGetWalkingFloorHeight(&p_obj->objMove, ObjectGetAreaSector(p_obj));
+    creatureZ = ObjectGetZ16(p_obj);
 
     /* See what we need to do */
     if (targetZ > creatureZ)  {

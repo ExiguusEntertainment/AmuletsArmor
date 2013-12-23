@@ -373,7 +373,7 @@ T_void PlayerUpdatePosInfo(T_void)
 
 //printf("Player set up over %d, %d\n", PlayerGetX16(), PlayerGetY16()) ;
 //    ObjMoveUpdate(&G_playerMove, 0) ;
-    ObjMoveSetUpSectors(&G_playerMove) ;
+    ObjMoveSetUpSectors(&G_playerObject->objMove) ;
     ObjectUnlinkCollisionLink(G_playerObject) ;
 
     /* Tug the player back the other way a bit. */
@@ -529,11 +529,12 @@ T_void PlayerUpdate(T_word32 delta)
 
     ObjectUnlinkCollisionLink(G_playerObject) ;
     /* Allow the player to dip. */
-    View3dAllowDip() ;
+//    View3dAllowDip() ;
     ObjectClearMoveFlags(G_playerObject, OBJMOVE_FLAG_DO_NOT_SINK) ;
 
     /* Make sure we are above the walking ground level. */
-    walkingHeight = MapGetWalkingFloorHeight(PlayerGetAreaSector()) ;
+    walkingHeight = MapGetWalkingFloorHeight(&G_playerObject->objMove,
+            PlayerGetAreaSector());
     if (PlayerGetZ16() < walkingHeight)
         PlayerSetZ16(walkingHeight) ;
 
@@ -648,7 +649,7 @@ T_void PlayerUpdate(T_word32 delta)
 
         ObjectForceUpdate(PlayerGetObject()) ;
         ObjectAddAttributes(PlayerGetObject(), OBJECT_ATTR_SLIDE_ONLY) ;
-        ObjMoveUpdate(&G_playerMove, delta) ;
+        ObjMoveUpdate(&G_playerObject->objMove, delta) ;
     }
 
     G_turnLeftTotal += ((delta * G_turnLeftFraction)<<8) +
@@ -1064,7 +1065,7 @@ T_void PlayerTeleport(T_sword16 x, T_sword16 y, T_word16 angle)
     T_word16 sector ;
 
     DebugRoutine("PlayerTeleport") ;
-
+printf("PlayerTeleport: %d %d %d\n", x, y, angle);
     sector = View3dFindSectorNum(x, y) ;
     if (sector != 0xFFFF)  {
 //printf("Player teleporting to %d %d\n", x, y) ;
@@ -1076,8 +1077,10 @@ T_void PlayerTeleport(T_sword16 x, T_sword16 y, T_word16 angle)
         PlayerSetCameraView() ;
 
         /* If we actually teleported, note it. */
-        if ((PlayerGetX16() == x) && (PlayerGetY16() == y))
-            PlayerTeleported() ;
+        if ((PlayerGetX16() == x) && (PlayerGetY16() == y)) {
+printf("PlayerTeleported!\n");
+        	PlayerTeleported() ;
+        }
     } else {
 #ifndef NDEBUG
         printf("Bad sector to teleport to! %d %d\n", x, y) ;
@@ -1570,7 +1573,7 @@ T_void PlayerSetFakeMode(T_void)
 {
     DebugRoutine("PlayerSetFakeMode") ;
 
-//printf("SetFakeMode by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
+printf("SetFakeMode by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
     DebugCheck(!G_playerIsFake) ;
     if (!G_playerIsFake)  {
         DebugCheck(G_playerObject != NULL) ;
@@ -1591,7 +1594,7 @@ T_void PlayerFakeOverwriteCurrent(T_void)
 {
     DebugRoutine("PlayerFakeOverwriteCurrent") ;
 
-//printf("FakeOverwriteCurrent by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
+printf("FakeOverwriteCurrent by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
     DebugCheck(G_playerObject != NULL) ;
 //    G_playerObject->objMove = G_playerFakeObject.objMove ;
     G_playerRealObject.objMove = G_playerObject->objMove ;
@@ -1684,7 +1687,8 @@ static T_void IPlayerUpdateStealth(T_void)
 E_Boolean PlayerJustTeleported(T_void)
 {
     E_Boolean justTele = G_playerTeleported ;
-
+if (justTele)
+	printf("player just teleported\n");
     G_playerTeleported = FALSE ;
 
     return justTele ;

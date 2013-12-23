@@ -36,7 +36,8 @@ T_void MapSetFloorHeight(T_word16 sector, T_sword16 height) ;
 
 T_sword16 MapGetFloorHeight(T_word16 sector) ;
 
-T_sword16 MapGetWalkingFloorHeight(T_word16 sector) ;
+//T_sword16 MapGetWalkingFloorHeight(T_word16 sector) ;
+T_sword16 MapGetWalkingFloorHeight(T_objMoveStruct *p_objMove, T_word16 sector);
 
 T_void MapSetCeilingHeight(T_word16 sector, T_sword16 height) ;
 
@@ -107,7 +108,10 @@ T_word16 MapGetTextureXOffset(T_word16 sideNum) ;
 
 T_word16 MapGetTextureYOffset(T_word16 sideNum) ;
 
-T_sword16 MapGetWalkingFloorHeightAtXY(T_sword16 x, T_sword16 y) ;
+T_sword16 MapGetWalkingFloorHeightAtXY(
+        T_objMoveStruct *p_objMove,
+        T_sword16 x,
+        T_sword16 y);
 
 T_sectorType MapGetSectorType(T_word16 sectorNum) ;
 
