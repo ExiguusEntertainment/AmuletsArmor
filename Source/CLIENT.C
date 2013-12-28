@@ -1160,16 +1160,19 @@ T_void ClientUpdate(T_void)
                 if ((PlayerIsAboveGround()==FALSE) ||
                         (EffectPlayerEffectIsActive(PLAYER_EFFECT_FLY)==TRUE))
                 {
-                    timeHeld = KeyMapGetHeld(KEYMAP_TURN_LEFT)*8 ;
-                    if (timeHeld)  {
-                        timeHeld += (timeHeld>>1) ;
-                        PlayerAccelDirection(playerMoveAngle+INT_ANGLE_90, timeHeld) ;
-                    }
+                    // Don't move if dead!
+                    if (!ClientIsDead()) {
+                        timeHeld = KeyMapGetHeld(KEYMAP_TURN_LEFT)*8 ;
+                        if (timeHeld)  {
+                            timeHeld += (timeHeld>>1) ;
+                            PlayerAccelDirection(playerMoveAngle+INT_ANGLE_90, timeHeld) ;
+                        }
 
-                    timeHeld = KeyMapGetHeld(KEYMAP_TURN_RIGHT)*8 ;
-                    if (timeHeld)  {
-                        timeHeld += (timeHeld>>1) ;
-                        PlayerAccelDirection(playerMoveAngle-INT_ANGLE_90, timeHeld) ;
+                        timeHeld = KeyMapGetHeld(KEYMAP_TURN_RIGHT)*8 ;
+                        if (timeHeld)  {
+                            timeHeld += (timeHeld>>1) ;
+                            PlayerAccelDirection(playerMoveAngle-INT_ANGLE_90, timeHeld) ;
+                        }
                     }
                 } else {
                     /* Clear the keys */
