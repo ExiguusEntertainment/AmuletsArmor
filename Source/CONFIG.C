@@ -32,6 +32,8 @@ static E_Boolean G_configLoaded = FALSE ;
 static T_iniFile G_configINIFile = INIFILE_BAD ;
 static E_Boolean G_bobOffFlag = FALSE ;
 static E_Boolean G_invertMouseY = FALSE;
+static T_word16 G_mouseTurnSpeed; // Value of 20 to 200
+static T_word16 G_keyboardTurnSpeed; // value of 20 to 200
 
 T_word32 FreeMemory(T_void) ;
 
@@ -187,6 +189,18 @@ E_Boolean ConfigGetInvertMouseY(T_void)
     return G_invertMouseY;
 }
 
+// Return a percentile of the turn rate (20% to 200%)
+T_word16 ConfigGetMouseTurnSpeed(T_void)
+{
+    return G_mouseTurnSpeed;
+}
+
+// Return a percentile of the turn rate (20% to 200%)
+T_word16 ConfigGetKeyboardTurnSpeed(T_void)
+{
+    return G_keyboardTurnSpeed;
+}
+
 void ConfigReadOptions(T_iniFile iniFile)
 {
     char *p_value;
@@ -214,6 +228,30 @@ void ConfigReadOptions(T_iniFile iniFile)
         }
     } else {
         G_invertMouseY = FALSE ;
+    }
+
+    p_value = INIFileGet(iniFile, "options", "mouseturnspeed");
+    if (p_value) {
+        G_mouseTurnSpeed = atoi(p_value);
+        if (G_mouseTurnSpeed < 20)
+            G_mouseTurnSpeed = 20;
+        if (G_mouseTurnSpeed > 200)
+             G_mouseTurnSpeed = 200;
+    } else {
+        // Use the default
+        G_mouseTurnSpeed = 100;
+    }
+
+    p_value = INIFileGet(iniFile, "options", "keyturnspeed");
+    if (p_value) {
+        G_keyboardTurnSpeed = atoi(p_value);
+        if (G_keyboardTurnSpeed < 20)
+            G_keyboardTurnSpeed = 20;
+        if (G_keyboardTurnSpeed > 200)
+            G_keyboardTurnSpeed = 200;
+    } else {
+        // Use the default
+        G_keyboardTurnSpeed = 100;
     }
 
     DebugEnd();

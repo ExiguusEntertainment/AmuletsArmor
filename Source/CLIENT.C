@@ -1043,6 +1043,7 @@ T_void ClientUpdate(T_void)
     T_sword16 x, y, newx, newy ;
     T_word32 delta ;
     T_sword16 relx, rely;
+    T_word32 turnAmount;
     TICKER_TIME_ROUTINE_PREPARE() ;
 
     TICKER_TIME_ROUTINE_START() ;
@@ -1145,16 +1146,28 @@ T_void ClientUpdate(T_void)
                     rely = 0;
                 }
                 if (relx < 0) {
-                    PlayerTurnLeft(-relx) ;
+                    turnAmount = -relx;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    PlayerTurnLeft((T_word16)turnAmount) ;
                 } else if (relx > 0) {
-                    PlayerTurnRight(relx) ;
+                    turnAmount = relx;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    PlayerTurnRight((T_word16)turnAmount) ;
                 }
 
                 // Look up or down
                 if (rely >= 0) {
-                    View3dSetUpDownAngle(View3dGetUpDownAngle() - (3*rely*delta)/100) ;
+                    turnAmount = (3*rely*delta)/100;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    View3dSetUpDownAngle(View3dGetUpDownAngle() - turnAmount) ;
                 } else if (rely < 0) {
-                    View3dSetUpDownAngle(View3dGetUpDownAngle() + (3*(-rely)*delta)/100) ;
+                    turnAmount = (3*(-rely)*delta)/100;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    View3dSetUpDownAngle(View3dGetUpDownAngle() + turnAmount) ;
                 }
 
                 if ((PlayerIsAboveGround()==FALSE) ||
@@ -1203,10 +1216,16 @@ T_void ClientUpdate(T_void)
                 } else {
                     // If NOT in relative mouse mode, we turn with the keyboard
                     if (KeyMapGetScan(KEYMAP_TURN_LEFT)) {
-                        PlayerTurnLeft((shift)?512:256) ;
+                        turnAmount = (shift)?512:256;
+                        turnAmount *= ConfigGetKeyboardTurnSpeed();
+                        turnAmount /= 100;
+                        PlayerTurnLeft(turnAmount) ;
                     }
                     if (KeyMapGetScan(KEYMAP_TURN_RIGHT)) {
-                        PlayerTurnRight((shift)?512:256) ;
+                        turnAmount = (shift)?512:256;
+                        turnAmount *= ConfigGetKeyboardTurnSpeed();
+                        turnAmount /= 100;
+                        PlayerTurnRight(turnAmount) ;
                     }
                 }
                 if (!G_msgOn)  {

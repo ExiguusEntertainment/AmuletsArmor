@@ -201,7 +201,7 @@ void PacketFPrint(FILE *fp, void *aData, unsigned int aSize)
 void PacketPrint(void *aData, unsigned int aSize)
 {
 #if WIN32
-    PacketFPrint(stdout, aData, aSize);
+    //PacketFPrint(stdout, aData, aSize);
 #elif 0
     FILE *fp;
 
