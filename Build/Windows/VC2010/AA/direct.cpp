@@ -33,6 +33,7 @@ void OutsideMouseDriverGet(T_word16 *xPos, T_word16 *yPos)
 void OutsideMouseDriverSet(T_word16 xPos, T_word16 yPos)
 {
     SDL_WarpMouse(xPos*2, yPos*2);
+    DirectMouseSet(xPos*2, yPos*2);
 }
 
 T_void DirectMouseSetButton(T_buttonClick click)
