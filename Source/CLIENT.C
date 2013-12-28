@@ -1266,12 +1266,12 @@ T_void ClientUpdate(T_void)
                 }
             } else {
                 timeHeld = KeyMapGetHeld(KEYMAP_FORWARD)*8 ;
-                if ((timeHeld) && ((rand() % 5)==0))  {
+                if (timeHeld)  {
                     PlayerAccelDirection(playerMoveAngle, timeHeld) ;
                     PlayerSetStance(STANCE_WALK) ;
                 }
                 timeHeld2 = KeyMapGetHeld(KEYMAP_BACKWARD)*8 ;
-                if ((timeHeld2) && ((rand() % 5)==0))  {
+                if (timeHeld2)  {
                     PlayerAccelDirection(playerMoveAngle, -timeHeld) ;
                     PlayerSetStance(STANCE_WALK) ;
                 }

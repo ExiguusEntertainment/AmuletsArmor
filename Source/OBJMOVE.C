@@ -1073,7 +1073,7 @@ T_void ObjMoveAccelXYZ (T_objMoveStruct *ObjMoveStruct,
 		ObjMoveStruct->XV+=XACC;
 		ObjMoveStruct->YV+=YACC;
 		ObjMoveStruct->ZV+=ZACC;
-        IObjMoveClipVelocity(ObjMoveStruct) ;
+//        IObjMoveClipVelocity(ObjMoveStruct) ;
 	}
 
 	DebugEnd();
@@ -1094,7 +1094,7 @@ T_void ObjMoveAccelFlat (T_objMoveStruct *ObjMoveStruct,
             ObjMoveStruct->Flags |= OBJMOVE_FLAG_PLEASE_UPDATE ;
 	    	ObjMoveStruct->XV+=(MathCosineLookup(angle)*amount);
 		    ObjMoveStruct->YV+=(MathSineLookup(angle)*amount);
-            IObjMoveClipVelocity(ObjMoveStruct) ;
+//            IObjMoveClipVelocity(ObjMoveStruct) ;
         }
 	}
 
@@ -1155,31 +1155,36 @@ T_void ObjMoveStopMoving(T_objMoveStruct *ObjMoveStruct)
  *<!-----------------------------------------------------------------------*/
 T_void IObjMoveClipVelocity(T_objMoveStruct *ObjMoveStruct)
 {
-    T_sword32 velocityMag ;
-    T_sword32 maxVelocity ;
+    double velocityMag ;
+    double maxVelocity ;
+    double xv, yv;
 
     DebugRoutine("IObjMoveClipVelocity") ;
     DebugCheck(ObjMoveStruct != NULL) ;
 
     if (!(ObjMoveStruct->Flags & OBJMOVE_FLAG_IGNORE_MAX_VELOCITY))  {
-        maxVelocity = ObjMoveStruct->maxVelocity ;
+        maxVelocity = (double)ObjMoveStruct->maxVelocity ;
+        xv = ObjMoveStruct->XV/65536.0;
+        yv = ObjMoveStruct->YV/65536.0;
+        velocityMag = sqrt(xv*xv+yv*yv);
 
-        velocityMag = CalculateDistance(
-                          0,
-                          0,
-                          ObjMoveStruct->XV>>16,
-                          ObjMoveStruct->YV>>16);
-/*
-printf("obj: %d (t: %d) -- velocity is %d, clip to %d\n",
- ObjectGetServerId((T_3dObject *)ObjMoveStruct),
- ObjectGetType((T_3dObject *)ObjMoveStruct),
- velocityMag,
- maxVelocity) ;
-*/
         /* Have we gone over the limit? */
         if (velocityMag > maxVelocity)  {
-            ObjMoveStruct->XV = (ObjMoveStruct->XV * maxVelocity) / velocityMag ;
-            ObjMoveStruct->YV = (ObjMoveStruct->YV * maxVelocity) / velocityMag ;
+/*            if (velocityMag > 0.1) {
+                printf("obj: %d (t: %d) -- velocity is %f (%f, %f), clip to %f\n",
+                 ObjectGetServerId((T_3dObject *)ObjMoveStruct),
+                 ObjectGetType((T_3dObject *)ObjMoveStruct),
+                 velocityMag,
+                 xv,
+                 yv,
+                 maxVelocity) ;
+            } */
+
+            ObjMoveStruct->XV = (T_sword32)((ObjMoveStruct->XV * maxVelocity) / velocityMag) ;
+            ObjMoveStruct->YV = (T_sword32)((ObjMoveStruct->YV * maxVelocity) / velocityMag) ;
+            //if (velocityMag > 0.1) {
+            //    printf("new velocity: %f, %f\n", ObjMoveStruct->XV/65535.0, ObjMoveStruct->YV/65535.0);
+            //}
         }
     }
 
