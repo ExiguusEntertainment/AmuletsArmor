@@ -532,6 +532,24 @@ T_void PlayerUpdate(T_word32 delta)
 //    View3dAllowDip() ;
     ObjectClearMoveFlags(G_playerObject, OBJMOVE_FLAG_DO_NOT_SINK) ;
 
+    /* Are we water walking and in water? */
+    if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_WATER_WALK)) &&
+        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_WATER))  {
+        /* Yes, don't sink and don't flow */
+        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
+        ObjectDoesNotFlow(PlayerGetObject()) ;
+    /* Are we lava walking and in lava? */
+    } else if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_LAVA_WALK)) &&
+        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_LAVA))  {
+        /* Yes, don't sink and don't flow */
+        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
+        ObjectDoesNotFlow(PlayerGetObject()) ;
+    } else {
+        /* Yes, sink and flow */
+        ObjectClearMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
+        ObjectDoesFlow(PlayerGetObject()) ;
+    }
+
     /* Make sure we are above the walking ground level. */
     walkingHeight = MapGetWalkingFloorHeight(&G_playerObject->objMove,
             PlayerGetAreaSector());
@@ -579,24 +597,6 @@ T_void PlayerUpdate(T_word32 delta)
             /* Low gravity in effect */
             ObjectLowGravity(PlayerGetObject()) ;
         }
-    }
-
-    /* Are we water walking and in water? */
-    if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_WATER_WALK)) &&
-        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_WATER))  {
-        /* Yes, don't sink and don't flow */
-        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
-        ObjectDoesNotFlow(PlayerGetObject()) ;
-    /* Are we lava walking and in lava? */
-    } else if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_LAVA_WALK)) &&
-        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_LAVA))  {
-        /* Yes, don't sink and don't flow */
-        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
-        ObjectDoesNotFlow(PlayerGetObject()) ;
-    } else {
-        /* Yes, sink and flow */
-        ObjectClearMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
-        ObjectDoesFlow(PlayerGetObject()) ;
     }
 
     /* Are we under the effect of a sticky feet spell? */
