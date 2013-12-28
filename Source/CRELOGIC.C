@@ -1005,9 +1005,6 @@ T_sword32 lx, ly, lz ;
 //OutputPlayerJunk() ;
 #   endif
 
-    /* Always allow dipping. */
-//    View3dAllowDip() ;
-
     /* Walls are creature based. */
     Collide3dSetWallDefinition(
         LINE_IS_IMPASSIBLE |

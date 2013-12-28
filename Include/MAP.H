@@ -36,7 +36,6 @@ T_void MapSetFloorHeight(T_word16 sector, T_sword16 height) ;
 
 T_sword16 MapGetFloorHeight(T_word16 sector) ;
 
-//T_sword16 MapGetWalkingFloorHeight(T_word16 sector) ;
 T_sword16 MapGetWalkingFloorHeight(T_objMoveStruct *p_objMove, T_word16 sector);
 
 T_void MapSetCeilingHeight(T_word16 sector, T_sword16 height) ;

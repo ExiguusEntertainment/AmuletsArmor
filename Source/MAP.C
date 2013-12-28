@@ -884,9 +884,6 @@ if (sector >= G_Num3dSectors)  {
 
     if (sector < G_Num3dSectors)  {
         height = G_3dSectorArray[sector].floorHt ;
-//        if (G_3dSectorArray[sector].trigger & SECTOR_DIP_FLAG)
-//            height -= VIEW_WATER_DIP_LEVEL ;
-//        if (View3dIsAllowDip())
       	if (!(p_objMove->Flags & OBJMOVE_FLAG_DO_NOT_SINK))
             height -= G_3dSectorInfoArray[sector].depth ;
     } else  {

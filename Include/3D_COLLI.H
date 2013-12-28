@@ -88,10 +88,6 @@ T_word16 View3dFindLineHits(
            T_word16 maxHits,
            T_sword16 *lines) ;
 
-//T_void View3dDisallowDip(T_void) ;
-//
-//T_void View3dAllowDip(T_void) ;
-
 T_word16 Collide3dGetWallsInBox(
              T_sword32 x,
              T_sword32 y,

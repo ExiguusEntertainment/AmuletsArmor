@@ -167,13 +167,6 @@ if (ObjectIsCreature(p_obj))
         /* don't collide with oneself. */
         View3dSetExceptObjectByPtr(ObjMoveStruct) ;
 
-        /* Check if we need to dip. */
-//        if (ObjMoveGetFlags(ObjMoveStruct) & OBJMOVE_FLAG_DO_NOT_SINK)  {
-//            View3dDisallowDip() ;
-//        } else {
-//            View3dAllowDip() ;
-//        }
-
         /* Try moving to the new location. */
         status = Collide3dMoveToXYZ(
                      ((T_3dObject *)ObjMoveStruct),

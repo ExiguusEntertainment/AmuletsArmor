@@ -529,7 +529,6 @@ T_void PlayerUpdate(T_word32 delta)
 
     ObjectUnlinkCollisionLink(G_playerObject) ;
     /* Allow the player to dip. */
-//    View3dAllowDip() ;
     ObjectClearMoveFlags(G_playerObject, OBJMOVE_FLAG_DO_NOT_SINK) ;
 
     /* Are we water walking and in water? */
@@ -1065,7 +1064,7 @@ T_void PlayerTeleport(T_sword16 x, T_sword16 y, T_word16 angle)
     T_word16 sector ;
 
     DebugRoutine("PlayerTeleport") ;
-printf("PlayerTeleport: %d %d %d\n", x, y, angle);
+
     sector = View3dFindSectorNum(x, y) ;
     if (sector != 0xFFFF)  {
 //printf("Player teleporting to %d %d\n", x, y) ;
@@ -1077,10 +1076,8 @@ printf("PlayerTeleport: %d %d %d\n", x, y, angle);
         PlayerSetCameraView() ;
 
         /* If we actually teleported, note it. */
-        if ((PlayerGetX16() == x) && (PlayerGetY16() == y)) {
-printf("PlayerTeleported!\n");
-        	PlayerTeleported() ;
-        }
+        if ((PlayerGetX16() == x) && (PlayerGetY16() == y))
+            PlayerTeleported() ;
     } else {
 #ifndef NDEBUG
         printf("Bad sector to teleport to! %d %d\n", x, y) ;
@@ -1573,7 +1570,6 @@ T_void PlayerSetFakeMode(T_void)
 {
     DebugRoutine("PlayerSetFakeMode") ;
 
-printf("SetFakeMode by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
     DebugCheck(!G_playerIsFake) ;
     if (!G_playerIsFake)  {
         DebugCheck(G_playerObject != NULL) ;
@@ -1594,7 +1590,7 @@ T_void PlayerFakeOverwriteCurrent(T_void)
 {
     DebugRoutine("PlayerFakeOverwriteCurrent") ;
 
-printf("FakeOverwriteCurrent by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
+//printf("FakeOverwriteCurrent by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
     DebugCheck(G_playerObject != NULL) ;
 //    G_playerObject->objMove = G_playerFakeObject.objMove ;
     G_playerRealObject.objMove = G_playerObject->objMove ;
@@ -1687,8 +1683,7 @@ static T_void IPlayerUpdateStealth(T_void)
 E_Boolean PlayerJustTeleported(T_void)
 {
     E_Boolean justTele = G_playerTeleported ;
-if (justTele)
-	printf("player just teleported\n");
+
     G_playerTeleported = FALSE ;
 
     return justTele ;
