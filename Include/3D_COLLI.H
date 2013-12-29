@@ -64,6 +64,8 @@ T_sword16 View3dMoveToFast(
 
 T_void View3dGetFloorAndCeilingHeight(T_sword16 *floor, T_sword16 *ceiling) ;
 
+T_void View3dSetInitialCeilingAboveAndFloorBelow(T_word16 sector);
+
 T_void View3dGetFloorAbove(T_word16 *above) ;
 
 T_void View3dGetCeilingBelow(T_word16 *below) ;

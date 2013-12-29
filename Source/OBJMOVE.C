@@ -1257,6 +1257,14 @@ if (sector >= G_Num3dSectors)  {
     ObjMoveStruct->CenterSector =
     ObjMoveStruct->OnSectors[0] = sector ;
     ObjMoveStruct->numOnSectors = 1 ;
+
+    // Okay, this is a bit of a hack, but when we setup sectors
+    // using the Move routines and the object is being squished and cannot
+    // move, the logic goes funky and the item does not get a valid
+    // above and below ceiling.  We're going to set them up to use
+    // the center sector until a better fix is put in place -- lshieds 12/28/2013
+    View3dSetInitialCeilingAboveAndFloorBelow(sector);
+
 #ifndef SERVER_ONLY
     /** If we are a client+server build... **/
     /* Check if this is the player object. */

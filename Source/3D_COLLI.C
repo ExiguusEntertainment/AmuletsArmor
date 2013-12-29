@@ -2109,6 +2109,27 @@ T_void View3dGetFloorAndCeilingHeight(T_sword16 *floor, T_sword16 *ceiling)
 }
 
 /*-------------------------------------------------------------------------*
+ * Routine:  View3dSetInitialCeilingAboveAndFloorBelow
+ *-------------------------------------------------------------------------*/
+/**
+ *  View3dSetCenterCeilingAboveAndFloorBelow sets the initial sector
+ *  above and below locations.
+ *
+ *  @param sector -- Default sector above and below.
+ *
+ *<!-----------------------------------------------------------------------*/
+T_void View3dSetInitialCeilingAboveAndFloorBelow(T_word16 sector)
+{
+    DebugRoutine("View3dSetInitialCeilingAboveAndFloorBelow") ;
+    DebugCheck(sector < G_Num3dSectors) ;
+
+    G_ceilingBelow = sector;
+    G_floorAbove = sector;
+
+    DebugEnd() ;
+}
+
+/*-------------------------------------------------------------------------*
  * Routine:  View3dGetFloorAbove
  *-------------------------------------------------------------------------*/
 /**
