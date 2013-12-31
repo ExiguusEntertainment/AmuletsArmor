@@ -34,6 +34,7 @@ static E_Boolean G_bobOffFlag = FALSE ;
 static E_Boolean G_invertMouseY = FALSE;
 static T_word16 G_mouseTurnSpeed; // Value of 20 to 200
 static T_word16 G_keyboardTurnSpeed; // value of 20 to 200
+static E_Boolean G_dyingdropsitems = TRUE;
 
 T_word32 FreeMemory(T_void) ;
 
@@ -201,6 +202,11 @@ T_word16 ConfigGetKeyboardTurnSpeed(T_void)
     return G_keyboardTurnSpeed;
 }
 
+E_Boolean ConfigDyingDropsItems(T_void)
+{
+    return G_dyingdropsitems;
+}
+
 void ConfigReadOptions(T_iniFile iniFile)
 {
     char *p_value;
@@ -252,6 +258,17 @@ void ConfigReadOptions(T_iniFile iniFile)
     } else {
         // Use the default
         G_keyboardTurnSpeed = 100;
+    }
+
+    p_value = INIFileGet(iniFile, "options", "dyingdropsitems");
+    if (p_value) {
+        if (atoi(p_value)==1)  {
+            G_dyingdropsitems = TRUE ;
+        } else {
+            G_dyingdropsitems = FALSE ;
+        }
+    } else {
+        G_dyingdropsitems = FALSE ;
     }
 
     DebugEnd();

@@ -25,6 +25,7 @@ E_Boolean ConfigGetBobOffFlag(T_void) ;
 E_Boolean ConfigGetInvertMouseY(T_void);
 T_word16 ConfigGetMouseTurnSpeed(T_void);
 T_word16 ConfigGetKeyboardTurnSpeed(T_void);
+E_Boolean ConfigDyingDropsItems(T_void);
 void ConfigReadOptions(T_iniFile iniFile);
 
 #endif

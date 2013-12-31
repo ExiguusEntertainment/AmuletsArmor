@@ -23,7 +23,8 @@
 #define ESC_MENU_INVERT_MOUSE_Y             1
 #define ESC_MENU_MOUSE_TURN_SPEED           2
 #define ESC_MENU_KEYBOARD_TURN_SPEED        3
-#define ESC_MENU_NUM_OPTIONS                4
+#define ESC_MENU_DYING_DROPS_ALL_ITEMS      4
+#define ESC_MENU_NUM_OPTIONS                5
 
 /*---------------------------------------------------------------------------
  * Types:
@@ -543,6 +544,8 @@ static T_void EscMenuSaveSettings(void)
     INIFilePut(G_iniFile, "options", "mouseturnspeed", value);
     sprintf(value, "%d", G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED]);
     INIFilePut(G_iniFile, "options", "keyturnspeed", value);
+    INIFilePut(G_iniFile, "options", "dyingdropsitems",
+            G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] ? "1" : "0");
 
     DebugEnd();
 }
@@ -583,6 +586,11 @@ static T_void EscMenuLoadSettings(void)
     if (G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] < 20)
         G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] = 20;
 
+    G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] = 1;
+    p = (char *)INIFileGet(G_iniFile, "options", "dyingdropsitems");
+    if (p)
+        G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] = (atoi(p)==1)?1:0;
+
     DebugEnd();
 }
 
@@ -612,6 +620,8 @@ static void EscapeMenuSetOptions(void)
     EscapeMenuSetOptionButtonText(ESC_MENU_MOUSE_TURN_SPEED, value, 31);
     sprintf(value, "%d %%", G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED]);
     EscapeMenuSetOptionButtonText(ESC_MENU_KEYBOARD_TURN_SPEED, value, 31);
+    EscapeMenuSetOptionButtonText(ESC_MENU_DYING_DROPS_ALL_ITEMS,
+            G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] ? "YES" : "NO", 31);
 
     DebugEnd();
 }

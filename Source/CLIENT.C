@@ -3074,7 +3074,7 @@ E_Boolean ClientDropInventoryItem(T_word16 numItems, T_word16 itemType, T_word16
     return doDestroy ;
 }
 
-T_void ClientDied(T_void)
+void ClientDropAll(void)
 {
     T_word16 i ;
     T_sword16 num ;
@@ -3093,46 +3093,54 @@ T_void ClientDied(T_void)
         105, /* GOLD */
         107, /* PLATINUM */
     } ;
+
+    /* Drop all his equipment here. */
+    InventoryGoThroughAll(ClientDropInventoryItem) ;
+
+    /* Drop bolts (if got any) */
+    for (i=0; i<EQUIP_TOTAL_BOLT_TYPES; i++)  {
+        num = StatsGetPlayerBolts(i) ;
+        if (num)  {
+            if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
+                /* Drop quiver full. */
+                ClientSyncSendActionDropAt(boltToQuiver[i], PlayerGetX16(), PlayerGetY16(), num) ;
+            }
+            StatsAddBolt((E_equipBoltTypes)i, -num) ;
+        }
+    }
+
+    /* Drop coins (if got any) */
+    for (i=0; i<EQUIP_TOTAL_COIN_TYPES; i++)  {
+        num = StatsGetPlayerCoins(i) ;
+        if (num)  {
+            /* Only drop 5 pieces */
+            if (num >= 5)  {
+                if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
+                    ClientSyncSendActionDropAt(coinTypeToCoin[i], PlayerGetX16(), PlayerGetY16(), 0) ;
+                }
+            }
+            StatsAddCoin((E_equipCoinTypes)i, -num);
+        }
+    }
+
+    /* Set weight allowance to zero */
+    StatsSetPlayerLoad(0);
+
+    /* Recalculate movement speed */
+    StatsCalcPlayerMovementSpeed();
+}
+
+T_void ClientDied(T_void)
+{
     E_Boolean isFake ;
 
     DebugRoutine("ClientDied") ;
     /* This player just died!  We need to take appropriate actions. */
 
     if (ClientIsInView())  {
-        /* Drop all his equipment here. */
-        InventoryGoThroughAll(ClientDropInventoryItem) ;
-
-        /* Drop bolts (if got any) */
-        for (i=0; i<EQUIP_TOTAL_BOLT_TYPES; i++)  {
-            num = StatsGetPlayerBolts(i) ;
-            if (num)  {
-                if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
-                    /* Drop quiver full. */
-                    ClientSyncSendActionDropAt(boltToQuiver[i], PlayerGetX16(), PlayerGetY16(), num) ;
-                }
-                StatsAddBolt(i, -num) ;
-            }
-        }
-
-        /* Drop coins (if got any) */
-        for (i=0; i<EQUIP_TOTAL_COIN_TYPES; i++)  {
-            num = StatsGetPlayerCoins(i) ;
-            if (num)  {
-                /* Only drop 5 pieces */
-                if (num >= 5)  {
-                    if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
-                        ClientSyncSendActionDropAt(coinTypeToCoin[i], PlayerGetX16(), PlayerGetY16(), 0) ;
-                    }
-                }
-                StatsAddCoin(i, -num);
-            }
-        }
-
-        /* Set weight allowance to zero */
-        StatsSetPlayerLoad(0);
-
-        /* Recalculate movemement speed */
-        StatsCalcPlayerMovementSpeed();
+        // Drop everything the player has collected.
+        if (ConfigDyingDropsItems())
+            ClientDropAll();
 
         /* update banner */
         if (BannerFormIsOpen (BANNER_FORM_INVENTORY))
