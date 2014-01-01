@@ -373,7 +373,7 @@ T_void PlayerUpdatePosInfo(T_void)
 
 //printf("Player set up over %d, %d\n", PlayerGetX16(), PlayerGetY16()) ;
 //    ObjMoveUpdate(&G_playerMove, 0) ;
-    ObjMoveSetUpSectors(&G_playerMove) ;
+    ObjMoveSetUpSectors(&G_playerObject->objMove) ;
     ObjectUnlinkCollisionLink(G_playerObject) ;
 
     /* Tug the player back the other way a bit. */
@@ -529,11 +529,29 @@ T_void PlayerUpdate(T_word32 delta)
 
     ObjectUnlinkCollisionLink(G_playerObject) ;
     /* Allow the player to dip. */
-    View3dAllowDip() ;
     ObjectClearMoveFlags(G_playerObject, OBJMOVE_FLAG_DO_NOT_SINK) ;
 
+    /* Are we water walking and in water? */
+    if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_WATER_WALK)) &&
+        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_WATER))  {
+        /* Yes, don't sink and don't flow */
+        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
+        ObjectDoesNotFlow(PlayerGetObject()) ;
+    /* Are we lava walking and in lava? */
+    } else if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_LAVA_WALK)) &&
+        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_LAVA))  {
+        /* Yes, don't sink and don't flow */
+        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
+        ObjectDoesNotFlow(PlayerGetObject()) ;
+    } else {
+        /* Yes, sink and flow */
+        ObjectClearMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
+        ObjectDoesFlow(PlayerGetObject()) ;
+    }
+
     /* Make sure we are above the walking ground level. */
-    walkingHeight = MapGetWalkingFloorHeight(PlayerGetAreaSector()) ;
+    walkingHeight = MapGetWalkingFloorHeight(&G_playerObject->objMove,
+            PlayerGetAreaSector());
     if (PlayerGetZ16() < walkingHeight)
         PlayerSetZ16(walkingHeight) ;
 
@@ -578,24 +596,6 @@ T_void PlayerUpdate(T_word32 delta)
             /* Low gravity in effect */
             ObjectLowGravity(PlayerGetObject()) ;
         }
-    }
-
-    /* Are we water walking and in water? */
-    if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_WATER_WALK)) &&
-        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_WATER))  {
-        /* Yes, don't sink and don't flow */
-        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
-        ObjectDoesNotFlow(PlayerGetObject()) ;
-    /* Are we lava walking and in lava? */
-    } else if ((EffectPlayerEffectIsActive(PLAYER_EFFECT_LAVA_WALK)) &&
-        (MapGetSectorType(PlayerGetAreaSector()) == SECTOR_TYPE_LAVA))  {
-        /* Yes, don't sink and don't flow */
-        ObjectSetMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
-        ObjectDoesNotFlow(PlayerGetObject()) ;
-    } else {
-        /* Yes, sink and flow */
-        ObjectClearMoveFlags(PlayerGetObject(), OBJMOVE_FLAG_DO_NOT_SINK) ;
-        ObjectDoesFlow(PlayerGetObject()) ;
     }
 
     /* Are we under the effect of a sticky feet spell? */
@@ -648,7 +648,7 @@ T_void PlayerUpdate(T_word32 delta)
 
         ObjectForceUpdate(PlayerGetObject()) ;
         ObjectAddAttributes(PlayerGetObject(), OBJECT_ATTR_SLIDE_ONLY) ;
-        ObjMoveUpdate(&G_playerMove, delta) ;
+        ObjMoveUpdate(&G_playerObject->objMove, delta) ;
     }
 
     G_turnLeftTotal += ((delta * G_turnLeftFraction)<<8) +
@@ -1570,7 +1570,6 @@ T_void PlayerSetFakeMode(T_void)
 {
     DebugRoutine("PlayerSetFakeMode") ;
 
-//printf("SetFakeMode by %s\n", DebugGetCallerName()) ;  fflush(stdout) ;
     DebugCheck(!G_playerIsFake) ;
     if (!G_playerIsFake)  {
         DebugCheck(G_playerObject != NULL) ;

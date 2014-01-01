@@ -865,10 +865,11 @@ if (sector >= G_Num3dSectors)  {
  *  is walking on it.  For water areas, this can be lower than the actual
  *  floor height.
  *
+ *  @param p_objMove -- Object move structure doing the walking
  *  @param sector -- Sector's floor to get.
  *
  *<!-----------------------------------------------------------------------*/
-T_sword16 MapGetWalkingFloorHeight(T_word16 sector)
+T_sword16 MapGetWalkingFloorHeight(T_objMoveStruct *p_objMove, T_word16 sector)
 {
     T_sword16 height ;
 
@@ -883,9 +884,7 @@ if (sector >= G_Num3dSectors)  {
 
     if (sector < G_Num3dSectors)  {
         height = G_3dSectorArray[sector].floorHt ;
-//        if (G_3dSectorArray[sector].trigger & SECTOR_DIP_FLAG)
-//            height -= VIEW_WATER_DIP_LEVEL ;
-        if (View3dIsAllowDip())
+      	if (!(p_objMove->Flags & OBJMOVE_FLAG_DO_NOT_SINK))
             height -= G_3dSectorInfoArray[sector].depth ;
     } else  {
         height = 10000 ;
@@ -1870,13 +1869,17 @@ T_word16 MapGetTextureYOffset(T_word16 sideNum)
  *  MapGetWalkingFloorHeightAtXY returns the height of the floor given
  *  a map coordinate.
  *
+ *  @param p_objMove -- Object movement being used at this xy
  *  @param x -- X Position on map.
  *  @param y -- Y Position on map.
  *
  *  @return Height there, or -32767
  *
  *<!-----------------------------------------------------------------------*/
-T_sword16 MapGetWalkingFloorHeightAtXY(T_sword16 x, T_sword16 y)
+T_sword16 MapGetWalkingFloorHeightAtXY(
+        T_objMoveStruct *p_objMove,
+        T_sword16 x,
+        T_sword16 y)
 {
     T_sword16 floor ;
     T_word16 sector ;
@@ -1885,7 +1888,7 @@ T_sword16 MapGetWalkingFloorHeightAtXY(T_sword16 x, T_sword16 y)
 
     sector = View3dFindSectorNum(x, y) ;
     if (sector < G_Num3dSectors)  {
-        floor = MapGetWalkingFloorHeight(sector) ;
+        floor = MapGetWalkingFloorHeight(p_objMove, sector) ;
     } else {
         floor = -32767 ;
     }

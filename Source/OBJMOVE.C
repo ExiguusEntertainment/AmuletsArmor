@@ -167,13 +167,6 @@ if (ObjectIsCreature(p_obj))
         /* don't collide with oneself. */
         View3dSetExceptObjectByPtr(ObjMoveStruct) ;
 
-        /* Check if we need to dip. */
-        if (ObjMoveGetFlags(ObjMoveStruct) & OBJMOVE_FLAG_DO_NOT_SINK)  {
-            View3dDisallowDip() ;
-        } else {
-            View3dAllowDip() ;
-        }
-
         /* Try moving to the new location. */
         status = Collide3dMoveToXYZ(
                      ((T_3dObject *)ObjMoveStruct),
@@ -241,7 +234,7 @@ if (ObjectIsCreature((T_3dObject *)ObjMoveStruct))
 //            floor = G_3dSectorArray[sector].floorHt ;
 //            if (G_3dSectorArray[sector].trigger & SECTOR_DIP_FLAG)
 //                floor -= VIEW_WATER_DIP_LEVEL ;
-            floor = MapGetWalkingFloorHeight(sector) ;
+            floor = MapGetWalkingFloorHeight(ObjMoveStruct, sector) ;
             if (floor > highFloor)  {
                 highFloor = floor ;
                 highFloorSector = sector ;
@@ -1347,14 +1340,14 @@ if (numSectors >= (MAX_OBJECT_SECTORS-1))  {
 
     } else {
         /* Just put it on the floor. */
-        floor = MapGetWalkingFloorHeight(sector) ;
+        floor = MapGetWalkingFloorHeight(ObjMoveStruct, sector) ;
 
         /** If I don't sink, my feet are on the visible floor.  If I do, **/
         /** they are on the "real" (i.e. underwater) floor. **/
         if (ObjMoveGetFlags (ObjMoveStruct) & OBJMOVE_FLAG_DO_NOT_SINK)
             floor = MapGetFloorHeight (sector);
         else
-            floor = MapGetWalkingFloorHeight(sector) ;
+            floor = MapGetWalkingFloorHeight(ObjMoveStruct, sector) ;
         ceiling = MapGetCeilingHeight(sector) ;
 
         if (numSectors != 0)  {
@@ -1363,7 +1356,7 @@ if (numSectors >= (MAX_OBJECT_SECTORS-1))  {
             if (ObjMoveGetFlags (ObjMoveStruct) & OBJMOVE_FLAG_DO_NOT_SINK)
                 floor2 = MapGetFloorHeight (areaSector);
             else
-                floor2 = MapGetWalkingFloorHeight(areaSector) ;
+                floor2 = MapGetWalkingFloorHeight(ObjMoveStruct, areaSector) ;
 
             if (floor2 > floor)
                 floor = floor2 ;

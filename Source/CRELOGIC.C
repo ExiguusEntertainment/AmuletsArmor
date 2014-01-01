@@ -1005,9 +1005,6 @@ T_sword32 lx, ly, lz ;
 //OutputPlayerJunk() ;
 #   endif
 
-    /* Always allow dipping. */
-    View3dAllowDip() ;
-
     /* Walls are creature based. */
     Collide3dSetWallDefinition(
         LINE_IS_IMPASSIBLE |
@@ -1089,11 +1086,6 @@ T_sword32 lx, ly, lz ;
                 DebugCheck(p_obj != NULL) ;
                 DebugCheck(ObjectGetServerId(p_obj) != 0) ;
                 DebugCheck(ObjectIsCreature(p_obj) == TRUE) ;
-#if 0
-lx = ObjectGetX(p_obj) ;
-ly = ObjectGetY(p_obj) ;
-lz = ObjectGetZ(p_obj) ;
-#endif
 #ifndef NDEBUG
                 SyncMemAdd("Creature %d at %d %d\n", ObjectGetServerId(p_obj), ObjectGetX16(p_obj), ObjectGetY16(p_obj)) ;
                 if (p_creature->targetID != 0)
@@ -1131,24 +1123,25 @@ lz = ObjectGetZ(p_obj) ;
                         CreatureTakeSectorDamage(p_logic, p_obj) ;
 
                     /* First, update gravity if the creature cannot fly. */
-                    if (p_logic->canFly == FALSE)  {
-                        if (ObjectGetZ(p_obj) >
-                                (MapGetWalkingFloorHeight(ObjectGetAreaSector(p_obj))<<16))
+                    if (p_logic->canFly == FALSE) {
+                        if (ObjectGetZ(p_obj)
+                                > (MapGetWalkingFloorHeight(&p_obj->objMove,
+                                        ObjectGetAreaSector(p_obj)) << 16))
                             if (p_creature->allowFall == TRUE)
-                                ObjectUpdateZVel(p_obj, delta) ;
+                                ObjectUpdateZVel(p_obj, delta);
                     } else {
-                        if (p_creature->isEarthbound)  {
-                            if (time > p_creature->timeEarthboundEnds)  {
+                        if (p_creature->isEarthbound) {
+                            if (time > p_creature->timeEarthboundEnds) {
                                 /* Stop being earthbound. */
-                                p_creature->isEarthbound = FALSE ;
+                                p_creature->isEarthbound = FALSE;
                                 ObjectSetMoveFlags(
-                                    p_obj,
-                                    OBJMOVE_FLAG_IGNORE_GRAVITY) ;
+                                        p_obj,
+                                        OBJMOVE_FLAG_IGNORE_GRAVITY);
                             }
                         } else {
                             ObjectClearMoveFlags(
-                                p_obj,
-                                OBJMOVE_FLAG_IGNORE_MAX_VELOCITY) ;
+                                    p_obj,
+                                    OBJMOVE_FLAG_IGNORE_MAX_VELOCITY);
                         }
                     }
 
@@ -1219,8 +1212,6 @@ lz = ObjectGetZ(p_obj) ;
                         p_creature->lastUpdateTime = time ;
 #endif
 
-//                    updateCount = 0 ;
-
                     updateTime = p_logic->updateTime ;
 /* TESTING */
 updateTime += (updateTime>>1) ;
@@ -1238,10 +1229,7 @@ updateTime += (updateTime>>1) ;
                         updateTime -= (updateTime>>2) ;
 
                     /* Check to see if it is time to update this creature. */
-//                    while (time > (p_creature->lastUpdateTime + updateTime))  {
-/* TESTING */
                     if (time >= (p_creature->lastUpdateTime + updateTime))  {
-//printf("%d Creature %d updates\n", SyncTimeGet(), ObjectGetServerId(p_obj)) ;
                         /* Yes, it is time to update the creature. */
                         /* Update the creature based on which logic package */
                         /* it is using. */
@@ -1277,14 +1265,6 @@ updateTime += (updateTime>>1) ;
                             (!ObjectIsFullyPassable(p_obj))) {
                                 /* The creature was blocked.  Handle that. */
                             if (p_logic->explodeOnCollision)  {
-/*
-if (p_creature->moveBlocked)
-  puts("move blocked") ;
-if (ObjectWasBlocked(p_obj))
-  puts("object was blocked") ;
-if (p_creature->blockCount != 0)
-  puts("block count") ;
-*/
                                 IExplodeSelf(
                                     p_creature,
                                     p_logic,
@@ -1323,8 +1303,6 @@ if (p_creature->blockCount != 0)
 
                         if (!isGone)  {
                             /* Step along the updates. */
-//                            p_creature->lastUpdateTime += updateTime ;
-/* TESTING */
                             p_creature->lastUpdateTime = time ;
 
                             /* Regenerate the creature */
@@ -1333,20 +1311,9 @@ if (p_creature->blockCount != 0)
                                 regenValue = p_logic->hitPoints ;
                             p_creature->health = regenValue ;
 
-                            /* If a long time has occured, update per instance up to */
-                            /* 3 times. (usually 1/4 a second) */
-//                            updateCount++ ;
-//                            if (updateCount > MAX_CREATURE_MOVES_PER_UPDATE)  {
-                                /* Force the creature to think it moved during that */
-                                /* whole time. */
-//                                p_creature->lastUpdateTime = time ;
-//                                break ;
-//                            }
-
                             /* Update the stance based on the movement. */
                             /* But only do this if the creature is already in a walking */
                             /* or standing stance. */
-
                             if ((ObjectGetStance(p_obj) == STANCE_WALK) ||
                                 (ObjectGetStance(p_obj) == STANCE_STAND))  {
                                 if ((ObjectGetX(p_obj) != oldX) ||
@@ -1359,12 +1326,6 @@ if (p_creature->blockCount != 0)
                                     ObjectSetStance(p_obj, STANCE_STAND) ;
                                 }
                             }
-                            /* If the update time is set to 0, it just means to */
-                            /* update as fast as possible, but no particular rate. */
-                            /* This is useful for missiles that just want to know */
-                            /* if they hit a wall. */
-//                            if (p_logic->updateTime == 0)
-//                                break ;
                         } else {
                             /* If the creature is gone, don't try to loop. */
 //                            break ;
@@ -1888,7 +1849,7 @@ static T_void INavTeleporter(
                 ObjectTeleport(p_obj, x, y) ;
 
                 /* Where is the floor at the new position? */
-                floor = MapGetWalkingFloorHeightAtXY(x, y) ;
+                floor = MapGetWalkingFloorHeightAtXY(&p_obj->objMove, x, y) ;
 
                 /* Check to see if our feet is on the ground. */
                 if (floor != ObjectGetZ16(p_obj))  {
@@ -2276,14 +2237,6 @@ static T_void IUpdateTarget(T_creatureState *p_creature)
             }
         }
     }
-
-#if 0 /* should not need */
-    /* Find the target by its id. */
-    if (p_creature->targetID != 0)
-        p_target = ObjectFind((T_word16)p_creature->targetID) ;
-    else
-        p_target = NULL ;
-#endif
 
     /* Is the object still existing? */
     if (p_target)  {
@@ -2886,11 +2839,11 @@ static T_void IStepForward(
     for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
          areaSector = ObjectGetNthAreaSector(p_obj, i) ;
          /* Check the floor under each sector we are now standing on. */
-         if (MapGetWalkingFloorHeight(areaSector) <= lowestFloor)  {
-             /* Floor we just stepped on is TOO far below ... */
-             stuckOnEdge = TRUE ;
-             break ;
-         }
+        if (MapGetWalkingFloorHeight(&p_obj->objMove, areaSector) <=lowestFloor)  {
+            /* Floor we just stepped on is TOO far below ... */
+            stuckOnEdge = TRUE ;
+            break ;
+        }
 
          /* If the creature is in a sector type that he is not supposed */
          /* to be in, use the same "stuck on edge" logic. */
@@ -2957,7 +2910,7 @@ stepSize += (stepSize>>1) ;
                 lowestFloor = (newZ >> 16) - ObjectGetHeight(p_obj) ;
                 for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
                      /* Check the floor under each sector we are now standing on. */
-                     if (MapGetWalkingFloorHeight(
+                     if (MapGetWalkingFloorHeight(&p_obj->objMove,
                              ObjectGetNthAreaSector(p_obj, i)) <= lowestFloor)  {
                          /* Floor we just stepped on is TOO far below ... */
                          canWalkThere = FALSE ;
@@ -3259,7 +3212,7 @@ static T_void IMoveForwardViaFlying(
 
                 for (i=0; i<ObjectGetNumAreaSectors(p_obj); i++)  {
                     sector = ObjectGetNthAreaSector(p_obj, i) ;
-                    h = MapGetWalkingFloorHeight(sector) ;
+                    h = MapGetWalkingFloorHeight(&p_obj->objMove, sector) ;
                     if (h > floor)
                         floor = h ;
                     h = MapGetCeilingHeight(sector) ;
@@ -3602,7 +3555,7 @@ static E_Boolean ITargetSummonCreature(
                     ObjectSetUpSectors(p_summoned) ;
                     ObjectSetZ16(
                         p_summoned,
-                        MapGetWalkingFloorHeight(
+                        MapGetWalkingFloorHeight(&p_obj->objMove,
                             ObjectGetAreaSector(p_summoned))) ;
 
                     if ((ObjectCheckIfCollide(
@@ -4326,7 +4279,7 @@ static T_void ICreatureDip(
     /* Stop moving so we can dip correctly. */
     ObjectStopMoving(p_obj) ;
 
-    floor = MapGetWalkingFloorHeight(ObjectGetAreaSector(p_obj)) ;
+    floor = MapGetWalkingFloorHeight(&p_obj->objMove, ObjectGetAreaSector(p_obj));
     creatureHeight = ObjectGetHeight(p_obj) ;
     creatureZ = ObjectGetZ16(p_obj) ;
 
@@ -4377,8 +4330,8 @@ static T_void ICreatureUndip(
 
     DebugRoutine("ICreatureUndip") ;
 
-    targetZ = MapGetWalkingFloorHeight(ObjectGetAreaSector(p_obj)) ;
-    creatureZ = ObjectGetZ16(p_obj) ;
+    targetZ = MapGetWalkingFloorHeight(&p_obj->objMove, ObjectGetAreaSector(p_obj));
+    creatureZ = ObjectGetZ16(p_obj);
 
     /* See what we need to do */
     if (targetZ > creatureZ)  {

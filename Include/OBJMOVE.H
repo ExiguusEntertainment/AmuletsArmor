@@ -120,7 +120,7 @@ typedef struct
              (((p_objM)->lastSound) = (sound))
 #define ObjMoveGetClimbHeight(oms)  ((oms)->climbHeight)
 
-T_void ObjMoveUpdate (T_objMoveStruct *ObjMoveStruct, T_sword32 delta) ;
+T_void ObjMoveUpdate (T_objMoveStruct *p_obj, T_sword32 delta) ;
 
 T_void ObjMoveInit (T_objMoveStruct *ObjMoveStruct);
 

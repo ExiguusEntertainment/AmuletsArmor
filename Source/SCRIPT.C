@@ -2093,7 +2093,7 @@ static T_word16 ICommandTeleport(T_scriptHeader *script, T_word16 position)
         PlayerGetAngle()) ;
     if (isFake)
         PlayerSetFakeMode() ;
-
+        
     DebugEnd() ;
 
     return position ;
