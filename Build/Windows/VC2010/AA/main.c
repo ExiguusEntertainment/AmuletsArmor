@@ -314,6 +314,7 @@ static void Render1(unsigned char *p_screen, unsigned char *palette)
 #endif
 }
 
+#if RENDER_OPENGL
 void WindowsRenderOpenGL(char *p_screen, unsigned char *palette)
 {
 #if 1
@@ -409,6 +410,7 @@ glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
+#endif
 
 void WindowsUpdate(char *p_screen, unsigned char *palette)
 {
@@ -427,7 +429,7 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
     {
         lastTick = tick;
 
-#if 1
+#if RENDER_OPENGL
         WindowsRenderOpenGL(p_screen, palette);
 #else
         WindowsRenderSDL(p_screen, palette);

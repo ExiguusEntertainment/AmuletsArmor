@@ -15,8 +15,13 @@
 #define _DEBUG
 #endif
 
+#if RENDER_OPENGL
 #define WINDOW_WIDTH    ((320*6)/2)
 #define WINDOW_HEIGHT   ((200*6)/2)
+#else
+#define WINDOW_WIDTH    640
+#define WINDOW_HEIGHT   400
+#endif
 
 /* Flag that determines if this is the shareware version */
 //#define COMPILE_OPTION_SHAREWARE_DEMO
