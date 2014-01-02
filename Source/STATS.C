@@ -2285,6 +2285,8 @@ T_void StatsChangePlayerAttributeMod (E_statsAttributeType attribute, T_sbyte8 v
         StatsCalcPlayerAttackDamage();
         /* recalculate max load */
         StatsCalcPlayerMaxLoad();
+        // Recalculate the player's speed (affected by max load)
+        StatsCalcPlayerMovementSpeed();
 
         /* redraw inventory screen to display new max load */
         if (BannerFormIsOpen (BANNER_FORM_INVENTORY)) InventoryDrawInventoryWindow(INVENTORY_PLAYER);

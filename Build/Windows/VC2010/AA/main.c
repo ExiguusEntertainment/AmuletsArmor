@@ -314,7 +314,7 @@ static void Render1(unsigned char *p_screen, unsigned char *palette)
 #endif
 }
 
-#if RENDER_OPENGL
+#ifdef AA_OPENGL
 void WindowsRenderOpenGL(char *p_screen, unsigned char *palette)
 {
 #if 1
@@ -429,7 +429,7 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
     {
         lastTick = tick;
 
-#if RENDER_OPENGL
+#ifdef AA_OPENGL
         WindowsRenderOpenGL(p_screen, palette);
 #else
         WindowsRenderSDL(p_screen, palette);

@@ -1458,6 +1458,7 @@ T_void SoundSetBackgroundMusic(T_byte8 *filename)
                     p_sample->isPlaying = TRUE;
                 }
                 MemCheck(8210);
+                FileClose(file);
             }
         } else {
 #ifdef COMPILE_OPTION_OUTPUT_BAD_SOUNDS

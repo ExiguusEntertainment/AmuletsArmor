@@ -101,7 +101,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY;RENDER_OPENGL=0</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <FunctionLevelLinking>
       </FunctionLevelLinking>
@@ -261,7 +261,9 @@
     <ClCompile Include="..\..\..\..\Source\3D_IO.C" />
     <ClCompile Include="..\..\..\..\Source\3D_Occlusion.c" />
     <ClCompile Include="..\..\..\..\Source\3D_TRIG.C" />
-    <ClCompile Include="..\..\..\..\Source\3D_VIEW.C" />
+    <ClCompile Include="..\..\..\..\Source\3D_VIEW.C">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\AAGLTexture.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>

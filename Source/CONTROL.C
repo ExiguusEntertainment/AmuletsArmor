@@ -445,12 +445,16 @@ static T_void ControlMouseControlForGame(
                             PlayerTurnRight(((x - vcx) << 8) / (VIEW3D_WIDTH / 2));
                         if ((dir >= 5) && (dir <= 7))
                             PlayerTurnLeft(((vcx - x) << 8) / (VIEW3D_WIDTH / 2));
-                        if ((dir == 0) || (dir == 1) || (dir == 7))
-                            PlayerMoveForward(
-                                    ((vcy - y) << 10) / (VIEW3D_HEIGHT / 2));
-                        if ((dir >= 3) && (dir <= 5))
-                            PlayerMoveBackward(
-                                    ((y - vcy) << 10) / (VIEW3D_HEIGHT / 2));
+
+                        // Can move only when not dead
+                        if (!ClientIsDead())  {
+                            if ((dir == 0) || (dir == 1) || (dir == 7))
+                                PlayerMoveForward(
+                                        ((vcy - y) << 10) / (VIEW3D_HEIGHT / 2));
+                            if ((dir >= 3) && (dir <= 5))
+                                PlayerMoveBackward(
+                                        ((y - vcy) << 10) / (VIEW3D_HEIGHT / 2));
+                        }
 
                         if (button == 3) {
                             /* initiate an attack or use item */

@@ -1043,6 +1043,7 @@ T_void ClientUpdate(T_void)
     T_sword16 x, y, newx, newy ;
     T_word32 delta ;
     T_sword16 relx, rely;
+    T_word32 turnAmount;
     TICKER_TIME_ROUTINE_PREPARE() ;
 
     TICKER_TIME_ROUTINE_START() ;
@@ -1144,31 +1145,46 @@ T_void ClientUpdate(T_void)
                     rely = 0;
                 }
                 if (relx < 0) {
-                    PlayerTurnLeft(-relx) ;
+                    turnAmount = -relx;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    PlayerTurnLeft((T_word16)turnAmount) ;
                 } else if (relx > 0) {
-                    PlayerTurnRight(relx) ;
+                    turnAmount = relx;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    PlayerTurnRight((T_word16)turnAmount) ;
                 }
 
                 // Look up or down
                 if (rely >= 0) {
-                    View3dSetUpDownAngle(View3dGetUpDownAngle() - (3*rely*delta)/100) ;
+                    turnAmount = (3*rely*delta)/100;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    View3dSetUpDownAngle(View3dGetUpDownAngle() - turnAmount) ;
                 } else if (rely < 0) {
-                    View3dSetUpDownAngle(View3dGetUpDownAngle() + (3*(-rely)*delta)/100) ;
+                    turnAmount = (3*(-rely)*delta)/100;
+                    turnAmount *= ConfigGetMouseTurnSpeed();
+                    turnAmount /= 100;
+                    View3dSetUpDownAngle(View3dGetUpDownAngle() + turnAmount) ;
                 }
 
                 if ((PlayerIsAboveGround()==FALSE) ||
                         (EffectPlayerEffectIsActive(PLAYER_EFFECT_FLY)==TRUE))
                 {
-                    timeHeld = KeyMapGetHeld(KEYMAP_TURN_LEFT)*8 ;
-                    if (timeHeld)  {
-                        timeHeld += (timeHeld>>1) ;
-                        PlayerAccelDirection(playerMoveAngle+INT_ANGLE_90, timeHeld) ;
-                    }
+                    // Don't move if dead!
+                    if (!ClientIsDead()) {
+                        timeHeld = KeyMapGetHeld(KEYMAP_TURN_LEFT)*8 ;
+                        if (timeHeld)  {
+                            timeHeld += (timeHeld>>1) ;
+                            PlayerAccelDirection(playerMoveAngle+INT_ANGLE_90, timeHeld) ;
+                        }
 
-                    timeHeld = KeyMapGetHeld(KEYMAP_TURN_RIGHT)*8 ;
-                    if (timeHeld)  {
-                        timeHeld += (timeHeld>>1) ;
-                        PlayerAccelDirection(playerMoveAngle-INT_ANGLE_90, timeHeld) ;
+                        timeHeld = KeyMapGetHeld(KEYMAP_TURN_RIGHT)*8 ;
+                        if (timeHeld)  {
+                            timeHeld += (timeHeld>>1) ;
+                            PlayerAccelDirection(playerMoveAngle-INT_ANGLE_90, timeHeld) ;
+                        }
                     }
                 } else {
                     /* Clear the keys */
@@ -1199,10 +1215,16 @@ T_void ClientUpdate(T_void)
                 } else {
                     // If NOT in relative mouse mode, we turn with the keyboard
                     if (KeyMapGetScan(KEYMAP_TURN_LEFT)) {
-                        PlayerTurnLeft((shift)?512:256) ;
+                        turnAmount = (shift)?512:256;
+                        turnAmount *= ConfigGetKeyboardTurnSpeed();
+                        turnAmount /= 100;
+                        PlayerTurnLeft(turnAmount) ;
                     }
                     if (KeyMapGetScan(KEYMAP_TURN_RIGHT)) {
-                        PlayerTurnRight((shift)?512:256) ;
+                        turnAmount = (shift)?512:256;
+                        turnAmount *= ConfigGetKeyboardTurnSpeed();
+                        turnAmount /= 100;
+                        PlayerTurnRight(turnAmount) ;
                     }
                 }
                 if (!G_msgOn)  {
@@ -1243,12 +1265,12 @@ T_void ClientUpdate(T_void)
                 }
             } else {
                 timeHeld = KeyMapGetHeld(KEYMAP_FORWARD)*8 ;
-                if ((timeHeld) && ((rand() % 5)==0))  {
+                if (timeHeld)  {
                     PlayerAccelDirection(playerMoveAngle, timeHeld) ;
                     PlayerSetStance(STANCE_WALK) ;
                 }
                 timeHeld2 = KeyMapGetHeld(KEYMAP_BACKWARD)*8 ;
-                if ((timeHeld2) && ((rand() % 5)==0))  {
+                if (timeHeld2)  {
                     PlayerAccelDirection(playerMoveAngle, -timeHeld) ;
                     PlayerSetStance(STANCE_WALK) ;
                 }
@@ -3050,7 +3072,7 @@ E_Boolean ClientDropInventoryItem(T_word16 numItems, T_word16 itemType, T_word16
     return doDestroy ;
 }
 
-T_void ClientDied(T_void)
+void ClientDropAll(void)
 {
     T_word16 i ;
     T_sword16 num ;
@@ -3069,46 +3091,54 @@ T_void ClientDied(T_void)
         105, /* GOLD */
         107, /* PLATINUM */
     } ;
+
+    /* Drop all his equipment here. */
+    InventoryGoThroughAll(ClientDropInventoryItem) ;
+
+    /* Drop bolts (if got any) */
+    for (i=0; i<EQUIP_TOTAL_BOLT_TYPES; i++)  {
+        num = StatsGetPlayerBolts(i) ;
+        if (num)  {
+            if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
+                /* Drop quiver full. */
+                ClientSyncSendActionDropAt(boltToQuiver[i], PlayerGetX16(), PlayerGetY16(), num) ;
+            }
+            StatsAddBolt((E_equipBoltTypes)i, -num) ;
+        }
+    }
+
+    /* Drop coins (if got any) */
+    for (i=0; i<EQUIP_TOTAL_COIN_TYPES; i++)  {
+        num = StatsGetPlayerCoins(i) ;
+        if (num)  {
+            /* Only drop 5 pieces */
+            if (num >= 5)  {
+                if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
+                    ClientSyncSendActionDropAt(coinTypeToCoin[i], PlayerGetX16(), PlayerGetY16(), 0) ;
+                }
+            }
+            StatsAddCoin((E_equipCoinTypes)i, -num);
+        }
+    }
+
+    /* Set weight allowance to zero */
+    StatsSetPlayerLoad(0);
+
+    /* Recalculate movement speed */
+    StatsCalcPlayerMovementSpeed();
+}
+
+T_void ClientDied(T_void)
+{
     E_Boolean isFake ;
 
     DebugRoutine("ClientDied") ;
     /* This player just died!  We need to take appropriate actions. */
 
     if (ClientIsInView())  {
-        /* Drop all his equipment here. */
-        InventoryGoThroughAll(ClientDropInventoryItem) ;
-
-        /* Drop bolts (if got any) */
-        for (i=0; i<EQUIP_TOTAL_BOLT_TYPES; i++)  {
-            num = StatsGetPlayerBolts(i) ;
-            if (num)  {
-                if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
-                    /* Drop quiver full. */
-                    ClientSyncSendActionDropAt(boltToQuiver[i], PlayerGetX16(), PlayerGetY16(), num) ;
-                }
-                StatsAddBolt(i, -num) ;
-            }
-        }
-
-        /* Drop coins (if got any) */
-        for (i=0; i<EQUIP_TOTAL_COIN_TYPES; i++)  {
-            num = StatsGetPlayerCoins(i) ;
-            if (num)  {
-                /* Only drop 5 pieces */
-                if (num >= 5)  {
-                    if (!(MapGetSectorType(PlayerGetAreaSector()) & SECTOR_TYPE_ACID))  {
-                        ClientSyncSendActionDropAt(coinTypeToCoin[i], PlayerGetX16(), PlayerGetY16(), 0) ;
-                    }
-                }
-                StatsAddCoin(i, -num);
-            }
-        }
-
-        /* Set weight allowance to zero */
-        StatsSetPlayerLoad(0);
-
-        /* Recalculate movemement speed */
-        StatsCalcPlayerMovementSpeed();
+        // Drop everything the player has collected.
+        if (ConfigDyingDropsItems())
+            ClientDropAll();
 
         /* update banner */
         if (BannerFormIsOpen (BANNER_FORM_INVENTORY))

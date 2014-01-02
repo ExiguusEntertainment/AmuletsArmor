@@ -105,6 +105,7 @@ static E_Boolean G_relativeMode = FALSE;
 static T_word16 G_mousePreRelativeX;
 static T_word16 G_mousePreRelativeY;
 static T_word16 G_relativeSensitivity = 70;
+static E_Boolean G_relativeModeFirstIsZero = FALSE;
 
 /*-------------------------------------------------------------------------*
  * Routine:  MouseInitialize
@@ -1151,6 +1152,8 @@ T_void MouseRelativeModeOn(T_void)
 
         // Center the mouse
         MouseMoveTo(SCREEN_SIZE_X/2, SCREEN_SIZE_Y/2);
+
+        G_relativeModeFirstIsZero = TRUE;
     }
 
     DebugEnd();
@@ -1196,9 +1199,16 @@ T_void MouseRelativeRead(T_sword16 *aDeltaX, T_sword16 *aDeltaY)
         // Read the mouse position and then recenter the mouse
         IMouseGetMousePosition(&x, &y);
 
-        // How far off did the mouse move from the middle?
-        *aDeltaX = ((T_sword16)(x - SCREEN_SIZE_X/2))*G_relativeSensitivity;
-        *aDeltaY = ((T_sword16)(y - SCREEN_SIZE_Y/2))*G_relativeSensitivity;
+        // Is this the first reading?  If so, we'll default to no movement
+        if (G_relativeModeFirstIsZero) {
+            *aDeltaX = 0;
+            *aDeltaY = 0;
+            G_relativeModeFirstIsZero = FALSE;
+        } else {
+            // How far off did the mouse move from the middle?
+            *aDeltaX = ((T_sword16)(x - SCREEN_SIZE_X/2))*G_relativeSensitivity;
+            *aDeltaY = ((T_sword16)(y - SCREEN_SIZE_Y/2))*G_relativeSensitivity;
+        }
 
         // Center the mouse
         MouseMoveTo(SCREEN_SIZE_X/2, SCREEN_SIZE_Y/2);

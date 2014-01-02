@@ -19,9 +19,12 @@
 #define NUMBER_KEY_PAGES 5
 #define NUMBER_KEYS (NUMBER_KEY_PAGES*12)
 
-#define ESC_MENU_OPTION_BOBBING     0
-#define ESC_MENU_INVERT_MOUSE_Y     1
-#define ESC_MENU_NUM_OPTIONS        2
+#define ESC_MENU_OPTION_BOBBING             0
+#define ESC_MENU_INVERT_MOUSE_Y             1
+#define ESC_MENU_MOUSE_TURN_SPEED           2
+#define ESC_MENU_KEYBOARD_TURN_SPEED        3
+#define ESC_MENU_DYING_DROPS_ALL_ITEMS      4
+#define ESC_MENU_NUM_OPTIONS                5
 
 /*---------------------------------------------------------------------------
  * Types:
@@ -334,9 +337,23 @@ T_void EscapeMenuFormControl(
             EscapeMenuEnterState(6);
             G_escMenuAssignMode = TRUE;
         } else if ((objID >= 7000) && (objID < (7000+ESC_MENU_NUM_OPTIONS))) {
-            // On/Off option hit
-            G_escMenuToggleOptions[objID - 7000] ^= 1;
-            EscapeMenuSetOptions();
+            if (objID == 7000+ESC_MENU_MOUSE_TURN_SPEED) {
+                // Set the range from 1 to 10 with 5 as the default
+                G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED]+=10;
+                if (G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] > 200)
+                    G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] = 20;
+                EscapeMenuSetOptions();
+            } else if (objID == 7000+ESC_MENU_KEYBOARD_TURN_SPEED) {
+                    // Set the range from 1 to 10 with 5 as the default
+                    G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED]+=10;
+                    if (G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] > 200)
+                        G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] = 20;
+                    EscapeMenuSetOptions();
+            } else {
+                // On/Off option hit
+                G_escMenuToggleOptions[objID - 7000] ^= 1;
+                EscapeMenuSetOptions();
+            }
         } else if (objID == 301) {
             // Pressed the "No Key" button
             // Assign a zero for no key selected
@@ -514,6 +531,7 @@ static T_void EscMenuLoadKeys(T_void)
 
 static T_void EscMenuSaveSettings(void)
 {
+    char value[10];
     DebugRoutine("EscMenuSaveSettings");
 
     EscMenuSaveKeys();
@@ -522,6 +540,12 @@ static T_void EscMenuSaveSettings(void)
             G_escMenuToggleOptions[ESC_MENU_OPTION_BOBBING] ? "0" : "1");
     INIFilePut(G_iniFile, "options", "invertmousey",
             G_escMenuToggleOptions[ESC_MENU_INVERT_MOUSE_Y] ? "1" : "0");
+    sprintf(value, "%d", G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED]);
+    INIFilePut(G_iniFile, "options", "mouseturnspeed", value);
+    sprintf(value, "%d", G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED]);
+    INIFilePut(G_iniFile, "options", "keyturnspeed", value);
+    INIFilePut(G_iniFile, "options", "dyingdropsitems",
+            G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] ? "1" : "0");
 
     DebugEnd();
 }
@@ -538,10 +562,34 @@ static T_void EscMenuLoadSettings(void)
     p = (char *)INIFileGet(G_iniFile, "options", "boboff");
     if (p)
         G_escMenuToggleOptions[ESC_MENU_OPTION_BOBBING] = (atoi(p)==1)?0:1;
+
     G_escMenuToggleOptions[ESC_MENU_INVERT_MOUSE_Y] = 0;
     p = (char *)INIFileGet(G_iniFile, "options", "invertmousey");
     if (p)
         G_escMenuToggleOptions[ESC_MENU_INVERT_MOUSE_Y] = (atoi(p)==1)?1:0;
+
+    G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] = 100;
+    p = (char *)INIFileGet(G_iniFile, "options", "mouseturnspeed");
+    if (p)
+        G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] = atoi(p);
+    if (G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] > 200)
+        G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] = 200;
+    if (G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] < 20)
+        G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED] = 20;
+
+    G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] = 100;
+    p = (char *)INIFileGet(G_iniFile, "options", "keyturnspeed");
+    if (p)
+        G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] = atoi(p);
+    if (G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] > 200)
+        G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] = 200;
+    if (G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] < 20)
+        G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED] = 20;
+
+    G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] = 1;
+    p = (char *)INIFileGet(G_iniFile, "options", "dyingdropsitems");
+    if (p)
+        G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] = (atoi(p)==1)?1:0;
 
     DebugEnd();
 }
@@ -561,12 +609,19 @@ static void EscapeMenuSetOptionButtonText(T_byte8 aOptionIndex, const char *aTex
 
 static void EscapeMenuSetOptions(void)
 {
+    char value[10];
     DebugRoutine("EscapeMenuSetOptions");
 
     EscapeMenuSetOptionButtonText(ESC_MENU_OPTION_BOBBING,
             G_escMenuToggleOptions[ESC_MENU_OPTION_BOBBING] ? "ON" : "OFF", 31);
     EscapeMenuSetOptionButtonText(ESC_MENU_INVERT_MOUSE_Y,
             G_escMenuToggleOptions[ESC_MENU_INVERT_MOUSE_Y] ? "YES" : "NO", 31);
+    sprintf(value, "%d %%", G_escMenuToggleOptions[ESC_MENU_MOUSE_TURN_SPEED]);
+    EscapeMenuSetOptionButtonText(ESC_MENU_MOUSE_TURN_SPEED, value, 31);
+    sprintf(value, "%d %%", G_escMenuToggleOptions[ESC_MENU_KEYBOARD_TURN_SPEED]);
+    EscapeMenuSetOptionButtonText(ESC_MENU_KEYBOARD_TURN_SPEED, value, 31);
+    EscapeMenuSetOptionButtonText(ESC_MENU_DYING_DROPS_ALL_ITEMS,
+            G_escMenuToggleOptions[ESC_MENU_DYING_DROPS_ALL_ITEMS] ? "YES" : "NO", 31);
 
     DebugEnd();
 }

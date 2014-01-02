@@ -1357,7 +1357,7 @@ T_void KeyboardUpdate(E_Boolean updateBuffers)
 
             /* Find keys that have changed */
             if (changed)  {
-printf("scancode %d = %d\n", scanCode, newValue);
+//printf("scancode %d = %d\n", scanCode, newValue);
                 G_keyTable[scanCode] = newValue ;
                 /* Store the key in the scan key buffer */
                 G_scanKeyBuffer[G_scanKeyEnd] = scanCode | ((G_keyTable[scanCode])?0:0x100) ;
@@ -1388,7 +1388,7 @@ printf("scancode %d = %d\n", scanCode, newValue);
                     if (c) {
                         /* If back at start, don't do */
                         if (next != G_asciiStart)  {
-printf("  buffer key %d, %d (%c), i=%d\n", scanCode, c, c, i);
+//printf("  buffer key %d, %d (%c), i=%d\n", scanCode, c, c, i);
                             /* Store in the buffer */
                             G_asciiBuffer[G_asciiEnd] = c ;
                             G_asciiEnd = next ;

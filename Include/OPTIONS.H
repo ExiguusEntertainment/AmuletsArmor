@@ -15,7 +15,7 @@
 #define _DEBUG
 #endif
 
-#if RENDER_OPENGL
+#if AA_OPENGL
 #define WINDOW_WIDTH    ((320*6)/2)
 #define WINDOW_HEIGHT   ((200*6)/2)
 #else
@@ -83,7 +83,7 @@
 #ifdef COMPILE_OPTION_SHAREWARE_DEMO
     #define VERSION_TEXT "Shareware Demo V1.2"
 #elif defined(COMPILE_OPTION_CLASSIC_VERSION)
-    #define VERSION_TEXT "Classic V1.03"
+    #define VERSION_TEXT "Classic V1.04"
 #else
     #define VERSION_TEXT "Registered V1.0"
 #endif
