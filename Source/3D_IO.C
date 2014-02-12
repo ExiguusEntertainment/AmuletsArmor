@@ -1079,6 +1079,11 @@ static T_void ILockPictures(T_void)
         }
         if (p_sector->ceilingTx[0] != '-')  {
             strncpy(name, p_sector->ceilingTx, 8) ;
+            // Open sky?
+            if (strncmp(name, "F_SKY", 5)==0) {
+                // Set the sky attribute
+                p_sector->trigger |= 1;
+            }
             *((T_byte8 **)(&p_sector->ceilingTx[1])) =
                 PictureLock(name, &G_3dCeilingResourceArray[i]) ;
 //printf("!A 1 %s\n", name) ;
