@@ -37,6 +37,7 @@
 #ifdef WIN32
 #include "Win32\ipx_client.h"
 #endif
+#include "AALua.h"
 
 //#undef TRUE
 //#undef FALSE
@@ -367,6 +368,7 @@ extern void SleepMS(T_word32 sleepMS);
     /* Initialize the game. */
     UpdateGameBegin() ;
     DebugSaveVectorTable() ;
+    AALuaInit();
 
 #ifdef PULL_OUT
     PullOut() ;
@@ -381,11 +383,11 @@ extern void SleepMS(T_word32 sleepMS);
 //#endif
 
 //#ifdef NDEBUG
-    SoundPlayByNumber(3501, 0) ;
+////    SoundPlayByNumber(3501, 0) ;
 //    if (IShowScreen("UI/SCREENS/USA1", VIEW_PALETTE_MAIN_TITLE, 14, FALSE, FALSE) == FALSE)  {
         ColorUpdate(1) ;
 //        delay(200) ;
-        SoundPlayByNumber(3501, 255) ;
+///        SoundPlayByNumber(3501, 255) ;
         //if (IShowScreen("UI/SCREENS/USA1", VIEW_PALETTE_MAIN_TITLE, 400, FALSE, TRUE) == FALSE)  {
         if (IShowScreen("UI/SCREENS/COMPANY", VIEW_PALETTE_STANDARD, 400, TRUE, TRUE) == FALSE)  {
             ColorFadeTo(0,0,0);
@@ -466,6 +468,7 @@ extern void SleepMS(T_word32 sleepMS);
 //    _dos_setvect(0x23, oldbreak) ;
 
     ConfigClose() ;
+    AALuaFinish();
 
     DebugEnd() ;
 }

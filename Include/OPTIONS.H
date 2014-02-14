@@ -18,7 +18,8 @@
 /* Flag that determines if this is the shareware version */
 //#define COMPILE_OPTION_SHAREWARE_DEMO
 //#define COMPILE_OPTION_CLASSIC_VERSION
-#define COMPILE_OPTION_CLASSIC_DEV_VERSION
+//#define COMPILE_OPTION_CLASSIC_DEV_VERSION
+#define COMPILE_OPTION_COMMUNITY_EDITION
 
 /* Flag to turn off the frames per second. */
 //#define COMPILE_OPTION_FRAME_SPEED_OFF
@@ -79,6 +80,8 @@
     #define VERSION_TEXT "Classic V1.04"
 #elif defined(COMPILE_OPTION_CLASSIC_DEV_VERSION)
     #define VERSION_TEXT "Classic Dev V1.04a"
+#elif defined(COMPILE_OPTION_COMMUNITY_EDITION)
+    #define VERSION_TEXT "Community Edition V0.01"
 #else
     #define VERSION_TEXT "Registered V1.0"
 #endif

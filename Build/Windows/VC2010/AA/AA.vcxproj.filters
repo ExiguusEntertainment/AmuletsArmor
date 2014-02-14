@@ -27,6 +27,15 @@
     <Filter Include="Source Files\Win32">
       <UniqueIdentifier>{781aa6aa-f37f-4068-98cd-2b9a736bf846}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\Lua">
+      <UniqueIdentifier>{eb5ecad7-bd43-4d7e-ae56-124fad4cdc3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Lua\lib">
+      <UniqueIdentifier>{3d33a85f-dd93-431f-a01c-2e775df7237e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\Lua\inc">
+      <UniqueIdentifier>{bce2bc66-0916-4897-961e-bbd9c758569b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Source\3D_COLLI.C">
@@ -321,6 +330,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SERVER.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\AALua.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -844,6 +856,18 @@
     <ClInclude Include="..\..\..\..\Include\PACKET.H">
       <Filter>Include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\lauxlib.h">
+      <Filter>Lib\Lua\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\lua.h">
+      <Filter>Lib\Lua\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\luaconf.h">
+      <Filter>Lib\Lua\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\lualib.h">
+      <Filter>Lib\Lua\inc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDL.lib">
@@ -851,6 +875,9 @@
     </Library>
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDLmain.lib">
       <Filter>Lib\SDL\lib</Filter>
+    </Library>
+    <Library Include="liblua.lib">
+      <Filter>Source Files\Win32</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

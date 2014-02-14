@@ -40,14 +40,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;..\..\..\..\Lib\Lua\lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\Lua\inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\Lua\inc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,7 +82,7 @@
       <ShowProgress>NotSet</ShowProgress>
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib;liblua.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <NoEntryPoint>false</NoEntryPoint>
@@ -90,6 +90,12 @@
       </EntryPointSymbol>
       <SubSystem>Console</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>copy $(ProjectDir)Debug\AA.exe $(ProjectDir)..\..\..\..\Exe\.</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying AA.exe to executable directory.</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -141,6 +147,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MaxSpeed</Optimization>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Speed</FavorSizeOrSpeed>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\AALua.c" />
     <ClCompile Include="..\..\..\..\Source\ACTIVITY.C" />
     <ClCompile Include="..\..\..\..\Source\AREASND.C" />
     <ClCompile Include="..\..\..\..\Source\BANKUI.C" />
@@ -368,6 +375,10 @@
     <ClInclude Include="..\..\..\..\Include\VIEWFILE.H" />
     <ClInclude Include="..\..\..\..\Include\VIEWREGN.H" />
     <ClInclude Include="..\..\..\..\Include\VM.H" />
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\lauxlib.h" />
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\lua.h" />
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\luaconf.h" />
+    <ClInclude Include="..\..\..\..\Lib\Lua\inc\lualib.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\begin_code.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\close_code.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL.h" />
@@ -416,6 +427,7 @@
   <ItemGroup>
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDL.lib" />
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDLmain.lib" />
+    <Library Include="liblua.lib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="anaicon.ico" />
