@@ -1,6 +1,7 @@
 package.path = './Lua/?.lua;./Lua/AAEngine/?.lua';
 
 local color = require "color"
+local display = require "display"
 local graphics = require "graphics"
 local keyboard = require "keyboard"
 local keymap = require "keymap"
@@ -69,21 +70,27 @@ function showScreen(picName, pal, timeout, showTag, doFlash)
 		-- At this point, the darkness can be adjusted with ALT-F11
 		-- Check if the gamma key is pressed and adjust
 		-- but don't keep adjusting until the key is released
---		if (keyboard.getScanCode("ALT")) then
---			if (keymap.getScan("gamma")) then
---				if (wasGamma ~= true) then
---					color.gammaAjusst()
---					color.update(1)
---					wasGamma = true
---				end
---			else
---				wasGamma = false;
---			end
---		else
---			wasGamma = false;
---		end
+		if (keyboard.getScanCode(keyboard.scankeys.KEY_SCAN_CODE_ALT)) then
+			if (keymap.getScanCode(keymap.mapping.KEYMAP_GAMMA_CORRECT)) then
+				if (wasGamma ~= true) then
+					color.gammaAdjust()
+					color.update(1)
+					wasGamma = true
+				end
+			else
+				wasGamma = false;
+			end
+		else
+			wasGamma = false;
+		end
 	end
 	mouse.popEventHandler()
+
+	if (not bypassed) then
+		color.fadeto({0, 0, 0})
+	end		
+	graphics.fillRect(0, 0, display.width()-1, display.height()-1, 0)
+	color.update(1)
 
 	return bypassed
 end
@@ -93,27 +100,15 @@ function titlescreen()
 	sound.play(3501, 1, 1);
 	
 	-- Show the company screen 
-	if (showScreen("UI/SCREENS/COMPANY", "standard", 400, true, true) == false) then
-		color.fadeto({0, 0, 0})
-		graphics.fillRect(0, 0, 319, 199, 0)
-		color.update(1)
-		if (showScreen("UI/SCREENS/PRESENTS", "standard", 250, true, false) == false) then
-			color.fadeto({0, 0, 0})
-			graphics.fillRect(0, 0, 319, 199, 0)
-			color.update(1)
-			time.delayMS(350)
-			if (showScreen("UI/SCREENS/BEGIN1", "standard", 1000, true, false) == false) then
-				color.fadeto({0, 0, 0})
-				graphics.fillRect(0, 0, 319, 199, 0)
-				color.update(1)
-			end
-		end
-	end
+	if (showScreen("UI/SCREENS/COMPANY", "standard", 400, false, true)) then return end;
+	
+	-- Show "presents"
+	if (showScreen("UI/SCREENS/PRESENTS", "standard", 250, false, false)) then return end;
+	time.delayMS(350)
+	
+	-- Show A&A Logo screen
+	if (showScreen("UI/SCREENS/BEGIN1", "standard", 1000, true, false)) then return end;
 end
 
 startup();
 
--- Lighting sound!
---sound.PlayByNumber(3501, 1.0);
---sound.PlayByName("snd#3501", 1.0);
---sound.play(3501, 1.0);

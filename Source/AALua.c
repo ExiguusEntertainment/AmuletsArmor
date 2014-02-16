@@ -8,6 +8,7 @@
 #include <COLOR.H>
 #include <GRAPHICS.H>
 #include <KEYBOARD.H>
+#include <KEYMAP.H>
 #include <MOUSEMOD.H>
 #include <PICS.H>
 #include <SOUND.H>
@@ -120,12 +121,32 @@ int LUA_API luaopen_aasound(lua_State *L)
 //--------------------
 static int lua_ColorAddGlobal(lua_State *L)
 {
-    T_byte8 red = (T_byte8)(lua_tonumber(L, 1));
-    T_byte8 green = (T_byte8)(lua_tonumber(L, 2));
-    T_byte8 blue = (T_byte8)(lua_tonumber(L, 3));
+    T_byte8 red, green, blue;
+
+    DebugRoutine("lua_ColorAddGlobal");
+
+    red = (T_byte8)(lua_tonumber(L, 1));
+    green = (T_byte8)(lua_tonumber(L, 2));
+    blue = (T_byte8)(lua_tonumber(L, 3));
     ColorAddGlobal(red/4, green/4, blue/4);
 
+    DebugEnd();
+
     return 0;
+}
+
+static int lua_ColorGammaAdjust(lua_State *L)
+{
+    T_word16 v;
+
+    DebugRoutine("lua_ColorAdjustGamma");
+
+    v = ColorGammaAdjust();
+    lua_pushnumber(L, v);
+
+    DebugEnd();
+
+    return 1;
 }
 
 static int lua_ColorStoreDefaultPalette(lua_State *L)
@@ -137,11 +158,16 @@ static int lua_ColorStoreDefaultPalette(lua_State *L)
 
 static int lua_ColorFadeTo(lua_State *L)
 {
-    T_byte8 red = (T_byte8)(lua_tonumber(L, 1));
-    T_byte8 green = (T_byte8)(lua_tonumber(L, 2));
-    T_byte8 blue = (T_byte8)(lua_tonumber(L, 3));
+    T_byte8 red, green, blue;
+
+    DebugRoutine("lua_ColorFadeTo");
+
+    red = (T_byte8)(lua_tonumber(L, 1));
+    green = (T_byte8)(lua_tonumber(L, 2));
+    blue = (T_byte8)(lua_tonumber(L, 3));
     ColorFadeTo(red, green, blue);
 
+    DebugEnd();
     return 0;
 }
 
@@ -161,6 +187,7 @@ int LUA_API luaopen_aacolor(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "AddGlobal", lua_ColorAddGlobal },
+            { "GammaAdjust", lua_ColorGammaAdjust },
             { "FadeTo", lua_ColorFadeTo },
             { "StoreDefaultPalette", lua_ColorStoreDefaultPalette },
             { "Update", lua_ColorUpdate },
@@ -376,21 +403,59 @@ static int lua_KeyboardBufferGet(lua_State *L)
     return 1;
 }
 
+static int lua_KeyboardGetScanCode(lua_State *L)
+{
+    T_word16 scankey;
+
+    DebugRoutine("lua_KeyboardGetScanKey");
+
+    scankey = (T_word16)lua_tonumber(L, 1);
+
+    if (KeyboardGetScanCode(scankey)) {
+        lua_pushboolean(L, 1);
+    } else {
+        lua_pushboolean(L, 0);
+    }
+    DebugEnd();
+    return 1;
+}
+
 int LUA_API luaopen_aakeyboard(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "BufferOn", lua_KeyboardBufferOn },
             { "BufferOff", lua_KeyboardBufferOff },
             { "BufferGet", lua_KeyboardBufferGet },
+            { "GetScanCode", lua_KeyboardGetScanCode },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
 }
 
 //-----------------
+
+static int lua_KeymapGetScan(lua_State *L)
+{
+    T_word16 keymapping;
+
+    DebugRoutine("lua_KeymapGetScan");
+
+    keymapping = (T_word16)lua_tonumber(L, 1);
+
+    if (KeyMapGetScan(keymapping)) {
+        lua_pushboolean(L, 1);
+    } else {
+        lua_pushboolean(L, 0);
+    }
+    DebugEnd();
+    return 1;
+}
+
+
 int LUA_API luaopen_aakeymap(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
+            { "GetScan", lua_KeymapGetScan },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -582,6 +647,37 @@ int LUA_API luaopen_aatime(lua_State *L)
 }
 //-----------------
 
+static int lua_DisplayGetWidth(lua_State *L)
+{
+    DebugRoutine("lua_DisplayGetWidth");
+
+    lua_pushnumber(L, SCREEN_SIZE_X);
+
+    DebugEnd();
+    return 1;
+}
+
+static int lua_DisplayGetHeight(lua_State *L)
+{
+    DebugRoutine("lua_DisplayGetHeight");
+
+    lua_pushnumber(L, SCREEN_SIZE_Y);
+
+    DebugEnd();
+    return 1;
+}
+
+int LUA_API luaopen_aadisplay(lua_State *L)
+{
+    static struct luaL_Reg driver[] = {
+            { "GetWidth", lua_DisplayGetWidth },
+            { "GetHeight", lua_DisplayGetHeight },
+            { NULL, NULL }, };
+    luaL_newlib(L, driver);
+    return 1;
+}
+//-----------------
+
 void AALuaInit(void)
 {
     DebugRoutine("AALuaInit");
@@ -593,6 +689,7 @@ void AALuaInit(void)
     luaL_openlibs(L);
 
     luaL_requiref(L, "aacolor", luaopen_aacolor, 1);
+    luaL_requiref(L, "aadisplay", luaopen_aadisplay, 1);
     luaL_requiref(L, "aagraphics", luaopen_aagraphics, 1);
     luaL_requiref(L, "aakeyboard", luaopen_aakeyboard, 1);
     luaL_requiref(L, "aakeymap", luaopen_aakeymap, 1);

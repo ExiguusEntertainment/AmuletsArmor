@@ -24,4 +24,9 @@ function color.update(duration)
 	aacolor.Update(duration)
 end
 
+-- Adjust the gama
+function color.gammaAdjust()
+	aacolor.GammaAdjust()
+end
+
 return color
