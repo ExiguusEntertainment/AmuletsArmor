@@ -1,4 +1,4 @@
-package.path = './Lua/?.lua;./Lua/AAEngine/?.lua';
+package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua';
 
 local color = require "AAEngine/color"
 local display = require "AAEngine/display"
@@ -14,7 +14,7 @@ local view = require "AAEngine/view"
 
 local titlescreen = require "AAGame/titlescreen"
 
-local VERSION_TEXT = "Lua version 0.01"
+local config = require "config"
 
 local function startup()
 	print "Hello "

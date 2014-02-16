@@ -9,6 +9,7 @@ local sound = require "AAEngine/sound"
 local time = require "AAEngine/time"
 local ticker = require "AAEngine/ticker"
 local view = require "AAEngine/view"
+local config = require "config"
 
 function showScreen(picName, pal, timeout, showTag, doFlash)
 	local bypassed = false
@@ -92,7 +93,7 @@ function titlescreen()
 	sound.play(3501, 1, 1);
 	
 	-- Show the company screen 
-	if (showScreen("UI/SCREENS/COMPANY", "standard", 400, false, true)) then return end;
+	if (showScreen("UI/SCREENS/COMPANY", "standard", 400, true, true)) then return end;
 	
 	-- Show "presents"
 	if (showScreen("UI/SCREENS/PRESENTS", "standard", 250, false, false)) then return end;
