@@ -4,5 +4,6 @@
 void AALuaInit(void);
 void AALuaFinish(void);
 void AALuaScriptLoadAndRun(const char *aFilename);
+void AALuaCallGlobalFunction0(const char *aFuncName);
 
 #endif

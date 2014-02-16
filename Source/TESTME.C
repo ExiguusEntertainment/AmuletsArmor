@@ -382,6 +382,8 @@ extern void SleepMS(T_word32 sleepMS);
     //    freopen("stderr.out", "w", stderr) ;
 //#endif
 
+    AALuaCallGlobalFunction0("titlescreen");
+#if 0
 //#ifdef NDEBUG
 ////    SoundPlayByNumber(3501, 0) ;
 //    if (IShowScreen("UI/SCREENS/USA1", VIEW_PALETTE_MAIN_TITLE, 14, FALSE, FALSE) == FALSE)  {
@@ -419,6 +421,7 @@ extern void SleepMS(T_word32 sleepMS);
         }
 //    }
 //#endif
+#endif
 
     GrDrawRectangle(0, 0, SCREEN_SIZE_X-1, SCREEN_SIZE_Y-1, 0) ;
     ColorUpdate(1) ;
