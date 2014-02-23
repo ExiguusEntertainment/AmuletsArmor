@@ -90,7 +90,7 @@ end
 
 function titlescreen()
 	print("Time is now "..ticker.get());
-	sound.play(3501, 1, 1);
+	sound.play(3501, 1);
 	
 	-- Show the company screen 
 	if (showScreen("UI/SCREENS/COMPANY", "standard", 400, true, true)) then return end;

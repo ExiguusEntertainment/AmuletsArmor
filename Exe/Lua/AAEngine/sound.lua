@@ -7,12 +7,14 @@ function sound.play(sound, volume, looped)
 		volume = 1.0
 	end
 	if (looped == nil) then
-		looped = 0
+		looped = false
 	end
 	print("Playing sound "..sound.." now")
 	if (looped) then
+	    print("  sound is looped.")
 		return aasound.PlayLoop(sound, volume)
 	else
+	    print("  sound is NOT looped")
 		return aasound.Play(sound, volume)
 	end
 end
