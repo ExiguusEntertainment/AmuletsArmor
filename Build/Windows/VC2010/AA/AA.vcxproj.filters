@@ -36,6 +36,12 @@
     <Filter Include="Lib\Lua\inc">
       <UniqueIdentifier>{bce2bc66-0916-4897-961e-bbd9c758569b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\Minizip">
+      <UniqueIdentifier>{acaace0f-66da-4b5a-a29e-4a3bbdff5fbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\zlib">
+      <UniqueIdentifier>{23b26a80-0855-498b-949e-38856816e97c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Source\3D_COLLI.C">
@@ -334,6 +340,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\Source\AALua.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\ioapi.c">
+      <Filter>Lib\Minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\iowin32.c">
+      <Filter>Lib\Minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\mztools.c">
+      <Filter>Lib\Minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\unzip.c">
+      <Filter>Lib\Minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\zip.c">
+      <Filter>Lib\Minizip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -868,6 +889,30 @@
     <ClInclude Include="..\..\..\..\Lib\Lua\inc\lualib.h">
       <Filter>Lib\Lua\inc</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\include\zconf.h">
+      <Filter>Lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\include\zlib.h">
+      <Filter>Lib\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\crypt.h">
+      <Filter>Lib\Minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\ioapi.h">
+      <Filter>Lib\Minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\iowin32.h">
+      <Filter>Lib\Minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\mztools.h">
+      <Filter>Lib\Minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\unzip.h">
+      <Filter>Lib\Minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\zip.h">
+      <Filter>Lib\Minizip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDL.lib">
@@ -878,6 +923,9 @@
     </Library>
     <Library Include="liblua.lib">
       <Filter>Source Files\Win32</Filter>
+    </Library>
+    <Library Include="..\..\..\..\Lib\zlib-1.2.8-dll\lib\zdll.lib">
+      <Filter>Lib\zlib</Filter>
     </Library>
   </ItemGroup>
   <ItemGroup>

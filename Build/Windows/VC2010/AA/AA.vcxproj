@@ -53,7 +53,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\zlib-1.2.8-dll\include;..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <SmallerTypeCheck>false</SmallerTypeCheck>
@@ -72,7 +72,7 @@
       <CreateHotpatchableImage>false</CreateHotpatchableImage>
       <BrowseInformation>true</BrowseInformation>
       <ShowIncludes>false</ShowIncludes>
-      <DisableSpecificWarnings>4200;4100;4996</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4200;4100;4996;4204</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
@@ -103,7 +103,7 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;..\..\..\..\Lib\zlib-1.2.8-dll\include;..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -140,6 +140,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\ioapi.c" />
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\iowin32.c" />
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\mztools.c" />
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\unzip.c" />
+    <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\zip.c" />
     <ClCompile Include="..\..\..\..\Source\3D_COLLI.C" />
     <ClCompile Include="..\..\..\..\Source\3D_IO.C" />
     <ClCompile Include="..\..\..\..\Source\3D_TRIG.C" />
@@ -420,6 +425,14 @@
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_types.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_version.h" />
     <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_video.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\crypt.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\ioapi.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\iowin32.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\mztools.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\unzip.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\zip.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\include\zconf.h" />
+    <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\include\zlib.h" />
     <ClInclude Include="..\..\..\..\Source\Win32\ipx_client.h" />
     <ClInclude Include="DIRECT.H" />
     <ClInclude Include="options.hpp" />
@@ -427,6 +440,7 @@
   <ItemGroup>
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDL.lib" />
     <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDLmain.lib" />
+    <Library Include="..\..\..\..\Lib\zlib-1.2.8-dll\lib\zdll.lib" />
     <Library Include="liblua.lib" />
   </ItemGroup>
   <ItemGroup>
