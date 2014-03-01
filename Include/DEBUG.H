@@ -52,7 +52,7 @@ T_void DebugRemoveRoutine(T_void) ;
      const char *DebugGetLastCalled(T_void) ;
      T_void DebugHeapOn(T_void) ;
      T_void DebugHeapOff(T_void) ;
-     T_void DebugCompareCheck(T_byte8 *str, T_byte8 *p_file, T_word16 line) ;
+     T_void DebugCompareCheck(const char *str, const char *p_file, T_word16 line) ;
      T_void DebugStop(T_void) ;
      T_void DebugTime(T_word16 timeSlot) ;
 #    ifdef COMPILE_OPTION_DEBUG_CHECKS_VECTORS

@@ -27,7 +27,7 @@ T_void SoundInitialize(T_void) ;
 
 T_void SoundFinish(T_void) ;
 
-T_void SoundSetBackgroundMusic(T_byte8 *filename) ;
+T_void SoundSetBackgroundMusic(const char *filename) ;
 
 T_sword16 SoundPlayByName(const char *filename, T_word16 volume) ;
 

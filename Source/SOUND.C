@@ -1394,7 +1394,7 @@ static T_void IBackgroundMusicDone(void *data)
     MemCheck(8203);
 }
 
-T_void SoundSetBackgroundMusic(T_byte8 *filename)
+T_void SoundSetBackgroundMusic(const char *filename)
 {
     T_byte8 realFilename[80] ;
     T_file file;

@@ -20,7 +20,7 @@ typedef enum {
     FILE_MODE_UNKNOWN
 } E_fileMode ;
 
-T_file FileOpen(T_byte8 *p_filename, E_fileMode mode) ;
+T_file FileOpen(const char *p_filename, E_fileMode mode) ;
 
 T_void FileClose(T_file file) ;
 
@@ -31,15 +31,15 @@ T_sword32 FileRead(T_file file, T_void *p_buffer, T_word32 size) ;
 
 T_sword32 FileWrite(T_file file, T_void *p_buffer, T_word32 size) ;
 
-T_void *FileLoad(T_byte8 *p_filename, T_word32 *p_size) ;
+T_void *FileLoad(const char *p_filename, T_word32 *p_size) ;
 
-T_word32 FileGetSize(T_byte8 *p_filename) ;
+T_word32 FileGetSize(const char *p_filename) ;
 
 E_Boolean FileFindFirst(T_byte8 *searchPattern, T_byte8 *filename) ;
 
 E_Boolean FileFindNext(T_byte8 *filename) ;
 
-E_Boolean FileExist(T_byte8 *p_filename) ;
+E_Boolean FileExist(const char *p_filename) ;
 
 #endif
 

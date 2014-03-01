@@ -45,7 +45,7 @@ static T_word16 G_numberOpenFiles = 0 ;
  *  @return file handle for all future accesses.
  *
  *<!-----------------------------------------------------------------------*/
-T_file FileOpen(T_byte8 *p_filename, E_fileMode mode)
+T_file FileOpen(const char *p_filename, E_fileMode mode)
 {
     T_file file ;
     static T_word32 fileOpenModes[4] = {
@@ -204,7 +204,7 @@ T_sword32 FileWrite(T_file file, T_void *p_buffer, T_word32 size)
  *      file.
  *
  *<!-----------------------------------------------------------------------*/
-T_void *FileLoad(T_byte8 *p_filename, T_word32 *p_size)
+T_void *FileLoad(const char *p_filename, T_word32 *p_size)
 {
     T_byte8 *p_data ;
     T_file file ;
@@ -261,7 +261,7 @@ printf("!A 1 file_r_%s\n", DebugGetCallerName()) ;
  *  @return Size of file
  *
  *<!-----------------------------------------------------------------------*/
-T_word32 FileGetSize(T_byte8 *p_filename)
+T_word32 FileGetSize(const char *p_filename)
 {
     T_word32 size ;
 #if defined(WIN32)
@@ -307,7 +307,7 @@ T_word32 FileGetSize(T_byte8 *p_filename)
  *  @return TRUE=file exists, else FALSE
  *
  *<!-----------------------------------------------------------------------*/
-E_Boolean FileExist(T_byte8 *p_filename)
+E_Boolean FileExist(const char *p_filename)
 {
     E_Boolean fileFound = FALSE ;
     T_file file ;

@@ -72,7 +72,7 @@ static T_resource IPrimResourceFind(
 
 static T_resource IResourceFind(
                T_resourceDirInfo *p_dirInfo,
-               T_byte8 *p_resourceName) ;
+               const char *p_resourceName) ;
 
 static T_void IPointAllToDir(
                   T_resourceDirInfo *p_dir,
@@ -82,7 +82,7 @@ static T_resourceDirInfo *IDirLock(T_resource dir) ;
 
 static T_void IDirUnlock(T_resourceDirInfo *p_dir) ;
 
-static T_resourceFile IFindOpenResource(T_byte8 *p_filename) ;
+static T_resourceFile IFindOpenResource(const char *p_filename) ;
 
 static T_void IDiscardEntries(T_resourceEntry *p_entry, T_word16 number) ;
 
@@ -121,7 +121,7 @@ static T_loadLink *G_loadedEntries = NULL ;
  *  @return handle to resource block.
  *
  *<!-----------------------------------------------------------------------*/
-T_resourceFile ResourceOpen(T_byte8 *filename)
+T_resourceFile ResourceOpen(const char *filename)
 {
     T_resourceFile resourceFile ;
     T_file file ;
@@ -304,7 +304,7 @@ T_byte8 *JustEnd(T_byte8 *p_string)
  *<!-----------------------------------------------------------------------*/
 T_resource ResourceFind(
                T_resourceFile resourceFile,
-               T_byte8 *p_resourceName)
+               const char *p_resourceName)
 {
     T_resource res ;
     T_resourceEntry *p_entry ;
@@ -1002,7 +1002,7 @@ static T_void IPointAllToDir(
  *<!-----------------------------------------------------------------------*/
 static T_resource IResourceFind(
                T_resourceDirInfo *p_dirInfo,
-               T_byte8 *p_resourceName)
+               const char *p_resourceName)
 {
     T_resourceEntry *p_index ;
     T_sword16 searchMin, searchMax, search ;
@@ -1302,7 +1302,7 @@ static T_void ICheckDirEntries(T_resourceDirInfo *p_dir)
  *      RESOURCE_FILE_BAD
  *
  *<!-----------------------------------------------------------------------*/
-static T_resourceFile IFindOpenResource(T_byte8 *p_filename)
+static T_resourceFile IFindOpenResource(const char *p_filename)
 {
     T_word16 i ;
     T_resourceFile file = RESOURCE_FILE_BAD ;

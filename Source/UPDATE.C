@@ -73,20 +73,16 @@ T_void UpdateGameBegin(T_void)
     memset(&G_playerStats, 0, sizeof(G_playerStats)) ;
     StatsSetActive(&G_playerStats) ;
 
-//printf("Largest memory block: %u\n", FreeMemory()) ;
-//printf("Loading config file ... \nEvaluation: ") ;
-//fflush(stdout) ;
-//puts("ConfigLoad") ;
-//fflush(stdout) ;
-//puts("SoundINitialize") ;
-//fflush(stdout) ;
+    //printf("Largest memory block: %u\n", FreeMemory()) ;
+    puts("SoundInitialize") ;
     SoundInitialize() ;
 
-/* set sound options */
-BannerInitSoundOptions();
+	/* set sound options */
+	BannerInitSoundOptions();
     TickerOn() ;
-/* TESTING */
-SyncTimeSet(1) ;
+
+    /* TESTING */
+    SyncTimeSet(1) ;
 
     DebugTime(1) ;
 
@@ -96,89 +92,59 @@ SyncTimeSet(1) ;
     ColorizeInitialize() ;
 #endif
     MouseInitialize() ;
-//puts("Script Init") ;
-//fflush(stdout) ;
+
+    puts("Script Init") ;
     ScriptInitialize() ;
 
-//printf("Largest memory block: %u\n", FreeMemory()) ;
-//fflush(stdout) ;
+    //printf("Largest memory block: %u\n", FreeMemory()) ;
 
-//    CommReadConfigFile() ;
-//puts("Active port") ;  fflush(stdout) ;
-
-//    CommSetActivePortN(0) ;
-//TestPort() ;
-
-//puts("CmdQ Init") ;  fflush(stdout) ;
+    puts("CmdQ Init") ;
     CmdQInitialize() ;
 
     G_res = ResourceOpen("sample.res") ;
     DebugCheck(G_res != RESOURCE_FILE_BAD) ;
 
     GrGraphicsOn() ;
-//puts("View Init") ; fflush(stdout) ;
+    puts("View Init") ;
     ViewInitialize() ;
 
-//puts("Locking in fonts") ; fflush(stdout) ;
+    puts("Locking in fonts");
     G_r_font = ResourceFind(G_res, "FontNormal") ;
     G_p_font = ResourceLock(G_r_font) ;
     G_r_font2 = ResourceFind(G_res, "FontEngl") ;
     G_p_font2 = ResourceLock(G_r_font2) ;
     GrSetBitFont(G_p_font) ;
 
-/*
-    r2 = ResourceFind(G_res, "BPalette") ;
-    p_pal = ResourceLock(G_r2) ;
-    GrSetPalette(0, 256, p_pal) ;
-    ResourceUnlock(G_r2) ;
-    ResourceUnfind(G_r2) ;
-*/
-
-/*
-//    r1 = ResourceFind(res, "T.Pic") ;
-//    r2 = ResourceFind(res, "C.Pic") ;
-*/
     GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
 
-/*
-    r1 = ResourceFind(res, "Game.pal") ;
-    ptr = ResourceLock(r1) ;
-    GrSetPalette(0, 256, (T_palette *)ptr) ;
-    ResourceUnlock(r1) ;
-    ResourceUnfind(r1) ;
-*/
-//puts("Setting palette") ; fflush(stdout) ;
     ViewSetPalette(VIEW_PALETTE_STANDARD) ;
 
-//puts("Server init") ; fflush(stdout) ;
+    puts("Server init") ;
     ServerInit() ;
 
-//puts("Inventory init"); fflush (stdout);
+    puts("Inventory init");
     InventoryInit() ;
 
-//puts("Stats init");fflush(stdout);
+    puts("Stats init");
     StatsInit(); /* Init player statistics */
 
-//puts("Client Init Mouse And Color") ; fflush(stdout) ;
-    ClientInitMouseAndColor ();
+    puts("Client Init Mouse And Color") ;
+    ClientInitMouseAndColor();
 
-//puts("Player INit First") ; fflush(stdout) ;
+    puts("Player Init First");
     PlayerInitFirst() ;
 
-    SoundSetBackgroundMusic("TITLE") ;
+    SoundSetBackgroundMusic("TITLE");
 
     MathInitialize(VIEW3D_WIDTH) ;
 
     /* initialize player effects */
-//puts("Effect init") ;fflush (stdout);
+    puts("Effect init") ;
     EffectInit();
     /* New calls go here. */
 #endif
 
     PeopleHereInitialize() ;
-
-
-//    G_musicChannel=SoundPlayLoopByNumber(1501,255);
 
     DebugEnd() ;
 }

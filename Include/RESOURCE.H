@@ -15,11 +15,11 @@ typedef T_word16 T_resourceFile ;
 
 typedef T_void *T_resource ;
 
-T_resourceFile ResourceOpen(T_byte8 *p_filename) ;
+T_resourceFile ResourceOpen(const char *p_filename) ;
 
 T_void ResourceClose(T_resourceFile resourceFile) ;
 
-T_resource ResourceFind(T_resourceFile resourceFile, T_byte8 *p_resourceName) ;
+T_resource ResourceFind(T_resourceFile resourceFile, const char *p_resourceName) ;
 
 T_void ResourceUnfind(T_resource res) ;
 

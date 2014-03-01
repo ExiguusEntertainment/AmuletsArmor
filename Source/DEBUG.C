@@ -270,9 +270,9 @@ T_void DebugHeapOff(T_void)
  *  the name you have given it.   If not, failure occurs.
  *
  *<!-----------------------------------------------------------------------*/
-T_void DebugCompareCheck(T_byte8 *str, T_byte8 *p_file, T_word16 line)
+T_void DebugCompareCheck(const char *str, const char *p_file, T_word16 line)
 {
-    T_byte8 msg[80] ;
+    char msg[80] ;
 
     if (strcmp(str, G_CallStack[G_StackPosition-1]) != 0)  {
         sprintf(msg, "Routine name comparison (%s) failed!", str) ;
