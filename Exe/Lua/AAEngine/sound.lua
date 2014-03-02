@@ -1,4 +1,4 @@
-local sound = {}
+sound = {}
 
 local aasound = require "aasound";
 

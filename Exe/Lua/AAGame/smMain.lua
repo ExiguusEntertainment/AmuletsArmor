@@ -34,7 +34,7 @@ smMain.ChooseCharacter = function (self, event)
 		self:check("BEGIN_GAME", smMain.PlayGame);
 		self:check("DROPPED", smMain.Disconnected);
 	elseif (event == "update") then
-		print("SMCChooseUpdate")
+		-- Sit here letting the player choose a character
 		smChooseCharacter:update();
 	elseif (event == "exit") then
 		-- TODO: SMCChooseFinish();

@@ -1,4 +1,4 @@
-local display = {}
+display = {}
 
 local aadisplay = require "aadisplay";
 

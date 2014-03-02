@@ -1,4 +1,4 @@
-local graphics = {}
+graphics = {}
 
 local aagraphics = require "aagraphics";
 

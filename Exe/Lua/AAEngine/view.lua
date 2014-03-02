@@ -1,4 +1,4 @@
-local view = {}
+view = {}
 
 local aaview = require "aaview";
 

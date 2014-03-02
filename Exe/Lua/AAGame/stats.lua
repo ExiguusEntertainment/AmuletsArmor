@@ -4,12 +4,12 @@ local aastats = require "aastats";
 
 function stats.getCharacterList()
 	-- Creates a table of characters with { name, password, status, mail }
-	return aastats.getCharacterList()
+	return aastats.GetCharacterList()
 end
 
 function stats.setActiveCharacterList(charList)
 	stats.charList = charList 
-	aastats.setSavedCharacterList(charList)
+	aastats.SetSavedCharacterList(charList)
 end
 
 return stats

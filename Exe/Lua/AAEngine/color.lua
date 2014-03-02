@@ -1,4 +1,4 @@
-local color = {}
+color = {}
 
 local aacolor = require "aacolor";
 

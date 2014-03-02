@@ -1,4 +1,4 @@
-local keyboard = require "keyboard"
+keyboard = require "keyboard"
 
 local keymap = {}
 

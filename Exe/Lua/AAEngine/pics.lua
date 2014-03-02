@@ -1,4 +1,4 @@
-local pics = {}
+pics = {}
 
 local aapics = require "aapics";
 

@@ -5,18 +5,23 @@
 #include <lualib.h>
 #include "AALua.h"
 #include "File.h"
+#include <BUTTON.H>
 #include <COLOR.H>
 #include <GRAPHICS.H>
 #include <KEYBOARD.H>
 #include <KEYMAP.H>
 #include <MOUSEMOD.H>
 #include <PICS.H>
+#include <SLIDR.H>
 #include <SOUND.H>
 #include <STATS.H>
 #include <TICKER.H>
 #include <VIEW.H>
 
 static lua_State *L;
+
+#define MAP_STRING_TO_INT(str, x)  if(strcmp(aString, str)==0) return (x);
+
 
 static void ITableSetInt(lua_State* L, const char *name, int value)
 {
@@ -581,9 +586,37 @@ static int lua_MousePushEventHandler(lua_State *L)
 
 static int lua_MouseUpdateEvents(lua_State *L)
 {
-    DebugRoutine("lua_KeyboardBufferOff");
+    DebugRoutine("lua_MouseUpdateEvents");
 
     MouseUpdateEvents();
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_MouseSetDefaultBitmap(lua_State *L)
+{
+    T_bitmap *p_bitmap;
+    T_word16 x, y;
+    DebugRoutine("lua_MouseSetDefaultBitmap");
+
+    x = (T_word16)lua_tonumber(L, 1);
+    y = (T_word16)lua_tonumber(L, 2);
+    if (lua_isnil(L, 3))
+        p_bitmap = NULL;
+    else
+        p_bitmap = (T_bitmap *)lua_touserdata(L, 3);
+    MouseSetDefaultBitmap(x, y, p_bitmap);
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_MouseUseDefaultBitmap(lua_State *L)
+{
+    DebugRoutine("lua_MouseUseDefaultBitmap");
+
+    MouseUseDefaultBitmap();
 
     DebugEnd();
     return 0;
@@ -595,6 +628,8 @@ int LUA_API luaopen_aamouse(lua_State *L)
             { "PopEventHandler", lua_MousePopEventHandler },
             { "PushEventHandler", lua_MousePushEventHandler },
             { "UpdateEvents", lua_MouseUpdateEvents },
+            { "SetDefaultBitmap", lua_MouseSetDefaultBitmap },
+            { "UseDefaultBitmap", lua_MouseUseDefaultBitmap },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -828,14 +863,109 @@ static int lua_StatsSetSavedCharacterList(lua_State *L)
 int LUA_API luaopen_aastats(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
-            { "getCharacterList", lua_StatsGetSavedCharacterList },
-            { "setSavedCharacterList", lua_StatsSetSavedCharacterList },
+            { "GetCharacterList", lua_StatsGetSavedCharacterList },
+            { "SetSavedCharacterList", lua_StatsSetSavedCharacterList },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
 }
-//-----------------
 
+//-----------------
+static E_mouseEvent IMouseEventConvert(const char *aString)
+{
+    MAP_STRING_TO_INT("start", MOUSE_EVENT_START);
+    MAP_STRING_TO_INT("end", MOUSE_EVENT_END);
+    MAP_STRING_TO_INT("move", MOUSE_EVENT_MOVE);
+    MAP_STRING_TO_INT("drag", MOUSE_EVENT_DRAG);
+    MAP_STRING_TO_INT("idle", MOUSE_EVENT_IDLE);
+    MAP_STRING_TO_INT("held", MOUSE_EVENT_HELD);
+    return MOUSE_EVENT_UNKNOWN;
+}
+
+static int lua_ButtonMouseControl(lua_State *L)
+{
+    E_mouseEvent event;
+    T_word16 x, y;
+    T_buttonClick button;
+    DebugRoutine("lua_ButtonMouseControl");
+
+    event = IMouseEventConvert(lua_tostring(L, 1));
+    x = (T_word16)lua_tonumber(L, 2);
+    y = (T_word16)lua_tonumber(L, 3);
+    button = (T_byte8)lua_tonumber(L, 4);
+    ButtonMouseControl(event, x, y, button);
+
+    DebugEnd();
+
+    return 0;
+}
+
+int LUA_API luaopen_aabutton(lua_State *L)
+{
+    static struct luaL_Reg driver[] = {
+            { "HandleMouseEvent", lua_ButtonMouseControl },
+            { NULL, NULL }, };
+    luaL_newlib(L, driver);
+    return 1;
+}
+
+//-----------------
+static int lua_ScrollbarMouseControl(lua_State *L)
+{
+    E_mouseEvent event;
+    T_word16 x, y;
+    T_buttonClick button;
+    DebugRoutine("lua_ScrollbarMouseControl");
+
+    event = IMouseEventConvert(lua_tostring(L, 1));
+    x = (T_word16)lua_tonumber(L, 2);
+    y = (T_word16)lua_tonumber(L, 3);
+    button = (T_byte8)lua_tonumber(L, 4);
+    SliderMouseControl(event, x, y, button);
+
+    DebugEnd();
+
+    return 0;
+}
+
+int LUA_API luaopen_aascrollbar(lua_State *L)
+{
+    static struct luaL_Reg driver[] = {
+            { "HandleMouseEvent", lua_ScrollbarMouseControl },
+            { NULL, NULL }, };
+    luaL_newlib(L, driver);
+    return 1;
+}
+
+//-----------------
+static int lua_TxtboxMouseControl(lua_State *L)
+{
+    E_mouseEvent event;
+    T_word16 x, y;
+    T_buttonClick button;
+    DebugRoutine("lua_TxtboxMouseControl");
+
+    event = IMouseEventConvert(lua_tostring(L, 1));
+    x = (T_word16)lua_tonumber(L, 2);
+    y = (T_word16)lua_tonumber(L, 3);
+    button = (T_byte8)lua_tonumber(L, 4);
+    TxtboxMouseControl(event, x, y, button);
+
+    DebugEnd();
+
+    return 0;
+}
+
+int LUA_API luaopen_aatextbox(lua_State *L)
+{
+    static struct luaL_Reg driver[] = {
+            { "HandleMouseEvent", lua_TxtboxMouseControl },
+            { NULL, NULL }, };
+    luaL_newlib(L, driver);
+    return 1;
+}
+
+//-----------------
 void AALuaInit(void)
 {
     DebugRoutine("AALuaInit");
@@ -846,6 +976,7 @@ void AALuaInit(void)
     L = luaL_newstate();  /* create state */
     luaL_openlibs(L);
 
+    luaL_requiref(L, "aabutton", luaopen_aabutton, 1);
     luaL_requiref(L, "aacolor", luaopen_aacolor, 1);
     luaL_requiref(L, "aadisplay", luaopen_aadisplay, 1);
     luaL_requiref(L, "aagraphics", luaopen_aagraphics, 1);
@@ -853,8 +984,10 @@ void AALuaInit(void)
     luaL_requiref(L, "aakeymap", luaopen_aakeymap, 1);
     luaL_requiref(L, "aamouse", luaopen_aamouse, 1);
     luaL_requiref(L, "aapics", luaopen_aapics, 1);
+    luaL_requiref(L, "aascrollbar", luaopen_aascrollbar, 1);
     luaL_requiref(L, "aasound", luaopen_aasound, 1);
     luaL_requiref(L, "aastats", luaopen_aastats, 1);
+    luaL_requiref(L, "aatextbox", luaopen_aatextbox, 1);
     luaL_requiref(L, "aatime", luaopen_aatime, 1);
     luaL_requiref(L, "aaticker", luaopen_aaticker, 1);
     luaL_requiref(L, "aaview", luaopen_aaview, 1);

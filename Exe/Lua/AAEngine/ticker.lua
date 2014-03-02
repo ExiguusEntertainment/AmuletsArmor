@@ -1,4 +1,4 @@
-local ticker = {}
+ticker = {}
 
 local aaticker = require "aaticker";
 

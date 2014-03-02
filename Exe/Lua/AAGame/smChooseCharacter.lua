@@ -1,5 +1,6 @@
 require "StateMachine"
 require "AAGame/stats"
+require "AAGame/mouseControl"
 --require "AAGame/smMain"
 local inspect = require "Utilities/inspect"
 
@@ -27,7 +28,7 @@ end
 smChooseCharacter.Choices = function(self, event)
 	if (event == "enter") then
 		self:clear({"EXIT", "CREATE", "LOAD", "DELETE", "REDRAW"});
-		-- TODO: ControlInitForJustUI()
+		mouseControl.InitForJustUI();
 		-- TODO: MainUIStart()
 	elseif (event == "check") then
 		self:check("EXIT", smChooseCharacter.Exit);
@@ -38,7 +39,7 @@ smChooseCharacter.Choices = function(self, event)
 	elseif (event == "update") then
 		-- TODO: MainUIUpdate()
 	elseif (event == "exit") then
-		-- TODO: ControlFinish()
+		mouseControl.Finish()
 		-- TODO: MainUIEnd()
 	end
 end
@@ -47,7 +48,7 @@ end
 smChooseCharacter.Create = function(self, event)
 	if (event == "enter") then
 		self:clear({"CREATE_COMPLETE", "CREATE_ABORT"})
-		-- TODO: ControlInitForJustUI()
+		mouseControl.InitForJustUI();
 		-- TODO: StatsCreateCharacterUIStart()
 		-- TODO: MapSetDayOffset(0x2AAA8)
 	elseif (event == "check") then
@@ -57,7 +58,7 @@ smChooseCharacter.Create = function(self, event)
 		-- TODO: StatsCreateCharacterUIUpdate()
 	elseif (event == "exit") then
 		-- TODO: StatsCreateCharadcterUIEnd()
-		-- TODO: ControlFinish()
+		mouseControl.Finish()
 	end
 end
 
@@ -110,7 +111,7 @@ smChooseCharacter.DisplayStats = function(self, event)
 		self:clear({"BEGIN", "PASSWORD_ENTERED", "CHANGE_PASSWORD", "EXIT"})
 		-- TODO: GrActualScreenPush
 		-- TODO: StatsLoadCharacter(StatsGetActive())
-		-- TODO: ControlInitForJustUI()
+		mouseControl.InitForJustUI();
 		-- TODO: StatsLoadCharacterUIStart
 	elseif (event == "check") then
 		self:check("BEGIN", smChooseCharacter.PasswordForLoad);
@@ -127,7 +128,7 @@ smChooseCharacter.DisplayStats = function(self, event)
 		--    strcpy(p_data->attemptPassword, p_password) ;
 		--
 		--    StatsLoadCharacterUIEnd() ;
-		--    ControlFinish() ;
+		mouseControl.Finish()
 		--
 		--    GrActualScreenPop() 
 	end
@@ -345,7 +346,7 @@ smChooseCharacter.Exit = function(self, event)
 		-- Player has chosen to exit the list of characters.  Let's
 		-- tell the main state machine we need to leave this server.
 		-- (this state machine will end and need a reset to continue)
-		smMain.set("LEAVE_SERVER")
+		smMain:set("LEAVE_SERVER")
 	end
 end
 

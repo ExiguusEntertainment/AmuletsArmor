@@ -1,4 +1,4 @@
-local keyboard = {}
+keyboard = {}
 
 keyboard.scankeys = {
 	KEY_SCAN_CODE_ESC = 1,

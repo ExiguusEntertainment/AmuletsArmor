@@ -1,4 +1,4 @@
-local time = {}
+time = {}
 
 local aatime = require "aatime";
 
