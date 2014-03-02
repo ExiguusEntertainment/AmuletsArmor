@@ -24,7 +24,7 @@ function showScreen(picName, pal, timeout, showTag, doFlash)
 	end
 	
 	mouse.pushEventHandler(function (event, x, y, buttons)
-			if (buttons) then
+			if (buttons) or (config.TitleScreenSkip) then
 				showScreen_clicked = true
 			end
 		end
@@ -40,7 +40,7 @@ function showScreen(picName, pal, timeout, showTag, doFlash)
 	
 	if (showTag) then
 		graphics.setCursor(5, 188)
-		graphics.drawShadowedText(VERSION_TEXT, 210, 0)
+		graphics.drawShadowedText(config.VERSION_TEXT, 210, 0)
 	end
 	
 	-- Check if a key was pressed on the keyboard and stop if pressed
@@ -90,7 +90,9 @@ end
 
 function titlescreen()
 	print("Time is now "..ticker.get());
-	sound.play(3501, 1);
+	if (not config.TitleScreenSkip) then
+		sound.play(3501, 1);
+	end
 	
 	-- Show the company screen 
 	if (showScreen("UI/SCREENS/COMPANY", "standard", 400, true, true)) then return end;
