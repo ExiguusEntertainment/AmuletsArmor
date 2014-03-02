@@ -1,4 +1,4 @@
-package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua';
+package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua;./Lua/Classes/?.lua';
 
 local color = require "AAEngine/color"
 local display = require "AAEngine/display"
@@ -22,3 +22,7 @@ end
 
 startup();
 
+require "AAGame/smmain" ;
+smmain:update();
+smmain:update();
+smmain:update();
