@@ -14,7 +14,6 @@ end
 function StateMachine:update()
     local change = 0;
 	local f = self.state;
-	print(f)
     if (self.laststate ~= self.state) then
 	    local state = self.state;
 		local last_f = self.laststate;
@@ -33,11 +32,23 @@ function StateMachine:update()
 end
 
 function StateMachine:set(flag)
-	self.flags[flag] = true;
+	if (type(flag) == "table") then
+		for i=1,#flag do
+			self.flags[flag[i]] = true;
+		end
+	else
+		self.flags[flag] = true;
+	end
 end
 
 function StateMachine:clear(flag)
-	self.flags[flag] = false;
+	if (type(flag) == "table") then
+		for i=1,#flag do
+			self.flags[flag[i]] = false;
+		end
+	else
+		self.flags[flag] = false;
+	end
 end
 
 function StateMachine:is(flag)

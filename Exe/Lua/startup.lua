@@ -1,4 +1,4 @@
-package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua;./Lua/Classes/?.lua';
+package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua;./Lua/Classes/?.lua;./Lua/Utilities/?.lua';
 
 local color = require "AAEngine/color"
 local display = require "AAEngine/display"
@@ -15,6 +15,7 @@ local view = require "AAEngine/view"
 local titlescreen = require "AAGame/titlescreen"
 
 local config = require "config"
+local inspect = require "inspect"
 
 local function startup()
 	print "Hello "
@@ -22,7 +23,7 @@ end
 
 startup();
 
-require "AAGame/smmain" ;
-smmain:update();
-smmain:update();
-smmain:update();
+require "AAGame/smMain" ;
+for i=1,10 do
+	smMain:update();
+end
