@@ -13,7 +13,6 @@ StateMachine.create = function()
 end
 
 function StateMachine:update()
-	print("SMMAIN: State is now " .. self.state .. " and was state " .. self.laststate .. ".");
     local change = 0;
 		local f = self.state_funcs[self.state];
     if (self.laststate ~= self.state) then
@@ -21,10 +20,16 @@ function StateMachine:update()
 		local last_f = self.state_funcs[self.laststate];
 	    if (last_f) then last_f(self, "exit") end;
 	    if (f) then f(self, "enter") end;
-		print("  NOW -- self: State is now " .. state .. " and was state " .. self.laststate .. ".");
 		self.laststate = state;
+	else
+		-- Check for any state changes
+		if (f) then f(self, "check") end;
+		
+		-- If the state did not change, then go ahead and update
+		if (self.laststate == self.state) then
+			if (f) then f(self, "update") end;
+		end
 	end
-	if (f) then f(self, "update") end;
 end
 
 function StateMachine:set(flag)
@@ -37,5 +42,9 @@ end
 
 function StateMachine:is(flag)
 	return self.flags[flag];
+end
+
+function StateMachine:check(flag, newState)
+	if (self:is(flag)) then self.state = newState end;
 end
 
