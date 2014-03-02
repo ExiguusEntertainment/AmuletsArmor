@@ -12,10 +12,62 @@
 #include <MOUSEMOD.H>
 #include <PICS.H>
 #include <SOUND.H>
+#include <STATS.H>
 #include <TICKER.H>
 #include <VIEW.H>
 
 static lua_State *L;
+
+static void ITableSetInt(lua_State* L, const char *name, int value)
+{
+    lua_pushstring(L, name);
+    lua_pushnumber(L, (double)value);
+    lua_settable(L, -3);
+}
+
+static void ITableSetString(lua_State* L, const char *name, const char *string)
+{
+    lua_pushstring(L, name);
+    lua_pushstring(L, string);
+    lua_settable(L, -3);
+}
+
+//static void ITableSetDouble(lua_State* L, const char *name, double value)
+//{
+//    lua_pushstring(L, name);
+//    lua_pushnumber(L, value);
+//    lua_settable(L, -3);
+//}
+
+static int ITableGetInt(lua_State* L, const char *name, int *value, int defvalue)
+{
+    lua_pushstring(L, name);
+    lua_gettable(L, -2);
+    if (!lua_isnumber(L, -1)) {
+        *value = defvalue;
+        return -1;
+    }
+    *value = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return 0;
+}
+
+static int ITableGetString(lua_State* L, const char *name, char *value, int limit, char *defvalue)
+{
+    const char *s;
+    lua_pushstring(L, name);
+    lua_gettable(L, -2);
+    if (!lua_isstring(L, -1)) {
+        strncpy(value, defvalue, limit);
+        return -1;
+    }
+    s = lua_tostring(L, -1);
+    strncpy(value, s, limit);
+    lua_pop(L, 1);
+
+    return 0;
+}
 
 static int AASetLuaPath(lua_State* L, const char* path)
 {
@@ -677,6 +729,112 @@ int LUA_API luaopen_aadisplay(lua_State *L)
     return 1;
 }
 //-----------------
+static int lua_StatsGetSavedCharacterList(lua_State *L)
+{
+    T_statsSavedCharArray *p_charArray;
+    T_statsSavedCharacterID *p_char;
+    const char *status;
+    int i;
+    DebugRoutine("lua_StatsGetSavedCharacterList");
+
+    p_charArray = StatsGetSavedCharacterList();
+    p_char = p_charArray->chars;
+    lua_newtable(L); // array
+    for (i=0; i<MAX_CHARACTERS_PER_SERVER; i++, p_char++) {
+        lua_newtable(L);
+        ITableSetString(L, "name", p_char->name);
+        switch (p_char->status) {
+            case CHARACTER_STATUS_OK:
+                status = "ok";
+                break;
+            case CHARACTER_STATUS_DEAD:
+                status = "dead";
+                break;
+            case CHARACTER_STATUS_TAGGED_FOR_REMOVAL:
+                status = "removal";
+                break;
+            case CHARACTER_STATUS_UNAVAILABLE:
+                status = "unavailable";
+                break;
+            case CHARACTER_STATUS_UNDEFINED:
+                status = "undefined";
+                break;
+            default:
+                status = "unknown";
+                break;
+        }
+        ITableSetString(L, "status", status);
+        ITableSetString(L, "password", p_char->password);
+        ITableSetInt(L, "mail", p_char->mail);
+
+        // Add to the array
+        lua_rawseti(L, -2, i+1);
+    }
+
+    DebugEnd();
+    return 1;
+}
+
+static int lua_StatsSetSavedCharacterList(lua_State *L)
+{
+    int i;
+    T_statsSavedCharArray charArray;
+    T_statsSavedCharacterID *p_char = charArray.chars;
+    char status[30];
+    int mail;
+    DebugRoutine("lua_StatsSetSavedCharacterList");
+
+    // Ensure we have a table/array being passed in
+    luaL_checktype(L, 1, LUA_TTABLE);
+
+    if (lua_istable(L, 1)) {
+        lua_pushnil(L);
+        for (i=1; i<=MAX_CHARACTERS_PER_SERVER; i++, p_char++) {
+            // Walk the list (1..n)
+            if (lua_next(L, 1) == 0) {
+                printf("Missing entry!");
+                DebugCheck(FALSE);
+            }
+            // Get the sub-table of the character
+            ITableGetString(L, "name", p_char->name, sizeof(p_char->name) - 1,
+                    "<undefined>");
+            ITableGetString(L, "password", p_char->password,
+                    sizeof(p_char->password) - 1, "");
+            ITableGetInt(L, "mail", &mail, 0);
+            p_char->mail = (T_byte8)mail;
+            ITableGetString(L, "status", status, sizeof(status) - 1,
+                    "<undefined>");
+            if (strcmp(status, "ok") == 0)
+                p_char->status = CHARACTER_STATUS_OK;
+            else if (strcmp(status, "dead") == 0)
+                p_char->status = CHARACTER_STATUS_DEAD;
+            else if (strcmp(status, "removal"))
+                p_char->status = CHARACTER_STATUS_TAGGED_FOR_REMOVAL;
+            else if (strcmp(status, "unavailable")==0)
+                p_char->status = CHARACTER_STATUS_UNAVAILABLE;
+            else if (strcmp(status, "undefined"))
+                p_char->status = CHARACTER_STATUS_UNDEFINED;
+            else
+                p_char->status = CHARACTER_STATUS_UNKNOWN;
+
+            lua_pop(L, 1);
+        }
+    }
+
+    DebugEnd();
+    return 0;
+}
+
+int LUA_API luaopen_aastats(lua_State *L)
+{
+    static struct luaL_Reg driver[] = {
+            { "getCharacterList", lua_StatsGetSavedCharacterList },
+            { "setSavedCharacterList", lua_StatsSetSavedCharacterList },
+            { NULL, NULL }, };
+    luaL_newlib(L, driver);
+    return 1;
+}
+//-----------------
 
 void AALuaInit(void)
 {
@@ -696,6 +854,7 @@ void AALuaInit(void)
     luaL_requiref(L, "aamouse", luaopen_aamouse, 1);
     luaL_requiref(L, "aapics", luaopen_aapics, 1);
     luaL_requiref(L, "aasound", luaopen_aasound, 1);
+    luaL_requiref(L, "aastats", luaopen_aastats, 1);
     luaL_requiref(L, "aatime", luaopen_aatime, 1);
     luaL_requiref(L, "aaticker", luaopen_aaticker, 1);
     luaL_requiref(L, "aaview", luaopen_aaview, 1);
