@@ -3,10 +3,9 @@ StateMachine_mt = { __index = StateMachine};
 
 StateMachine.create = function()
 	local new_instance = { 
-		state = "init", 
-		laststate = "", 
+		state = nil, 
+		laststate = nil, 
 		flags = {}, 
-		state_funcs = {},
 	}
 	setmetatable( new_instance, StateMachine_mt );
 	return new_instance;
@@ -14,10 +13,11 @@ end
 
 function StateMachine:update()
     local change = 0;
-		local f = self.state_funcs[self.state];
+	local f = self.state;
+	print(f)
     if (self.laststate ~= self.state) then
 	    local state = self.state;
-		local last_f = self.state_funcs[self.laststate];
+		local last_f = self.laststate;
 	    if (last_f) then last_f(self, "exit") end;
 	    if (f) then f(self, "enter") end;
 		self.laststate = state;
