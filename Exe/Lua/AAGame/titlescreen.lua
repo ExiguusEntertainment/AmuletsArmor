@@ -24,7 +24,7 @@ function showScreen(picName, pal, timeout, showTag, doFlash)
 	end
 	
 	mouse.pushEventHandler(function (event, x, y, buttons)
-			if (buttons) or (config.TitleScreenSkip) then
+			if ((buttons) or (config.TitleScreenSkip)) then
 				showScreen_clicked = true
 			end
 		end

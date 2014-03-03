@@ -19,4 +19,8 @@ function sound.play(sound, volume, looped)
 	end
 end
 
+function sound.update()
+	aasound.Update();
+end
+
 return sound

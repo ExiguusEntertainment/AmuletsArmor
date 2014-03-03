@@ -18,4 +18,8 @@ function ticker.continue()
 	aaticker.Continue();
 end
 
+function ticker.sleep(milliseconds)
+	aaticker.SleepMS(milliseconds)
+end
+
 return ticker

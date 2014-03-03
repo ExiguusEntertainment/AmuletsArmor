@@ -12,4 +12,8 @@ function stats.setActiveCharacterList(charList)
 	aastats.SetSavedCharacterList(charList)
 end
 
+function stats.getActiveCharacterList()
+	return stats.charList 
+end
+
 return stats

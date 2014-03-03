@@ -29,7 +29,7 @@ smChooseCharacter.Choices = function(self, event)
 	if (event == "enter") then
 		self:clear({"EXIT", "CREATE", "LOAD", "DELETE", "REDRAW"});
 		mouseControl.InitForJustUI();
-		-- TODO: MainUIStart()
+		uiChooseCharacter.start();
 	elseif (event == "check") then
 		self:check("EXIT", smChooseCharacter.Exit);
 		self:check("CREATE", smChooseCharacter.Create);
@@ -37,7 +37,7 @@ smChooseCharacter.Choices = function(self, event)
 		self:check("DELETE", smChooseCharacter.Delete);
 		self:check("REDRAW", smChooseCharacter.Choices);
 	elseif (event == "update") then
-		-- TODO: MainUIUpdate()
+		uiChooseCharacter.update();
 	elseif (event == "exit") then
 		mouseControl.Finish()
 		-- TODO: MainUIEnd()

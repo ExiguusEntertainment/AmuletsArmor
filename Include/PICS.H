@@ -26,7 +26,7 @@ E_Boolean PictureExist(T_byte8 *name) ;
 
 T_void PictureGetXYSize(T_void *p_picture, T_word16 *sizeX, T_word16 *sizeY) ;
 
-T_resource PictureFind(T_byte8 *name) ;
+T_resource PictureFind(const char *name) ;
 
 T_void PictureUnfind(T_resource res) ;
 

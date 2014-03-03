@@ -21,8 +21,6 @@ typedef enum
 	BUTTON_ACTION_NO_ACTION,
 	BUTTON_ACTION_PUSHED,
 	BUTTON_ACTION_RELEASED,
-	BUTTON_ACTION_OTHER,
-	BUTTON_ACTION_UNKNOWN
 } E_buttonAction;
 
 typedef struct
@@ -46,7 +44,7 @@ typedef struct
 
 T_buttonID ButtonCreate (T_word16 lx,
 					  T_word16 ly,
-					  T_byte8 *bmname,
+					  const char *bmname,
 					  E_Boolean toggletype,
 					  T_word16 keyassoc,
 					  T_buttonHandler p_cbroutine,

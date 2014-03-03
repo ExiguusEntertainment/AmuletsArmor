@@ -34,7 +34,7 @@ typedef struct
 
 } T_graphicStruct ;
 
-T_graphicID GraphicCreate (T_word16 lx,  T_word16 ly, T_byte8 *graphicname);
+T_graphicID GraphicCreate (T_word16 lx,  T_word16 ly, const char *graphicname);
 
 T_void GraphicSetPreCallBack (T_graphicID graphicID, T_graphicHandler graphichandler, T_word16 index);
 T_void GraphicSetPostCallBack (T_graphicID graphicID, T_graphicHandler graphichandler, T_word16 index);

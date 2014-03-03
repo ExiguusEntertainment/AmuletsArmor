@@ -7,6 +7,7 @@
 #include "File.h"
 #include <BUTTON.H>
 #include <COLOR.H>
+#include <GRAPHIC.H>
 #include <GRAPHICS.H>
 #include <KEYBOARD.H>
 #include <KEYMAP.H>
@@ -16,6 +17,7 @@
 #include <SOUND.H>
 #include <STATS.H>
 #include <TICKER.H>
+#include <TXTBOX.H>
 #include <VIEW.H>
 
 static lua_State *L;
@@ -166,11 +168,22 @@ static int lua_SoundPlayLoop(lua_State *L)
     return 1;
 }
 
+static int lua_SoundUpdate(lua_State *L)
+{
+    DebugRoutine("lua_SoundUpdate");
+
+    SoundUpdate();
+
+    DebugEnd();
+    return 0;
+}
+
 int LUA_API luaopen_aasound(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "Play", lua_SoundPlay },
             { "PlayLoop", lua_SoundPlayLoop },
+            { "Update", lua_SoundUpdate },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -280,7 +293,22 @@ static int lua_TickerPause(lua_State *L)
 
 static int lua_TickerContinue(lua_State *L)
 {
+#ifdef WIN32
+    extern void SleepMS(T_word32 aMS);
+#endif
     DebugRoutine("lua_TickerContinue");
+
+#ifdef WIN32
+    SleepMS((T_word32)lua_tonumber(L, 1));
+#endif
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_TickerSleepMS(lua_State *L)
+{
+    DebugRoutine("lua_TickerSleepMS");
 
     TickerContinue();
 
@@ -291,9 +319,10 @@ static int lua_TickerContinue(lua_State *L)
 int LUA_API luaopen_aaticker(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
+            { "Continue", lua_TickerContinue },
             { "Get", lua_TickerGet },
             { "Pause", lua_TickerPause },
-            { "Continue", lua_TickerContinue },
+            { "SleepMS", lua_TickerSleepMS },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -424,6 +453,40 @@ int LUA_API luaopen_aagraphics(lua_State *L)
 }
 
 //-----------------
+static T_void IAALuaKeyboardEventHandler(E_keyboardEvent event, T_word16 scankey)
+{
+    const char *p_event;
+
+    switch (event) {
+        case KEYBOARD_EVENT_NONE:
+            p_event = "none";
+            break;
+        case KEYBOARD_EVENT_PRESS:
+            p_event = "press";
+            break;
+        case KEYBOARD_EVENT_RELEASE:
+            p_event = "release";
+            break;
+        case KEYBOARD_EVENT_BUFFERED:
+            p_event = "buffered";
+            break;
+        case KEYBOARD_EVENT_HELD:
+            p_event = "held";
+            break;
+        default:
+        case KEYBOARD_EVENT_UNKNOWN:
+            p_event = "unknown";
+            break;
+    }
+    lua_getglobal(L, "_keyboardHandleEvent");
+    lua_pushstring(L, p_event);
+    lua_pushnumber(L, scankey);
+    if (lua_pcall(L, 2, 0, 0) != 0) {
+        printf("IAALuaKeyboardEventHandler error:\n  %s\n", lua_tostring(L, -1));
+        DebugCheck(FALSE);
+    }
+}
+
 static int lua_KeyboardBufferOn(lua_State *L)
 {
     DebugRoutine("lua_KeyboardBufferOn");
@@ -477,13 +540,57 @@ static int lua_KeyboardGetScanCode(lua_State *L)
     return 1;
 }
 
+static int lua_KeyboardUpdateEvents(lua_State *L)
+{
+    DebugRoutine("lua_KeyboardUpdateEvents");
+
+    KeyboardUpdateEvents();
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_KeyboardDebounce(lua_State *L)
+{
+    DebugRoutine("lua_KeyboardDebounce");
+
+    KeyboardDebounce();
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_KeyboardPopEventHandler(lua_State *L)
+{
+    DebugRoutine("lua_KeyboardPopEventHandler");
+
+    KeyboardPopEventHandler();
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_KeyboardPushEventHandler(lua_State *L)
+{
+    DebugRoutine("lua_KeyboardPushEventHandler");
+
+    KeyboardPushEventHandler(IAALuaKeyboardEventHandler);
+
+    DebugEnd();
+    return 0;
+}
+
 int LUA_API luaopen_aakeyboard(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "BufferOn", lua_KeyboardBufferOn },
             { "BufferOff", lua_KeyboardBufferOff },
             { "BufferGet", lua_KeyboardBufferGet },
+            { "Debounce", lua_KeyboardDebounce },
             { "GetScanCode", lua_KeyboardGetScanCode },
+            { "PopEventHandler", lua_KeyboardPopEventHandler },
+            { "PushEventHandler", lua_KeyboardPushEventHandler },
+            { "UpdateEvents", lua_KeyboardUpdateEvents },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -559,7 +666,7 @@ static T_void IAALuaMouseEventHandler(E_mouseEvent event,
     else
         lua_pushnil(L);
     if (lua_pcall(L, 4, 0, 0) != 0) {
-        printf("IAALuaMouseEventHandler '%s' error:\n  %s\n", lua_tostring(L, -1));
+        printf("IAALuaMouseEventHandler error:\n  %s\n", lua_tostring(L, -1));
         DebugCheck(FALSE);
     }
 }
@@ -606,7 +713,7 @@ static int lua_MouseSetDefaultBitmap(lua_State *L)
         p_bitmap = NULL;
     else
         p_bitmap = (T_bitmap *)lua_touserdata(L, 3);
-    MouseSetDefaultBitmap(x, y, p_bitmap);
+    MouseSetDefaultBitmap(x, y, &p_bitmap[1]);
 
     DebugEnd();
     return 0;
@@ -882,6 +989,59 @@ static E_mouseEvent IMouseEventConvert(const char *aString)
     return MOUSE_EVENT_UNKNOWN;
 }
 
+static T_void IAALuaButtonEventHandler(T_buttonID buttonID)
+{
+    const char *p_event;
+    DebugRoutine("IAALuaButtonEventHandler");
+
+    switch (ButtonGetAction()) {
+        default:
+        case BUTTON_ACTION_NO_ACTION:
+            p_event = "none";
+            break;
+        case BUTTON_ACTION_PUSHED:
+            p_event = "press";
+            break;
+        case BUTTON_ACTION_RELEASED:
+            p_event = "release";
+            break;
+    }
+    lua_getglobal(L, "_buttonHandleEvent");
+//    lua_pushnumber(L, (T_word32)buttonID);
+    lua_pushlightuserdata(L, buttonID);
+    lua_pushstring(L, p_event);
+    if (lua_pcall(L, 2, 0, 0) != 0) {
+        const char *errMsg = lua_tostring(L, -1);
+        printf("IAALuaButtonEventHandler error:\n  %s\n", errMsg);
+        DebugCheck(FALSE);
+    }
+
+    DebugEnd();
+}
+
+static int lua_ButtonCreate(lua_State *L)
+{
+    T_word16 x, y;
+    T_word16 hotkeys;
+    const char *picName;
+    E_Boolean toggleType;
+    T_buttonID buttonID;
+    DebugRoutine("lua_ButtonCreate");
+
+    x = (T_word16)lua_tonumber(L, 1);
+    y = (T_word16)lua_tonumber(L, 2);
+    picName = lua_tostring(L, 3);
+    toggleType = lua_tonumber(L, 4)?TRUE:FALSE;
+    hotkeys = (T_word16)lua_tonumber(L, 5);
+    buttonID = ButtonCreate(x, y, picName, toggleType, hotkeys,
+            IAALuaButtonEventHandler, IAALuaButtonEventHandler);
+//    lua_pushnumber(L, (T_word32)buttonID);
+    lua_pushlightuserdata(L, buttonID);
+
+    DebugEnd();
+    return 1;
+}
+
 static int lua_ButtonMouseControl(lua_State *L)
 {
     E_mouseEvent event;
@@ -903,6 +1063,7 @@ static int lua_ButtonMouseControl(lua_State *L)
 int LUA_API luaopen_aabutton(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
+            { "Create", lua_ButtonCreate },
             { "HandleMouseEvent", lua_ButtonMouseControl },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
@@ -938,6 +1099,95 @@ int LUA_API luaopen_aascrollbar(lua_State *L)
 }
 
 //-----------------
+static E_TxtboxMode ITxtboxModeConvert(const char *aString)
+{
+    MAP_STRING_TO_INT("field", Txtbox_MODE_EDIT_FIELD);
+    MAP_STRING_TO_INT("textarea", Txtbox_MODE_EDIT_FIELD);
+    MAP_STRING_TO_INT("ro_textarea", Txtbox_MODE_VIEW_SCROLL_FORM);
+    MAP_STRING_TO_INT("ro_textarea_noscroll", Txtbox_MODE_VIEW_NOSCROLL_FORM);
+    MAP_STRING_TO_INT("selection", Txtbox_MODE_SELECTION_BOX);
+    MAP_STRING_TO_INT("fixed_field", Txtbox_MODE_FIXED_WIDTH_FIELD);
+    return Txtbox_MODE_UNKNOWN;
+}
+
+static T_void IAALuaTxtboxEventHandler(T_TxtboxID textboxID)
+{
+    const char *p_event;
+    DebugRoutine("IAALuaTxtboxEventHandler");
+
+    switch (TxtboxGetAction()) {
+        default:
+        case Txtbox_ACTION_NO_ACTION:
+            p_event = "none";
+            break;
+        case Txtbox_ACTION_GAINED_FOCUS:
+            p_event = "focus";
+            break;
+        case Txtbox_ACTION_LOST_FOCUS:
+            p_event = "lost";
+            break;
+        case Txtbox_ACTION_ACCEPTED:
+            p_event = "accepted";
+            break;
+        case Txtbox_ACTION_DATA_CHANGED:
+            p_event = "changed";
+            break;
+        case Txtbox_ACTION_SELECTION_CHANGED:
+            p_event = "select";
+            break;
+    }
+    lua_getglobal(L, "_textboxHandleEvent");
+    lua_pushlightuserdata(L, textboxID);
+    lua_pushstring(L, p_event);
+    if (lua_pcall(L, 2, 0, 0) != 0) {
+        const char *errMsg = lua_tostring(L, -1);
+        printf("IAALuaTxtboxEventHandler error:\n  %s\n", errMsg);
+        DebugCheck(FALSE);
+    }
+
+    DebugEnd();
+}
+
+static int lua_TxtboxCreate(lua_State *L)
+{
+    T_word16 x1, y1;
+    T_word16 width, height;
+    T_word16 x2, y2;
+    T_word16 hotkeys;
+    const char *picName;
+    T_TxtboxID textboxID;
+    T_word32 maxLength;
+    const char *fontName;
+    E_Boolean numericOnly;
+    E_TxtboxJustify justify;
+    const char *p_justify;
+    E_TxtboxMode boxMode;
+    DebugRoutine("lua_ButtonCreate");
+
+    x1 = (T_word16)lua_tonumber(L, 1);
+    y1 = (T_word16)lua_tonumber(L, 2);
+    width = (T_word16)lua_tonumber(L, 3);
+    height = (T_word16)lua_tonumber(L, 4);
+    fontName = lua_tostring(L, 5);
+    maxLength = (T_word16)lua_tonumber(L, 6);
+    hotkeys = (T_word16)lua_tonumber(L, 7);
+    numericOnly = lua_tonumber(L, 8)?TRUE:FALSE;
+    p_justify = lua_tostring(L, 9);
+    justify = (strcmp(p_justify, "center")==0)?Txtbox_JUSTIFY_CENTER:Txtbox_JUSTIFY_LEFT;
+    boxMode = ITxtboxModeConvert(lua_tostring(L, 10));
+    x2 = x1 + width - 1;
+    y2 = y1 + height - 1;
+
+    picName = lua_tostring(L, 3);
+//    textboxID = TxtboxCreate(x1, y1, picName, toggleType, hotkeys,
+//            IAALuaButtonEventHandler, IAALuaButtonEventHandler);
+    textboxID = TxtboxCreate (x1, y1, x2, y2, fontName, maxLength, hotkeys, numericOnly, justify, boxMode, IAALuaTxtboxEventHandler);
+    lua_pushlightuserdata(L, textboxID);
+
+    DebugEnd();
+    return 1;
+}
+
 static int lua_TxtboxMouseControl(lua_State *L)
 {
     E_mouseEvent event;
@@ -956,10 +1206,121 @@ static int lua_TxtboxMouseControl(lua_State *L)
     return 0;
 }
 
+static int lua_TxtboxRepaginate(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxRepaginate");
+    TxtboxRepaginate((T_TxtboxID)lua_touserdata(L, 1));
+    DebugEnd();
+
+    return 0;
+}
+
+static int lua_TxtboxCursorTop(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxCursorTop");
+    TxtboxCursTop((T_TxtboxID)lua_touserdata(L, 1));
+    DebugEnd();
+
+    return 0;
+}
+
+static int lua_TxtboxFirstBox(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxFirstBox");
+    TxtboxFirstBox();
+    DebugEnd();
+
+    return 0;
+}
+
+static int lua_TxtboxAppend(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxAppend");
+    TxtboxAppendString((T_TxtboxID)lua_touserdata(L, 1), lua_tostring(L, 2));
+    DebugEnd();
+
+    return 0;
+}
+
+static int lua_TxtboxBackspace(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxBackspace");
+    TxtboxBackSpace((T_TxtboxID)lua_touserdata(L, 1));
+    DebugEnd();
+
+    return 0;
+}
+
+static int lua_TxtboxSetText(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxAppend");
+    TxtboxSetData((T_TxtboxID)lua_touserdata(L, 1), lua_tostring(L, 2));
+    DebugEnd();
+
+    return 0;
+}
+
+
+static int lua_TxtboxGetSelectionNumber(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxGetSelectionNumber");
+    lua_pushnumber(L, TxtboxGetSelectionNumber((T_TxtboxID)lua_touserdata(L, 1)));
+    DebugEnd();
+
+    return 1;
+}
+
 int LUA_API luaopen_aatextbox(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
+            { "Append", lua_TxtboxAppend },
+            { "Backspace", lua_TxtboxBackspace },
+            { "Create", lua_TxtboxCreate },
+            { "CursorTop", lua_TxtboxCursorTop },
+            { "FirstBox", lua_TxtboxFirstBox },
+            { "GetSelectionNumber", lua_TxtboxGetSelectionNumber },
             { "HandleMouseEvent", lua_TxtboxMouseControl },
+            { "Repaginate", lua_TxtboxRepaginate },
+            { "SetText", lua_TxtboxSetText },
+            { NULL, NULL }, };
+    luaL_newlib(L, driver);
+    return 1;
+}
+
+//-----------------
+static int lua_GraphicCreate(lua_State *L)
+{
+    T_word16 x, y;
+    const char *picName;
+    T_graphicID graphicID;;
+    DebugRoutine("lua_TxtboxMouseControl");
+
+    x = (T_word16)lua_tonumber(L, 1);
+    y = (T_word16)lua_tonumber(L, 2);
+    picName = lua_tostring(L, 3);
+    graphicID = GraphicCreate(x, y, picName);
+    lua_pushlightuserdata(L, graphicID);
+
+    DebugEnd();
+
+    return 1;
+}
+
+static int lua_GraphicUpdateAllGraphics(lua_State *L)
+{
+    DebugRoutine("lua_GraphicUpdateAllGraphics");
+
+    GraphicUpdateAllGraphics();
+
+    DebugEnd();
+    return 0;
+}
+
+int LUA_API luaopen_aagraphic(lua_State *L)
+{
+    static struct luaL_Reg driver[] = {
+            { "Create", lua_GraphicCreate },
+            { "UpdateAllGraphics", lua_GraphicUpdateAllGraphics },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -979,6 +1340,7 @@ void AALuaInit(void)
     luaL_requiref(L, "aabutton", luaopen_aabutton, 1);
     luaL_requiref(L, "aacolor", luaopen_aacolor, 1);
     luaL_requiref(L, "aadisplay", luaopen_aadisplay, 1);
+    luaL_requiref(L, "aagraphic", luaopen_aagraphic, 1);
     luaL_requiref(L, "aagraphics", luaopen_aagraphics, 1);
     luaL_requiref(L, "aakeyboard", luaopen_aakeyboard, 1);
     luaL_requiref(L, "aakeymap", luaopen_aakeymap, 1);

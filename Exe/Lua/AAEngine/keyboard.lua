@@ -1,6 +1,7 @@
 keyboard = {}
 
 keyboard.scankeys = {
+	KEY_SCAN_CODE_NONE = 0,
 	KEY_SCAN_CODE_ESC = 1,
 	KEY_SCAN_CODE_1 = 2,
 	KEY_SCAN_CODE_2 = 3,
@@ -140,6 +141,30 @@ end
 -- Determine if the given scan key is being pressed
 function keyboard.getScanCode(scankey)
 	return aakeyboard.GetScanCode(scankey);
+end
+
+function keyboard.updateEvents()
+	return aakeyboard.UpdateEvents();
+end
+
+function keyboard.debounce()
+	return aakeyboard.Debounce()
+end
+
+keyboard.eventHandlers = {}
+
+function keyboard.pushEventHandler(func)
+	table.insert(keyboard.eventHandlers, func);
+	aakeyboard.PushEventHandler();
+end
+
+function keyboard.popEventHandler()
+	table.remove(keyboard.eventHandlers);
+	aakeyboard.PopEventHandler();
+end
+
+function _keyboardHandleEvent(event, scankey)
+	keyboard.eventHandlers[#keyboard.eventHandlers](event, scankey)
 end
 
 return keyboard

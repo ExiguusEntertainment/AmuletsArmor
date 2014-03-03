@@ -1,6 +1,6 @@
-local config = {}
+config = {}
 
 config.VERSION_TEXT = "Lua version 0.01"
-config.TitleScreenSkip = 1
+config.TitleScreenSkip = true
 
 return config;

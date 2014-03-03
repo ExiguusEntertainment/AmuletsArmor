@@ -24,9 +24,9 @@ end
 
 function mouse.setDefaultBitmap(pic, hotspot)
 	if (pic == nil) then
-		aamouse.SetDefaultBitmap(nil, 0, 0)
+		aamouse.SetDefaultBitmap(0, 0, nil)
 	else
-		aamouse.SetDefaultBitmap(pic.bitmap, hotspot.x, hotspot.y)
+		aamouse.SetDefaultBitmap(hotspot.x, hotspot.y, pic.bitmap)
 	end
 end
 

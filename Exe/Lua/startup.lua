@@ -14,22 +14,6 @@ ui = require "AAEngine/ui"
 view = require "AAEngine/view"
 
 local titlescreen = require "AAGame/titlescreen"
-
 local config = require "config"
 local inspect = require "inspect"
 
-local function startup()
-	print "Hello "
-end
-
-startup();
-
-require "AAGame/smMain" ;
-for i=1,10 do
-	smMain:update();
-end
-smChooseCharacter:set("EXIT")
-smMain:set("LEAVE_GAME");
-for i=1,10 do
-	smMain:update();
-end

@@ -27,7 +27,7 @@ static T_buttonID G_buttonarray[MAX_BUTTONS];
 static T_buttonID ButtonInit(
         T_word16 lx,
         T_word16 ly,
-        T_byte8 *bmname,
+        const char *bmname,
         E_Boolean toggletype,
         T_word16 keyassoc,
         T_buttonHandler p_cbroutine,
@@ -46,7 +46,7 @@ static T_buttonID G_mouseOverButton = NULL;
 T_buttonID ButtonCreate(
         T_word16 lx,
         T_word16 ly,
-        T_byte8 *bmname,
+        const char *bmname,
         E_Boolean toggletype,
         T_word16 keyassoc,
         T_buttonHandler p_cbroutine,
@@ -79,7 +79,7 @@ T_buttonID ButtonCreate(
 static T_buttonID ButtonInit(
         T_word16 lx,
         T_word16 ly,
-        T_byte8 *bmname,
+        const char *bmname,
         E_Boolean toggletype,
         T_word16 keyassoc,
         T_buttonHandler p_cbroutine,

@@ -137,13 +137,10 @@ extern void SleepMS(T_word32 sleepMS);
     DebugSaveVectorTable() ;
     AALuaInit();
 
-//#ifdef NDEBUG
     /* If this is NOT the debug version, redirect the output. */
 #ifdef COMPILER_WATCOM
     freopen("stdout.out", "w", stdout) ;
 #endif
-    //    freopen("stderr.out", "w", stderr) ;
-//#endif
 
     AALuaCallGlobalFunction0("titlescreen");
 
@@ -151,6 +148,8 @@ extern void SleepMS(T_word32 sleepMS);
     ColorUpdate(1) ;
     ViewSetPalette(VIEW_PALETTE_STANDARD) ;
     ClientInit();
+
+    AALuaScriptLoadAndRun("main.lua");
 
     SMMainInit() ;
     while (!SMMainIsDone())  {

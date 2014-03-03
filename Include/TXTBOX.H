@@ -69,7 +69,7 @@ typedef struct
     T_word32        maxlength;
 
     /* hotkey for window selection */
-    T_byte8         hotkey;
+    T_word16        hotkey;
 
     /* is data numeric or alpha-numeric? */
     E_Boolean       numericonly;
@@ -134,9 +134,9 @@ T_TxtboxID TxtboxCreate (T_word16 x1,
                          T_word16 y1,
                          T_word16 x2,
                          T_word16 y2,
-                         T_byte8 *fontname,
+                         const char *fontname,
                          T_word32 maxlength,
-                         T_byte8  hotkey,
+                         T_word16 hotkey,
                          E_Boolean numericonly,
                          E_TxtboxJustify justify,
                          E_TxtboxMode boxmode,
@@ -160,8 +160,8 @@ T_void TxtboxCursSetRow (T_TxtboxID TxtboxID, T_word16 row);
 T_void TxtboxCursMoveTo (T_TxtboxID TxtboxID, T_word16 x, T_word16 y);
 
 T_void TxtboxAppendKey (T_TxtboxID TxtboxID, T_word16 scankey);
-T_void TxtboxAppendString (T_TxtboxID TxtboxID, T_byte8 *data);
-T_void TxtboxSetData (T_TxtboxID TxtboxID, T_byte8 *data);
+T_void TxtboxAppendString (T_TxtboxID TxtboxID, const char *data);
+T_void TxtboxSetData (T_TxtboxID TxtboxID, const char *data);
 T_void TxtboxSetNData (T_TxtboxID TxtboxID, T_byte8 *data, T_word32 len);
 
 T_byte8 *TxtboxGetData (T_TxtboxID TxtboxID);

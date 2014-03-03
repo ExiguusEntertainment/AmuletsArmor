@@ -1,6 +1,7 @@
 require "StateMachine";
 local keyboard = require "keyboard";
 local smChooseCharacter = require "AAGame/smChooseCharacter"
+local uiChooseCharacter = require "AAGame/uiChooseCharacter"
 
 smMain = StateMachine:create();
 
@@ -111,10 +112,16 @@ end
 -- and clean up.
 smMain.ExitGame = function (self, event)
 	if (event == "update") then
+		smMain.isDone = true
 	end
 end
 
 -- Start in Connect mode
 smMain.state = smMain.Connect;
+smMain.done = false;
+
+smMain.isDone = function (self)
+	return self.done
+end
 
 return smMain

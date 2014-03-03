@@ -276,7 +276,7 @@ T_void PictureGetXYSize(T_void *p_picture, T_word16 *sizeX, T_word16 *sizeY)
  *      RESOURCE_BAD
  *
  *<!-----------------------------------------------------------------------*/
-T_resource PictureFind(T_byte8 *name)
+T_resource PictureFind(const char *name)
 {
     T_resource res ;
 

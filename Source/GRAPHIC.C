@@ -15,7 +15,7 @@
 #include "MEMORY.H"
 #include "PICS.H"
 
-static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, T_byte8 *bmname);
+static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, const char *bmname);
 static T_graphicID G_graphicarray[MAX_GRAPHICS];
 static E_Boolean G_drawToActualScreen=TRUE;
 
@@ -26,7 +26,7 @@ static E_Boolean G_drawToActualScreen=TRUE;
  *  Adds a graphic to the current list of graphics for a form
  *
  *<!-----------------------------------------------------------------------*/
-T_graphicID GraphicCreate (T_word16 lx, T_word16 ly, T_byte8 *bmname)
+T_graphicID GraphicCreate (T_word16 lx, T_word16 ly, const char *bmname)
 {
 	T_word16 i;
 
@@ -53,7 +53,7 @@ T_graphicID GraphicCreate (T_word16 lx, T_word16 ly, T_byte8 *bmname)
  *  Initializes a graphic as well as allocates memory for it.
  *
  *<!-----------------------------------------------------------------------*/
-static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, T_byte8 *bmname)
+static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, const char *bmname)
 {
 	T_word32 size;
 	T_graphicStruct *myID;
