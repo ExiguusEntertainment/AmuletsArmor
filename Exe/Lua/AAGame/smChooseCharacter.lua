@@ -14,7 +14,6 @@ smChooseCharacter.WaitForList = function(self, event)
 		-- In this current verison, there is no server.  Just fetch
 		-- the list from the hard disk.
 		listOfChars = stats.getCharacterList();
-		print(inspect(listOfChars));
 		stats.setActiveCharacterList(listOfChars);
 		
 		-- and immediately say we are complete

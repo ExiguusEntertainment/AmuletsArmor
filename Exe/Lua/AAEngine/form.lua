@@ -63,8 +63,6 @@ end
 
 -- Create a new form (which is basically a collection of UI widgets)
 Form.create = function(eventHandler)
-print("Form.create")
-print(inspect(eventHandler));
 	local new_instance = {
 		objects = {},
 		eventHandler = eventHandler
@@ -95,16 +93,12 @@ end
 
 -- One of the buttons on this form has been pressed
 function Form:HandleButton(buttonID, event)
-	-- TODO:
-	print("HandleButton event " .. event)
-	print(buttonID)
-	print(self)
 	if (self.eventHandler) then
 		local buttonObj;
 		self:foreach(function(form, obj) 
 			if (obj.buttonID == buttonID) then 
 				buttonObj = obj
-			end;
+			end
 		end)
 		if (buttonObj) then
 			self:eventHandler(event, buttonObj, buttonObj.id)
@@ -157,8 +151,6 @@ function Form:addTextbox(args)
 	if (args.downid == nil) then args.downid = 0 end
 	if (args.mode == nil) then args.mode = "field" end
 
---	local funcDown = function(buttonID) Form.HandleButton(self, buttonID, "press") end
---	local funcUp = function(buttonID) Form.HandleButton(self, buttonID, "release") end
 	local numericOnly = 0;
 	if (args.filter == "digits") then numericOnly = 1 end
 	
@@ -215,6 +207,7 @@ function Form.checkForGammaAdjust()
 end
 
 function Form.handleKeyEvent(event, scankey)
+--print(string.format("Form handle key event %s, scankey %d", event, scankey))
 	if (G_numButtons > 0) then 
 		button.handleKeyEvent(event, scankey) 
 	end 
@@ -222,7 +215,7 @@ function Form.handleKeyEvent(event, scankey)
 		textbox.handleKeyEvent(event, scankey) 
 	end
 	
-	form.checkForGammaAdjust()	
+	Form.checkForGammaAdjust()	
 end
 
 function Form.start()
@@ -230,5 +223,5 @@ function Form.start()
 	
 	-- Intercept mouse and keyboard events
 	mouse.pushEventHandler(Form.handleMouse)
- 	keyboard.pushEventHandler(Form.handleKey)
+ 	keyboard.pushEventHandler(Form.handleKeyEvent)
 end

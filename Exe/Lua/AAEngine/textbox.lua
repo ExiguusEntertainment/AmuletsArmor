@@ -4,9 +4,11 @@ textbox_mt = { __index = textbox};
 local aatextbox = require "aatextbox";
 
 function textbox.handleMouseEvent(event, x, y, buttons)
---print("Textbox handleMouseEvent "..event)
---print("  x="..x.." y="..y)
 	aatextbox.HandleMouseEvent(event, x, y, buttons)
+end
+
+function textbox.handleKeyEvent(event, scankey)
+	aatextbox.HandleKeyEvent(event, scankey)
 end
 
 function textbox:backspace()
@@ -35,6 +37,10 @@ end
 
 function textbox:getSelection()
 	return aatextbox.GetSelectionNumber(self.textboxID)
+end
+
+function textbox:cursorSetRow(row)
+	return aatextbox.CursorSetRow(self.textboxID, row)
 end
 
 function textbox.create(x, y, width, height, font, maxLength, scankey1, scankey2, numericOnly, justify, boxmode, callback)

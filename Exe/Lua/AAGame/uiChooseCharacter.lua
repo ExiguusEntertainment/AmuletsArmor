@@ -8,8 +8,12 @@
 uiChooseCharacter = {}
 
 local listChars;
+local loadButton;
 local form;
 
+------------------------------------------------------------------------------
+-- Create the choose a character form
+------------------------------------------------------------------------------
 uiChooseCharacter.createForm = function()
 	form = Form.create(uiChooseCharacter.eventHandler);
 	
@@ -17,7 +21,7 @@ uiChooseCharacter.createForm = function()
 	form:addGraphic{id=100, x=0, y=0, picName="UI/LOGON/LOGON_BK"}
 	
 	-- Button: Load
-	form:addButton{id=304, x=162, y=49, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, 
+	loadButton = form:addButton{id=304, x=162, y=49, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, 
 		scankey2=keyboard.scankeys.KEY_SCAN_CODE_L, picName="UI/LOGON/LOGON_B3"}
 		
 	-- Button: Create
@@ -39,20 +43,46 @@ uiChooseCharacter.createForm = function()
 	return form;
 end
 
-uiChooseCharacter.eventHandler = function(self, event, obj)
-	print("uiChooseCharacter.eventHandler")
-	print("objType = " .. obj.type)
-	print("event = " .. event)
-	print("objID = " .. obj.id)
-	if (event == "select") then
-		print("Selection = ")
-		print(listChars:getSelection());
+------------------------------------------------------------------------------
+-- Handle form events here
+------------------------------------------------------------------------------
+uiChooseCharacter.eventHandler = function(form, event, obj)
+	if (event ~= "none") then
+		if (event == "select") then
+			local selected = listChars:getSelection();
+			stats.makeActive(selected);
+			uiChooseCharacter.charSelected = selected;
+			local charID = stats.getSavedCharacterIDStruct(selected);
+			if (charID.status ~= "undefined") then
+				uiChooseCharacter:showSelected();
+			else
+				uiChooseCharacter:clearPortrait();
+			end
+		elseif (event == "release") then
+			if (obj.id == 304) then
+				print("Release Load by ID")
+			end
+			if (obj == loadButton) then
+				print("Release Load by Button")
+			end
+		end
 	end
 end
 
-uiChooseCharacter.updateCharacterListing = function()
-print("update char listing")
---print(inspect(listChars))
+------------------------------------------------------------------------------
+-- An empty slot was chosen, clear the portrait area with helpful info
+------------------------------------------------------------------------------
+function uiChooseCharacter:clearPortrait()
+	local pic = pics.lockBitmap("UI/CREATEC/CHARINFO");
+	color.update(0);
+	graphics.drawPic(pic, 180, 79);
+	pics.unlockAndUnfind(pic);
+end
+
+------------------------------------------------------------------------------
+-- Load the list of characters and present
+------------------------------------------------------------------------------
+function uiChooseCharacter:updateCharacterListing()
 	listChars:set("");
 	listChars:cursorTop();
 	chars = stats.getActiveCharacterList();
@@ -63,52 +93,49 @@ print("update char listing")
 	listChars:cursorTop();
 end
 
-uiChooseCharacter.showSelected = function()
---
---    /* character selected changed */
---    TxtboxID=FormGetObjID (MAINUI_CHARACTER_LIST);
---    DebugCheck (TxtboxID != NULL);
---    TxtboxCursSetRow (TxtboxID,G_characterSelected);
-	--	local c = uiChooseCharacter.charSelected;
-	--	listChars:cursorSetRow(c);
-	--	stats.makeActive(c);
---	local chardata = stats.GetSavedCharacterIDStruct(c);
---
---    /* LES:  Make the selected item the active one. */
---    StatsMakeActive(G_characterSelected);
---    chardata=StatsGetSavedCharacterIDStruct (G_characterSelected);
---    if (chardata->status < CHARACTER_STATUS_UNDEFINED)
---    {
---        StatsLoadCharacter(G_characterSelected);
---        StatsDrawCharacterPortrait(180,79);
---    }
---    else
---    {
+------------------------------------------------------------------------------
+-- Show the currently selected character's portrait
+------------------------------------------------------------------------------
+function uiChooseCharacter:showSelected()
+	local c = self.charSelected;
+	stats.makeActive(c);
+	chardata = stats.getSavedCharacterIDStruct(c);
+	if (chardata.status ~= "undefined") then
+		stats.loadCharacter(c);
+		stats.drawCharacterPortrait(180, 79);
+	else
+		-- do nothing?
 --//        GrDrawRectangle(180,79,295,181,77);
---    }
---
+	end		
+
 	graphic.updateAllGraphics()
 end
 
+------------------------------------------------------------------------------
+-- Initiliaze the uiChooseCharacter screen by creating a form
+------------------------------------------------------------------------------
 function uiChooseCharacter:init()
-print("uiChooseCharacter.init")
-print(uiChooseCharacter.eventHandler)
 	self.createForm();
-	self.updateCharacterListing()
+	self:updateCharacterListing()
 	graphic.updateAllGraphics();
 	self.charSelected = 0;
-	self.showSelected();
+	self:showSelected();
 	
 	graphics.setCursor(5, 188)
 	graphics.drawShadowedText(config.VERSION_TEXT, 210, 0);
 end
 
+------------------------------------------------------------------------------
+-- Start is a short cut to get this started
+------------------------------------------------------------------------------
 uiChooseCharacter.start = function()
-print("uiChooseCharacter.start")
 	uiChooseCharacter:init(uiChooseCharacter)
 	form.start()
 end
 
+------------------------------------------------------------------------------
+-- As the UI state machine is updated, run the form's ui
+------------------------------------------------------------------------------
 uiChooseCharacter.update = function()
 	form:updateUI();
 end

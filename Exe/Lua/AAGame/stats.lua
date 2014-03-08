@@ -16,4 +16,35 @@ function stats.getActiveCharacterList()
 	return stats.charList 
 end
 
+function stats.makeActive(charSelected)
+	aastats.MakeActive(charSelected)
+end
+
+function stats.getSavedCharacterIDStruct(c)
+	return stats.charList[c+1];
+end
+
+function stats.get()
+	return aastats.Get()
+end
+
+function stats.loadCharacter(c)
+print(string.format("Loading %s", c))	
+	local loadSuccessful = aastats.LoadCharacter(c);
+	stats.char = aastats.Get();
+	return loadSuccessful;
+end
+
+function stats.drawCharacterPortrait(x, y)
+	if (stats.char) then
+print(string.format("Character %s type %s", stats.char.name, stats.char.classType))	
+		local stmp = string.format("UI/CREATEC/CHAR%02d", stats.char.classType);
+		graphics.fillRect(x, y, x+115, y+102, 0);
+		local pic = pics.lockBitmap(stmp);
+		graphics.drawPic(pic, x, y);
+		color.update(0);
+		pics.unlockAndUnfind(pic);
+	end	
+end
+
 return stats

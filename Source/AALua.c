@@ -15,6 +15,7 @@
 #include <PICS.H>
 #include <SLIDR.H>
 #include <SOUND.H>
+#include <SPELTYPE.H>
 #include <STATS.H>
 #include <TICKER.H>
 #include <TXTBOX.H>
@@ -22,8 +23,17 @@
 
 static lua_State *L;
 
-#define MAP_STRING_TO_INT(str, x)  if(strcmp(aString, str)==0) return (x);
+#define MAP_STRING_TO_INT(str, x)   if(strcmp(aString, str)==0) return (x);
+#define MAP_INT_START(v)            switch (v) {
+#define MAP_INT_TO_STRING(x, str)       case (x): return (str); break;
+#define MAP_INT_END()                default: break; }
 
+static void ITableSetBoolean(lua_State* L, const char *name, E_Boolean value)
+{
+    lua_pushstring(L, name);
+    lua_pushboolean(L, value?1:0);
+    lua_settable(L, -3);
+}
 
 static void ITableSetInt(lua_State* L, const char *name, int value)
 {
@@ -76,25 +86,36 @@ static int ITableGetString(lua_State* L, const char *name, char *value, int limi
     return 0;
 }
 
-static int AASetLuaPath(lua_State* L, const char* path)
+static E_mouseEvent IMouseEventConvert(const char *aString)
 {
-//    const char *cur_path;
-    char newPath[1000];
+    MAP_STRING_TO_INT("start", MOUSE_EVENT_START);
+    MAP_STRING_TO_INT("end", MOUSE_EVENT_END);
+    MAP_STRING_TO_INT("move", MOUSE_EVENT_MOVE);
+    MAP_STRING_TO_INT("drag", MOUSE_EVENT_DRAG);
+    MAP_STRING_TO_INT("idle", MOUSE_EVENT_IDLE);
+    MAP_STRING_TO_INT("held", MOUSE_EVENT_HELD);
+    return MOUSE_EVENT_UNKNOWN;
+}
 
-    sprintf(newPath, "LUA_PATH=%s", path);
-    _putenv ( newPath );
-#if 0
-    lua_getglobal(L, "package");
-    lua_getfield(L, -1, "path"); // get field "path" from table at top of stack (-1)
-    cur_path = lua_tostring( L, -1 ); // grab path string from top of stack
-    sprintf(newPath, "%s;%s", cur_path, path);
-    lua_pop(L, 1); // get rid of the string on the stack we just pushed on line 5
-    lua_pushstring(L, cur_path); // push the new one
-    lua_setfield(L, -2, "path"); // set the field "path" in table at -2 with value at top of stack
-    lua_pop(L, 1); // get rid of package table from top of stack
-#endif
+static E_keyboardEvent IKeyEventConvert(const char *aString)
+{
+    MAP_STRING_TO_INT("press", KEYBOARD_EVENT_PRESS);
+    MAP_STRING_TO_INT("release", KEYBOARD_EVENT_RELEASE);
+    MAP_STRING_TO_INT("buffered", KEYBOARD_EVENT_BUFFERED);
+    MAP_STRING_TO_INT("held", KEYBOARD_EVENT_HELD);
+    return KEYBOARD_EVENT_UNKNOWN;
+}
 
-    return 0; // all done!
+static const char *ISpellSystemToString(T_byte8 aSpellSystem)
+{
+    MAP_INT_START(aSpellSystem);
+    MAP_INT_TO_STRING(SPELL_SYSTEM_NONE, "none");
+    MAP_INT_TO_STRING(SPELL_SYSTEM_MAGE, "mage");
+    MAP_INT_TO_STRING(SPELL_SYSTEM_CLERIC, "cleric");
+    MAP_INT_TO_STRING(SPELL_SYSTEM_ARCANE, "arcane");
+    MAP_INT_TO_STRING(SPELL_SYSTEM_ANY, "any");
+    MAP_INT_END();
+    return "unknown";
 }
 
 void AALuaScriptLoadAndRun(const char *aFilename)
@@ -967,10 +988,88 @@ static int lua_StatsSetSavedCharacterList(lua_State *L)
     return 0;
 }
 
+static int lua_StatsGet(lua_State *L)
+{
+    T_byte8 selected;
+
+    selected = (T_byte8)lua_tonumber(L, 1);
+
+    lua_newtable(L);
+    ITableSetString(L, "name", G_activeStats->Name);
+    ITableSetString(L, "class", G_activeStats->ClassName);
+    ITableSetString(L, "title", G_activeStats->ClassTitle);
+    ITableSetInt(L, "health", G_activeStats->Health);
+    ITableSetInt(L, "healthMax", G_activeStats->MaxHealth);
+    ITableSetInt(L, "mana", G_activeStats->Mana);
+    ITableSetInt(L, "manaMax", G_activeStats->MaxMana);
+    ITableSetInt(L, "food", G_activeStats->Food);
+    ITableSetInt(L, "foodMax", G_activeStats->MaxFood);
+    ITableSetInt(L, "water", G_activeStats->Water);
+    ITableSetInt(L, "waterMax", G_activeStats->MaxWater);
+    ITableSetInt(L, "poison", G_activeStats->PoisonLevel);
+    ITableSetInt(L, "regenHealth", G_activeStats->RegenHealth);
+    ITableSetInt(L, "regenMana", G_activeStats->RegenMana);
+    ITableSetInt(L, "jumpPower", G_activeStats->JumpPower);
+    ITableSetInt(L, "jumpPowerMod", G_activeStats->JumpPowerMod);
+    ITableSetInt(L, "tallness", G_activeStats->Tallness);
+    ITableSetInt(L, "climbHeight", G_activeStats->ClimbHeight);
+    ITableSetInt(L, "velRunningMax", G_activeStats->MaxVRunning);
+    ITableSetInt(L, "velWalkingMax", G_activeStats->MaxVWalking);
+    ITableSetInt(L, "heartRate", G_activeStats->HeartRate);
+    ITableSetInt(L, "velFallingMax", G_activeStats->MaxFallV);
+    ITableSetInt(L, "weaponBaseDamage", G_activeStats->WeaponBaseDamage);
+    ITableSetInt(L, "weaponBaseSpeed", G_activeStats->WeaponBaseSpeed);
+    ITableSetInt(L, "attackSpeed", G_activeStats->AttackSpeed);
+    ITableSetInt(L, "attackDamage", G_activeStats->AttackDamage);
+    ITableSetBoolean(L, "isAlive", G_activeStats->playerisalive);
+    ITableSetInt(L, "classType", G_activeStats->ClassType);
+    ITableSetInt(L, "armorLevel", G_activeStats->ArmorLevel);
+    ITableSetInt(L, "load", G_activeStats->Load);
+    ITableSetInt(L, "loadMax", G_activeStats->MaxLoad);
+    ITableSetInt(L, "level", G_activeStats->Level);
+    ITableSetInt(L, "xp", G_activeStats->Experience);
+    ITableSetInt(L, "xpNeeded", G_activeStats->ExpNeeded);
+    ITableSetString(L, "spellSystem", ISpellSystemToString(G_activeStats->SpellSystem));
+//    ITableSetInt(L, "", G_activeStats->);
+//    ITableSetInt(L, "", G_activeStats->);
+//    ITableSetInt(L, "", G_activeStats->);
+//    ITableSetInt(L, "", G_activeStats->);
+//    ITableSetInt(L, "", G_activeStats->);
+
+    return 1;
+}
+
+static int lua_StatsMakeActive(lua_State *L)
+{
+    T_byte8 selected;
+
+    selected = (T_byte8)lua_tonumber(L, 1);
+
+    StatsMakeActive(selected);
+    return 0;
+}
+
+static int lua_StatsLoadCharacter(lua_State *L)
+{
+    T_byte8 selected;
+    E_Boolean result;
+
+    selected = (T_byte8)lua_tonumber(L, 1);
+
+    result = StatsLoadCharacter(selected);
+    lua_pushboolean(L, (result)?1:0);
+
+    return 1;
+}
+
+
 int LUA_API luaopen_aastats(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "GetCharacterList", lua_StatsGetSavedCharacterList },
+            { "Get", lua_StatsGet },
+            { "LoadCharacter", lua_StatsLoadCharacter },
+            { "MakeActive", lua_StatsMakeActive },
             { "SetSavedCharacterList", lua_StatsSetSavedCharacterList },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
@@ -978,17 +1077,6 @@ int LUA_API luaopen_aastats(lua_State *L)
 }
 
 //-----------------
-static E_mouseEvent IMouseEventConvert(const char *aString)
-{
-    MAP_STRING_TO_INT("start", MOUSE_EVENT_START);
-    MAP_STRING_TO_INT("end", MOUSE_EVENT_END);
-    MAP_STRING_TO_INT("move", MOUSE_EVENT_MOVE);
-    MAP_STRING_TO_INT("drag", MOUSE_EVENT_DRAG);
-    MAP_STRING_TO_INT("idle", MOUSE_EVENT_IDLE);
-    MAP_STRING_TO_INT("held", MOUSE_EVENT_HELD);
-    return MOUSE_EVENT_UNKNOWN;
-}
-
 static T_void IAALuaButtonEventHandler(T_buttonID buttonID)
 {
     const char *p_event;
@@ -1060,10 +1148,26 @@ static int lua_ButtonMouseControl(lua_State *L)
     return 0;
 }
 
+static int lua_ButtonKeyControl(lua_State *L)
+{
+    E_keyboardEvent event;
+    T_word16 scankey;
+    DebugRoutine("lua_ButtonKeyControl");
+
+    event = IKeyEventConvert(lua_tostring(L, 1));
+    scankey = (T_byte8)lua_tonumber(L, 2);
+    ButtonKeyControl(event, scankey);
+
+    DebugEnd();
+
+    return 0;
+}
+
 int LUA_API luaopen_aabutton(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "Create", lua_ButtonCreate },
+            { "HandleKeyEvent", lua_ButtonKeyControl },
             { "HandleMouseEvent", lua_ButtonMouseControl },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
@@ -1215,6 +1319,14 @@ static int lua_TxtboxRepaginate(lua_State *L)
     return 0;
 }
 
+static int lua_TxtboxCursorSetRow(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxCursorTop");
+    TxtboxCursSetRow((T_TxtboxID)lua_touserdata(L, 1), (T_word16)lua_tonumber(L, 2));
+    DebugEnd();
+
+    return 0;
+}
 static int lua_TxtboxCursorTop(lua_State *L)
 {
     DebugRoutine("lua_TxtboxCursorTop");
@@ -1270,15 +1382,32 @@ static int lua_TxtboxGetSelectionNumber(lua_State *L)
     return 1;
 }
 
+static int lua_TxtboxKeyControl(lua_State *L)
+{
+    E_keyboardEvent event;
+    T_word16 scankey;
+    DebugRoutine("lua_TxtboxKeyControl");
+
+    event = IKeyEventConvert(lua_tostring(L, 1));
+    scankey = (T_word16)lua_tonumber(L, 2);
+    TxtboxKeyControl(event, scankey);
+
+    DebugEnd();
+
+    return 0;
+}
+
 int LUA_API luaopen_aatextbox(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "Append", lua_TxtboxAppend },
             { "Backspace", lua_TxtboxBackspace },
             { "Create", lua_TxtboxCreate },
+            { "CursorSetRow", lua_TxtboxCursorSetRow },
             { "CursorTop", lua_TxtboxCursorTop },
             { "FirstBox", lua_TxtboxFirstBox },
             { "GetSelectionNumber", lua_TxtboxGetSelectionNumber },
+            { "HandleKeyEvent", lua_TxtboxKeyControl },
             { "HandleMouseEvent", lua_TxtboxMouseControl },
             { "Repaginate", lua_TxtboxRepaginate },
             { "SetText", lua_TxtboxSetText },
@@ -1354,7 +1483,6 @@ void AALuaInit(void)
     luaL_requiref(L, "aaticker", luaopen_aaticker, 1);
     luaL_requiref(L, "aaview", luaopen_aaview, 1);
 
-    //AASetLuaPath(L, "./Lua;./Lua/AAEngine");
     AALuaScriptLoadAndRun("startup.lua");
 
     DebugEnd();
