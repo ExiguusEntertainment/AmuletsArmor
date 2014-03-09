@@ -111,9 +111,23 @@ void WindowsUpdateEvents(void)
     }
 }
 
+#if COMPILE_OPTION_HICOLOR
+#define Copy2x(aDest, aSrc) \
+		aDest[0] = aSrc[0]; \
+		aDest[4] = aSrc[0]; \
+		aDest[1] = aSrc[1]; \
+		aDest[5] = aSrc[1]; \
+		aDest[2] = aSrc[2]; \
+		aDest[6] = aSrc[2]; \
+		aDest[3] = aSrc[3]; \
+		aDest[7] = aSrc[3]; \
+		aDest += 8; \
+		aSrc += 4;
+#else
 #define Copy2x(aDest, aSrc) \
         *(aDest++) = *aSrc; \
         *(aDest++) = *(aSrc++);
+#endif
 
 #define oldCopy2x_4times(aDest, aSrc) \
     Copy2x(aDest, aSrc) \
@@ -121,6 +135,13 @@ void WindowsUpdateEvents(void)
     Copy2x(aDest, aSrc) \
     Copy2x(aDest, aSrc)
 
+#if COMPILE_OPTION_HICOLOR
+#define Copy2x_4times(aDest, aSrc) \
+		Copy2x(aDest, aSrc); \
+		Copy2x(aDest, aSrc); \
+		Copy2x(aDest, aSrc); \
+		Copy2x(aDest, aSrc);
+#else
 #define Copy2x_4times(aDest, aSrc) \
     v = *((T_word32 *)aSrc); \
     aSrc += 4; \
@@ -133,6 +154,7 @@ void WindowsUpdateEvents(void)
     aDest[6] = ((T_byte8 *)&v)[3]; \
     aDest[7] = ((T_byte8 *)&v)[3]; \
     aDest += 8;
+#endif
 
 #define Copy2x_20times(aDest, aSrc) \
     Copy2x_4times(aDest, aSrc) \
@@ -167,7 +189,10 @@ void WindowsUpdate(char *p_screen, unsigned char *palette)
     T_word32 tick = clock();
     static T_word32 lastTick = 0xFFFFEEEE;
     static double movingAverage = 0;
+#if COMPILE_OPTION_HICOLOR
+#else
     T_word32 v;
+#endif
     T_word32 frac;
 
 #if CAP_SPEED_TO_FPS
@@ -187,28 +212,33 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
         colors[i].b = ((((unsigned int)*(palette++))&0x3F)<<2);
     }
     //SDL_SetColors(surface, colors, 0, 256);
+#if COMPILE_OPTION_HICOLOR
+#else
     SDL_SetColors(largesurface, colors, 0, 256);
+#endif
 
     // Blit the current surface from 320x200 to 640x480
+#if COMPILE_OPTION_HICOLOR
     line = src;
-    for (y=0, frac=0; y<200; y++, line+=320) {
-//        for (x=0; x<320; x++) {
-//            *(dst++) = *src;
-//            *(dst++) = *(src++);
-//        }
+    for (y=0, frac=0; y<200; y++, line+=320*4) {
         while (frac < 400) {
             src = line;
             Copy2x_320times(dst, src);
             frac += 200;
         }
         frac -= 400;
-//        for (x=0; x<320; x++) {
-//            *(dst++) = *src;
-//            *(dst++) = *(src++);
-//        }
-//        Copy2x_320times(dst, src);
     }
-
+#else
+    line = src;
+    for (y=0, frac=0; y<200; y++, line+=320) {
+        while (frac < 400) {
+            src = line;
+            Copy2x_320times(dst, src);
+            frac += 200;
+        }
+        frac -= 400;
+    }
+#endif
     if (SDL_BlitSurface(largesurface, &largesrcrect, screen, &destrect)) {
         printf("Failed blit: %s\n", SDL_GetError());
     }
@@ -265,6 +295,37 @@ int SDL_main(int argc, char *argv[])
           return 1;
     }
 
+#if COMPILE_OPTION_HICOLOR
+    surface = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+    if (surface == NULL) {
+        printf("Could not create overlay: %s\n", SDL_GetError());
+        return 1;
+    }
+    largesurface = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 400, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+    if (largesurface == NULL) {
+        printf("Could not create overlay: %s\n", SDL_GetError());
+        return 1;
+    }
+    SDL_SetColors(surface, &black, 0, 1);
+    SDL_SetColors(surface, &white, 255, 1);
+    pixels = (char *)surface->pixels;
+    GRAPHICS_ACTUAL_SCREEN = (void *)pixels;
+    for (y=0; y<240; y++) {
+        for (x=0; x<320; x++, pixels+=4) {
+            if ((x == 0) || (x == 319) || (y == 0) || (y == 239)) {
+                pixels[0] = 255;
+                pixels[1] = 255;
+                pixels[2] = 255;
+                pixels[3] = 255;
+            } else {
+                pixels[0] = 0;
+                pixels[1] = 0;
+                pixels[2] = 0;
+                pixels[3] = 255;
+            }
+        }
+    }
+#else
     surface = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 240, 8, 0, 0, 0, 0);
     if (surface == NULL) {
         printf("Could not create overlay: %s\n", SDL_GetError());
@@ -287,6 +348,7 @@ int SDL_main(int argc, char *argv[])
                 *pixels = 0;
         }
     }
+#endif
 
     {
 #ifndef NDEBUG

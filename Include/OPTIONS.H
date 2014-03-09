@@ -205,6 +205,8 @@
 #define _enable()
 #endif
 
+#define COMPILE_OPTION_HICOLOR		1
+
 #endif
 
 /****************************************************************************/
