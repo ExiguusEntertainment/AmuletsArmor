@@ -1,4 +1,4 @@
-mouse = {}
+mouse = { hotspot = { 0, 0 }, pic = { pic = nil, bitmap = nil, res = nil }}
 
 local aamouse = require "aamouse";
 
@@ -25,13 +25,28 @@ end
 function mouse.setDefaultBitmap(pic, hotspot)
 	if (pic == nil) then
 		aamouse.SetDefaultBitmap(0, 0, nil)
+		mouse.hotspot.x = 0;
+		mouse.hotspot.y = 0;
+		mouse.pic = { pic = nil, bitmap = nil, res = nil };
 	else
+print(debug.traceback())
+print("pic:");
+print(inspect(pic))	
+print("hotspot:");
+print(inspect(hotspot))	
 		aamouse.SetDefaultBitmap(hotspot.x, hotspot.y, pic.bitmap)
+		mouse.hotspot.x = hotspot.x;
+		mouse.hotspot.y = hotspot.y;
+		mouse.pic = pic;
 	end
 end
 
 function mouse.useDefaultBitmap()
 	aamouse.UseDefaultBitmap()
+end
+
+function mouse.getBitmapAndHotspot()
+	return { hotspot = mouse.hotspot, pic = mouse.pic };
 end
 
 return mouse

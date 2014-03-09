@@ -2,14 +2,27 @@ pics = {}
 
 local aapics = require "aapics";
 
+function pics.exist(name)
+	return aapics.Exist(name);
+end
+
 function pics.lockBitmap(name)
-	bitmap, res =  aapics.LockData(name);
-	return { data=bitmap, bitmap=bitmap, res=res };
+	if (pics.exist(name)) then
+		bitmap, res =  aapics.LockData(name);
+		return { data=bitmap, bitmap=bitmap, res=res };
+	else
+		error(string.format("Bitmap resource '%s' does not exist!", name))
+	end
 end
 
 function pics.lockData(name)
-	data, res =  aapics.LockData(name);
-	return { data=data, res=res };
+	if (pics.exist(name)) then
+		assert(pics.exist(name));
+		data, res =  aapics.LockData(name);
+		return { data=data, res=res };
+	else
+		error(string.format("Data resource '%s' does not exist!", name))
+	end
 end
 
 function pics.unfind(pic)

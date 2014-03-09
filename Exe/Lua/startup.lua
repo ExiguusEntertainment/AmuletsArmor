@@ -12,6 +12,9 @@ time = require "AAEngine/time"
 ticker = require "AAEngine/ticker"
 ui = require "AAEngine/ui"
 view = require "AAEngine/view"
+require "Utilities/inspect"
+
+require "AAGame/prompt"
 
 local titlescreen = require "AAGame/titlescreen"
 local config = require "config"

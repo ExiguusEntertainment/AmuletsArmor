@@ -10,7 +10,22 @@ function updateOften()
 	color.update(delta)
 end
 
-function main()
+function sprintf(fmt, ...)
+	return string.format(fmt, ...);
+end
+
+function printf(fmt, ...)
+	print(string.format(fmt, ...));
+end
+
+function AABacktrace(errmsg)
+	local backtrace = debug.traceback();
+	print("A&A Backtrace: " .. errmsg)
+	print(backtrace);
+	return errmsg;
+end
+
+function protected_main()
 	print("** MAIN ENTERED **")
 	local lastTick = ticker.get();
 
@@ -27,6 +42,10 @@ function main()
 		updateOften()
 		smMain:update()
 	end
+end
+
+function main()
+	xpcall(protected_main, AABacktrace)
 end
 
 -- Run!

@@ -22,7 +22,7 @@ T_void PictureUnlock(T_resource res) ;
 
 #define PictureUnlockData(res)  ResourceUnlock(res)
 
-E_Boolean PictureExist(T_byte8 *name) ;
+E_Boolean PictureExist(const char *name) ;
 
 T_void PictureGetXYSize(T_void *p_picture, T_word16 *sizeX, T_word16 *sizeY) ;
 

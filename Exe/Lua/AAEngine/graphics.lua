@@ -22,4 +22,16 @@ function graphics.fillRect(x1, y1, x2, y2, color)
 	aagraphics.DrawRectangle(x1, y1, x2, y2, color)
 end
 
+function graphics.push()
+	aagraphics.ScreenPush();
+end
+
+function graphics.pop()
+	aagraphics.ScreenPop();
+end
+
+function graphics.shadeRect(x1, y1, x2, y2, shade)
+	aagraphics.ShadeRectangle(x1, y1, x2, y2, shade)
+end
+
 return graphics

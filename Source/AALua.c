@@ -118,6 +118,16 @@ static const char *ISpellSystemToString(T_byte8 aSpellSystem)
     return "unknown";
 }
 
+static int traceback(lua_State *L) {
+    lua_getglobal(L, "debug");
+    lua_getfield(L, -1, "traceback");
+    lua_pushvalue(L, 1);
+    lua_pushinteger(L, 2);
+    lua_call(L, 2, 1);
+    fprintf(stderr, "%s\n", lua_tostring(L, -1));
+    return 1;
+}
+
 void AALuaScriptLoadAndRun(const char *aFilename)
 {
     void *p_file;
@@ -131,8 +141,9 @@ void AALuaScriptLoadAndRun(const char *aFilename)
 
     p_file = FileLoad(filename, &size);
     if (p_file) {
+        lua_pushcfunction(L, traceback);
         error = luaL_loadbuffer(L, p_file, size, aFilename)
-                || lua_pcall(L, 0, 0, 0);
+                || lua_pcall(L, 0, 0, lua_gettop(L) - 1);
         if (error) {
             fprintf(stderr, "%s", lua_tostring(L, -1));
             lua_pop(L, 1); /* pop error message from the stack */
@@ -444,6 +455,26 @@ static int lua_GraphicsDrawText(lua_State *L)
     return 0;
 }
 
+static int lua_GraphicsScreenPop(lua_State *L)
+{
+    DebugRoutine("lua_GraphicsScreenPop");
+
+    GrActualScreenPop();
+
+    DebugEnd();
+    return 0;
+}
+
+static int lua_GraphicsScreenPush(lua_State *L)
+{
+    DebugRoutine("lua_GraphicsScreenPush");
+
+    GrActualScreenPush();
+
+    DebugEnd();
+    return 0;
+}
+
 static int lua_GraphicsSetCursorPosition(lua_State *L)
 {
     T_word16 x, y;
@@ -459,6 +490,25 @@ static int lua_GraphicsSetCursorPosition(lua_State *L)
     return 0;
 }
 
+static int lua_GraphicsShadeRectangle(lua_State *L)
+{
+    T_word16 x1, y1, x2, y2;
+    T_byte8 shade;
+
+    DebugRoutine("lua_GraphicsShadeRectangle");
+
+    x1 = (T_word16)lua_tonumber(L, 1);
+    y1 = (T_word16)lua_tonumber(L, 2);
+    x2 = (T_word16)lua_tonumber(L, 3);
+    y2 = (T_word16)lua_tonumber(L, 4);
+    shade = (T_byte8)lua_tonumber(L, 5);
+
+    GrShadeRectangle(x1, y1, x2, y2, shade);
+
+    DebugEnd();
+    return 0;
+}
+
 
 int LUA_API luaopen_aagraphics(lua_State *L)
 {
@@ -467,6 +517,9 @@ int LUA_API luaopen_aagraphics(lua_State *L)
             { "DrawRectangle", lua_GraphicsDrawRectangle },
             { "DrawText", lua_GraphicsDrawText },
             { "DrawShadowedText", lua_GraphicsDrawShadowedText },
+            { "ScreenPop", lua_GraphicsScreenPop },
+            { "ScreenPush", lua_GraphicsScreenPush },
+            { "ShadeRectangle", lua_GraphicsShadeRectangle },
             { "SetCursor", lua_GraphicsSetCursorPosition },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
@@ -764,6 +817,21 @@ int LUA_API luaopen_aamouse(lua_State *L)
 }
 
 //-----------------
+static int lua_PicsExist(lua_State *L)
+{
+    const char *picName;
+    E_Boolean result;
+
+    DebugRoutine("lua_PicsExist");
+
+    picName = lua_tolstring(L, 1, NULL);
+    result = PictureExist(picName);
+    lua_pushboolean(L, result?1:0);
+
+    DebugEnd();
+    return 1;
+}
+
 static int lua_PicsLockData(lua_State *L)
 {
     T_byte8 *p_data;
@@ -828,6 +896,7 @@ static int lua_PicsUnlockAndUnfind(lua_State *L)
 int LUA_API luaopen_aapics(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
+            { "Exist", lua_PicsExist },
             { "LockData", lua_PicsLockData },
             { "Unfind", lua_PicsUnfind },
             { "Unlock", lua_PicsUnlock },
@@ -1492,8 +1561,9 @@ void AALuaCallGlobalFunction0(const char *aFuncName)
 {
     DebugRoutine("AALuaCallGlobalFunction0");
 
+    lua_pushcfunction(L, traceback);
     lua_getglobal(L, aFuncName);
-    if (lua_pcall(L, 0, 0, 0) != 0) {
+    if (lua_pcall(L, 0, 0, lua_gettop(L) - 1) != 0) {
         printf("Lua Function '%s' error:\n  %s\n", aFuncName, lua_tostring(L, -1));
         DebugCheck(FALSE);
     }

@@ -207,7 +207,7 @@ T_void PictureUnlock(T_resource res)
  *  @return TRUE = found, FALSE = not found
  *
  *<!-----------------------------------------------------------------------*/
-E_Boolean PictureExist(T_byte8 *name)
+E_Boolean PictureExist(const char *name)
 {
     E_Boolean picExist ;
     T_resource res ;

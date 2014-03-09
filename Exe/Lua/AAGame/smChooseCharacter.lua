@@ -2,7 +2,6 @@ require "StateMachine"
 require "AAGame/stats"
 require "AAGame/mouseControl"
 --require "AAGame/smMain"
-local inspect = require "Utilities/inspect"
 
 smChooseCharacter = StateMachine:create();
 

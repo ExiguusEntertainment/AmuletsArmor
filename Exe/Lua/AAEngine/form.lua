@@ -2,7 +2,6 @@
 -- Groups of User Interface components come together into a single Form.
 --
 
-
 Form = {}
 Form_mt = { __index = Form }
 
@@ -38,7 +37,7 @@ function Form:foreach(func)
 end
 
 -- Global event to handle any button event going to a form
-function _buttonHandleEvent(buttonID, event)
+function Form.protected_buttonHandleEvent(buttonID, event)
 	G_forms.forall(function (form, obj)
 		-- Do we have a button and matching buttonID?
 		if ((obj.type == "button") and (obj.buttonID == buttonID)) then
@@ -51,14 +50,22 @@ function _buttonHandleEvent(buttonID, event)
 	end)
 end
 
+function _buttonHandleEvent(buttonID, event)
+	xpcall(function() Form.protected_buttonHandleEvent(buttonID, event) end, AABacktrace)
+end
+
 -- Global event to handle any textbox event going to a form
-function _textboxHandleEvent(textboxID, event)
+function Form.protected_textboxHandleEvent(textboxID, event)
 	G_forms.forall(function (form, obj)
 		-- Do we have a textbox and matching textboxID?
 		if ((obj.type == "textbox") and (obj.textboxID == textboxID)) then
 			obj.callback(form, obj, event)
 		end
 	end)
+end
+
+function _textboxHandleEvent(textboxID, event)
+	xpcall(function() Form.protected_textboxHandleEvent(textboxID, event) end, AABacktrace)
 end
 
 -- Create a new form (which is basically a collection of UI widgets)
@@ -112,6 +119,7 @@ function Form:addButton(args)
 	if (args.scankey2 == nil) then args.scankey2 = keyboard.scankeys.KEY_SCAN_CODE_NONE end
 	if (args.x == nil) then args.x = 0 end
 	if (args.y == nil) then args.y = 0 end
+	assert(args.picName ~= nil, "Form:addButton needs name");
 	local funcDown = function(buttonID) Form.HandleButton(self, buttonID, "press") end
 	local funcUp = function(buttonID) Form.HandleButton(self, buttonID, "release") end
 	local buttonID = button.create(args.x, args.y, args.picName, args.toggleType, args.scankey1, args.scankey2)
@@ -224,4 +232,64 @@ function Form.start()
 	-- Intercept mouse and keyboard events
 	mouse.pushEventHandler(Form.handleMouse)
  	keyboard.pushEventHandler(Form.handleKeyEvent)
+end
+
+function Form:delete()
+	local i;
+	
+	-- Tell all the component objects to delete themselves from teh system
+	self:foreach(function(form, obj)
+		obj:delete(obj)
+	end);
+	
+	-- Remove the form from the list
+	for i=#G_forms, 1, -1 do
+		if (G_forms[i] == form) then
+			table.remove(G_forms, i);
+		end
+	end
+	
+	graphic.updateAllGraphics();
+end
+
+function Form:run()
+print("Form:run");	
+	local oldbitmap = mouse.getBitmapAndHotspot();
+	local pic = pics.lockBitmap("UI/MOUSE/DEFAULT");
+
+print(inspect(pic));
+	mouse.setDefaultBitmap(pic, {x=0, y=0});
+	mouse.useDefaultBitmap();
+
+	mouse.pushEventHandler(Form.handleMouse);
+	keyboard.pushEventHandler(Form.handleKeyEvent);
+	
+	keyboard.debounce();
+	
+	local lastTick = ticker.get();
+	self.exit = 0;
+	while (self.exit == 0) do
+		local delta = ticker.get() - lastTick;
+		if (delta < 1) then
+			-- Too fast! Slow down and let the CPU cool off
+			ticker.sleep(1)
+		end
+		
+		-- Update the system 
+		graphic.updateAllGraphics();
+		color.update(delta);
+		mouse.updateEvents();
+		keyboard.updateEvents();
+		sound.update();
+	end
+
+	-- Remove the form from the system
+	self:delete();	
+	mouse.popEventHandler();
+	keyboard.popEventHandler();	
+	keyboard.debounce();
+	pics.unlockAndUnfind(pic);
+	
+	mouse.setDefaultBitmap(oldbitmap.pic, oldbitmap.hotspot);
+	mouse.useDefaultBitmap();
 end
