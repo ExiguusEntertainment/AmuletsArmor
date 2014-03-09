@@ -89,7 +89,7 @@ static T_sword16 G_lefts[SCREEN_SIZE_Y] ;
 static T_sword16 G_rights[SCREEN_SIZE_Y] ;
 static T_void IResetLeftsAndRights(T_void) ;
 
-static T_byte8 G_lastPalette[256][3] ;
+T_byte8 G_lastPalette[256][3] ;
 
 /*-------------------------------------------------------------------------*
  * Routine:  GrScreenAlloc

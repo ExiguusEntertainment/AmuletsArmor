@@ -478,6 +478,18 @@ if (drawSize >= 300)  {
 #endif
 #endif
 
+#if COMPILE_OPTION_HICOLOR
+                        if (drawSize > 0)  {
+                            if (G_translucencyMode)  {
+                                DrawTranslucentAsm(
+                                    p_data + start,
+                                    p_screen + (y*SCREEN_SIZE_X + x)*4UL,
+                                    drawSize) ;
+                            } else {
+                                DrawAndShadeRaster(p_data+start, p_screen + (y*SCREEN_SIZE_X + x)*4UL, drawSize, 255);
+                            }
+                        }
+#else
                         if (drawSize > 0)  {
                             if (G_translucencyMode)  {
                                 DrawTranslucentAsm(
@@ -491,6 +503,7 @@ if (drawSize >= 300)  {
                                     drawSize) ;
                             }
                         }
+#endif
                     }
                     p_data += size ;
                 }

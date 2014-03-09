@@ -25,7 +25,8 @@
 #include "VIEW.H"
 
 #if COMPILE_OPTION_HICOLOR
-#define BYTES_PER_PIXEL	4
+#define BYTES_PER_PIXEL	4UL
+extern T_byte8 G_lastPalette[256][3];
 #else
 #define BYTES_PER_PIXEL	1
 #endif
@@ -33,13 +34,21 @@
 #if COMPILE_OPTION_HICOLOR
 	#define WriteShadedPixel(p, s, c) \
 		{ T_byte8 *p_color = G_lastPalette[c]; \
-			(p[0]) = (p_color[0] * ((T_word32)s))/256; \
-			(p[1]) = (p_color[1] * ((T_word32)s))/256; \
-			(p[2]) = (p_color[2] * ((T_word32)s))/256; \
-			(p[3]) = 0xFF; } \
+			(p[0]) = (p_color[0] * 4* ((T_word32)s))/256; \
+			(p[1]) = (p_color[1] * 4 * ((T_word32)s))/256; \
+			(p[2]) = (p_color[2] * 4 * ((T_word32)s))/256; \
+			(p[3]) = 0xFF; }
+    #define WriteTranslucentPixel(p_pixel, c) \
+            IWriteTranslucentPixel(p_pixel, c)
+    #define WriteTranslucentShadedPixel(p_pixel, p_shade, c) \
+            IWriteTranslucentShadedPixel(p_pixel, p_shade, c)
 #else
 	#define WriteShadePixel(p, s, c) \
 		{ *(p) = s[c]; }
+    #define WriteTranslucentPixel(p_pixel, c) \
+        { *p_pixel = G_translucentTable[c][*p_pixel]; }
+    #define WriteTranslucentShadedPixel(p_pixel, p_shade, c) \
+        { *p_pixel = G_translucentTable[p_shade[c]][*p_pixel]; }
 #endif
 
 static T_word16 G_fromSector ;
@@ -1092,6 +1101,31 @@ T_void ISortObjectQuick(T_sword16 p, T_sword16 q) ;
 
 /** BEGIN GRAPHICS-MODE (i.e. not req'd by server) FUNCTION DEFS **/
 #ifndef SERVER_ONLY
+__inline void IWriteTranslucentPixel(T_byte8 *p_pixel, T_byte8 c)
+{
+    T_byte8 *p_color = G_lastPalette[c];
+    T_word32 v;
+
+    v = p_color[0]*4 + p_pixel[0];
+    p_pixel[0] = v/2;
+    v = p_color[1]*4 + p_pixel[1];
+    p_pixel[1] = v/2;
+    v = p_color[2]*4 + p_pixel[2];
+    p_pixel[2] = v/2;
+}
+
+__inline void IWriteTranslucentShadedPixel(T_byte8 *p_pixel, T_byte8 *s, T_byte8 c)
+{
+    T_byte8 *p_color = G_lastPalette[c];
+    T_word32 v;
+
+    v = p_pixel[0] + (p_color[0]*4 * ((T_word32)s))/256;
+    p_pixel[0] = v/2;
+    v = p_pixel[1] + (p_color[1]*4 * ((T_word32)s))/256;
+    p_pixel[1] = v/2;
+    v = p_pixel[2] + (p_color[2]*4 * ((T_word32)s))/256;
+    p_pixel[2] = v/2;
+}
 
 /*-------------------------------------------------------------------------*
  * Routine:  View3dSetView
@@ -3465,7 +3499,7 @@ T_void IDrawColumn(
     T_byte8 *p_pixel ;
     T_word16 y ;
 #if COMPILE_OPTION_HICOLOR
-    T_byte8 *p_pixel;
+    T_byte8 *p_color;
 #endif
 
     if (top >= MAX_VIEW3D_HEIGHT)
@@ -3477,11 +3511,11 @@ T_void IDrawColumn(
     p_pixel = G_doublePtrLookup[top] + x*BYTES_PER_PIXEL ;
 #if COMPILE_OPTION_HICOLOR
 	p_color = G_lastPalette[color];
-	for (y = top; y < bottom; y++, p_pixel += 320) {
-		p_pixel[0] = p_color[0];
-		p_pixel[1] = p_color[1];
-		p_pixel[2] = p_color[2];
-		p_pixel[3] = p_color[3];
+	for (y = top; y < bottom; y++, p_pixel += 320*BYTES_PER_PIXEL) {
+		p_pixel[0] = p_color[0]*4;
+		p_pixel[1] = p_color[1]*4;
+		p_pixel[2] = p_color[2]*4;
+		p_pixel[3] = 0xFF;
 	}
 #else
     for (y=top; y<bottom; y++, p_pixel += 320)
@@ -3509,10 +3543,6 @@ T_void IDrawRow(
            T_byte8 color)
 {
     T_byte8 *p_pixel ;
-#if COMPILE_OPTION_HICOLOR
-    T_byte8 *p_color;
-    T_word16 width;
-#endif
 
     if (left >= MAX_VIEW3D_WIDTH)
         left = 0 ;
@@ -4128,7 +4158,7 @@ T_byte8 c ;
                           p_runInfo->distance,
                           (p_runInfo->light>>2)) ;
             /* Find the location of the first pixel we are to draw. */
-            p_pixel = G_doublePtrLookup[top]+x ;
+            p_pixel = G_doublePtrLookup[top]+x*BYTES_PER_PIXEL ;
 
             G_CurrentTexturePos = p_texture ;
 /* TESTING:  Make everything colored. */
@@ -4157,7 +4187,7 @@ DebugCheck(x < 320) ;
 DebugCheck(bottom > top) ;
 DebugCheck(p_shade != NULL) ;
 DebugCheck(p_pixel != NULL) ;
-DebugCheck(((T_word32)p_pixel) < (((T_word32)P_doubleBuffer)+64000)) ;
+DebugCheck(((T_word32)p_pixel) < (((T_word32)P_doubleBuffer)+64000*BYTES_PER_PIXEL)) ;
 DebugCheck(((T_word32)p_pixel) >= ((T_word32)P_doubleBuffer)) ;
 
             if (ObjectGetAttributes(p_run->p_runInfo->p_obj) &
@@ -4388,8 +4418,8 @@ T_void View3dSetSize(T_word16 width, T_word16 height)
 
     for (p_where=P_doubleBuffer, i=0;
          i<MAX_VIEW3D_HEIGHT;
-         i++, p_where+=MAX_VIEW3D_WIDTH)  {
-        G_doublePtrLookup[i] = p_where-VIEW3D_CLIP_LEFT ;
+         i++, p_where+=MAX_VIEW3D_WIDTH*BYTES_PER_PIXEL)  {
+        G_doublePtrLookup[i] = p_where-VIEW3D_CLIP_LEFT*BYTES_PER_PIXEL ;
     }
 
     MathInitialize(width) ;
@@ -4432,8 +4462,8 @@ T_void View3dClipCenter(T_word16 centerWidth)
 
     for (p_where=P_doubleBuffer, i=0;
          i<MAX_VIEW3D_HEIGHT;
-         i++, p_where+=MAX_VIEW3D_WIDTH)  {
-        G_doublePtrLookup[i] = p_where-VIEW3D_CLIP_LEFT ;
+         i++, p_where+=MAX_VIEW3D_WIDTH*BYTES_PER_PIXEL)  {
+        G_doublePtrLookup[i] = p_where-VIEW3D_CLIP_LEFT*BYTES_PER_PIXEL ;
     }
 
     DebugEnd() ;
@@ -4788,7 +4818,7 @@ DebugCheck(p_texture != NULL) ;
 
 DebugCheck(row < 200) ;
 DebugCheck(start < 320) ;
-    p_pixel = G_doublePtrLookup[row] + start ;
+    p_pixel = G_doublePtrLookup[row] + start*BYTES_PER_PIXEL ;
 
     /* If sizeY = 0, then we must be drawing the sky. */
     /* If so, don't do any unnecessary texture calculations. */
@@ -4945,7 +4975,7 @@ DebugCheck(start < 320) ;
                         if (((end-start)-amount) != 0)  {
                             DrawAndShadeRaster(
                                 G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1)),
-                                p_pixel+amount,
+                                p_pixel+amount*BYTES_PER_PIXEL,
                                 (end-start)-amount,
                                 MapGetOutsideLighting()) ;
 /*
@@ -5005,7 +5035,7 @@ DebugCheck(start < 320) ;
 */
                         DrawAndShadeRaster(
                             G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1)),
-                            p_pixel+amount,
+                            p_pixel+amount*BYTES_PER_PIXEL,
                             (end-start)-amount,
                             MapGetOutsideLighting()) ;
                     }
@@ -6998,7 +7028,7 @@ T_void DrawObjectColumnAsm(
         x = ((textureOffset>>16) & 0xFFFF);
         if (x >= G_objColumnStart)
             break;
-        p_pixel += 320;
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
         count--;
     }
@@ -7008,8 +7038,8 @@ T_void DrawObjectColumnAsm(
             break;
         c = G_CurrentTexturePos[x];
         if (c)
-            *p_pixel = p_shade[c];
-        p_pixel += 320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
         count--;
     }
@@ -7029,7 +7059,7 @@ T_void DrawTranslucentObjectColumnAsm(
         x = ((textureOffset>>16) & 0xFFFF);
         if (x >= G_objColumnStart)
             break;
-        p_pixel += 320;
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
         count--;
     }
@@ -7039,8 +7069,8 @@ T_void DrawTranslucentObjectColumnAsm(
             break;
         c = G_CurrentTexturePos[x];
         if (c)
-            *p_pixel = G_translucentTable[p_shade[c]][*p_pixel];
-        p_pixel += 320;
+            WriteTranslucentShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
         count--;
     }
@@ -7054,10 +7084,12 @@ T_void DrawTextureColumnAsm1(
            T_byte8 *p_pixel)
 {
     T_byte8 c;
-    c = p_shade[G_CurrentTexturePos[0]];
+
+    c = G_CurrentTexturePos[0];
     while (count--) {
-        *p_pixel = c;
-        p_pixel += 320;
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
+        textureOffset += textureStep;
     }
 }
 
@@ -7068,9 +7100,12 @@ T_void DrawTextureColumnAsm2(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x01]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x01];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7082,9 +7117,12 @@ T_void DrawTextureColumnAsm4(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x03]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x03];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7096,9 +7134,12 @@ T_void DrawTextureColumnAsm8(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x07]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x07];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7110,9 +7151,12 @@ T_void DrawTextureColumnAsm16(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x0F]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x0F];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7124,9 +7168,12 @@ T_void DrawTextureColumnAsm32(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x1F]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x1F];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7138,9 +7185,12 @@ T_void DrawTextureColumnAsm64(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x3F]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x3F];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7152,9 +7202,12 @@ T_void DrawTextureColumnAsm128(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0x7F]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0x7F];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7166,9 +7219,12 @@ T_void DrawTextureColumnAsm256(
            T_sword32 textureOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *p_pixel = p_shade[G_CurrentTexturePos[(textureOffset>>16)&0xFF]];
-        p_pixel += 320;
+        c = G_CurrentTexturePos[(textureOffset>>16)&0xFF];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7185,8 +7241,9 @@ T_void DrawTransparentColumnAsm1(
     if (c) {
         c = p_shade[c];
         while (count--) {
-            *(p_pixel) = c;
-            p_pixel+=320;
+            if (c)
+                WriteShadedPixel(p_pixel, p_shade, c);
+            p_pixel+=320*BYTES_PER_PIXEL;
             textureOffset += textureStep;
         }
     }
@@ -7204,8 +7261,8 @@ T_void DrawTransparentColumnAsm2(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x01];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7222,8 +7279,8 @@ T_void DrawTransparentColumnAsm4(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x03];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7240,8 +7297,8 @@ T_void DrawTransparentColumnAsm8(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x07];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7258,8 +7315,8 @@ T_void DrawTransparentColumnAsm16(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x0F];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7276,8 +7333,8 @@ T_void DrawTransparentColumnAsm32(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x1F];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7294,8 +7351,8 @@ T_void DrawTransparentColumnAsm64(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x3F];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7312,8 +7369,8 @@ T_void DrawTransparentColumnAsm128(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0x7F];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7330,8 +7387,8 @@ T_void DrawTransparentColumnAsm256(
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset>>16) & 0xFF];
         if (c)
-            *(p_pixel) = p_shade[c];
-        p_pixel+=320;
+            WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7348,8 +7405,10 @@ T_void DrawTranslucentColumnAsm1(
     c = G_CurrentTexturePos[0];
     if (c) {
         while (count--) {
-            *p_pixel = G_translucentTable[c][*p_pixel];
-            p_pixel += 320;
+            if (c) {
+                WriteTranslucentPixel(p_pixel, c);
+            }
+            p_pixel += 320*BYTES_PER_PIXEL;
             textureOffset += textureStep;
         }
     }
@@ -7366,9 +7425,10 @@ T_void DrawTranslucentColumnAsm2(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x01];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7384,9 +7444,10 @@ T_void DrawTranslucentColumnAsm4(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x03];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7402,9 +7463,10 @@ T_void DrawTranslucentColumnAsm8(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x07];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7420,9 +7482,10 @@ T_void DrawTranslucentColumnAsm16(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x0F];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7438,9 +7501,10 @@ T_void DrawTranslucentColumnAsm32(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x1F];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7456,9 +7520,10 @@ T_void DrawTranslucentColumnAsm64(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x3F];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7474,9 +7539,10 @@ T_void DrawTranslucentColumnAsm128(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0x7F];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7492,9 +7558,10 @@ T_void DrawTranslucentColumnAsm256(
 
     while (count--) {
         c = G_CurrentTexturePos[(textureOffset >> 16) & 0xFF];
-        if (c)
-            *p_pixel = G_translucentTable[c][*p_pixel];
-        p_pixel += 320;
+        if (c) {
+            WriteTranslucentPixel(p_pixel, c);
+        }
+        p_pixel += 320*BYTES_PER_PIXEL;
         textureOffset += textureStep;
     }
 }
@@ -7506,8 +7573,12 @@ T_void DrawTextureRowAsm1(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(xOffset >> 16) & G_textureAndX]];
+        c = G_CurrentTexturePos[(xOffset >> 16) & G_textureAndX];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7520,8 +7591,12 @@ T_void DrawTextureRowAsm2(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 1) | ((yOffset >> 16) & 0x01)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 1) | ((yOffset >> 16) & 0x01)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7534,8 +7609,12 @@ T_void DrawTextureRowAsm4(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 2) | ((yOffset >> 16) & 0x03)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 2) | ((yOffset >> 16) & 0x03)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7548,8 +7627,12 @@ T_void DrawTextureRowAsm8(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 3) | ((yOffset >> 16) & 0x07)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 3) | ((yOffset >> 16) & 0x07)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7562,8 +7645,12 @@ T_void DrawTextureRowAsm16(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 4) | ((yOffset >> 16) & 0x0F)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 4) | ((yOffset >> 16) & 0x0F)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7576,8 +7663,12 @@ T_void DrawTextureRowAsm32(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 5) | ((yOffset >> 16) & 0x1F)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 5) | ((yOffset >> 16) & 0x1F)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7590,8 +7681,12 @@ T_void DrawTextureRowAsm64(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 6) | ((yOffset >> 16) & 0x3F)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 6) | ((yOffset >> 16) & 0x3F)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7604,8 +7699,12 @@ T_void DrawTextureRowAsm128(
            T_sword32 yOffset,
            T_byte8 *p_pixel)
 {
+    T_byte8 c;
+
     while (count--) {
-        *(p_pixel++) = p_shade[G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 7) | ((yOffset >> 16) & 0x7F)]];
+        c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 7) | ((yOffset >> 16) & 0x7F)];
+        WriteShadedPixel(p_pixel, p_shade, c);
+        p_pixel+=BYTES_PER_PIXEL;
         xOffset += G_textureStepX;
         yOffset += G_textureStepY;
     }
@@ -7620,9 +7719,8 @@ T_void DrawTextureRowAsm256(
 {
 	T_byte8 c;
     while (count--) {
-//TODO: Edit here (well, above)
     	c = G_CurrentTexturePos[(((xOffset >> 16) & G_textureAndX) << 8) | ((yOffset >> 16) & 0xFF)];
-    	*p_pixel = WriteShadedPixel(p_pixel, p_shade, c);
+    	WriteShadedPixel(p_pixel, p_shade, c);
     	p_pixel += BYTES_PER_PIXEL;
 
         xOffset += G_textureStepX;
