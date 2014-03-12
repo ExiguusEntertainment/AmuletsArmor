@@ -47,6 +47,7 @@ end
 -- Handle form events here
 ------------------------------------------------------------------------------
 uiChooseCharacter.eventHandler = function(form, event, obj)
+printf("uiChooseCharacter.eventHandler %s %s %s", form, event, obj);
 	if (event ~= "none") then
 		if (event == "select") then
 			local selected = listChars:getSelection();

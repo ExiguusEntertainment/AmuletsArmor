@@ -12,15 +12,15 @@ function textbox.handleKeyEvent(event, scankey)
 end
 
 function textbox:backspace()
-	aatextbox.Backspace(self.textboxID);
+	aatextbox.Backspace(self.handle);
 end
 
 function textbox:cursorTop()
-	aatextbox.CursorTop(self.textboxID);
+	aatextbox.CursorTop(self.handle);
 end
 
 function textbox:repaginate()
-	aatextbox.Repaginate(self.textboxID);
+	aatextbox.Repaginate(self.handle);
 end
 
 function textbox.firstBox()
@@ -28,19 +28,24 @@ function textbox.firstBox()
 end
 
 function textbox:set(text)
-	aatextbox.SetText(self.textboxID, text)
+	aatextbox.SetText(self.handle, text)
 end
 
 function textbox:append(text)
-	aatextbox.Append(self.textboxID, text)
+	aatextbox.Append(self.handle, text)
 end
 
 function textbox:getSelection()
-	return aatextbox.GetSelectionNumber(self.textboxID)
+	return aatextbox.GetSelectionNumber(self.handle)
 end
 
 function textbox:cursorSetRow(row)
-	return aatextbox.CursorSetRow(self.textboxID, row)
+	return aatextbox.CursorSetRow(self.handle, row)
+end
+
+function textbox:delete()
+	aatextbox.Delete(self.handle);
+	self.handle = nil;
 end
 
 function textbox.create(x, y, width, height, font, maxLength, scankey1, scankey2, numericOnly, justify, boxmode, callback)
@@ -61,12 +66,12 @@ function textbox.create(x, y, width, height, font, maxLength, scankey1, scankey2
 		callback = callback};
 
 	setmetatable( textbox, textbox_mt );
-	textbox.textboxID = aatextbox.Create(x, y, width, height, font, maxLength, hotkeys, 
+	textbox.handle = aatextbox.Create(x, y, width, height, font, maxLength, hotkeys, 
 		numericOnly, justify, boxmode);
 	textbox:cursorTop();
 	textbox:repaginate();
 	textbox.firstBox();
-		
+
 	return textbox 
 end
 

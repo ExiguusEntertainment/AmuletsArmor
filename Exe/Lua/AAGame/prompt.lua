@@ -41,6 +41,7 @@ end
 
 prompt.displayMessage = function(message)
 print("prompt.displayMessage");	
+	Form.deleteAll();
 	local form = Form.create(prompt.control);
 	prompt.exit = false;
 	prompt.action = "none";

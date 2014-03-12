@@ -1199,21 +1199,15 @@ static int lua_ButtonCreate(lua_State *L)
     return 1;
 }
 
-static int lua_ButtonMouseControl(lua_State *L)
+static int lua_ButtonDelete(lua_State *L)
 {
-    E_mouseEvent event;
-    T_word16 x, y;
-    T_buttonClick button;
-    DebugRoutine("lua_ButtonMouseControl");
+    T_buttonID buttonID;
+    DebugRoutine("lua_ButtonDelete");
 
-    event = IMouseEventConvert(lua_tostring(L, 1));
-    x = (T_word16)lua_tonumber(L, 2);
-    y = (T_word16)lua_tonumber(L, 3);
-    button = (T_byte8)lua_tonumber(L, 4);
-    ButtonMouseControl(event, x, y, button);
+    buttonID = (T_buttonID)lua_touserdata(L, 1);
+    ButtonDelete(buttonID);
 
     DebugEnd();
-
     return 0;
 }
 
@@ -1232,10 +1226,29 @@ static int lua_ButtonKeyControl(lua_State *L)
     return 0;
 }
 
+static int lua_ButtonMouseControl(lua_State *L)
+{
+    E_mouseEvent event;
+    T_word16 x, y;
+    T_buttonClick button;
+    DebugRoutine("lua_ButtonMouseControl");
+
+    event = IMouseEventConvert(lua_tostring(L, 1));
+    x = (T_word16)lua_tonumber(L, 2);
+    y = (T_word16)lua_tonumber(L, 3);
+    button = (T_byte8)lua_tonumber(L, 4);
+    ButtonMouseControl(event, x, y, button);
+
+    DebugEnd();
+
+    return 0;
+}
+
 int LUA_API luaopen_aabutton(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "Create", lua_ButtonCreate },
+            { "Delete", lua_ButtonDelete },
             { "HandleKeyEvent", lua_ButtonKeyControl },
             { "HandleMouseEvent", lua_ButtonMouseControl },
             { NULL, NULL }, };
@@ -1361,6 +1374,18 @@ static int lua_TxtboxCreate(lua_State *L)
     return 1;
 }
 
+static int lua_TxtboxDelete(lua_State *L)
+{
+    T_TxtboxID textboxID;
+    DebugRoutine("lua_TxtboxDelete");
+
+    textboxID = (T_TxtboxID)lua_touserdata(L, 1);
+    TxtboxDelete(textboxID);
+
+    DebugEnd();
+    return 0;
+}
+
 static int lua_TxtboxMouseControl(lua_State *L)
 {
     E_mouseEvent event;
@@ -1474,6 +1499,7 @@ int LUA_API luaopen_aatextbox(lua_State *L)
             { "Create", lua_TxtboxCreate },
             { "CursorSetRow", lua_TxtboxCursorSetRow },
             { "CursorTop", lua_TxtboxCursorTop },
+            { "Delete", lua_TxtboxDelete },
             { "FirstBox", lua_TxtboxFirstBox },
             { "GetSelectionNumber", lua_TxtboxGetSelectionNumber },
             { "HandleKeyEvent", lua_TxtboxKeyControl },
@@ -1491,7 +1517,7 @@ static int lua_GraphicCreate(lua_State *L)
     T_word16 x, y;
     const char *picName;
     T_graphicID graphicID;;
-    DebugRoutine("lua_TxtboxMouseControl");
+    DebugRoutine("lua_GraphicCreate");
 
     x = (T_word16)lua_tonumber(L, 1);
     y = (T_word16)lua_tonumber(L, 2);
@@ -1502,6 +1528,19 @@ static int lua_GraphicCreate(lua_State *L)
     DebugEnd();
 
     return 1;
+}
+
+static int lua_GraphicDelete(lua_State *L)
+{
+    T_graphicID graphicID;;
+    DebugRoutine("lua_GraphicDelete");
+
+    graphicID = (T_graphicID)lua_touserdata(L, 1);
+    GraphicDelete(graphicID);
+
+    DebugEnd();
+
+    return 0;
 }
 
 static int lua_GraphicUpdateAllGraphics(lua_State *L)
@@ -1518,6 +1557,7 @@ int LUA_API luaopen_aagraphic(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "Create", lua_GraphicCreate },
+            { "Delete", lua_GraphicDelete },
             { "UpdateAllGraphics", lua_GraphicUpdateAllGraphics },
             { NULL, NULL }, };
     luaL_newlib(L, driver);

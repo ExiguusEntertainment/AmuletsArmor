@@ -1,4 +1,9 @@
-button = {}
+button = { 
+	-- List of buttons currently active in the system indexed by handle.
+	-- Used to convert between T_buttonID and Lua button objects quickly.
+	index = {}  
+}
+button_mt = { __index = button };
 
 local aabutton = require "aabutton";
 
@@ -10,13 +15,48 @@ function button.handleKeyEvent(event, scankey)
 	aabutton.HandleKeyEvent(event, scankey)
 end
 
-function button.create(x, y, picName, toggleType, scankey1, scankey2)
+-- Global event to handle any button event going to a button
+function _buttonHandleEvent(handle, event)
+	xpcall( -- protected action with backtrace on failues
+		function() 
+			local obj = button.index[handle];
+			if (event == "press") then
+				obj.funcPress(event);
+			elseif (event == "release") then
+				obj.funcRelease(event);
+			end
+		end, 
+	AABacktrace)
+end
+
+function button.create(x, y, picName, toggleType, scankey1, scankey2, funcPress, funcRelease)
+	local new_instance = {
+		x = x,
+		y = y,
+		picName = picName,
+		toggleType = toggleType,
+		scankey1 = scankey1,
+		scankey2 = scankey2,
+		funcPress=funcPress,
+		funcRelease=funcRelease
+	}
+
 	local toggle = 0;
 	local hotkeys = scankey1 * 256 + scankey2
 	if (toggleType == "toggle") then 
 		toggle = 1
 	end
-    return aabutton.Create(x, y, picName, toggle, hotkeys);
+    new_instance.handle = aabutton.Create(x, y, picName, toggle, hotkeys);
+	setmetatable(new_instance, button_mt);
+	button.index[new_instance.handle] = new_instance;
+	
+	return new_instance;
+end
+
+function button:delete()
+	aabutton.Delete(self.handle);
+	button.index[self.handle] = nil;
+	self.handle = nil;
 end
 
 return button

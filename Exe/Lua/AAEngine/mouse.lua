@@ -29,11 +29,6 @@ function mouse.setDefaultBitmap(pic, hotspot)
 		mouse.hotspot.y = 0;
 		mouse.pic = { pic = nil, bitmap = nil, res = nil };
 	else
-print(debug.traceback())
-print("pic:");
-print(inspect(pic))	
-print("hotspot:");
-print(inspect(hotspot))	
 		aamouse.SetDefaultBitmap(hotspot.x, hotspot.y, pic.bitmap)
 		mouse.hotspot.x = hotspot.x;
 		mouse.hotspot.y = hotspot.y;
