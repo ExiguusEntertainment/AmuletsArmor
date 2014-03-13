@@ -130,7 +130,7 @@ end
 ------------------------------------------------------------------------------
 uiChooseCharacter.start = function()
 	uiChooseCharacter:init(uiChooseCharacter)
-	form.start()
+	form:start()
 end
 
 ------------------------------------------------------------------------------
@@ -138,6 +138,10 @@ end
 ------------------------------------------------------------------------------
 uiChooseCharacter.update = function()
 	form:updateUI();
+end
+
+uiChooseCharacter.finish = function()
+	form:finish();
 end
 
 return uiChooseCharacter

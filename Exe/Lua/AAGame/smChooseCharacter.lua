@@ -38,7 +38,7 @@ smChooseCharacter.Choices = function(self, event)
 		uiChooseCharacter.update();
 	elseif (event == "exit") then
 		mouseControl.Finish()
-		-- TODO: MainUIEnd()
+		uiChooseCharacter.finish();
 	end
 end
 

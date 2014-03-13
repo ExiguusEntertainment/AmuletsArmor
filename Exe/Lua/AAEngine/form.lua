@@ -159,12 +159,19 @@ function Form.handleKeyEvent(event, scankey)
 	Form.checkForGammaAdjust()	
 end
 
-function Form.start()
+function Form:start()
 	keyboard.debounce()
 	
 	-- Intercept mouse and keyboard events
 	mouse.pushEventHandler(Form.handleMouse)
  	keyboard.pushEventHandler(Form.handleKeyEvent)
+end
+
+function Form:finish()
+	self:delete();
+	mouse.popEventHandler();
+	keyboard.popEventHandler();
+	keyboard.debounce();
 end
 
 function Form:delete()
