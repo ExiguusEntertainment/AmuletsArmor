@@ -783,11 +783,13 @@ static int lua_MouseSetDefaultBitmap(lua_State *L)
 
     x = (T_word16)lua_tonumber(L, 1);
     y = (T_word16)lua_tonumber(L, 2);
-    if (lua_isnil(L, 3))
+    if (lua_isnil(L, 3)) {
         p_bitmap = NULL;
-    else
+	    MouseSetDefaultBitmap(x, y, 0);
+	} else {
         p_bitmap = (T_bitmap *)lua_touserdata(L, 3);
-    MouseSetDefaultBitmap(x, y, &p_bitmap[1]);
+	    MouseSetDefaultBitmap(x, y, &p_bitmap[1]);
+	}
 
     DebugEnd();
     return 0;
