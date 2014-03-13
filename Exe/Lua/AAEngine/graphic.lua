@@ -1,4 +1,4 @@
-graphic = {}
+graphic = { index = {} }
 graphic_mt = { __index = graphic };
 
 local aagraphic = require "aagraphic";
@@ -12,6 +12,8 @@ function graphic.create(x, y, picName)
 
 	if (pics.exist(picName)) then
 		new_instance.handle = aagraphic.Create(x, y, picName);
+		setmetatable(new_instance, graphic_mt);
+		graphic.index[new_instance.handle] = new_instance;
 		return new_instance;
 	else
 		error(string.format("Graphic '%s' does not exist!", picName));
@@ -19,8 +21,11 @@ function graphic.create(x, y, picName)
 end
 
 function graphic:delete()
-	aagraphic.Delete(self.handle);
-	self.handle = nil;
+	if (self.handle ~= nil) then
+		aagraphic.Delete(self.handle);
+		graphic.index[self.handle] = nil;
+		self.handle = nil;
+	end
 end
 
 function graphic.updateAllGraphics()

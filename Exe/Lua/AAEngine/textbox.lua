@@ -1,4 +1,4 @@
-textbox = {}
+textbox = { index = {} }
 textbox_mt = { __index = textbox};
 
 local aatextbox = require "aatextbox";
@@ -43,14 +43,24 @@ function textbox:cursorSetRow(row)
 	return aatextbox.CursorSetRow(self.handle, row)
 end
 
+function _textboxHandleEvent(handle, event)
+	xpcall(
+		function() 
+			local obj = textbox.index[handle];
+			obj.callback(obj, event);
+		end, 
+	AABacktrace)
+end
+
 function textbox:delete()
 	aatextbox.Delete(self.handle);
+	textbox.index[self.handle] = nil;
 	self.handle = nil;
 end
 
 function textbox.create(x, y, width, height, font, maxLength, scankey1, scankey2, numericOnly, justify, boxmode, callback)
 	local hotkeys = scankey1 * 256 + scankey2
-	local textbox = {
+	local new_textbox = {
 		type = "textbox",
 		mode = boxmode,
 		id=id, 
@@ -65,14 +75,15 @@ function textbox.create(x, y, width, height, font, maxLength, scankey1, scankey2
 		justify = justify, 
 		callback = callback};
 
-	setmetatable( textbox, textbox_mt );
-	textbox.handle = aatextbox.Create(x, y, width, height, font, maxLength, hotkeys, 
+	setmetatable( new_textbox, textbox_mt );
+	new_textbox.handle = aatextbox.Create(x, y, width, height, font, maxLength, hotkeys, 
 		numericOnly, justify, boxmode);
-	textbox:cursorTop();
-	textbox:repaginate();
-	textbox.firstBox();
+	new_textbox:cursorTop();
+	new_textbox:repaginate();
+	new_textbox.firstBox();
+	textbox.index[new_textbox.handle] = new_textbox;
 
-	return textbox 
+	return new_textbox 
 end
 
 return textbox

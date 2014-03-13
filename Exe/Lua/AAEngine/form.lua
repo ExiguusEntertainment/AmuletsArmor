@@ -36,26 +36,6 @@ function Form:foreach(func)
 	end
 end
 
--- Global event to handle any textbox event going to a form
-function Form.protected_textboxHandleEvent(handle, event)
-	G_forms.forall(function (form, obj)
-		-- Do we have a textbox and matching handle?
-  printf("_textboxHandleEvent compare %s %s", obj.handle, handle)
-		if (obj.handle == handle) then
-printf("Match! event: %s %s", event, obj.callback)
-			obj.callback(form, obj, event)
-printf("Done!");
-		end
-	end)
-end
-
-function _textboxHandleEvent(handle, event)
-if (event ~= "idle") then
-  printf("_textboxHandleEvent %s %s", handle, event)
-end
-	xpcall(function() Form.protected_textboxHandleEvent(handle, event) end, AABacktrace)
-end
-
 -- Create a new form (which is basically a collection of UI widgets)
 Form.create = function(eventHandler)
 	local new_instance = {
@@ -76,21 +56,8 @@ function Form:addGraphic(args)
 	if (args.y == nil) then args.y = 0 end
 	local obj = graphic.create(args.x, args.y, args.picName);
 	self.objects[1+#self.objects] = obj
+	obj.id = args.id;
 	return obj
-end
-
--- One of the buttons on this form has been pressed
-function Form:eventHandler(handle, event)
-printf("Form:eventHandler %s %s", handle, event)
-	if (self.eventHandler) then
-		self:foreach(function(form, obj) 
-printf("eventHandler compare %s %s %s", obj, handle, event)
-			if (obj.handle == handle) then
-printf("eventHandler match") 
-				self:eventHandler(event, obj)
-			end
-		end)
-	end
 end
 
 -- Add a button to this form
@@ -100,11 +67,12 @@ function Form:addButton(args)
 	if (args.x == nil) then args.x = 0 end
 	if (args.y == nil) then args.y = 0 end
 	assert(args.picName ~= nil, "Form:addButton needs name");
-	local funcDown = function(handle) Form.eventHandler(self, handle, "press") end
-	local funcUp = function(handle) Form.eventHandler(self, handle, "release") end
-	local newbutton = button.create(args.x, args.y, args.picName, args.toggleType, args.scankey1, args.scankey2, funcDown, funcUp)
+	local funcDown = function(obj, event) self:eventHandler(obj, "press") end
+	local funcUp = function(obj, event) self:eventHandler(obj, "release") end
+	local new_button = button.create(args.x, args.y, args.picName, args.toggleType, args.scankey1, args.scankey2, funcDown, funcUp);
+	new_button.id = args.id;
 	G_numButtons = G_numButtons+1;
-	self.objects[1+#self.objects] = newbutton;
+	self.objects[1+#self.objects] = new_button;
 end
 
 -- Add a textbox to this form
@@ -130,7 +98,7 @@ function Form:addTextbox(args)
 	-- Create it in the system		
 	local newObj = textbox.create(args.x, args.y, args.width, args.height, 
 		args.font, args.length, args.scankey1, args.scankey2, numericOnly, 
-		args.justify, args.mode, Form.eventHandler)
+		args.justify, args.mode, function(obj, event) self:eventHandler(obj, event); end)
 	G_numTextBoxes = G_numTextBoxes+1;
 	newObj.id = args.id;
 	
@@ -204,13 +172,12 @@ function Form:delete()
 	
 	-- Tell all the component objects to delete themselves from the system
 	self:foreach(function(form, obj)
-print(inspect(obj))	
 		obj:delete(obj)
 	end);
 	
 	-- Remove the form from the list
 	for i=#G_forms, 1, -1 do
-		if (G_forms[i] == form) then
+		if (G_forms[i] == self) then
 			table.remove(G_forms, i);
 		end
 	end
@@ -220,16 +187,15 @@ function Form.deleteAll()
 	-- Delete all forms
 	for i=#G_forms, 1, -1 do
 		G_forms[i]:delete();
+		G_forms[i] = nil;
 	end	
 	graphic.updateAllGraphics();
 end
 
 function Form:run()
-print("Form:run");	
 	local oldbitmap = mouse.getBitmapAndHotspot();
 	local pic = pics.lockBitmap("UI/MOUSE/DEFAULT");
 
-print(inspect(pic));
 	mouse.setDefaultBitmap(pic, {x=0, y=0});
 	mouse.useDefaultBitmap();
 

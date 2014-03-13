@@ -46,25 +46,22 @@ end
 ------------------------------------------------------------------------------
 -- Handle form events here
 ------------------------------------------------------------------------------
-uiChooseCharacter.eventHandler = function(form, event, obj)
-printf("uiChooseCharacter.eventHandler %s %s %s", form, event, obj);
+uiChooseCharacter.eventHandler = function(form, obj, event)
+--printf("uiChooseCharacter.eventHandler %s %s %s", form, event, obj);
 	if (event ~= "none") then
 		if (event == "select") then
 			local selected = listChars:getSelection();
 			if (selected ~= uiChooseCharacter.charSelected) then
-printf("Selected char %s", selected)
 				stats.makeActive(selected);
 				uiChooseCharacter.charSelected = selected;
 				local charID = stats.getSavedCharacterIDStruct(selected);
 				uiChooseCharacter:showSelected();
 			end
-		elseif (event == "release") then
+		elseif (event == "release") then		
 			if (obj.id == "load") then
 				if (stats.loadCharacter(uiChooseCharacter.charSelected)) then
-print("Char available");				
 					smChooseCharacter:set("LOAD");
 				else
-print("Char not available");				
 					prompt.displayMessage("Character not available.");
 					smChooseCharacter:set("REDRAW");
 				end

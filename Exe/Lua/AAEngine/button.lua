@@ -21,9 +21,9 @@ function _buttonHandleEvent(handle, event)
 		function() 
 			local obj = button.index[handle];
 			if (event == "press") then
-				obj.funcPress(event);
+				obj.funcPress(obj, event);
 			elseif (event == "release") then
-				obj.funcRelease(event);
+				obj.funcRelease(obj, event);
 			end
 		end, 
 	AABacktrace)

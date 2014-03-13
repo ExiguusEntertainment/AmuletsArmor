@@ -80,6 +80,7 @@ end
 
 -- Character load/download is requested
 smChooseCharacter.Load = function(self, event)
+printf("STATE: smChooseCharacter.Load");
 	if (event == "enter") then
 		self:clear({"LOAD_STATUS_OK", "LOAD_STATUS_INCORRECT", "DOWNLOAD_COMPLETE"})
 		-- TODO: MapSetDayOffset(0);

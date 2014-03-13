@@ -14,12 +14,13 @@ end
 function StateMachine:update()
     local change = 0;
 	local f = self.state;
-    if (self.laststate ~= self.state) then
+    if ((self.laststate ~= self.state) or (self.forceNewState ~= nil)) then
 	    local state = self.state;
 		local last_f = self.laststate;
 	    if (last_f) then last_f(self, "exit") end;
 	    if (f) then f(self, "enter") end;
 		self.laststate = state;
+		self.forceNewState = nil;
 	else
 		-- Check for any state changes
 		if (f) then f(self, "check") end;
@@ -56,6 +57,6 @@ function StateMachine:is(flag)
 end
 
 function StateMachine:check(flag, newState)
-	if (self:is(flag)) then self.state = newState end;
+	if (self:is(flag)) then self.state = newState; self.forceNewState = 1; end;
 end
 

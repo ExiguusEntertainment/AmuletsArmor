@@ -36,7 +36,18 @@ prompt = {}
 --    DebugEnd();
 --}
 
-prompt.control = function()
+prompt.control = function(form, obj, event)
+	if (event == "release") then
+		if (obj.id == "ok") then
+			form.action = "ok";
+			form.exit = 1;
+		elseif (obj.id == "cancel") then
+			form.action = "cancel";
+			form.exit = 1;
+		end
+	elseif (event == "changed") then
+		form.enteredString = obj.get(); -- TODO: Make this work!
+	end
 end
 
 prompt.displayMessage = function(message)
@@ -55,12 +66,12 @@ print("prompt.displayMessage");
 	form:addButton{id="ok", x=131, y=98, picName="UI/PROMPT/OK",
 		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ENTER};
 	form.field = form:addTextbox{id="message", x=32, y=84, width=254, height=9, readonly=1, 
-		scrolling=0, font="FontMedium", mode="field"};
+		scrolling=0, font="FontMedium", mode="ro_textarea_noscroll", justify="center"};
 	form.field:set(message);
 	
 	form:run();
 	
-	graphics.pop(); 
+	graphics.pop();
 end
 
 return prompt;
