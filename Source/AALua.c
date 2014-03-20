@@ -1111,6 +1111,13 @@ static int lua_StatsGet(lua_State *L)
     return 1;
 }
 
+static int lua_StatsGetActive(lua_State *L)
+{
+    lua_pushnumber(L, StatsGetActive());
+
+    return 1;
+}
+
 static int lua_StatsMakeActive(lua_State *L)
 {
     T_byte8 selected;
@@ -1140,6 +1147,7 @@ int LUA_API luaopen_aastats(lua_State *L)
     static struct luaL_Reg driver[] = {
             { "GetCharacterList", lua_StatsGetSavedCharacterList },
             { "Get", lua_StatsGet },
+            { "GetActive", lua_StatsGetActive },
             { "LoadCharacter", lua_StatsLoadCharacter },
             { "MakeActive", lua_StatsMakeActive },
             { "SetSavedCharacterList", lua_StatsSetSavedCharacterList },
@@ -1460,6 +1468,14 @@ static int lua_TxtboxBackspace(lua_State *L)
     return 0;
 }
 
+static int lua_TxtboxSetMaxLength(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxSetMaxLength");
+    TxtboxSetMaxLength((T_TxtboxID)lua_touserdata(L, 1), (T_word32)lua_tonumber(L, 2));
+    DebugEnd();
+
+    return 0;
+}
 static int lua_TxtboxSetText(lua_State *L)
 {
     DebugRoutine("lua_TxtboxAppend");
@@ -1469,6 +1485,14 @@ static int lua_TxtboxSetText(lua_State *L)
     return 0;
 }
 
+static int lua_TxtboxGetData(lua_State *L)
+{
+    DebugRoutine("lua_TxtboxGetData");
+    lua_pushstring(L, TxtboxGetData((T_TxtboxID)lua_touserdata(L, 1)));
+    DebugEnd();
+
+    return 1;
+}
 
 static int lua_TxtboxGetSelectionNumber(lua_State *L)
 {
@@ -1504,10 +1528,12 @@ int LUA_API luaopen_aatextbox(lua_State *L)
             { "CursorTop", lua_TxtboxCursorTop },
             { "Delete", lua_TxtboxDelete },
             { "FirstBox", lua_TxtboxFirstBox },
+            { "GetData", lua_TxtboxGetData },
             { "GetSelectionNumber", lua_TxtboxGetSelectionNumber },
             { "HandleKeyEvent", lua_TxtboxKeyControl },
             { "HandleMouseEvent", lua_TxtboxMouseControl },
             { "Repaginate", lua_TxtboxRepaginate },
+            { "SetMaxLength", lua_TxtboxSetMaxLength },
             { "SetText", lua_TxtboxSetText },
             { NULL, NULL }, };
     luaL_newlib(L, driver);

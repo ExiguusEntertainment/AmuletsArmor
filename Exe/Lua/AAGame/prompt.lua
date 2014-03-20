@@ -46,12 +46,11 @@ prompt.control = function(form, obj, event)
 			form.exit = 1;
 		end
 	elseif (event == "changed") then
-		form.enteredString = obj.get(); -- TODO: Make this work!
+		form.enteredString = obj.get();
 	end
 end
 
 prompt.displayMessage = function(message)
-print("prompt.displayMessage");	
 	Form.deleteAll();
 	local form = Form.create(prompt.control);
 	prompt.exit = false;
@@ -72,6 +71,36 @@ print("prompt.displayMessage");
 	form:run();
 	
 	graphics.pop();
+end
+
+prompt.forString = function(message, maxLength)
+	Form.deleteAll();
+	local form = Form.create(prompt.control);
+	prompt.exit = false;
+	prompt.action = "none";
+	
+	graphics.push();
+	
+	graphics.shadeRect(37, 81, 301, 133, 125);
+	graphics.shadeRect(36, 80, 302, 134, 125);
+
+	form:addGraphic{id="background", x=27, y=71, picName="UI/PROMPT/PMPTSTRN"};
+	form:addButton{id="ok", x=89, y=108, picName="UI/PROMPT/ACCEPT", 
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ENTER};
+	form:addButton{id="cancel", x=173, y=108, picName="UI/PROMPT/CANCEL", 
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ESC};
+	form.message = form:addTextbox{id="message", x=32, y=76, width=254, height=10, 
+		readonly=1, scrolling=0, font="FontMedium", mode="field", justify="center"};
+	form.field = form:addTextbox{id="field", x=65, y=91, width=192, height=10, 
+		readonly=0, scrolling=0, font="FontMedium", mode="field", justify="left"};
+	form.message:set(message);
+	form.field:setMaxLength(maxLength);
+
+	form:run();
+	
+	graphics.pop();
+
+	return form.action, form.enteredString;
 end
 
 return prompt;

@@ -263,44 +263,23 @@ smChooseCharacter.Delete = function(self, event)
 	if (event == "enter") then
 		self:clear({"DELETE_PASSWORD_OK", "DELETE_PASSWORD_NOT_OK"})
 		
-		-- TODO: Convert this:
-		--    StatsGetPassword(StatsGetActive(), oldPassword) ;
-		--
-		--    /* get character id structure for selected character */
-		--    chardata=StatsGetSavedCharacterIDStruct (StatsGetActive());
-		--    DebugCheck(chardata->status < CHARACTER_STATUS_UNDEFINED) ;
-		--    if (chardata->status < CHARACTER_STATUS_UNDEFINED)
-		--    {
-		--        /* get password */
-		--        sprintf(tempstr, "^001Enter password to confirm ^021delete") ;
-		--        strcpy (password,"");
-		--
-		--        if ((strlen(oldPassword)==0) ||
-		--            (PromptForString(tempstr,12,password)==TRUE))  {
-		--            /* check to see if password is correct */
-		--            if (stricmp (password, oldPassword)==0)  {
-		--                /* success. character will be deleted */
-		--                /*         delete code here           */
-		--                SMCChooseSetFlag(
-		--                    SMCCHOOSE_FLAG_DELETE_PASSWORD_OK,
-		--                    TRUE) ;
-		--            } else {
-		--                strcpy (tempstr,"Improper password. Delete command canceled.");
-		--                PromptDisplayMessage(tempstr);
-		--                /* failure. return to mainui after notification of failure */
-		--
-		--                SMCChooseSetFlag(
-		--                    SMCCHOOSE_FLAG_DELETE_PASSWORD_NOT_OK,
-		--                    TRUE) ;
-		--            }
-		--        } else {
-		--            /* Go back, user aborted. */
-		--            SMCChooseSetFlag(
-		--                SMCCHOOSE_FLAG_DELETE_PASSWORD_NOT_OK,
-		--                TRUE) ;
-		--        }
-		--    }
-		
+print("smChooseCharacter.Delete")		
+		local chardata = stats.getSavedCharacterIDStruct(stats.getActive());
+		local oldPassword = chardata.password;
+		if (chardata.status ~= "undefined") then
+			local tempstr = sprintf("")
+			local action, password = prompt.forString("^001Enter password to confirm ^021delete", 12);
+			if ((action == "accept") and (password.length > 0)) then
+				if (password == chardata.password) then
+					self:set("DELETE_PASSWORD_OK");
+				else
+					prompt.displayMessage("Improper password. Delete command canceled.");
+					self:set("DELETE_PASSWORD_NOT_OK");
+				end
+			else
+				self:set("DELETE_PASSWORD_NOT_OK");
+			end
+		end
 	elseif (event == "check") then
 		self:check("DELETE_PASSWORD_OK", smChooseCharacter.DeleteCharacter);
 		self:check("DELETE_PASSWORD_NOT_OK", smChooseCharacter.Choices);

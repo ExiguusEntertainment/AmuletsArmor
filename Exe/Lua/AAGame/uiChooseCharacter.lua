@@ -65,6 +65,18 @@ uiChooseCharacter.eventHandler = function(form, obj, event)
 					prompt.displayMessage("Character not available.");
 					smChooseCharacter:set("REDRAW");
 				end
+			elseif (obj.id == "delete") then
+				local selected = listChars:getSelection();
+				stats.makeActive(selected);
+				local chardata = stats.getSavedCharacterIDStruct(selected);
+				if (chardata.status ~= "undefined") then
+					-- Go on to deleting the character on the server
+					smChooseCharacter:set("DELETE");
+				else
+				    -- Can't delete an empty slot
+					prompt.displayMessage("^001Character slot not filled.");
+					smChooseCharacter:set("REDRAW");
+				end
 			elseif (obj.id == "exit") then
 				smChooseCharacter:set("EXIT");
 			end
@@ -120,8 +132,8 @@ function uiChooseCharacter:init()
 	self.createForm();
 	self:updateCharacterListing()
 	graphic.updateAllGraphics();
-	self.charSelected = 0;
 	self:showSelected();
+	listChars:setSelection(self.charSelected);
 
 	graphics.setCursor(5, 188)
 	graphics.drawShadowedText(config.VERSION_TEXT, 210, 0);
@@ -148,5 +160,7 @@ end
 uiChooseCharacter.finish = function()
 	form:finish();
 end
+
+uiChooseCharacter.charSelected = 0;
 
 return uiChooseCharacter

@@ -11,36 +11,48 @@ function textbox.handleKeyEvent(event, scankey)
 	aatextbox.HandleKeyEvent(event, scankey)
 end
 
+function textbox:append(text)
+	aatextbox.Append(self.handle, text)
+end
+
 function textbox:backspace()
 	aatextbox.Backspace(self.handle);
+end
+
+function textbox:cursorSetRow(row)
+	return aatextbox.CursorSetRow(self.handle, row)
 end
 
 function textbox:cursorTop()
 	aatextbox.CursorTop(self.handle);
 end
 
-function textbox:repaginate()
-	aatextbox.Repaginate(self.handle);
-end
-
 function textbox.firstBox()
 	aatextbox.FirstBox();
 end
 
-function textbox:set(text)
-	aatextbox.SetText(self.handle, text)
-end
-
-function textbox:append(text)
-	aatextbox.Append(self.handle, text)
+function textbox:get()
+	return aatextbox.GetData(self.handle);
 end
 
 function textbox:getSelection()
 	return aatextbox.GetSelectionNumber(self.handle)
 end
 
-function textbox:cursorSetRow(row)
-	return aatextbox.CursorSetRow(self.handle, row)
+function textbox:setSelection(selection)
+	self:cursorSetRow(selection);
+end
+
+function textbox:repaginate()
+	aatextbox.Repaginate(self.handle);
+end
+
+function textbox:set(text)
+	aatextbox.SetText(self.handle, text)
+end
+
+function textbox:setMaxLength(length)
+	aatextbox.SetMaxLength(self.handle, length)
 end
 
 function _textboxHandleEvent(handle, event)
@@ -53,8 +65,10 @@ function _textboxHandleEvent(handle, event)
 end
 
 function textbox:delete()
-	aatextbox.Delete(self.handle);
-	textbox.index[self.handle] = nil;
+	if (self.handle ~= nil) then
+		aatextbox.Delete(self.handle);
+		textbox.index[self.handle] = nil;
+	end
 	self.handle = nil;
 end
 

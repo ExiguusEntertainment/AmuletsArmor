@@ -122,7 +122,7 @@ T_TxtboxID TxtboxCreate (T_word16 x1,
                 p_Txtbox->mode==Txtbox_MODE_EDIT_FIELD ||
                 p_Txtbox->mode==Txtbox_MODE_FIXED_WIDTH_FIELD)
             {
-                DebugCheck (p_Txtbox->justify==FALSE);
+                DebugCheck (p_Txtbox->justify==Txtbox_JUSTIFY_LEFT);
             }
 
 

@@ -20,6 +20,10 @@ function stats.makeActive(charSelected)
 	aastats.MakeActive(charSelected)
 end
 
+function stats.getActive()
+	return aastats.GetActive();
+end
+
 function stats.getSavedCharacterIDStruct(c)
 	return stats.charList[c+1];
 end
