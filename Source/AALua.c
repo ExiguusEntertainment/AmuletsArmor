@@ -30,23 +30,25 @@ static lua_State *L;
 
 static void ITableSetBoolean(lua_State* L, const char *name, E_Boolean value)
 {
-    lua_pushstring(L, name);
     lua_pushboolean(L, value?1:0);
-    lua_settable(L, -3);
+    lua_setfield(L, -2, name);
 }
 
 static void ITableSetInt(lua_State* L, const char *name, int value)
 {
-    lua_pushstring(L, name);
     lua_pushnumber(L, (double)value);
-    lua_settable(L, -3);
+    lua_setfield(L, -2, name);
 }
 
 static void ITableSetString(lua_State* L, const char *name, const char *string)
 {
-    lua_pushstring(L, name);
     lua_pushstring(L, string);
-    lua_settable(L, -3);
+    lua_setfield(L, -2, name);
+}
+
+static void ITableSetTable(lua_State* L, const char *name)
+{
+    lua_setfield(L, -2, name);
 }
 
 //static void ITableSetDouble(lua_State* L, const char *name, double value)
@@ -783,14 +785,13 @@ static int lua_MouseSetDefaultBitmap(lua_State *L)
 
     x = (T_word16)lua_tonumber(L, 1);
     y = (T_word16)lua_tonumber(L, 2);
-    if (lua_isnil(L, 3))
+    if (lua_isnil(L, 3)) {
         p_bitmap = NULL;
-    else
+	    MouseSetDefaultBitmap(x, y, 0);
+	} else {
         p_bitmap = (T_bitmap *)lua_touserdata(L, 3);
-    if (p_bitmap)
         MouseSetDefaultBitmap(x, y, &p_bitmap[1]);
-    else
-        MouseSetDefaultBitmap(x, y, 0);
+	}
 
     DebugEnd();
     return 0;
@@ -1102,11 +1103,14 @@ static int lua_StatsGet(lua_State *L)
     ITableSetInt(L, "xp", G_activeStats->Experience);
     ITableSetInt(L, "xpNeeded", G_activeStats->ExpNeeded);
     ITableSetString(L, "spellSystem", ISpellSystemToString(G_activeStats->SpellSystem));
-//    ITableSetInt(L, "", G_activeStats->);
-//    ITableSetInt(L, "", G_activeStats->);
-//    ITableSetInt(L, "", G_activeStats->);
-//    ITableSetInt(L, "", G_activeStats->);
-//    ITableSetInt(L, "", G_activeStats->);
+    lua_newtable(L);
+    ITableSetInt(L, "strength", G_activeStats->Attributes[ATTRIBUTE_STRENGTH]);
+    ITableSetInt(L, "speed", G_activeStats->Attributes[ATTRIBUTE_SPEED]);
+    ITableSetInt(L, "magic", G_activeStats->Attributes[ATTRIBUTE_MAGIC]);
+    ITableSetInt(L, "accuracy", G_activeStats->Attributes[ATTRIBUTE_ACCURACY]);
+    ITableSetInt(L, "stealth", G_activeStats->Attributes[ATTRIBUTE_STEALTH]);
+    ITableSetInt(L, "constitution", G_activeStats->Attributes[ATTRIBUTE_CONSTITUTION]);
+    ITableSetTable(L, "attrs");
 
     return 1;
 }
@@ -1301,6 +1305,7 @@ static E_TxtboxMode ITxtboxModeConvert(const char *aString)
     MAP_STRING_TO_INT("field", Txtbox_MODE_EDIT_FIELD);
     MAP_STRING_TO_INT("textarea", Txtbox_MODE_EDIT_FIELD);
     MAP_STRING_TO_INT("ro_textarea", Txtbox_MODE_VIEW_SCROLL_FORM);
+    MAP_STRING_TO_INT("ro_field", Txtbox_MODE_VIEW_NOSCROLL_FORM);
     MAP_STRING_TO_INT("ro_textarea_noscroll", Txtbox_MODE_VIEW_NOSCROLL_FORM);
     MAP_STRING_TO_INT("selection", Txtbox_MODE_SELECTION_BOX);
     MAP_STRING_TO_INT("fixed_field", Txtbox_MODE_FIXED_WIDTH_FIELD);

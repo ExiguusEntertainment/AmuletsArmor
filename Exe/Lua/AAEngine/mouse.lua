@@ -23,6 +23,7 @@ function mouse.updateEvents()
 end
 
 function mouse.setDefaultBitmap(pic, hotspot)
+printf("Mouse Set default bitmap %s %s", pic, hotspot)
 	if (pic == nil) then
 		aamouse.SetDefaultBitmap(0, 0, nil)
 		mouse.hotspot.x = 0;
@@ -37,10 +38,12 @@ function mouse.setDefaultBitmap(pic, hotspot)
 end
 
 function mouse.useDefaultBitmap()
+printf("mouse use default bitmap");
 	aamouse.UseDefaultBitmap()
 end
 
 function mouse.getBitmapAndHotspot()
+printf("mouse get bitmap and hotspot: %s %s %s", mouse.hotspot.x, mouse.hotspot.y, mouse.pic);
 	return { hotspot = mouse.hotspot, pic = mouse.pic };
 end
 

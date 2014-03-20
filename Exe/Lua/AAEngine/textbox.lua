@@ -35,6 +35,16 @@ function textbox:get()
 	return aatextbox.GetData(self.handle);
 end
 
+function textbox:set(text)
+	assert(text ~= nil)
+	aatextbox.SetText(self.handle, text)
+end
+
+function textbox:append(text)
+	assert(text ~= nil)
+	aatextbox.Append(self.handle, text)
+end
+
 function textbox:getSelection()
 	return aatextbox.GetSelectionNumber(self.handle)
 end
