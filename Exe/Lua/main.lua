@@ -10,14 +10,6 @@ function updateOften()
 	color.update(delta)
 end
 
-function sprintf(fmt, ...)
-	return string.format(fmt, ...);
-end
-
-function printf(fmt, ...)
-	print(string.format(fmt, ...));
-end
-
 function AABacktrace(errmsg)
 	local backtrace = debug.traceback();
 	print("A&A Backtrace: " .. errmsg)
@@ -28,6 +20,8 @@ end
 function protected_main()
 	print("** MAIN ENTERED **")
 	local lastTick = ticker.get();
+
+	mouseControl.InitForJustUI();
 
 	while (not smMain:isDone()) do
 		local delta = ticker.get() - lastTick;
@@ -41,6 +35,8 @@ function protected_main()
 		updateOften()
 		smMain:update()
 	end
+	
+	mouseControl.Finish();
 end
 
 function main()

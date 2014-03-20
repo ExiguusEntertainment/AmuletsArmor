@@ -26,7 +26,6 @@ end
 smChooseCharacter.Choices = function(self, event)
 	if (event == "enter") then
 		self:clear({"EXIT", "CREATE", "LOAD", "DELETE", "REDRAW"});
-		mouseControl.InitForJustUI();
 		uiChooseCharacter.start();
 	elseif (event == "check") then
 		self:check("EXIT", smChooseCharacter.Exit);
@@ -37,7 +36,6 @@ smChooseCharacter.Choices = function(self, event)
 	elseif (event == "update") then
 		uiChooseCharacter.update();
 	elseif (event == "exit") then
-		mouseControl.Finish();
 		uiChooseCharacter.finish();
 	end
 end
@@ -46,7 +44,6 @@ end
 smChooseCharacter.Create = function(self, event)
 	if (event == "enter") then
 		self:clear({"CREATE_COMPLETE", "CREATE_ABORT"})
-		mouseControl.InitForJustUI();
 		-- TODO: StatsCreateCharacterUIStart()
 		-- TODO: MapSetDayOffset(0x2AAA8)
 	elseif (event == "check") then
@@ -56,7 +53,6 @@ smChooseCharacter.Create = function(self, event)
 		-- TODO: StatsCreateCharacterUIUpdate()
 	elseif (event == "exit") then
 		-- TODO: StatsCreateCharadcterUIEnd()
-		mouseControl.Finish()
 	end
 end
 
@@ -111,7 +107,6 @@ print("DisplayStats");
 		self:clear({"BEGIN", "PASSWORD_ENTERED", "CHANGE_PASSWORD", "EXIT"})
 		graphics.push();
 		-- TODO: StatsLoadCharacter(StatsGetActive())
-		mouseControl.InitForJustUI();
 		uiLoadCharacter.start();
 	elseif (event == "check") then
 		self:check("BEGIN", smChooseCharacter.PasswordForLoad);
@@ -128,7 +123,6 @@ print("DisplayStats");
 		--    strcpy(p_data->attemptPassword, p_password) ;
 		--
 		uiLoadCharacter.finish();
-		mouseControl.Finish()
 		graphics.pop();
 	end
 end
@@ -181,7 +175,7 @@ end
 -- User is requesting to change their password
 smChooseCharacter.ChangePassword = function(self, event)
 	if (event == "enter") then
-		self:clear({"CHNAGE_PASSWORD_COMPLETE", "CHANGE_PASSWORD_ABORT"})
+		self:clear({"CHANGE_PASSWORD_COMPLETE", "CHANGE_PASSWORD_ABORT"})
 	elseif (event == "check") then
 		self:check("CHANGE_PASSWORD_COMPLETE", smChooseCharacter.DisplayStats);
 		self:check("CHANGE_PASSWORD_ABORT", smChooseCharacter.DisplayStats);
@@ -263,13 +257,17 @@ smChooseCharacter.Delete = function(self, event)
 	if (event == "enter") then
 		self:clear({"DELETE_PASSWORD_OK", "DELETE_PASSWORD_NOT_OK"})
 		
-print("smChooseCharacter.Delete")		
 		local chardata = stats.getSavedCharacterIDStruct(stats.getActive());
 		local oldPassword = chardata.password;
 		if (chardata.status ~= "undefined") then
-			local tempstr = sprintf("")
-			local action, password = prompt.forString("^001Enter password to confirm ^021delete", 12);
-			if ((action == "accept") and (password.length > 0)) then
+			local action, password;
+			if (#(chardata.password) > 0) then
+				action, password = prompt.forString("^001Enter password to confirm ^021delete", 12);
+			else
+				action = "ok";
+				password = "";
+			end
+			if (action == "ok") then
 				if (password == chardata.password) then
 					self:set("DELETE_PASSWORD_OK");
 				else
@@ -284,6 +282,7 @@ print("smChooseCharacter.Delete")
 		self:check("DELETE_PASSWORD_OK", smChooseCharacter.DeleteCharacter);
 		self:check("DELETE_PASSWORD_NOT_OK", smChooseCharacter.Choices);
 	elseif (event == "update") then
+	elseif (event == "exit") then
 	end
 end
 
@@ -294,17 +293,14 @@ smChooseCharacter.DeleteCharacter = function(self, event)
 	elseif (event == "check") then
 		self:check("DELETE_COMPLETE", smChooseCharacter.Choices);
 	elseif (event == "update") then
-		-- TODO: Convert this code:
-		--    /* OK, we can delete the character. */
-		--    if (PromptForBoolean("Are you sure you want to delete?", FALSE) == TRUE)  {
-		--        StatsDeleteCharacter(StatsGetActive());
-		--
-		--        /* inform user of deletion */
-		--        PromptDisplayMessage ("Character deleted.");
-		--    } else {
-		--        PromptDisplayMessage ("Character NOT deleted.");
-		--    }
-		--    SMCChooseSetFlag(SMCCHOOSE_FLAG_DELETE_COMPLETE, TRUE) ;
+		if (prompt.question("Are you sure you want to delete?", false) == true) then
+		 	-- TODO: StatsDeleteChaacter(StatsGetActive());
+			prompt.displayMessage("Character deleted.");
+		else
+			prompt.displayMessage("Character NOT deleted.");
+		end
+		self:set("DELETE_COMPLETE");
+	elseif (event == "exit") then
 	end
 end
 

@@ -154,6 +154,7 @@ end
 keyboard.eventHandlers = {}
 
 function keyboard.pushEventHandler(func)
+	assert(func ~= nil);
 	table.insert(keyboard.eventHandlers, func);
 	aakeyboard.PushEventHandler();
 end

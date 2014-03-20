@@ -38,23 +38,23 @@ prompt = {}
 
 prompt.control = function(form, obj, event)
 	if (event == "release") then
-		if (obj.id == "ok") then
+		if ((obj.id == "ok") or (obj.id == "yes")) then
 			form.action = "ok";
 			form.exit = 1;
-		elseif (obj.id == "cancel") then
+		elseif ((obj.id == "cancel") or (obj.id == "no")) then
 			form.action = "cancel";
 			form.exit = 1;
 		end
 	elseif (event == "changed") then
-		form.enteredString = obj.get();
+		form.enteredString = obj:get();
 	end
 end
 
 prompt.displayMessage = function(message)
 	Form.deleteAll();
 	local form = Form.create(prompt.control);
-	prompt.exit = false;
-	prompt.action = "none";
+	form.exit = false;
+	form.action = "none";
 	
 	graphics.push();
 	
@@ -76,8 +76,9 @@ end
 prompt.forString = function(message, maxLength)
 	Form.deleteAll();
 	local form = Form.create(prompt.control);
-	prompt.exit = false;
-	prompt.action = "none";
+	form.exit = false;
+	form.action = "none";
+	form.enteredString = "";
 	
 	graphics.push();
 	
@@ -101,6 +102,45 @@ prompt.forString = function(message, maxLength)
 	graphics.pop();
 
 	return form.action, form.enteredString;
+end
+
+------------------------------------------------------------------------------
+-- Ask a yes/no question and return with true for yes, false for no.
+-- The default is what ENTER selects in the prompt
+------------------------------------------------------------------------------
+prompt.question = function(question, default)
+	Form.deleteAll();
+	local form = Form.create(prompt.control);
+	form.exit = false;
+	form.action = "none";
+
+	graphics.push();
+	
+	graphics.shadeRect(37, 89, 301, 123, 125);
+	graphics.shadeRect(36, 88, 302, 124, 125);
+
+	form:addGraphic{id="background", x=27, y=79, picName="UI/PROMPT/PMPTBOOL"};
+	form:addButton{id="yes", x=89, y=98, picName="UI/PROMPT/YES", 
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ENTER};
+	form:addButton{id="no", x=173, y=98, picName="UI/PROMPT/NO", 
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ESC};
+	form.question = form:addTextbox{id="question", x=32, y=84, width=254, height=10, 
+		readonly=1, scrolling=0, font="FontMedium", mode="field", justify="center"};
+	form.question:set(question);
+
+	form:run();
+	
+	graphics.pop();
+
+	if (form.action == "none") then
+		return default;
+	end
+
+	if (form.action == "ok") then
+		return true;
+	end
+	
+	return false;
 end
 
 return prompt;

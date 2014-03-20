@@ -54,10 +54,6 @@ function button.create(x, y, picName, toggleType, scankey1, scankey2, funcPress,
 end
 
 function button:delete()
-print("button:delete");
-print(inspect(self));	
-print(inspect(self.handle));	
-print(inspect(button.index));
 	if (self.handle ~= nil) then	
 		aabutton.Delete(self.handle);
 		button.index[self.handle] = nil;

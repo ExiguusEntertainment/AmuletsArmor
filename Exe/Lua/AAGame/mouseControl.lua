@@ -21,6 +21,7 @@ end
 -- Initializes all necessary variables and default mouse bitmap, etc.
 ------------------------------------------------------------------------------
 function mouseControl.InitForJustUI()
+print("mouseControl.InitForJustUI");
 	assert(init == false)
 	init = true
 	hotspot = {x=0, y=0}
@@ -38,6 +39,7 @@ end
 -- Restores the mouse to the default bitmap.
 ------------------------------------------------------------------------------
 function mouseControl.Finish()
+print("mouseControl.Finish");
 	assert(init == true)
 	init = false
 

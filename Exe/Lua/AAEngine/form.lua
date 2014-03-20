@@ -127,7 +127,7 @@ end
 
 function Form.handleMouseEvent(event, x, y, buttons)
 	button.handleMouseEvent(event, x, y, buttons)
-	slider.handleMouseEvent(event, x, y, buttons)
+	-- slider.handleMouseEvent(event, x, y, buttons)
 	if (G_numTextBoxes > 0) then
 		textbox.handleMouseEvent(event, x, y, buttons)
 	end
@@ -168,7 +168,7 @@ function Form:start()
 	keyboard.debounce()
 	
 	-- Intercept mouse and keyboard events
-	mouse.pushEventHandler(Form.handleMouse)
+	mouse.pushEventHandler(Form.handleMouseEvent)
  	keyboard.pushEventHandler(Form.handleKeyEvent)
 end
 
@@ -215,7 +215,7 @@ function Form:run()
 	mouse.setDefaultBitmap(pic, {x=0, y=0});
 	mouse.useDefaultBitmap();
 
-	mouse.pushEventHandler(Form.handleMouse);
+	mouse.pushEventHandler(Form.handleMouseEvent);
 	keyboard.pushEventHandler(Form.handleKeyEvent);
 	
 	keyboard.debounce();
@@ -244,8 +244,6 @@ function Form:run()
 	keyboard.debounce();
 	pics.unlockAndUnfind(pic);
 	
-printf("Going back to old bitmap %s", oldbitmap.pic);
-print(inspect(oldbitmap));
 	mouse.setDefaultBitmap(oldbitmap.pic, oldbitmap.hotspot);
 	mouse.useDefaultBitmap();
 end

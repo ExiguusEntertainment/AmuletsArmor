@@ -2,13 +2,16 @@ mouse = { hotspot = { 0, 0 }, pic = { pic = nil, bitmap = nil, res = nil }}
 
 local aamouse = require "aamouse";
 
-local mouseEventHandlers = {}
+mouseEventHandlers = {}
 
 function _mouseHandleEvent(event, x, y, buttons)
-	mouseEventHandlers[#mouseEventHandlers](event, x, y, buttons)
+	if (#mouseEventHandlers > 0) then
+		mouseEventHandlers[#mouseEventHandlers](event, x, y, buttons)
+	end
 end
 
 function mouse.pushEventHandler(func)
+	assert (func ~= nil);
 	table.insert(mouseEventHandlers, func);
 	aamouse.PushEventHandler();
 end
@@ -23,7 +26,6 @@ function mouse.updateEvents()
 end
 
 function mouse.setDefaultBitmap(pic, hotspot)
-printf("Mouse Set default bitmap %s %s", pic, hotspot)
 	if (pic == nil) then
 		aamouse.SetDefaultBitmap(0, 0, nil)
 		mouse.hotspot.x = 0;
@@ -38,12 +40,10 @@ printf("Mouse Set default bitmap %s %s", pic, hotspot)
 end
 
 function mouse.useDefaultBitmap()
-printf("mouse use default bitmap");
 	aamouse.UseDefaultBitmap()
 end
 
 function mouse.getBitmapAndHotspot()
-printf("mouse get bitmap and hotspot: %s %s %s", mouse.hotspot.x, mouse.hotspot.y, mouse.pic);
 	return { hotspot = mouse.hotspot, pic = mouse.pic };
 end
 
