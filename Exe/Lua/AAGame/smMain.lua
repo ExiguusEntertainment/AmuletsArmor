@@ -2,6 +2,7 @@ require "StateMachine";
 local keyboard = require "keyboard";
 local smChooseCharacter = require "AAGame/smChooseCharacter"
 local uiChooseCharacter = require "AAGame/uiChooseCharacter"
+local uiLoadCharacter = require "AAGame/uiLoadCharacter"
 
 smMain = StateMachine:create();
 

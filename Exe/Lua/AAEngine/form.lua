@@ -94,6 +94,8 @@ function Form:addTextbox(args)
 
 	local numericOnly = 0;
 	if (args.filter == "digits") then numericOnly = 1 end
+
+	if (args.readonly == 1) then args.mode = "ro_" .. args.mode; end
 	
 	-- Create it in the system		
 	local newObj = textbox.create(args.x, args.y, args.width, args.height, 
@@ -105,6 +107,9 @@ function Form:addTextbox(args)
 	-- Add this object to the list with details
 	self.objects[1+#self.objects] = newObj
 
+	if (args.text ~= nil) then 
+		newObj:set(args.text);
+	end
 	return newObj
 end
 
@@ -199,6 +204,10 @@ function Form.deleteAll()
 	graphic.updateAllGraphics();
 end
 
+function Form:draw()
+	graphic.updateAllGraphics();
+end
+
 function Form:run()
 	local oldbitmap = mouse.getBitmapAndHotspot();
 	local pic = pics.lockBitmap("UI/MOUSE/DEFAULT");
@@ -235,6 +244,8 @@ function Form:run()
 	keyboard.debounce();
 	pics.unlockAndUnfind(pic);
 	
+printf("Going back to old bitmap %s", oldbitmap.pic);
+print(inspect(oldbitmap));
 	mouse.setDefaultBitmap(oldbitmap.pic, oldbitmap.hotspot);
 	mouse.useDefaultBitmap();
 end

@@ -28,10 +28,12 @@ function textbox.firstBox()
 end
 
 function textbox:set(text)
+	assert(text ~= nil)
 	aatextbox.SetText(self.handle, text)
 end
 
 function textbox:append(text)
+	assert(text ~= nil)
 	aatextbox.Append(self.handle, text)
 end
 

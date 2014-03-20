@@ -107,18 +107,19 @@ end
 -- Character has been shown.  Show stats.
 smChooseCharacter.DisplayStats = function(self, event)
 	if (event == "enter") then
+print("DisplayStats");
 		self:clear({"BEGIN", "PASSWORD_ENTERED", "CHANGE_PASSWORD", "EXIT"})
-		-- TODO: GrActualScreenPush
+		graphics.push();
 		-- TODO: StatsLoadCharacter(StatsGetActive())
 		mouseControl.InitForJustUI();
-		-- TODO: StatsLoadCharacterUIStart
+		uiLoadCharacter.start();
 	elseif (event == "check") then
 		self:check("BEGIN", smChooseCharacter.PasswordForLoad);
 		self:check("PASSWORD_ENTERED", smChooseCharacter.PasswordForLoad);
 		self:check("CHANGE_PASSWORD", smChooseCharacter.ChangePassword);
 		self:check("EXIT", smChooseCharacter.Choices);
 	elseif (event == "update") then
-	    -- TODO: StatsLoadCharacterUIUpdate
+		uiLoadCharacter.update();
 	elseif (event == "exit") then
 		-- TODO: Convert this code
 		--    passwordID = FormGetObjID(LOAD_CHARACTER_PASSWORD_TEXT);
@@ -126,10 +127,9 @@ smChooseCharacter.DisplayStats = function(self, event)
 		--//printf("StatsExit: %p (%-10.10s) %p (%-10.10s)\n", p_data->attemptPassword, p_data->attemptPassword, p_password, p_password) ; fflush(stdout) ;  delay(100) ;
 		--    strcpy(p_data->attemptPassword, p_password) ;
 		--
-		--    StatsLoadCharacterUIEnd() ;
+		uiLoadCharacter.finish();
 		mouseControl.Finish()
-		--
-		--    GrActualScreenPop() 
+		graphics.pop();
 	end
 end
 

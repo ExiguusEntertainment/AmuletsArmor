@@ -37,7 +37,7 @@ uiChooseCharacter.createForm = function()
 		scankey2=keyboard.scankeys.KEY_SCAN_CODE_E, picName="UI/LOGON/LOGON_B6"}
 
 	-- Textbox: List of Characters (readonly scrolling list of text)
-	listChars = form:addTextbox{id="listChars", x=162, y=4, width=153, height=44, readonly=1,
+	listChars = form:addTextbox{id="listChars", x=162, y=4, width=153, height=44,
 		scrolling=1, font="FontMedium", mode="selection"};
 
 	return form;

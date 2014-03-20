@@ -13,6 +13,7 @@ ticker = require "AAEngine/ticker"
 ui = require "AAEngine/ui"
 view = require "AAEngine/view"
 require "Utilities/inspect"
+require "AAGame/uiColors"
 
 require "AAGame/prompt"
 
