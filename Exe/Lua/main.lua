@@ -38,7 +38,6 @@ function protected_main()
 		-- Okay, proceed
 		lastTick = ticker.get()
 -- TODO:            UpdateCmdqueue() ;
---            DebugCompare("main") ;
 		updateOften()
 		smMain:update()
 	end

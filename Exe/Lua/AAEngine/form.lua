@@ -231,3 +231,10 @@ function Form:run()
 	mouse.setDefaultBitmap(oldbitmap.pic, oldbitmap.hotspot);
 	mouse.useDefaultBitmap();
 end
+
+function Form:finish()
+	self:delete();
+	mouse.popEventHandler();
+	keyboard.popEventHandler();	
+	keyboard.debounce();
+end

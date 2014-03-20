@@ -38,8 +38,7 @@ smMain.ChooseCharacter = function (self, event)
 		-- Sit here letting the player choose a character
 		smChooseCharacter:update();
 	elseif (event == "exit") then
-		-- TODO: SMCChooseFinish();
-		
+		smChooseCharacter.finish();
 		keyboard.bufferOff();
 	end
 end
@@ -112,7 +111,7 @@ end
 -- and clean up.
 smMain.ExitGame = function (self, event)
 	if (event == "update") then
-		smMain.isDone = true
+		smMain.done = true
 	end
 end
 

@@ -37,8 +37,8 @@ smChooseCharacter.Choices = function(self, event)
 	elseif (event == "update") then
 		uiChooseCharacter.update();
 	elseif (event == "exit") then
-		mouseControl.Finish()
-		-- TODO: MainUIEnd()
+		mouseControl.Finish();
+		uiChooseCharacter.finish();
 	end
 end
 
@@ -367,6 +367,11 @@ end
 smChooseCharacter.init = function()
 	-- Start in Connect mode
 	smChooseCharacter.state = smChooseCharacter.WaitForList;
+end
+
+smChooseCharacter.finish = function()
+	-- Mark this as done and avoid any more calls (nothing else to do currently)
+	smChooseCharacter.state = nil;
 end
 
 smChooseCharacter.init();

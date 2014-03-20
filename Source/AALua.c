@@ -787,7 +787,10 @@ static int lua_MouseSetDefaultBitmap(lua_State *L)
         p_bitmap = NULL;
     else
         p_bitmap = (T_bitmap *)lua_touserdata(L, 3);
-    MouseSetDefaultBitmap(x, y, &p_bitmap[1]);
+    if (p_bitmap)
+        MouseSetDefaultBitmap(x, y, &p_bitmap[1]);
+    else
+        MouseSetDefaultBitmap(x, y, 0);
 
     DebugEnd();
     return 0;

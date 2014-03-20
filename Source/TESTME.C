@@ -151,6 +151,7 @@ extern void SleepMS(T_word32 sleepMS);
 
     AALuaScriptLoadAndRun("main.lua");
 
+#if 0
     SMMainInit() ;
     while (!SMMainIsDone())  {
         if ((TickerGet() - lastTick) < CAP_TICK_RATE) {
@@ -174,6 +175,7 @@ extern void SleepMS(T_word32 sleepMS);
     SMMainFinish() ;
 
     ClientFinish() ;
+#endif
 
     UpdateGameEnd() ;
 

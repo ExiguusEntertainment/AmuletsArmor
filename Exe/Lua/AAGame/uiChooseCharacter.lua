@@ -65,6 +65,8 @@ uiChooseCharacter.eventHandler = function(form, obj, event)
 					prompt.displayMessage("Character not available.");
 					smChooseCharacter:set("REDRAW");
 				end
+			elseif (obj.id == "exit") then
+				smChooseCharacter:set("EXIT");
 			end
 		end
 	end
@@ -138,6 +140,13 @@ end
 ------------------------------------------------------------------------------
 uiChooseCharacter.update = function()
 	form:updateUI();
+end
+
+------------------------------------------------------------------------------
+-- We are done with this state machine.  Clean up and exit
+------------------------------------------------------------------------------
+uiChooseCharacter.finish = function()
+	form:finish();
 end
 
 return uiChooseCharacter
