@@ -280,8 +280,6 @@ T_void    StatsSetIOwnHouse(T_word32 houseNum, E_Boolean to);
 
 T_void StatsSetActive(T_playerStats *p_stats) ;
 
-T_byte8 *StatsGetCharacterList(T_void);
-
 E_Boolean StatsPlayerHasNotePage(T_word16 whichpage);
 T_void    StatsAddPlayerNotePage(T_word16 whichpage);
 T_void    StatsRemovePlayerNotePage(T_word16 whichpage);

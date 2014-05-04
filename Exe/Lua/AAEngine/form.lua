@@ -2,7 +2,7 @@
 -- Groups of User Interface components come together into a single Form.
 --
 
-Form = {}
+Form = { response = nil; }
 Form_mt = { __index = Form }
 
 -- Global list of forms
@@ -253,4 +253,16 @@ function Form:finish()
 	mouse.popEventHandler();
 	keyboard.popEventHandler();	
 	keyboard.debounce();
+end
+
+function Form:clearResponse()
+	self.response = nil;
+end
+
+function Form:setResponse(r)
+	self.response = r;
+end
+
+function Form:getResponse(r)
+	return self.response;
 end

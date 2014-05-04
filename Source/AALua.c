@@ -51,6 +51,15 @@ static void ITableSetTable(lua_State* L, const char *name)
     lua_setfield(L, -2, name);
 }
 
+static void ITableGetTable(lua_State* L, const char *name)
+{
+    lua_getfield(L, -1, name);
+}
+
+static void ITableReleaseTable(lua_State *L)
+{
+    lua_pop(L, 1);
+}
 //static void ITableSetDouble(lua_State* L, const char *name, double value)
 //{
 //    lua_pushstring(L, name);
@@ -67,6 +76,20 @@ static int ITableGetInt(lua_State* L, const char *name, int *value, int defvalue
         return -1;
     }
     *value = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return 0;
+}
+
+static int ITableGetBoolean(lua_State* L, const char *name, E_Boolean *value, E_Boolean defvalue)
+{
+    lua_pushstring(L, name);
+    lua_gettable(L, -2);
+    if (!lua_isboolean(L, -1)) {
+        *value = defvalue;
+        return -1;
+    }
+    *value = (int)lua_toboolean(L, -1);
     lua_pop(L, 1);
 
     return 0;
@@ -118,6 +141,16 @@ static const char *ISpellSystemToString(T_byte8 aSpellSystem)
     MAP_INT_TO_STRING(SPELL_SYSTEM_ANY, "any");
     MAP_INT_END();
     return "unknown";
+}
+
+static T_byte8 IStringToSpellSystem(const char *aString)
+{
+    MAP_STRING_TO_INT("none", SPELL_SYSTEM_NONE);
+    MAP_STRING_TO_INT("mage", SPELL_SYSTEM_MAGE);
+    MAP_STRING_TO_INT("cleric", SPELL_SYSTEM_CLERIC);
+    MAP_STRING_TO_INT("arcane", SPELL_SYSTEM_ARCANE);
+    MAP_STRING_TO_INT("any", SPELL_SYSTEM_ANY);
+    return SPELL_SYSTEM_NONE;
 }
 
 static int traceback(lua_State *L) {
@@ -1103,6 +1136,7 @@ static int lua_StatsGet(lua_State *L)
     ITableSetInt(L, "xp", G_activeStats->Experience);
     ITableSetInt(L, "xpNeeded", G_activeStats->ExpNeeded);
     ITableSetString(L, "spellSystem", ISpellSystemToString(G_activeStats->SpellSystem));
+    ITableSetString(L, "password", (char *)G_activeStats->password);
     lua_newtable(L);
     ITableSetInt(L, "strength", G_activeStats->Attributes[ATTRIBUTE_STRENGTH]);
     ITableSetInt(L, "speed", G_activeStats->Attributes[ATTRIBUTE_SPEED]);
@@ -1113,6 +1147,105 @@ static int lua_StatsGet(lua_State *L)
     ITableSetTable(L, "attrs");
 
     return 1;
+}
+
+static int lua_StatsSet(lua_State *L)
+{
+    T_byte8 selected;
+    int v;
+    char spellsystem[20];
+    E_Boolean b;
+
+    selected = (T_byte8)lua_tonumber(L, 1);
+
+    //lua_newtable(L);
+    ITableGetString(L, "name", G_activeStats->Name, sizeof(G_activeStats->Name), "Missing");
+    ITableGetString(L, "class", G_activeStats->ClassName, sizeof(G_activeStats->ClassName), "Citizen");
+    ITableGetString(L, "title", G_activeStats->ClassTitle, sizeof(G_activeStats->ClassTitle), "---");
+    ITableGetInt(L, "health", &v, 20);
+    G_activeStats->Health = v;
+    ITableGetInt(L, "healthMax", &v, 20);
+    G_activeStats->MaxHealth = v;
+    ITableGetInt(L, "mana", &v, 0);
+    G_activeStats->Mana = v;
+    ITableGetInt(L, "manaMax", &v, 0);
+    G_activeStats->MaxMana = v;
+    ITableGetInt(L, "food", &v, 0);
+    G_activeStats->Food = v;
+    ITableGetInt(L, "foodMax", &v, 0);
+    G_activeStats->MaxFood = v;
+    ITableGetInt(L, "water", &v, 0);
+    G_activeStats->Water = v;
+    ITableGetInt(L, "waterMax", &v, 0);
+    G_activeStats->MaxWater = v;
+    ITableGetInt(L, "poison", &v, 0);
+    G_activeStats->PoisonLevel = v;
+    ITableGetInt(L, "regenHealth", &v, 0);
+    G_activeStats->RegenHealth = v;
+    ITableGetInt(L, "regenMana", &v, 0);
+    G_activeStats->RegenMana = v;
+    ITableGetInt(L, "jumpPower", &v, 0);
+    G_activeStats->JumpPower = v;
+    ITableGetInt(L, "jumpPowerMod", &v, 0);
+    G_activeStats->JumpPowerMod = v;
+    ITableGetInt(L, "tallness", &v, 0);
+    G_activeStats->Tallness = v;
+    ITableGetInt(L, "climbHeight", &v, 0);
+    G_activeStats->ClimbHeight = v;
+    ITableGetInt(L, "velRunningMax", &v, 0);
+    G_activeStats->MaxVRunning = v;
+    ITableGetInt(L, "velWalkingMax", &v, 0);
+    G_activeStats->MaxVWalking = v;
+    ITableGetInt(L, "heartRate", &v, 0);
+    G_activeStats->HeartRate = v;
+    ITableGetInt(L, "velFallingMax", &v, 0);
+    G_activeStats->MaxFallV = v;
+    ITableGetInt(L, "weaponBaseDamage", &v, 0);
+    G_activeStats->WeaponBaseDamage = v;
+    ITableGetInt(L, "weaponBaseSpeed", &v, 0);
+    G_activeStats->WeaponBaseSpeed = v;
+    ITableGetInt(L, "attackSpeed", &v, 0);
+    G_activeStats->AttackSpeed = v;
+    ITableGetInt(L, "attackDamage", &v, 0);
+    G_activeStats->AttackDamage = v;
+    ITableGetBoolean(L, "isAlive", &b, TRUE);
+    G_activeStats->playerisalive = b;
+    ITableGetInt(L, "classType", &v, 0);
+    G_activeStats->ClassType = v;
+    ITableGetInt(L, "armorLevel", &v, 0);
+    G_activeStats->ArmorLevel = v;
+    ITableGetInt(L, "load", &v, 0);
+    G_activeStats->Load = v;
+    ITableGetInt(L, "loadMax", &v, 0);
+    G_activeStats->MaxLoad = v;
+    ITableGetInt(L, "level", &v, 0);
+    G_activeStats->Level = v;
+    ITableGetInt(L, "xp", &v, 0);
+    G_activeStats->Experience = v;
+    ITableGetInt(L, "xpNeeded", &v, 0);
+    G_activeStats->ExpNeeded = v;
+    ITableGetString(L, "spellSystem", spellsystem, sizeof(spellsystem), "none");
+    G_activeStats->SpellSystem = IStringToSpellSystem(spellsystem);
+    ITableGetString(L, "password", (char *)G_activeStats->password, sizeof(G_activeStats->password), "");
+    
+    ITableGetTable(L, "attrs");
+
+    ITableGetInt(L, "strength", &v, 20);
+    G_activeStats->Attributes[ATTRIBUTE_STRENGTH] = v;
+    ITableGetInt(L, "speed", &v, 20);
+    G_activeStats->Attributes[ATTRIBUTE_SPEED] = v;
+    ITableGetInt(L, "magic", &v, 20);
+    G_activeStats->Attributes[ATTRIBUTE_MAGIC] = v;
+    ITableGetInt(L, "accuracy", &v, 20);
+    G_activeStats->Attributes[ATTRIBUTE_ACCURACY] = v;
+    ITableGetInt(L, "stealth", &v, 20);
+    G_activeStats->Attributes[ATTRIBUTE_STEALTH] = v;
+    ITableGetInt(L, "constitution", &v, 20);
+    G_activeStats->Attributes[ATTRIBUTE_CONSTITUTION] = v;
+
+    ITableReleaseTable(L);
+
+    return 0;
 }
 
 static int lua_StatsGetActive(lua_State *L)
@@ -1145,6 +1278,17 @@ static int lua_StatsLoadCharacter(lua_State *L)
     return 1;
 }
 
+static int lua_StatsSaveCharacter(lua_State *L)
+{
+    T_byte8 selected;
+    E_Boolean result;
+
+    selected = (T_byte8)lua_tonumber(L, 1);
+
+    result = StatsSaveCharacter(selected);
+
+    return 0;
+}
 
 int LUA_API luaopen_aastats(lua_State *L)
 {
@@ -1154,6 +1298,8 @@ int LUA_API luaopen_aastats(lua_State *L)
             { "GetActive", lua_StatsGetActive },
             { "LoadCharacter", lua_StatsLoadCharacter },
             { "MakeActive", lua_StatsMakeActive },
+            { "SaveCharacter", lua_StatsSaveCharacter },
+            { "Set", lua_StatsSet },
             { "SetSavedCharacterList", lua_StatsSetSavedCharacterList },
             { NULL, NULL }, };
     luaL_newlib(L, driver);

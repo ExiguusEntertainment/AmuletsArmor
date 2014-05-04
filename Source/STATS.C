@@ -1696,26 +1696,6 @@ T_void StatsUpdateCreateCharacterUI (T_void)
 
 
 
-/*-------------------------------------------------------------------------*
- * Routine:  StatsGetCharacterList
- *-------------------------------------------------------------------------*/
-/**
- *  Downloads a list of characters from the server
- *
- *  NOTE: 
- *  Doesn't do anything yet.
- *
- *<!-----------------------------------------------------------------------*/
-T_byte8 *StatsGetCharacterList (T_void)
-{
-    static char data[256];
-    sprintf (data,"1. Nirvana\r2. <@> Stone Temple Pilot\r3. <*> White Zombie\r4. Pantera\r5. <empty>");
-
-    return (data);
-}
-
-
-
 T_void StatsCreateCharacterUIInit(T_void)
 {
     DebugRoutine ("StatsCreateCharacterUIInit");
@@ -2701,6 +2681,7 @@ T_statsSavedCharArray *StatsGetSavedCharacterList(T_void)
     T_word16 i;
     T_byte8 filename[32];
     FILE *fp;
+    T_playerStats stats;
 
     DebugRoutine ("StatsGetSavedCharacterList");
 
@@ -2721,14 +2702,16 @@ T_statsSavedCharArray *StatsGetSavedCharacterList(T_void)
 	    if (fp!=NULL)
         {
             /* file is available, saved char slot is avail for load */
-            fread(
-                G_savedCharacters[i].name,
-                sizeof(G_savedCharacters[i].name),
-                1,
-                fp) ;
-//            sprintf (G_savedCharacters[i].name,"<CHAR%02d>",i);
-//            strcpy  (G_savedCharacters[i].password,"password");
-            strcpy  (G_savedCharacters[i].password,"");
+            //fread(
+            //    G_savedCharacters[i].name,
+            //    sizeof(G_savedCharacters[i].name),
+            //    1,
+            //    fp) ;
+            fread(&stats, sizeof(stats), 1, fp);
+    //            sprintf (G_savedCharacters[i].name,"<CHAR%02d>",i);
+            strncpy((char *)G_savedCharacters[i].password, stats.password, MAX_SIZE_PASSWORD);
+            strncpy((char *)G_savedCharacters[i].name, stats.Name, sizeof(G_savedCharacters[i].name));
+//            strcpy  (G_savedCharacters[i].password,"");
             G_savedCharacters[i].status=CHARACTER_STATUS_OK;
             fclose(fp);
         }

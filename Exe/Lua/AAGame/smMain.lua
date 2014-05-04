@@ -37,7 +37,7 @@ smMain.ChooseCharacter = function (self, event)
 		self:check("DROPPED", smMain.Disconnected);
 	elseif (event == "update") then
 		-- Sit here letting the player choose a character
-		smChooseCharacter:update();
+		smChooseCharacter.update();
 	elseif (event == "exit") then
 		smChooseCharacter.finish();
 		keyboard.bufferOff();

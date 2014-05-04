@@ -39,7 +39,7 @@ print(inspect(char));
 	-- Textbox: Name
 	form:addTextbox{id="name", x=45, y=24, width=226, height=10, readonly=1,
 		scrolling=0, font="FontMedium", mode="field", justify="center", text=char.name};
-	form:addTextbox{id="password", x=104, y=153, width=167, height=10, readonly=0,
+	uiLoadCharacter.passwordField = form:addTextbox{id="password", x=104, y=153, width=167, height=10, readonly=0,
 		scrolling=0, font="FontMedium", mode="field"};
 	form:addTextbox{id="level", x=255, y=39, width=16, height=8, readonly=1,
 		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.level};
@@ -75,12 +75,13 @@ uiLoadCharacter.eventHandler = function(form, obj, event)
 	if (event ~= "none") then
 		if (event == "release") then
 			if (obj.id == "exit") then
-				smChooseCharacter:set("EXIT");
+				form:setResponse("exit");
 			elseif (obj.id == "set_password") then
-				smChooseCharacter:set("CHANGE_PASSWORD");
+				form:setResponse("change_password");
 			elseif (obj.id == "begin") then
                 -- ComwinInitCommunicatePage();
-				smChooseCharacter:set("BEGIN");
+                uiLoadCharacter.passwordEntered =  uiLoadCharacter.passwordField:get();
+				form:setResponse("begin");
 			end
 		end
 	end
@@ -111,7 +112,9 @@ end
 -- As the UI state machine is updated, run the form's ui
 ------------------------------------------------------------------------------
 uiLoadCharacter.update = function()
+	form:setResponse(nil);
 	form:updateUI();
+	return form:getResponse();
 end
 
 uiLoadCharacter.finish = function()

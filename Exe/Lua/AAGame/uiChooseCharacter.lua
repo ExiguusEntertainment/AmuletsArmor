@@ -60,10 +60,10 @@ uiChooseCharacter.eventHandler = function(form, obj, event)
 		elseif (event == "release") then		
 			if (obj.id == "load") then
 				if (stats.loadCharacter(uiChooseCharacter.charSelected)) then
-					smChooseCharacter:set("LOAD");
+					form:setResponse("load");
 				else
 					prompt.displayMessage("Character not available.");
-					smChooseCharacter:set("REDRAW");
+					form:setResponse("redraw");
 				end
 			elseif (obj.id == "delete") then
 				local selected = listChars:getSelection();
@@ -71,14 +71,14 @@ uiChooseCharacter.eventHandler = function(form, obj, event)
 				local chardata = stats.getSavedCharacterIDStruct(selected);
 				if (chardata.status ~= "undefined") then
 					-- Go on to deleting the character on the server
-					smChooseCharacter:set("DELETE");
+					form:setResponse("delete");
 				else
 				    -- Can't delete an empty slot
 					prompt.displayMessage("^001Character slot not filled.");
-					smChooseCharacter:set("REDRAW");
+					form:setResponse("redraw");
 				end
 			elseif (obj.id == "exit") then
-				smChooseCharacter:set("EXIT");
+				form:setResponse("exit");
 			end
 		end
 	end
@@ -151,7 +151,9 @@ end
 -- As the UI state machine is updated, run the form's ui
 ------------------------------------------------------------------------------
 uiChooseCharacter.update = function()
+	form:clearResponse();
 	form:updateUI();
+	return form:getResponse();
 end
 
 ------------------------------------------------------------------------------

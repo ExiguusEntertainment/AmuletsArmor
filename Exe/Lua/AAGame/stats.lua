@@ -4,7 +4,9 @@ local aastats = require "aastats";
 
 function stats.getCharacterList()
 	-- Creates a table of characters with { name, password, status, mail }
-	return aastats.GetCharacterList()
+	local chars = aastats.GetCharacterList()
+print(inspect(chars));
+	return chars;	
 end
 
 function stats.setActiveCharacterList(charList)
@@ -47,6 +49,34 @@ function stats.drawCharacterPortrait(x, y)
 		color.update(0);
 		pics.unlockAndUnfind(pic);
 	end	
+end
+
+function stats.setPassword(c, newPassword)
+	stats.char.password = newPassword;
+end
+
+-- Store the version of the character in Lua into the A&A engine underneath.
+-- TODO: Remove this step
+function stats.set()
+	aastats.Set(stats.char);
+end
+
+-- Save the currently active character to the given save slot
+function stats.saveCharacter(c)
+	printf("SaveCharacter to slot %d with password %s", c, stats.char.password);
+	stats.set();
+	aastats.SaveCharacter(c);
+	
+	-- Update the list info
+	stats.charList[c+1].name = stats.char.name;
+	stats.charList[c+1].password = stats.char.password;
+	stats.charList[c+1].mail = stats.char.mail;
+	stats.charList[c+1].status = stats.char.status;
+end
+
+function stats.deleteCharacter(c)
+	printf("DeleteCharacter slot %d", c);
+	-- TODO: Enter code here!
 end
 
 return stats
