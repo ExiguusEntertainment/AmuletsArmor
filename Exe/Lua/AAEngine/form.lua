@@ -235,6 +235,8 @@ function Form:run()
 		mouse.updateEvents();
 		keyboard.updateEvents();
 		sound.update();
+		
+		coroutine.yield();
 	end
 
 	-- Remove the form from the system

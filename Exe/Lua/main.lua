@@ -23,8 +23,10 @@ function protected_main()
 
 	mouseControl.InitForJustUI();
 
+	smMain.init();
 	while (not smMain:isDone()) do
 		local delta = ticker.get() - lastTick;
+		
 		if (delta < 1) then
 			-- Too fast! Slow down and let the CPU cool off
 			ticker.sleep(1)
@@ -35,6 +37,7 @@ function protected_main()
 		updateOften()
 		smMain:update()
 	end
+	smMain.finish();
 	
 	mouseControl.Finish();
 end

@@ -202,11 +202,14 @@ smChooseCharacter.update = function()
 		assert(false, "");
 	else
 		if (result == "exit") then
-			smMain:set("LEAVE_SERVER");
+--			smMain:set("LEAVE_SERVER");
+			return "leave_server";
 		elseif (result == "begin") then
-			smMain:set("BEGIN_GAME")
+--			smMain:set("BEGIN_GAME")l
+			return "begin";
 		end
 	end
+	return nil;
 end
 
 smChooseCharacter.finish = function()
