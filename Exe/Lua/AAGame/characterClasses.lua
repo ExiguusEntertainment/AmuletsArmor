@@ -1,4 +1,4 @@
-characterClasses = {
+characterClassesArray = {
 	Citizen = {
 		class = "Citizen",
 		attributes = {
@@ -39,6 +39,10 @@ characterClasses = {
 			stealth = 2,
 			constitution = 2,
 		},
+		description = "This class has slightly above average attributes in all areas but lacks any special abilities.  He is especially suited to beginning gamers.\rArmor Types: All\rWeapon Types: All\rMagik System: Arcane\r",
+		portrait_name = "UI/CREATEC/CHAR00",
+		init_inventory = function()
+		end
 	},
 	Knight = {
 		class = "Knight",
@@ -80,6 +84,10 @@ characterClasses = {
 			stealth = 1,
 			constitution = 3,
 		},
+		description = "Characters of the Knight class are specialized in melee combat.  Knights receive bonuses to damage done with melee weapons.\r\rArmor Types: All\rWeapon Types: All\rMagik System: Arcane\r",
+		portrait_name = "UI/CREATEC/CHAR01",
+		init_inventory = function()
+		end
 	},
 	Mage = {
 		class = "Mage",
@@ -121,6 +129,10 @@ characterClasses = {
 			stealth = 2,
 			constitution = 1,
 		},
+		description = "Mages wield powerful magiks but are physically weak.  Mages rely solely on magik to make them formidable characters.\r\rArmor Types: Leather\rWeapon Types: Staff/Dagger\rMagik System: Mage\r",
+		portrait_name = "UI/CREATEC/CHAR02",
+		init_inventory = function()
+		end
 	},
 	Warlock = {
 		class = "Warlock",
@@ -162,6 +174,10 @@ characterClasses = {
 			stealth = 2,
 			constitution = 2,
 		},
+		description = "Warlocks are mages trained especially for combat.  They are not as powerful in the magiks as mages, but have devoted time to studying melee combat techniques.\rArmor Types: Up to chain\rWeapon Types: No crossbow\rMagik System: Mage\r",
+		portrait_name = "UI/CREATEC/CHAR03",
+		init_inventory = function()
+		end
 	},
 	Priest = {
 		class = "Priest",
@@ -203,6 +219,10 @@ characterClasses = {
 			stealth = 2,
 			constitution = 2,
 		},
+		description = "Characters devoted to becoming Priests gain powers of healing and protection.  They can also fight reasonably well.\r\rArmor Types: Up to Chain\rWeapon Types: Mace/Staff\rMagik System: Priest\r",
+		portrait_name = "UI/CREATEC/CHAR04",
+		init_inventory = function()
+		end
 	},
 	Rogue = {
 		class = "Rogue",
@@ -244,6 +264,10 @@ characterClasses = {
 			stealth = 3,
 			constitution = 2,
 		},
+		description = "Rogues specialize in sneaking around and picking locks and pockets.  They are very quick but rely on stealth instead of combat.\r\rArmor Types: Leather\rWeapon Types: No longsword\rMagik System: Arcane\r",
+		portrait_name = "UI/CREATEC/CHAR05",
+		init_inventory = function()
+		end
 	},
 	Archer = {
 		class = "Archer",
@@ -285,6 +309,10 @@ characterClasses = {
 			stealth = 1,
 			constitution = 2,
 		},
+		description = "Archers are the masters of missile weapons.\r\r\r\r\rArmor Types: Up to chain\rWeapon Types: Any\rMagik System: Arcane\r",
+		portrait_name = "UI/CREATEC/CHAR06",
+		init_inventory = function()
+		end
 	},
 	Sailor = {
 		class = "Sailor",
@@ -326,6 +354,10 @@ characterClasses = {
 			stealth = 2,
 			constitution = 3,
 		},
+		description = "Sailors are quick on their feet and are brutal fighters, but are weak in the magiks.\r\r\r\rArmor Types: Up to chain\rWeapon Types: Any\rMagik System: Arcane\r",
+		portrait_name = "UI/CREATEC/CHAR07",
+		init_inventory = function()
+		end
 	},
 	Paladin = {
 		class = "Paladin",
@@ -367,6 +399,10 @@ characterClasses = {
 			stealth = 1,
 			constitution = 2,
 		},
+		description = "Paladins are formidable fighters blessed with the holy word.\r\r\r\rArmor Types: Any\rWeapon Types: No bow\rMagik System: Priest\r",
+		portrait_name = "UI/CREATEC/CHAR08",
+		init_inventory = function()
+		end
 	},
 	Mercenary = {
 		class = "Mercenary",
@@ -408,6 +444,10 @@ characterClasses = {
 			stealth = 2,
 			constitution = 2,
 		},
+		description = "Mercenaries have had a hard life, and have learned to fight and steal to survive.\r\r\r\rArmor Types: Any\rWeapon Types: No mace\rMagik System: Arcane\r",
+		portrait_name = "UI/CREATEC/CHAR09",
+		init_inventory = function()
+		end
 	},
 	Magician = {
 		class = "Magician",
@@ -449,6 +489,51 @@ characterClasses = {
 			stealth = 1,
 			constitution = 2,
 		},
+		description = "Magicians are trickster-mages, and will often times pick your pockets while they mesmerise you with magik\r\rArmor Types: Leather\rWeapon Types: Sword/Dagger/Staff\rMagik System: Mage\r",
+		portrait_name = "UI/CREATEC/CHAR10",
+		init_inventory = function()
+		end
 	},
 };
 
+characterClasses = {}
+
+characterClasses.findPrevious = function(class)
+	local previous = nil;
+	for key, value in pairs(characterClassesArray) do
+		if (characterClassesArray[key].class == class) then
+			break;
+		end
+		previous = characterClassesArray[key].class;
+	end	
+	if (previous == nil) then
+		-- First on the list, find the last one
+		for key, value in pairs(characterClassesArray) do
+			previous = characterClassesArray[key].class;
+		end	
+	end
+	return previous;
+end
+
+characterClasses.findNext = function(class)
+	local previous = nil;
+	local now = nil;
+	local first = nil;
+	for key, value in pairs(characterClassesArray) do
+		if (first == nil) then
+			first = characterClassesArray[key].class;
+		end
+		now = characterClassesArray[key].class;
+		if (previous == class) then
+			return now;
+		end
+		previous = characterClassesArray[key].class;
+	end
+	return first;	
+end
+
+characterClasses.find = function(className)
+	return characterClassesArray[className];
+end
+
+return chraacterClasses;

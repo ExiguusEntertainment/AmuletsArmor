@@ -235,8 +235,6 @@ function Form:run()
 		mouse.updateEvents();
 		keyboard.updateEvents();
 		sound.update();
-		
-		coroutine.yield();
 	end
 
 	-- Remove the form from the system
@@ -267,4 +265,13 @@ end
 
 function Form:getResponse(r)
 	return self.response;
+end
+
+function Form:find(id)
+	for i=1,#self.objects do
+		if (self.objects[i].id == id) then
+		    return self.objects[i];
+		end
+	end
+	return nil;
 end

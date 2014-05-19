@@ -149,9 +149,9 @@ extern void SleepMS(T_word32 sleepMS);
     ViewSetPalette(VIEW_PALETTE_STANDARD) ;
     ClientInit();
 
+#if 1
     AALuaScriptLoadAndRun("main.lua");
-
-#if 0
+#else
     SMMainInit() ;
     while (!SMMainIsDone())  {
         if ((TickerGet() - lastTick) < CAP_TICK_RATE) {

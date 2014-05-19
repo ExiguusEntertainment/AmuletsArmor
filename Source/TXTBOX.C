@@ -1906,18 +1906,24 @@ T_void TxtboxDrawCallBack(T_graphicID graphicID, T_word16 index)
 //    bcolor2=p_Txtbox->textshadow;
 
     /* figure out our last color */
-    for (i=0;i<p_Txtbox->linestarts[startline];i++)
-    {
-        if (p_Txtbox->data[i]>128)
+    if (startline < endline) {
+        for (i=0;i<p_Txtbox->linestarts[startline];i++)
         {
-            newcolor=p_Txtbox->data[i]-128;
-            if (newcolor < MAX_EXTENDED_COLORS)
+            if (p_Txtbox->data[i]>128)
             {
-                newcolor=G_extendedColors[newcolor];
-                p_Txtbox->textcolor=(T_byte8)newcolor;
-                p_Txtbox->htextcolor=(T_byte8)newcolor;
-             }
+                newcolor=p_Txtbox->data[i]-128;
+                if (newcolor < MAX_EXTENDED_COLORS)
+                {
+                    newcolor=G_extendedColors[newcolor];
+                    p_Txtbox->textcolor=(T_byte8)newcolor;
+                    p_Txtbox->htextcolor=(T_byte8)newcolor;
+                 }
+            }
         }
+    } else {
+        newcolor=G_extendedColors[1]; // white
+        p_Txtbox->textcolor=(T_byte8)newcolor;
+        p_Txtbox->htextcolor=(T_byte8)newcolor;
     }
 
     /* loop through the data lines, drawing each line */

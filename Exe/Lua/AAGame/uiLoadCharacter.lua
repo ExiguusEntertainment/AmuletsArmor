@@ -17,7 +17,6 @@ uiLoadCharacter.createForm = function()
 	local char;
 
 	char = stats.get();
-	char.test = { x=1, y=2 };
 print(inspect(char));
 	form = Form.create(uiLoadCharacter.eventHandler);
 
@@ -44,17 +43,17 @@ print(inspect(char));
 	form:addTextbox{id="level", x=255, y=39, width=16, height=8, readonly=1,
 		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.level};
 	form:addTextbox{id="str", x=255, y=49, width=16, height=8, readonly=1,
-		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attrs.strength};
+		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attributes.strength};
 	form:addTextbox{id="con", x=255, y=59, width=16, height=8, readonly=1,
-		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attrs.constitution};
+		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attributes.constitution};
 	form:addTextbox{id="acc", x=255, y=69, width=16, height=8, readonly=1,
-		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attrs.accuracy };
+		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attributes.accuracy };
 	form:addTextbox{id="stl", x=255, y=79, width=16, height=8, readonly=1,
-		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attrs.stealth};
+		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attributes.stealth};
 	form:addTextbox{id="mag", x=255, y=89, width=16, height=8, readonly=1,
-		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attrs.magic};
+		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attributes.magic};
 	form:addTextbox{id="spd", x=255, y=99, width=16, height=8, readonly=1,
-		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attrs.speed};
+		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.attributes.speed};
 	form:addTextbox{id="class", x=196, y=109, width=75, height=8, readonly=1,
 		scrolling=0, font="FontTiny", mode="field", justify="center", text=char.class};
 	form:addTextbox{id="title", x=196, y=119, width=75, height=8, readonly=1,

@@ -5,7 +5,13 @@
 --
 -- NOTE: In the original A&A code, this was called MAINUI
 --
-uiChooseCharacter = {}
+--
+
+local uiCreateCharacter = require "AAGame/uiCreateCharacter"
+
+uiChooseCharacter = {
+	charSelected = 0
+}
 
 local listChars;
 local loadButton;
@@ -64,6 +70,15 @@ uiChooseCharacter.eventHandler = function(form, obj, event)
 				else
 					prompt.displayMessage("Character not available.");
 					form:setResponse("redraw");
+				end
+			elseif (obj.id == "create") then
+				local chardata;
+				chardata = stats.getSavedCharacterIDStruct(uiChooseCharacter.charSelected);
+				-- FormCleanUp();
+				if (chardata.status == "undefined") then
+					form:setResponse("create");
+				else
+            		prompt.displayMessage("^001Character slot filled - ^003Delete^001 character first.");
 				end
 			elseif (obj.id == "delete") then
 				local selected = listChars:getSelection();
@@ -163,6 +178,4 @@ uiChooseCharacter.finish = function()
 	form:finish();
 end
 
-uiChooseCharacter.charSelected = 0;
-
-return uiChooseCharacter
+return uiChooseCharacter;

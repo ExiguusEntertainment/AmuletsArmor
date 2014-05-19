@@ -998,6 +998,19 @@ int LUA_API luaopen_aadisplay(lua_State *L)
     return 1;
 }
 //-----------------
+static int lua_StatsDeleteCharacter(lua_State *L)
+{
+    T_byte8 selected;
+    E_Boolean result;
+
+    DebugRoutine("lua_StatsDeleteCharacter");
+    selected = (T_byte8)lua_tonumber(L, 1);
+    result = StatsDeleteCharacter(selected);
+    DebugEnd();
+
+    return 1;
+}
+
 static int lua_StatsGetSavedCharacterList(lua_State *L)
 {
     T_statsSavedCharArray *p_charArray;
@@ -1144,7 +1157,7 @@ static int lua_StatsGet(lua_State *L)
     ITableSetInt(L, "accuracy", G_activeStats->Attributes[ATTRIBUTE_ACCURACY]);
     ITableSetInt(L, "stealth", G_activeStats->Attributes[ATTRIBUTE_STEALTH]);
     ITableSetInt(L, "constitution", G_activeStats->Attributes[ATTRIBUTE_CONSTITUTION]);
-    ITableSetTable(L, "attrs");
+    ITableSetTable(L, "attributes");
 
     return 1;
 }
@@ -1228,7 +1241,7 @@ static int lua_StatsSet(lua_State *L)
     G_activeStats->SpellSystem = IStringToSpellSystem(spellsystem);
     ITableGetString(L, "password", (char *)G_activeStats->password, sizeof(G_activeStats->password), "");
     
-    ITableGetTable(L, "attrs");
+    ITableGetTable(L, "attributes");
 
     ITableGetInt(L, "strength", &v, 20);
     G_activeStats->Attributes[ATTRIBUTE_STRENGTH] = v;
@@ -1253,6 +1266,13 @@ static int lua_StatsGetActive(lua_State *L)
     lua_pushnumber(L, StatsGetActive());
 
     return 1;
+}
+
+static int lua_StatsInit(lua_State *L)
+{
+    StatsInit();
+
+    return 0;
 }
 
 static int lua_StatsMakeActive(lua_State *L)
@@ -1293,9 +1313,11 @@ static int lua_StatsSaveCharacter(lua_State *L)
 int LUA_API luaopen_aastats(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
+            { "DeleteCharacter", lua_StatsDeleteCharacter },
             { "GetCharacterList", lua_StatsGetSavedCharacterList },
             { "Get", lua_StatsGet },
             { "GetActive", lua_StatsGetActive },
+            { "Init", lua_StatsInit },
             { "LoadCharacter", lua_StatsLoadCharacter },
             { "MakeActive", lua_StatsMakeActive },
             { "SaveCharacter", lua_StatsSaveCharacter },

@@ -1,9 +1,13 @@
 require "StateMachine"
 require "AAGame/stats"
 require "AAGame/mouseControl"
+require "AAGame/characterClasses"
+
 --require "AAGame/smMain"
 
-smChooseCharacter = {}
+smChooseCharacter = { 
+	activeStats = "Citizen", 
+}
 
 ------------------------------------------------------------------------------
 -- User has a current character selected and is trying to change the password.
@@ -117,7 +121,7 @@ function smDeleteCharacter()
 				-- Password was entered correctly.  Let's ask to confirm.
 				if (prompt.question("Are you sure you want to delete?", false) == true) then
 					-- Yes.  Delete character.
-				 	stats.deleteCharacter(StatsGetActive());
+				 	stats.deleteCharacter(stats.getActive());
 					prompt.displayMessage("Character deleted.");
 				else
 					-- No.  Whew!  That was close!  Let the player know they didn't mess it up.
@@ -136,15 +140,36 @@ end
 -- Bring up a user interface to select the type of character and enter a
 -- name.
 function smCreateCharacter()
+	local result;
+	
 	-- Enter
-	-- TODO: StatsCreateCharacterUIStart()
+	stats.init();
+	
+	graphics.push();
+
+	uiCreateCharacter.start();		
 	-- TODO: MapSetDayOffset(0x2AAA8)
 
-	-- Update / Request Create		 
-	-- TODO: StatsCreateCharacterUIUpdate()
+	result = "";
+	while true do
+		coroutine.yield(nil);
+		result = uiCreateCharacter.update();
+if (result ~= nil) then
+printf("Result=%s", result);
+end		
+		if (result == "exit") then
+			result = "exit";
+			break;
+		elseif (result == "begin") then
+			result = "begin";
+			break;
+		end
+	end
 
-	-- Exit
-	-- TODO: StatsCreateCharadcterUIEnd()
+	uiCreateCharacter.finish();
+	
+	graphics.pop();
+	return result;
 end
 
 function smChooseCharacterFunc()
@@ -165,8 +190,13 @@ function smChooseCharacterFunc()
 		if (result == "exit") then
 			break;
 		elseif (result == "create") then
-			smCreateCharacter();
+			uiChooseCharacter.finish();
+			result = smCreateCharacter();
+			if (result == "begin") then
+				return "begin";
+			end
 			redraw = 1;
+			uiChooseCharacter.start(); 
 		elseif (result == "load") then
 			uiChooseCharacter.finish();
 			result = smLoadCharacter();
@@ -175,9 +205,11 @@ function smChooseCharacterFunc()
 			end
 			uiChooseCharacter.start(); 
 		elseif (result == "delete") then
+			uiChooseCharacter.finish();
 			-- Delete the character 
 			smDeleteCharacter();
 			redraw = 1;
+			uiChooseCharacter.start(); 
 		end
 		if (redraw == 1) then
 			uiChooseCharacter.finish();
