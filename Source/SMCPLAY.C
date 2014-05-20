@@ -16,7 +16,6 @@
 #include "CSYNCPCK.H"
 #include "MEMORY.H"
 #include "SMCPLAY.H"
-#include "SMMAIN.H"
 #include "TICKER.H"
 #include "UPDATE.H"
 #include "VIEW.H"
@@ -594,7 +593,7 @@ T_void SMCPlayGameDoGameExit(
     /* Shut down the 3d view and associated members. */
     ControlFinish() ;
 
-    SMMainSetFlag(SMMAIN_FLAG_END_GAME, TRUE) ;
+    //SMMainSetFlag(SMMAIN_FLAG_END_GAME, TRUE) ;
 
     DebugEnd() ;
 }

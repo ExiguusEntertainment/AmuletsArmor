@@ -29,7 +29,6 @@
 #include "PACKET.H"
 #include "PICS.H"
 #include "SOUND.H"
-#include "SMMAIN.H"
 #include "SYNCMEM.H"
 #include "TICKER.H"
 #include "UPDATE.H"
