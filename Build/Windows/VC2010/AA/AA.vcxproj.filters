@@ -248,9 +248,6 @@
     <ClCompile Include="..\..\..\..\Source\SMACHINE.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SMCCHOOS.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SMCPLAY.C">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -623,9 +620,6 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\SMACHINE.H">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Include\SMCCHOOS.H">
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Include\SMCPLAY.H">

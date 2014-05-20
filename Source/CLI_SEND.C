@@ -27,7 +27,6 @@
 #include "PACKET.H"
 #include "PEOPHERE.H"
 #include "PLAYER.H"
-#include "SMCCHOOS.H"
 #include "STATS.H"
 
 /*-------------------------------------------------------------------------*

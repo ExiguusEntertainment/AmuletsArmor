@@ -16,7 +16,6 @@
 #include "MAINUI.H"
 #include "PICS.H"
 #include "PROMPT.H"
-#include "SMCCHOOS.H"
 #include "STATS.H"
 #include "VIEW.H"
 
@@ -78,16 +77,16 @@ T_void MainUIControl (E_formObjectType objtype,
         /* LES:  Make the selected item the active one. */
         StatsMakeActive(G_characterSelected) ;
 
-        /* load character selected, go to the load character UI */
-        if (StatsLoadCharacter((T_byte8)selected)==TRUE)
-        {
-            SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_LOAD, TRUE) ;
-        }
-        else
-        {
-            PromptDisplayMessage ("Character not available.");
-            SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_REDRAW, TRUE) ;
-        }
+        ///* load character selected, go to the load character UI */
+        //if (StatsLoadCharacter((T_byte8)selected)==TRUE)
+        //{
+        //    SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_LOAD, TRUE) ;
+        //}
+        //else
+        //{
+        //    PromptDisplayMessage ("Character not available.");
+        //    SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_REDRAW, TRUE) ;
+        //}
     }
     else if (objID==MAINUI_CREATE_CHARACTER_BUTTON &&
              objstatus==BUTTON_ACTION_RELEASED)
@@ -108,15 +107,15 @@ T_void MainUIControl (E_formObjectType objtype,
 
         FormCleanUp();
 
-        if (chardata->status==CHARACTER_STATUS_UNDEFINED)
-        {
-            SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_CREATE, TRUE) ;
-        }
-        else
-        {
-            strcpy (tempstr,"^001Character slot filled - ^003Delete^001 character first.");
-            PromptDisplayMessage (tempstr);
-        }
+        //if (chardata->status==CHARACTER_STATUS_UNDEFINED)
+        //{
+        //    SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_CREATE, TRUE) ;
+        //}
+        //else
+        //{
+        //    strcpy (tempstr,"^001Character slot filled - ^003Delete^001 character first.");
+        //    PromptDisplayMessage (tempstr);
+        //}
 
         MainUIInit();
     }
@@ -133,7 +132,7 @@ T_void MainUIControl (E_formObjectType objtype,
         chardata=StatsGetSavedCharacterIDStruct(StatsGetActive());
         if (chardata->status < CHARACTER_STATUS_UNDEFINED)
         {
-            SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_DELETE, TRUE) ;
+            //SMCChooseSetFlag(SMCCHOOSE_FLAG_CHOOSE_DELETE, TRUE) ;
         } else {
             strcpy (tempstr,"^001Character slot not filled.");
             PromptDisplayMessage (tempstr);
@@ -194,7 +193,7 @@ T_void MainUIControl (E_formObjectType objtype,
     else if (objID == MAINUI_EXIT_BUTTON &&
              objstatus==BUTTON_ACTION_RELEASED)
     {
-        SMCChooseSetFlag(SMCCHOOSE_FLAG_EXIT, TRUE) ;
+        //SMCChooseSetFlag(SMCCHOOSE_FLAG_EXIT, TRUE) ;
     }
 #if 0
     else if (objID == MAINUI_BULLETIN_LIST &&

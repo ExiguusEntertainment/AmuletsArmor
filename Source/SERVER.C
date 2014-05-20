@@ -26,7 +26,6 @@
 #include "RANDOM.H"
 #include "SERVER.H"
 #include "SERVERSH.H"
-#include "SMCCHOOS.H"
 #include "SOUND.H"
 #include "SOUNDS.H"
 #include "STATS.H"
@@ -720,10 +719,6 @@ T_void ServerReceiveRequestCharacterListPacket(
     p_charArray = StatsGetSavedCharacterList() ;
 
     StatsSetSavedCharacterList(p_charArray) ;
-
-    SMCChooseSetFlag(
-        SMCCHOOSE_FLAG_ENTER_COMPLETE,
-        TRUE) ;
 
     DebugEnd() ;
 }

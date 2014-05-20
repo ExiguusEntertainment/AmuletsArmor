@@ -289,19 +289,6 @@ T_byte8*  StatsGetPlayerNotes(T_void);
 T_void    StatsSetPlayerNotes(T_byte8 *fieldData);
 
 #ifndef SERVER_ONLY
-E_Boolean StatsCreateCharacterUI(T_void);
-T_void StatsCreateCharacterControl(E_formObjectType objtype,
-					            	T_word16 objstatus,
-					             	T_word32 objID);
-T_void StatsCreateCharacterUIInit(T_void);
-
-
-E_Boolean StatsLoadCharacterUI(T_byte8 selection);
-T_void StatsLoadCharacterControl(E_formObjectType objtype,
-					            	T_word16 objstatus,
-					             	T_word32 objID);
-T_void StatsLoadCharacterUIInit(T_void);
-
 T_void StatsDisplayStatisticsPage(T_void);
 E_Boolean StatsAddCoin(E_equipCoinTypes type, T_sword16 num);
 E_Boolean StatsAddBolt(E_equipBoltTypes type, T_sword16 num);
@@ -351,15 +338,7 @@ T_statsSavedCharArray *StatsGetSavedCharacterList(T_void) ;
 T_void StatsSetSavedCharacterList(T_statsSavedCharArray *p_chars) ;
 T_void StatsClearSavedCharacterList(T_void) ;
 
-T_void StatsLoadCharacterUIStart(T_void) ;
-T_void StatsLoadCharacterUIUpdate(T_void) ;
-T_void StatsLoadCharacterUIEnd(T_void) ;
-
 T_word32 StatsComputeCharacterChecksum(T_void) ;
-
-T_void StatsCreateCharacterUIStart(T_void) ;
-T_void StatsCreateCharacterUIEnd(T_void) ;
-T_void StatsCreateCharacterUIUpdate(T_void) ;
 
 T_word32 StatsGetPlayerTotalSavedWealth(T_void);
 T_word32 StatsGetPlayerTotalCarriedWealth(T_void);

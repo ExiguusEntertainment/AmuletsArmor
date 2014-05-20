@@ -12,7 +12,6 @@
  *<!-----------------------------------------------------------------------*/
 #include "CLIENT.H"
 #include "MEMORY.H"
-#include "SMCCHOOS.H"
 #include "SMCPLAY.H"
 #include "SMMAIN.H"
 
@@ -596,7 +595,7 @@ T_void SMMainChooseStart(
         FALSE) ;
 
     /* Initialize the client connect state machine. */
-    SMCChooseInitialize() ;
+//    SMCChooseInitialize() ;
 
     KeyboardBufferOn() ;
 
@@ -625,7 +624,7 @@ T_void SMMainChooseCharacterIdle(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCChooseUpdate() ;
+//    SMCChooseUpdate() ;
 
     DebugEnd() ;
 }
@@ -654,7 +653,7 @@ T_void SMMainChooseCharacterExit(
     p_data = (T_smMainData *)StateMachineGetExtraData(G_smMainHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    SMCChooseFinish() ;
+//    SMCChooseFinish() ;
 
     KeyboardBufferOff() ;
 

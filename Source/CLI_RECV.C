@@ -27,7 +27,6 @@
 #include "OBJECT.H"
 #include "PEOPHERE.H"
 #include "PLAYER.H"
-#include "SMCCHOOS.H"
 #include "SOUND.H"
 #include "SOUNDS.H"
 #include "STATS.H"
