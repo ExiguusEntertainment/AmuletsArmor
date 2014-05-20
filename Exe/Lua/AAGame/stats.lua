@@ -54,12 +54,38 @@ local aastats = require "aastats";
 function stats.getCharacterList()
 	-- Creates a table of characters with { name, password, status, mail }
 	local chars = aastats.GetCharacterList()
-print(inspect(chars));
-	return chars;	
+	local i;
+	charList = {};
+	for i=0,4 do
+		local char = stats.loadCharacter(i);
+		if (char ~= nil) then
+			-- Check for a few extras
+			if (char.mail == nil) then
+				char.mail = 0;
+			end
+			if (char.status == nil) then
+				char.status = "ok";
+			end
+		else
+			char = {};
+			print("  Empty");
+			char.name = "<empty>";
+			char.password = "";
+			char.mail = 0;
+			char.status = "undefined";
+		end
+		charList[#charList+1] = char;
+	end
+
+	return charList;
 end
 
 function stats.setActiveCharacterList(charList)
-	stats.charList = charList 
+print("stats.setActiveCharacterList");
+print(inspect(charList));
+print(inspect(stats.charList));
+	stats.charList = charList;
+print(inspect(stats.charList));
 	aastats.SetSavedCharacterList(charList)
 end
 
@@ -88,10 +114,23 @@ function stats.init()
 	stats.char = stats.get();
 end
 
-function stats.loadCharacter(c)
-	local loadSuccessful = aastats.LoadCharacter(c);
-	stats.char = aastats.Get();
-	return loadSuccessful;
+------------------------------------------------------------------------------
+-- Load a character based on it's slot
+-- @param [in] slotNum -- Slot number to load
+-- @return Character loaded or nil if not found 
+------------------------------------------------------------------------------
+function stats.loadCharacter(slotNum)
+	local char = nil;
+	--stats.char = aastats.Get();
+	local filename = sprintf("Characters/CharSlot%d.json", slotNum);
+	local file = io.open(filename, "r");
+	if (file ~= nil) then
+		local chardata = file:read("*all");
+		char = JSON:decode(chardata);
+		file:close();
+	end
+		
+	return char;
 end
 
 function stats.drawCharacterPortrait(x, y)
@@ -120,7 +159,11 @@ end
 function stats.saveCharacter(c)
 	printf("SaveCharacter to slot %d with password %s", c, stats.char.password);
 	stats.set();
-	aastats.SaveCharacter(c);
+--	aastats.SaveCharacter(c);
+	local filename = sprintf("Characters/CharSlot%d.json", c);
+	local file = assert(io.open(filename, "w"));
+	file:write(JSON:encode_pretty(stats.char));
+	file:close();
 	
 	-- Update the list info
 	stats.charList[c+1].name = stats.char.name;

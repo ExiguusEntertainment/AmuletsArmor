@@ -2,6 +2,7 @@ package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua;./Lua/Classes/?.lua;./L
 
 require "Utilities/inspect"
 require "Utilities/printf"
+require "Utilities/tableUtils"
 color = require "AAEngine/color"
 display = require "AAEngine/display"
 graphics = require "AAEngine/graphics"
@@ -14,6 +15,8 @@ time = require "AAEngine/time"
 ticker = require "AAEngine/ticker"
 ui = require "AAEngine/ui"
 view = require "AAEngine/view"
+JSON = require "Utilities/JSON";
+
 require "AAGame/uiColors"
 
 require "AAGame/prompt"

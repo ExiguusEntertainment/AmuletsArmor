@@ -767,8 +767,10 @@ function encode_value(self, value, parents, etc, indent) -- non-nil indent means
                table.insert(KEYS, encoded)
             end
             local key_indent = indent .. "    "
-            local subtable_indent = indent .. string.rep(" ", max_key_length + 2 + 4)
-            local FORMAT = "%s%" .. string.format("%d", max_key_length) .. "s: %s"
+            -- local subtable_indent = indent .. string.rep(" ", max_key_length + 2 + 4)
+            local subtable_indent = indent .. string.rep(" ", 4)
+            -- local FORMAT = "%s%" .. string.format("%d", max_key_length) .. "s: %s"
+            local FORMAT = "%s%s: %s"
 
             local COMBINED_PARTS = { }
             for i, key in ipairs(object_keys) do

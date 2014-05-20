@@ -65,7 +65,8 @@ uiChooseCharacter.eventHandler = function(form, obj, event)
 			end
 		elseif (event == "release") then		
 			if (obj.id == "load") then
-				if (stats.loadCharacter(uiChooseCharacter.charSelected)) then
+		        stats.char = stats.loadCharacter(uiChooseCharacter.charSelected);
+				if (stats.char ~= nil) then
 					form:setResponse("load");
 				else
 					prompt.displayMessage("Character not available.");
@@ -131,7 +132,7 @@ function uiChooseCharacter:showSelected()
 	stats.makeActive(c);
 	chardata = stats.getSavedCharacterIDStruct(c);
 	if (chardata.status ~= "undefined") then
-		stats.loadCharacter(c);
+		stats.char = stats.loadCharacter(c);
 		stats.drawCharacterPortrait(180, 79);
 	else
 		uiChooseCharacter:clearPortrait();

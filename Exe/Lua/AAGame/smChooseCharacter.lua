@@ -154,14 +154,9 @@ function smCreateCharacter()
 	while true do
 		coroutine.yield(nil);
 		result = uiCreateCharacter.update();
-if (result ~= nil) then
-printf("Result=%s", result);
-end		
 		if (result == "exit") then
-			result = "exit";
 			break;
 		elseif (result == "begin") then
-			result = "begin";
 			break;
 		end
 	end

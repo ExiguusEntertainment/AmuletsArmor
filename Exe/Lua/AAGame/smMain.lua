@@ -1,10 +1,9 @@
-require "StateMachine";
 local keyboard = require "keyboard";
 local smChooseCharacter = require "AAGame/smChooseCharacter"
 local uiChooseCharacter = require "AAGame/uiChooseCharacter"
 local uiLoadCharacter = require "AAGame/uiLoadCharacter"
+local smPlay = require "AAGame/smPlay"
 
---smMain = StateMachine:create();
 smMain = {}
 
 function smMainFunc()
@@ -15,7 +14,6 @@ function smMainFunc()
 
 	while (true) do	
 		-- Connected, choose character
-		print("SMCChooseInitialize")
 		smChooseCharacter.init();
 	
 		keyboard.bufferOn();		
@@ -32,18 +30,11 @@ function smMainFunc()
 		
 		-- Start the game?
 		if (result == "begin") then
-			-- Start the game
-				-- Just chosen to play the game, start up the flags and sub-state
-				-- machine
-				
-				-- TODO: SMCPlayGameInitialize();
-				print("SMCPlayGameInitialize")
-				-- TODO: MouseRelativeModeOff();
-				-- TODO: ClientGotoPlace(20004, 0);
-				while (true) do
-					-- Do nothing here!
-					coroutine.yield();
-				end
+			-- Play the game until it is done and then return here
+			result = smPlay.run();
+			if (result == "leave_server") then
+				break;
+			end
 		elseif (result == "leave_server") then
 			break;
 		end
