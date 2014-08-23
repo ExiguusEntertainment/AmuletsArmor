@@ -61,4 +61,12 @@ function button:delete()
 	self.handle = nil;
 end
 
+function button:setData(d)
+	button.data = d;
+end
+
+function button.redrawAllButtons()
+	aabutton.RedrawAllButtons();
+end
+
 return button

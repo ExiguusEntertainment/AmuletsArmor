@@ -724,11 +724,25 @@ static int lua_KeymapGetScan(lua_State *L)
     return 1;
 }
 
+static int lua_KeymapGetMap(lua_State *L)
+{
+    T_word16 keymapping;
+
+    DebugRoutine("lua_KeymapGetMap");
+
+    keymapping = (T_word16)lua_tonumber(L, 1);
+
+    lua_pushnumber(L, KeyMap(keymapping));
+    DebugEnd();
+    return 1;
+}
+
 
 int LUA_API luaopen_aakeymap(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "GetScan", lua_KeymapGetScan },
+            { "GetMap", lua_KeymapGetMap },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;
@@ -1427,6 +1441,17 @@ static int lua_ButtonMouseControl(lua_State *L)
     return 0;
 }
 
+static int lua_ButtonRedrawAllButtons(lua_State *L)
+{
+    DebugRoutine("lua_ButtonRedrawAllButtons");
+
+    ButtonRedrawAllButtons();
+
+    DebugEnd();
+
+    return 0;
+}
+
 int LUA_API luaopen_aabutton(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
@@ -1434,6 +1459,7 @@ int LUA_API luaopen_aabutton(lua_State *L)
             { "Delete", lua_ButtonDelete },
             { "HandleKeyEvent", lua_ButtonKeyControl },
             { "HandleMouseEvent", lua_ButtonMouseControl },
+            { "RedrawAllButtons", lua_ButtonRedrawAllButtons },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;

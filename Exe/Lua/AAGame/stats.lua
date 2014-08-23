@@ -1,7 +1,9 @@
 require "AAGame/characterClasses"
 
 stats = {
-	char = {
+	char = {},
+	templateChar = {
+		activeRunes = {},
 		armorLevel = 5,
 		attackDamage = 125,
 		attackSpeed = 78500,
@@ -27,6 +29,7 @@ stats = {
 		level = 1,
 		load = 88,
 		loadMax = 500,
+		mail = 0,
 		mana = 2500,
 		manaMax = 2500,
 		name = "Undefined",
@@ -35,6 +38,7 @@ stats = {
 		regenHealth = 150,
 		regenMana = 150,
 		spellSystem = "arcane",
+		status = "ok",
 		tallness = 50,
 		title = "Serviceman",
 		velFallingMax = 31000,
@@ -48,6 +52,7 @@ stats = {
 		xpNeeded = 2000,
 	}
 };
+
 
 local aastats = require "aastats";
 
@@ -68,7 +73,6 @@ function stats.getCharacterList()
 			end
 		else
 			char = {};
-			print("  Empty");
 			char.name = "<empty>";
 			char.password = "";
 			char.mail = 0;
@@ -81,11 +85,7 @@ function stats.getCharacterList()
 end
 
 function stats.setActiveCharacterList(charList)
-print("stats.setActiveCharacterList");
-print(inspect(charList));
-print(inspect(stats.charList));
 	stats.charList = charList;
-print(inspect(stats.charList));
 	aastats.SetSavedCharacterList(charList)
 end
 
@@ -110,8 +110,9 @@ function stats.get()
 end
 
 function stats.init()
-	aastats.Init();
-	stats.char = stats.get();
+	-- aastats.Init();
+	-- stats.char = stats.get();
+	stats.char = table.deepcopy(stats.templateChar);
 end
 
 ------------------------------------------------------------------------------
@@ -172,9 +173,15 @@ function stats.saveCharacter(c)
 	stats.charList[c+1].status = stats.char.status;
 end
 
-function stats.deleteCharacter(c)
-	printf("DeleteCharacter slot %d", c);
-	aastats.DeleteCharacter(c);
+function stats.deleteCharacter(slotNum)
+	printf("DeleteCharacter slot %d", slotNum);
+	--aastats.DeleteCharacter(c);
+	local filename = sprintf("Characters/CharSlot%d.json", slotNum);
+	os.remove(filename);
+end
+
+function stats.runeIsAvailable(runeIndex)
+	return stats.char.activeRunes[runeIndex];
 end
 
 return stats

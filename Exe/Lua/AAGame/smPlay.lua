@@ -1,22 +1,74 @@
 --local uiLoadCharacter = require "AAGame/uiLoadCharacter"
+banner = require "AAGame/Banner/uiBanner";
+hardform = require "AAGame/hardform";
 
 --smPlay = StateMachine:create();
-smPlay = {}
+smPlay = {
+	location = { type="hardform", place="town hall" }
+}
 
 function smPlayFunc()
 	local result;
 	
-		print("SMPlayFunc")
-		stats.saveCharacter(stats.getActive());
+	print("SMPlayFunc")
+	stats.saveCharacter(stats.getActive());
 		
-	-- Connect
-	-- Nothing special here
+	mouseControl.InitForGamePlay();
+	
+	-- show standard palette, and stop showing black screen
+	view.setPalette(0); 
 
+	-- Startup the banner UI
+    uiBanner:init();
+
+    -- and add default rune buttons for current character class
+    --SpellsInitSpells();
+
+    -- clear the messages
+    --MessageClear();
+
+	if (stats.char.xp == 0) then
+        --- Open 'journal to intro banner
+         
+        --EffectSoundOff();
+        --NotesGotoPageID(0);
+        --BannerOpenForm (BANNER_FORM_JOURNAL);
+        --EffectSoundOn();
+	end
+
+		
 	while (true) do	
-		-- Connected, choose character
-		smChooseCharacter.init();
+		coroutine.yield();
+		--smChooseCharacter.init();
+		if (client.location.type == "hardform") then
+			hardform.update();
+			
+			-- Was Escape key pressed?
+			if (keyboard.getScanCode(keyboard.KEY_SCAN_CODE_ESC)) then
+				if (smPlay.location.place == "town hall") then
+					-- Stop playing the game!
+					-- TODO: MessageClear();
+					break;
+				else
+					-- Otherwise, go back to town all
+					-- TODO: MouseRelativeModeOff();
+					-- TODO: client.GotoPlace({type="hardform", place="town hall"}); 
+					smPlay.location.place = "town hall";
+				end
+			end
+		end
+-- TODO:		
+--    /* Update all the regular game stuff. */
+--    if (ClientIsActive())   {
+--        ClientUpdate() ;
+--        CreaturesCheck() ;
+--        ClientSyncEnsureSend() ;
+--    }
+
 	end
 		
+	mouseControl.Finish();
+	
 	-- Done, leave the server
 	return "leave_server";
 end
@@ -57,7 +109,9 @@ smPlay.run = function()
 	
 	-- TODO: SMCPlayGameInitialize();
 	-- TODO: MouseRelativeModeOff();
-	-- TODO: ClientGotoPlace(20004, 0);
+	client:gotoPlace("hardform", "town hall", 0);
+	smPlay.location.type = "hardform";
+	smPlay.location.place = "town hall"; -- was 20004
 	smPlay:init();
 	while (not smPlay:isDone()) do
 		coroutine.yield();

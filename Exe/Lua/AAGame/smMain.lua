@@ -3,6 +3,7 @@ local smChooseCharacter = require "AAGame/smChooseCharacter"
 local uiChooseCharacter = require "AAGame/uiChooseCharacter"
 local uiLoadCharacter = require "AAGame/uiLoadCharacter"
 local smPlay = require "AAGame/smPlay"
+local client = require "AAGame/client"
 
 smMain = {}
 

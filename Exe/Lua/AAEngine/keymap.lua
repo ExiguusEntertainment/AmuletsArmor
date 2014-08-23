@@ -78,4 +78,9 @@ function keymap.getScanCode(keymapping)
 	return aakeymap.GetScan(keymapping);
 end
 
+-- Takes in a keymapping and returns a key scan code
+function keymap.getMap(keymapping)
+	return aakeymap.GetMap(keymapping);
+end
+
 return keymap
