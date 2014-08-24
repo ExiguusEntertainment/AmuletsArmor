@@ -1768,7 +1768,15 @@ static T_void BannerGetCoin(T_buttonID buttonID)
     DebugEnd();
 }
 
-
+T_void BannerSpellAddRuneMaybe(T_buttonID buttonID)
+{
+    DebugRoutine("BannerSpellAddRuneMaybe");
+    // Cannot cast spells when communications window is open
+    if (!BannerFormIsOpen(BANNER_FORM_COMMUNICATE)) {
+        SpellsAddRune(buttonID);
+    }
+    DebugEnd();
+}
 /* this routine adds a rune button for selection of a spell */
 /* Spellsystem dictates the picture locked, slot indicates where */
 T_void BannerAddSpellButton(T_byte8 slot)
@@ -1842,7 +1850,7 @@ T_void BannerAddSpellButton(T_byte8 slot)
 
         DebugCheck(G_runeButtons[slot]==NULL);
         G_runeButtons[slot] = ButtonCreate(xloc[slot], yloc[slot], stmp, FALSE,
-                keycode, SpellsAddRune, NULL);
+                keycode, BannerSpellAddRuneMaybe, NULL);
         DebugCheck(G_runeButtons[slot]!=NULL);
         sprintf(stmp, "UI/3DUI/RUDBUT%02d", picno);
         ButtonSetSelectPic(G_runeButtons[slot], stmp);

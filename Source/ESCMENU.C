@@ -1,3 +1,4 @@
+#include "BANNER.H"
 #include "BUTTON.H"
 #include "CLIENT.H"
 #include "CONFIG.H"
@@ -9,6 +10,7 @@
 #include "KEYMAP.H"
 #include "KEYSCAN.H"
 #include "MOUSEMOD.H"
+#include "SPELLS.H"
 #include "TEXT.H"
 #include "TXTFLD.H"
 #include "VIEW.H"
@@ -757,7 +759,12 @@ void EscapeMenuClose(void)
         ConfigClose();
         ConfigOpen();
 
-        // TODO: Now reload all the keys!
+        BannerFinish();
+        BannerInit();
+
+        SpellsClearRunes(NULL);
+        SpellsFinish();
+        SpellsInitSpells();
     }
 
     DebugEnd();

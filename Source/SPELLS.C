@@ -16,6 +16,7 @@
 #include "DBLLINK.H"
 #include "EFFECT.H"
 #include "KEYSCAN.H"
+#include "KEYMAP.H"
 #include "MESSAGE.H"
 #include "PICS.H"
 #include "SOUND.H"
@@ -78,15 +79,15 @@ T_void SpellsInitSpells (T_void)
         /* remap casting code to keyboard */
         for (i=0;i<4;i++)
         {
-            if (p_spell->code[i]==1) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_1;
-            else if (p_spell->code[i]==2) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_2;
-            else if (p_spell->code[i]==3) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_3;
-            else if (p_spell->code[i]==4) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_4;
-            else if (p_spell->code[i]==5) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_5;
-            else if (p_spell->code[i]==6) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_6;
-            else if (p_spell->code[i]==7) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_7;
-            else if (p_spell->code[i]==8) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_8;
-            else if (p_spell->code[i]==9) p_spell->code[i]=KEY_SCAN_CODE_KEYPAD_9;
+            if (p_spell->code[i]==1) p_spell->code[i]=KeyMap(KEYMAP_RUNE1);
+            else if (p_spell->code[i]==2) p_spell->code[i]=KeyMap(KEYMAP_RUNE2);
+            else if (p_spell->code[i]==3) p_spell->code[i]=KeyMap(KEYMAP_RUNE3);
+            else if (p_spell->code[i]==4) p_spell->code[i]=KeyMap(KEYMAP_RUNE4);
+            else if (p_spell->code[i]==5) p_spell->code[i]=KeyMap(KEYMAP_RUNE5);
+            else if (p_spell->code[i]==6) p_spell->code[i]=KeyMap(KEYMAP_RUNE6);
+            else if (p_spell->code[i]==7) p_spell->code[i]=KeyMap(KEYMAP_RUNE7);
+            else if (p_spell->code[i]==8) p_spell->code[i]=KeyMap(KEYMAP_RUNE8);
+            else if (p_spell->code[i]==9) p_spell->code[i]=KeyMap(KEYMAP_RUNE9);
         }
 /*
         printf ("\n\nloading spell:\n");
@@ -212,6 +213,30 @@ T_void SpellsFinish(T_void)
 
 }
 
+T_byte8 SpellKeyToRuneID(T_byte8 scankey)
+{
+    if (scankey == KeyMap(KEYMAP_RUNE1))
+        return 1;
+    if (scankey == KeyMap(KEYMAP_RUNE2))
+        return 2;
+    if (scankey == KeyMap(KEYMAP_RUNE3))
+        return 3;
+    if (scankey == KeyMap(KEYMAP_RUNE4))
+        return 4;
+    if (scankey == KeyMap(KEYMAP_RUNE5))
+        return 5;
+    if (scankey == KeyMap(KEYMAP_RUNE6))
+        return 6;
+    if (scankey == KeyMap(KEYMAP_RUNE7))
+        return 7;
+    if (scankey == KeyMap(KEYMAP_RUNE8))
+        return 8;
+    if (scankey == KeyMap(KEYMAP_RUNE9))
+        return 9;
+
+    // Unknown
+    return 0;
+}
 /*-------------------------------------------------------------------------*
  * Routine:  SpellsAddRune
  *-------------------------------------------------------------------------*/
@@ -250,7 +275,7 @@ T_void SpellsAddRune (T_buttonID buttonID)
 				if (StatsGetPlayerMana()>0)
 				{
 				  ColorSetColor (MANA_BACKCOLOR,30,0,30);
-				  G_curspell[i]=(T_byte8)p_button->scancode;   //add scancode to spell key
+				  G_curspell[i]=SpellKeyToRuneID((T_byte8)p_button->scancode);   //add scancode to spell key
 				  SpellsDrawRuneBox();
 				} else ColorSetColor (MANA_BACKCOLOR,55,0,0);
 				break;
@@ -331,6 +356,55 @@ T_void SpellsBackspace (T_buttonID buttonID)
 }
 
 
+T_byte8 RuneIDToKey(T_byte8 aRuneID)
+{
+    T_byte8 key = 0;
+
+    DebugRoutine("RundeIDToKey");
+    DebugCheck(aRuneID <= 9);
+
+    switch (aRuneID) {
+        case 1: key = KeyMap(KEYMAP_RUNE1); break;
+        case 2: key = KeyMap(KEYMAP_RUNE2); break;
+        case 3: key = KeyMap(KEYMAP_RUNE3); break;
+        case 4: key = KeyMap(KEYMAP_RUNE4); break;
+        case 5: key = KeyMap(KEYMAP_RUNE5); break;
+        case 6: key = KeyMap(KEYMAP_RUNE6); break;
+        case 7: key = KeyMap(KEYMAP_RUNE7); break;
+        case 8: key = KeyMap(KEYMAP_RUNE8); break;
+        case 9: key = KeyMap(KEYMAP_RUNE9); break;
+        default: key = 0; break;
+    }
+
+    DebugEnd();
+
+    return key;
+}
+
+T_byte8 RuneIDToOriginalScanKey(T_byte8 aRuneID)
+{
+    T_byte8 scankey = 0;
+
+    DebugRoutine("RuneIDToOriginalScanKey");
+    DebugCheck(aRuneID <= 9);
+
+    switch (aRuneID) {
+        case 1: scankey = KEY_SCAN_CODE_KEYPAD_1; break;
+        case 2: scankey = KEY_SCAN_CODE_KEYPAD_2; break;
+        case 3: scankey = KEY_SCAN_CODE_KEYPAD_3; break;
+        case 4: scankey = KEY_SCAN_CODE_KEYPAD_4; break;
+        case 5: scankey = KEY_SCAN_CODE_KEYPAD_5; break;
+        case 6: scankey = KEY_SCAN_CODE_KEYPAD_6; break;
+        case 7: scankey = KEY_SCAN_CODE_KEYPAD_7; break;
+        case 8: scankey = KEY_SCAN_CODE_KEYPAD_8; break;
+        case 9: scankey = KEY_SCAN_CODE_KEYPAD_9; break;
+        default: scankey = 0; break;
+    }
+
+    DebugEnd();
+
+    return scankey;
+}
 
 /*-------------------------------------------------------------------------*
  * Routine:  SpellsDrawRuneBox
@@ -355,7 +429,7 @@ T_void SpellsDrawRuneBox (T_void)
 	    {
 		    if (G_curspell[i]!=0)
 		    {
-		         runebutton=ButtonGetByKey (G_curspell[i]);
+		         runebutton=ButtonGetByKey(RuneIDToKey(G_curspell[i]));
                  pushed=ButtonIsPushed(runebutton);
                  if (pushed==FALSE)
                  {
@@ -499,7 +573,7 @@ T_void SpellsCastSpell (T_buttonID buttonID)
             success=TRUE;
             for (i=0;i<4;i++)
             {
-                if (p_spell->code[i]!=G_curspell[i])
+                if (p_spell->code[i]!=RuneIDToKey(G_curspell[i]))
                 {
                     success=FALSE;
                     break;
