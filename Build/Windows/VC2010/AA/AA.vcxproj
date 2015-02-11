@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;..\..\..\..\Lib\Lua\lib;$(LibraryPath)</LibraryPath>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\Lua\inc;$(IncludePath)</IncludePath>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\Lua\inc;..\..\..\..\Lib\zlib-1.2.8-dll\contrib;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>

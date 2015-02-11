@@ -1,0 +1,30 @@
+type = "Doom Builder Map Settings Configuration";
+gameconfig = "AnA.cfg";
+strictpatches = 0;
+
+maps
+{
+	
+	MAP01
+	{
+		
+		grid
+		{
+			background = "";
+			backoffsetx = 0;
+			backoffsety = 0;
+			backscalex = 100;
+			backscaley = 100;
+			backsource = 0;
+			gridsize = 32;
+		}
+		
+		
+		resources
+		{
+		}
+		
+	}
+	
+}
+
