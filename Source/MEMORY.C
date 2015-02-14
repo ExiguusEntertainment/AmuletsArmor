@@ -72,7 +72,7 @@ static E_Boolean IMemFindFreeSpace(T_void) ;
 T_word32 FreeMemory(T_void) ;
 
 #ifdef _MEM_CHECK_FULL_
-#define MAX_BLOCK_LIST 20000
+#define MAX_BLOCK_LIST 200000
 static T_memBlockHeader *G_blockList[MAX_BLOCK_LIST] ;
 static T_word16 G_numBlocks = 0 ;
 static T_word16 G_firstFree = 0xFFFF ;

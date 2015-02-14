@@ -9,9 +9,9 @@
 #include "GENERAL.H"
 
 #define RESOURCE_BAD NULL
-#define RESOURCE_FILE_BAD ((T_word16)0xFFFF)
+#define RESOURCE_FILE_BAD 0
 
-typedef T_word16 T_resourceFile ;
+typedef T_void *T_resourceFile ;
 
 typedef T_void *T_resource ;
 
