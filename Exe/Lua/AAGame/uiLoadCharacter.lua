@@ -15,7 +15,8 @@ local form;
 uiLoadCharacter.createForm = function()
 	local t;
 	local char;
-
+	
+	stats.set();
 	char = stats.get();
 print(inspect(char));
 	form = Form.create(uiLoadCharacter.eventHandler);

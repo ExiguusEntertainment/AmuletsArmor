@@ -128,7 +128,7 @@ function stats.loadCharacter(slotNum)
 	if (file ~= nil) then
 		local chardata = file:read("*all");
 		char = JSON:decode(chardata);
-		file:close();
+		file:close();		
 	end
 		
 	return char;
