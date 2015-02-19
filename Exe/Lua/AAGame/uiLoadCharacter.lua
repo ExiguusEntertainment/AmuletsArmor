@@ -16,7 +16,10 @@ uiLoadCharacter.createForm = function()
 	local t;
 	local char;
 	
+	--The actual character selection happened at character select
+	--	but before we can get stats they must be set on the backend
 	stats.set();
+	
 	char = stats.get();
 print(inspect(char));
 	form = Form.create(uiLoadCharacter.eventHandler);
