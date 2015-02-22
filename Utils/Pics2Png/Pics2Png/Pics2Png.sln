@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pics2Png", "Pics2Png.vcxproj", "{2FFD8389-8A71-449C-B01F-4CE12C117150}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FFD8389-8A71-449C-B01F-4CE12C117150}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2FFD8389-8A71-449C-B01F-4CE12C117150}.Debug|Win32.Build.0 = Debug|Win32
+		{2FFD8389-8A71-449C-B01F-4CE12C117150}.Release|Win32.ActiveCfg = Release|Win32
+		{2FFD8389-8A71-449C-B01F-4CE12C117150}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
