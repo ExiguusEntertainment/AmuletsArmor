@@ -1,11 +1,26 @@
 --local uiLoadCharacter = require "AAGame/uiLoadCharacter"
-banner = require "AAGame/Banner/uiBanner";
-hardform = require "AAGame/hardform";
+banner = require "AAGame/Banner/uiBanner"
+hardformInst = require "AAGame/hardform"
 
 --smPlay = StateMachine:create();
 smPlay = {
 	location = { type="hardform", place="town hall" }
 }
+
+local isprinted = false
+function getAllData(t)
+	local data = {}
+
+	if isprinted then
+		return
+	end
+		
+	isprinted = true
+	-- print all the attributes from t
+	for k,v in pairs(t) do
+		printf("%s - %s", k, v)
+	end
+end
 
 function smPlayFunc()
 	local result;
@@ -35,13 +50,16 @@ function smPlayFunc()
         --BannerOpenForm (BANNER_FORM_JOURNAL);
         --EffectSoundOn();
 	end
-
 		
 	while (true) do	
 		coroutine.yield();
 		--smChooseCharacter.init();
+		--printf("Try to update hardform %s", client.location.type);
 		if (client.location.type == "hardform") then
-			hardform.update();
+			--printf("Do update hardform");
+			--getAllData(hardform)
+			--getAllData(hardformInst)
+			hardformInst.update()
 			
 			-- Was Escape key pressed?
 			if (keyboard.getScanCode(keyboard.KEY_SCAN_CODE_ESC)) then
