@@ -92,21 +92,30 @@ T_byte8 *PictureLock(T_byte8 *name, T_resource *res)
 {
     T_resource found ;
     T_byte8 *where = NULL ;
+    char pngName[200];
+    char *p;
 
     DebugRoutine("PictureLock") ;
     DebugCheck(name != NULL) ;
     DebugCheck(res != NULL) ;
     DebugCheck(G_picturesActive == TRUE) ;
 
+    // Convert all pictures into .png file names
+    strcpy(pngName, name);
+    p = strchr(pngName, '.');
+    if (!p)
+        p = pngName + strlen(pngName);
+    strcpy(p, ".png");
+
     /* Look up the picture in the index. */
 //printf("> %s\n", name) ;
-    found = ResourceFind(G_pictureResFile, name) ;
+    found = ResourceFind(G_pictureResFile, pngName) ;
 //printf("Locking pic %s (%p) for %s\n", name, found, DebugGetCallerName()) ;
     if (found == RESOURCE_BAD)  {
 #ifndef NDEBUG
-        printf("Cannot find picture named '%s'\n", name) ;
+        printf("Cannot find picture named '%s'\n", pngName) ;
 #endif
-        found = ResourceFind(G_pictureResFile, "DRK42") ;
+        found = ResourceFind(G_pictureResFile, "DRK42.png") ;
     }
 
 DebugCheck(found != RESOURCE_BAD) ;
@@ -156,6 +165,48 @@ T_byte8 *PictureLockData(T_byte8 *name, T_resource *res)
     if (found == RESOURCE_BAD)  {
         printf("Cannot find picture named '%s'\n", name) ;
         found = ResourceFind(G_pictureResFile, "DRK42") ;
+    }
+#endif
+
+DebugCheck(found != RESOURCE_BAD) ;
+    /* If we found it, we need to lock it in memory. */
+    if (found != RESOURCE_BAD)
+        where = ResourceLock(found) ;
+
+    /* Record the resource we got the data from.  Needed for unlocking. */
+    *res = found ;
+
+    DebugEnd() ;
+
+    /* Return a pointer to the data part. */
+    return where ;
+}
+
+T_byte8 *PictureLockPNG(T_byte8 *name, T_resource *res)
+{
+    T_resource found ;
+    T_byte8 *where = NULL ;
+    char pngName[200];
+    char *p;
+
+    DebugRoutine("PictureLockData") ;
+    DebugCheck(name != NULL) ;
+    DebugCheck(res != NULL) ;
+    DebugCheck(G_picturesActive == TRUE) ;
+
+    // Convert all pictures into .png file names
+    strcpy(pngName, name);
+    p = strchr(pngName, '.');
+    if (!p)
+        p = pngName + strlen(pngName);
+    strcpy(p, ".png");
+
+    /* Look up the picture in the index. */
+    found = ResourceFind(G_pictureResFile, pngName) ;
+#ifndef NDEBUG
+    if (found == RESOURCE_BAD)  {
+        printf("Cannot find picture named '%s'\n", pngName) ;
+        found = ResourceFind(G_pictureResFile, "DRK42.png") ;
     }
 #endif
 
