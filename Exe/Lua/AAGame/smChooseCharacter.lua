@@ -9,7 +9,7 @@ local uiCreateCharacter = require "AAGame/uiCreateCharacter"
 
 --require "AAGame/smMain"
 
-smChooseCharacter = { 
+local smChooseCharacter = { 
 	activeStats = "Citizen", 
 }
 
@@ -17,7 +17,7 @@ smChooseCharacter = {
 -- User has a current character selected and is trying to change the password.
 -- Have the user enter the old password (if it exists), and if it matches
 -- have the user enter a new password.
-function smChangePassword()
+smChooseCharacter.smChangePassword = function()
 	local chardata = stats.getSavedCharacterIDStruct(stats.getActive());
 	local password = chardata.password;
 	local correct = true;
@@ -61,7 +61,7 @@ end
 ------------------------------------------------------------------------------
 -- User is choosing to load and play the current character.
 -- Bring up the character summary screen and allow changing of the password.
-function smLoadCharacter()
+smChooseCharacter.smLoadCharacter = function()
 	local result = "exit";
 	-- TODO: MapSetDayOffset(0);
 	graphics.push();
@@ -85,7 +85,7 @@ function smLoadCharacter()
 			break;
 		elseif (loadresult == "change_password") then
 			-- User is opting to change the password, go there instead
-			smChangePassword();
+			smChooseCharacter.smChangePassword();
 			break;
 		elseif (loadresult == "exit") then
 			-- Exit pressed?  Drop out of this loop.
@@ -106,7 +106,7 @@ end
 -- User is choosing to delete the current character.
 -- We don't want this to be a mistake, so if there is a password, first
 -- ask for that.  Then confirm with a yes/no question.
-function smDeleteCharacter()
+smChooseCharacter.smDeleteCharacter = function()
 	local chardata = stats.getSavedCharacterIDStruct(stats.getActive());
 	local oldPassword = chardata.password;
 	if (chardata.status ~= "undefined") then
@@ -143,7 +143,7 @@ end
 -- User is choosing to create a whole new character
 -- Bring up a user interface to select the type of character and enter a
 -- name.
-function smCreateCharacter()
+smChooseCharacter.smCreateCharacter = function()
 	local result;
 	
 	-- Enter
@@ -171,7 +171,7 @@ function smCreateCharacter()
 	return result;
 end
 
-function smChooseCharacterFunc()
+smChooseCharacter.cofunc = function()
 	local result;
 	
 	-- Wait for list here
@@ -190,7 +190,7 @@ function smChooseCharacterFunc()
 			break;
 		elseif (result == "create") then
 			uiChooseCharacter.finish();
-			result = smCreateCharacter();
+			result = smChooseCharacter.smCreateCharacter();
 			if (result == "begin") then
 				return "begin";
 			end
@@ -198,7 +198,7 @@ function smChooseCharacterFunc()
 			uiChooseCharacter.start(); 
 		elseif (result == "load") then
 			uiChooseCharacter.finish();
-			result = smLoadCharacter();
+			result = smChooseCharacter.smLoadCharacter();
 			if (result == "begin") then
 				return "begin";
 			end
@@ -206,7 +206,7 @@ function smChooseCharacterFunc()
 		elseif (result == "delete") then
 			uiChooseCharacter.finish();
 			-- Delete the character 
-			smDeleteCharacter();
+			smChooseCharacter.smDeleteCharacter();
 			stats.setActiveCharacterList(stats.getCharacterList());
 			redraw = 1;
 			uiChooseCharacter.start();
@@ -227,7 +227,7 @@ end
 smChooseCharacter.init = function()
 	-- Start in Connect mode
 --	smChooseCharacter.state = smChooseCharacter.WaitForList;
-	smChooseCharacter.co = coroutine.create(smChooseCharacterFunc);
+	smChooseCharacter.co = coroutine.create(smChooseCharacter.cofunc);
 end
 
 smChooseCharacter.update = function()
