@@ -176,7 +176,7 @@ function smChooseCharacterFunc()
 	
 	-- Wait for list here
 	-- Start by getting the list of characters
-	listOfChars = stats.getCharacterList();
+	local listOfChars = stats.getCharacterList();
 	stats.setActiveCharacterList(listOfChars);
 
 	-- Setup the UI for th list of characters and start it up
@@ -207,8 +207,13 @@ function smChooseCharacterFunc()
 			uiChooseCharacter.finish();
 			-- Delete the character 
 			smDeleteCharacter();
+			stats.setActiveCharacterList(stats.getCharacterList());
 			redraw = 1;
-			uiChooseCharacter.start(); 
+			uiChooseCharacter.start();
+		elseif (result == "redraw") then 
+			uiChooseCharacter.finish();
+			redraw = 1;
+			uiChooseCharacter.start();
 		end
 		if (redraw == 1) then
 			uiChooseCharacter.finish();
