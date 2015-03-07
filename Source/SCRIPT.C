@@ -28,7 +28,6 @@
 #include "OBJGEN.H"
 #include "PLAYER.H"
 #include "SCHEDULE.H"
-#include "SCRFORM.H"
 #include "SCRIPT.H"
 #include "SERVER.H"
 #include "SLIDER.H"
@@ -3293,9 +3292,6 @@ static T_word16 ICommandTextBoxSetSelection(T_scriptHeader *script, T_word16 pos
 
     /* Change the row. */
 #ifndef SERVER_ONLY
-    ScriptFormTextBoxSetSelection(
-        textBoxID.ns.number,
-        row.ns.number) ;
 #else
     DebugCheck(FALSE) ;
 #endif

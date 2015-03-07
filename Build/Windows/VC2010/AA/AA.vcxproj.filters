@@ -233,9 +233,6 @@
     <ClCompile Include="..\..\..\..\Source\SCHEDULE.C">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Source\SCRFORM.C">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Source\SCRIPT.C">
       <Filter>Source Files</Filter>
     </ClCompile>

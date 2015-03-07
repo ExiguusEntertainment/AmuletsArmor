@@ -51,7 +51,6 @@
 #include "PICS.H"
 #include "PLAYER.H"
 #include "RANDOM.H"
-#include "SCRFORM.H"
 #include "SCRIPT.H"
 #include "SMCPLAY.H"
 #include "SOUND.H"
@@ -1358,12 +1357,6 @@ T_void ClientUpdate(T_void)
             /* Back into fake mode */
             PlayerSetFakeMode() ;
 
-        } else if (G_clientMode == CLIENT_MODE_SCRIPT_FORM)  {
-            MouseHide() ;
-              KeyboardUpdateEvents() ;
-            MouseUpdateEvents();
-            ScriptFormUpdate() ;
-            MouseShow() ;
         } else if (ClientGetMode() == CLIENT_MODE_HARD_CODED_FORM)  {
             delta = ClientGetDelta() ;
             HardFormUpdate() ;
@@ -2248,21 +2241,6 @@ T_void ClientGotoForm(T_word32 formNumber)
 //            NULL /* IGotoSucceededForIntro */) ;
 
         HardFormStart(formNumber) ;
-    } else {
-        G_clientMode = CLIENT_MODE_SCRIPT_FORM ;
-
-        /* Standard scripting form. */
-        ScriptFormStart(formNumber) ;
-
-//        p_succeed = (T_gotoSucceededPacket *)packet.data;
-//        p_succeed->command = PACKET_COMMANDCS_GOTO_SUCCEEDED ;
-//        p_succeed->placeNumber = formNumber;
-//
-//        CmdQSendShortPacket(
-//            &packet,
-//            600,
-//            0,
-//            NULL /* IGotoSucceededForIntro */) ;
     }
 
     G_clientIsActive = TRUE ;
@@ -2863,10 +2841,6 @@ T_void ClientForceGotoPlace(
 //printf("Client mode: %d\n", ClientGetMode()) ;
         /* Stop bothering with this level. */
         ClientSetInactive() ;
-
-        if (ClientGetMode() == CLIENT_MODE_SCRIPT_FORM)
-            /* Stop processing the form and destroy it. */
-            ScriptFormEnd() ;
 
         if (ClientGetMode() == CLIENT_MODE_HARD_CODED_FORM)  {
             HardFormEnd() ;

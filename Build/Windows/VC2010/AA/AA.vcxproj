@@ -215,7 +215,6 @@
     <ClCompile Include="..\..\..\..\Source\RANDOM.C" />
     <ClCompile Include="..\..\..\..\Source\RESOURCE.C" />
     <ClCompile Include="..\..\..\..\Source\SCHEDULE.C" />
-    <ClCompile Include="..\..\..\..\Source\SCRFORM.C" />
     <ClCompile Include="..\..\..\..\Source\SCRIPT.C" />
     <ClCompile Include="..\..\..\..\Source\SERVER.C" />
     <ClCompile Include="..\..\..\..\Source\SERVERSH.C" />

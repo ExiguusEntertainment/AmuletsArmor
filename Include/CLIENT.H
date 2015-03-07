@@ -15,7 +15,6 @@
 
 typedef enum {
     CLIENT_MODE_GAME,
-    CLIENT_MODE_SCRIPT_FORM,
     CLIENT_MODE_HARD_CODED_FORM,
     CLIENT_MODE_UNKNOWN
 } E_clientMode;
