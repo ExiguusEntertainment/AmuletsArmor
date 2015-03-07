@@ -1,6 +1,7 @@
-uiTown = require "AAGame/HardForm/uiTown"
+local uiTown = require "AAGame/HardForm/uiTown"
+local uiBanner = require "AAGame/Banner/uiBanner"
 
-hardform = {
+local hardform = {
 	currentForm = nil,
 	isOpen = false,
 	closeButton = nil,

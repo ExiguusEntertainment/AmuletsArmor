@@ -5,7 +5,10 @@
 --
 -- NOTE: In the original A&A code, this was called MAINUI
 --
-uiLoadCharacter = {}
+local stats = require "AAGame/stats"
+local Form = require "AAEngine/form"
+
+local uiLoadCharacter = {}
 
 local form;
 

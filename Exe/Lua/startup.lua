@@ -3,6 +3,8 @@ package.path = './?.lua;./Lua/?.lua;./Lua/AAEngine/?.lua;./Lua/Classes/?.lua;./L
 require "Utilities/inspect"
 require "Utilities/printf"
 require "Utilities/tableUtils"
+
+-- Global access tot he engine
 color = require "AAEngine/color"
 display = require "AAEngine/display"
 graphics = require "AAEngine/graphics"
@@ -18,7 +20,7 @@ view = require "AAEngine/view"
 JSON = require "Utilities/JSON";
 
 require "AAGame/uiColors"
-require "AAGame/prompt"
+--require "AAGame/prompt"
 
 local titlescreen = require "AAGame/titlescreen"
 local config = require "config"

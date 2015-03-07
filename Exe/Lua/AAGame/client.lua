@@ -1,4 +1,6 @@
-client = {
+local hardform = require "AAGame/hardform"
+
+local client = {
 	gamePaused = false,
 	location = {
 		type = "nowhere",
@@ -173,3 +175,5 @@ printf("Goto form %s", formName);
 	hardform.start(formName);
 	self.isActive = true;
 end
+
+return client;

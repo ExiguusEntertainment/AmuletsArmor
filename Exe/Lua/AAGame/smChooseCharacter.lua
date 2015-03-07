@@ -1,7 +1,11 @@
-require "StateMachine"
-require "AAGame/stats"
-require "AAGame/mouseControl"
-require "AAGame/characterClasses"
+local StateMachine = require "StateMachine"
+local prompt = require "AAGame/prompt"
+local stats = require "AAGame/stats"
+local mouseControl = require "AAGame/mouseControl"
+local characterClasses = require "AAGame/characterClasses"
+local uiChooseCharacter = require "AAGame/uiChooseCharacter"
+local uiLoadCharacter = require "AAGame/uiLoadCharacter"
+local uiCreateCharacter = require "AAGame/uiCreateCharacter"
 
 --require "AAGame/smMain"
 

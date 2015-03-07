@@ -5,7 +5,7 @@ local uiLoadCharacter = require "AAGame/uiLoadCharacter"
 local smPlay = require "AAGame/smPlay"
 local client = require "AAGame/client"
 
-smMain = {}
+local smMain = {}
 
 function smMainFunc()
 	local result;

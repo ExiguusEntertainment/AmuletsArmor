@@ -1,4 +1,4 @@
-StateMachine = {}
+local StateMachine = {}
 StateMachine_mt = { __index = StateMachine};
 
 StateMachine.create = function()
@@ -60,3 +60,4 @@ function StateMachine:check(flag, newState)
 	if (self:is(flag)) then self.state = newState; self.forceNewState = 1; end;
 end
 
+return StateMachine

@@ -3,9 +3,10 @@
 --Entered from character load/create
 --Exited in INN, with X, or through quest
 -----------------------------------------------
-uiTown = {
+local Form = require "AAEngine/form"
+
+local uiTown = {
 	bgPic = nil
-	
 }
 
 local form

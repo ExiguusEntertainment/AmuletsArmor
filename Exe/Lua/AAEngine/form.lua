@@ -2,7 +2,7 @@
 -- Groups of User Interface components come together into a single Form.
 --
 
-Form = { response = nil; }
+local Form = { response = nil; }
 Form_mt = { __index = Form }
 
 -- Global list of forms
@@ -275,3 +275,5 @@ function Form:find(id)
 	end
 	return nil;
 end
+
+return Form

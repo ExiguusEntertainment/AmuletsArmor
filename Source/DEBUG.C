@@ -139,6 +139,7 @@ T_void DebugAddRoutine(
 T_void DebugFail(const char *p_msg, const char *p_file, long line)
 {
     FILE *fp ;
+    char nothing[1000];
 
     /* Open a file for the error log. */
     fp = fopen("error.log", "a") ;
@@ -191,6 +192,8 @@ T_void DebugFail(const char *p_msg, const char *p_file, long line)
 
     /* Do a hard exit. */
 //    abort();
+printf("Press ENTER to exit");
+gets(nothing);
     exit(3) ;
 }
 

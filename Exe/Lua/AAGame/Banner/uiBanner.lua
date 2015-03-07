@@ -1,4 +1,6 @@
-uiBanner = { 
+local stats = require "AAGame/stats"
+
+local uiBanner = { 
 	type = "inventory",
 	buttonsCreated = false,
 	bannerButtons = {},
@@ -91,3 +93,5 @@ function uiBanner:update()
 --        lastupdate = TickerGet();
 --    }
 end
+
+return uiBanner

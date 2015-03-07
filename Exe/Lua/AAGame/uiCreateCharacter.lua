@@ -5,7 +5,12 @@
 --
 -- NOTE: In the original A&A code, this was called MAINUI
 --
-uiCreateCharacter = {}
+local Form = require "AAEngine/form"
+local characterClasses = require "AAGame/characterClasses"
+local prompt = require "AAGame/prompt"
+local stats = require "AAGame/stats"
+
+local uiCreateCharacter = {}
 
 local form;
 
@@ -16,17 +21,17 @@ uiCreateCharacter.createForm = function()
 	form = Form.create(uiCreateCharacter.eventHandler);
 
 	-- Graphic: Background
-	form:addGraphic{id="background", x=0, y=0, picName="UI/CREATEC/CRC_BACK"}
+	form:addGraphic{id="background", x=0, y=0, picName="UI/CREATEC/CRC_BACK.png"}
 
 	-- Buttons: Last, Next, Accept, and Cancel
 	form:addButton{id="last", x=12, y=122, scankey1=0,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_LEFT, picName="UI/CREATEC/CRC_LST"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_LEFT, picName="UI/CREATEC/CRC_LST.png"}
 	form:addButton{id="next", x=110, y=122, scankey1=0,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_RIGHT, picName="UI/CREATEC/CRC_NXT"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_RIGHT, picName="UI/CREATEC/CRC_NXT.png"}
 	form:addButton{id="accept", x=133, y=182, scankey1=0,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ENTER, picName="UI/CREATEC/CRC_ACC"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ENTER, picName="UI/CREATEC/CRC_ACC.png"}
 	form:addButton{id="cancel", x=252, y=182, scankey1=0,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ESC, picName="UI/CREATEC/CRC_CNC"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_ESC, picName="UI/CREATEC/CRC_CNC.png"}
 
 	-- Textboxes: Description
 	form:addTextbox{id="description", x=11, y=134, width=114, height=56, readonly=1,
@@ -57,7 +62,7 @@ end
 -- Show the text on the screen
 ------------------------------------------------------------------------------
 uiCreateCharacter.updateText = function()
-	local class = characterClassesArray[stats.char.class];
+	local class = characterClasses.characterClassesArray[stats.char.class];
 	form:find("description"):set(class.description);
 	form:find("strength"):set(class.attributes.strength);
 	form:find("constitution"):set(class.attributes.constitution);
@@ -73,7 +78,7 @@ end
 -- Setup the stats of a character
 ------------------------------------------------------------------------------
 uiCreateCharacter.setupStats = function(className)
-	local class = characterClassesArray[className];
+	local class = characterClasses.characterClassesArray[className];
 	stats.char.attributes = class.attributes;
 	stats.char.class = className;
 	uiCreateCharacter.updateText();

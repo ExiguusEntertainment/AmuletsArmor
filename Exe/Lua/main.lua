@@ -1,4 +1,5 @@
-require "AAGame/smMain" ;
+local smMain = require "AAGame/smMain" ;
+local mouseControl = require "AAGame/mouseControl"
 local G_lastOftenTime = 0
 
 function updateOften()

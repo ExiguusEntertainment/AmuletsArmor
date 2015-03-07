@@ -8,8 +8,11 @@
 --
 
 local uiCreateCharacter = require "AAGame/uiCreateCharacter"
+local prompt = require "AAGame/prompt"
+local Form = require "AAEngine/form"
+local stats = require "AAGame/stats"
 
-uiChooseCharacter = {
+local uiChooseCharacter = {
 	charSelected = 0
 }
 

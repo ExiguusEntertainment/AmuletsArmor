@@ -1,9 +1,12 @@
 --local uiLoadCharacter = require "AAGame/uiLoadCharacter"
-banner = require "AAGame/Banner/uiBanner"
-hardformInst = require "AAGame/hardform"
+local uiBanner = require "AAGame/Banner/uiBanner"
+local client = require "AAGame/client"
+local hardform = require "AAGame/hardform"
+local mouseControl = require "AAGame/mouseControl"
+local stats = require "AAGame/stats"
 
 --smPlay = StateMachine:create();
-smPlay = {
+local smPlay = {
 	location = { type="hardform", place="town hall" }
 }
 
@@ -59,7 +62,7 @@ function smPlayFunc()
 			--printf("Do update hardform");
 			--getAllData(hardform)
 			--getAllData(hardformInst)
-			hardformInst.update()
+			hardform.update()
 			
 			-- Was Escape key pressed?
 			if (keyboard.getScanCode(keyboard.KEY_SCAN_CODE_ESC)) then

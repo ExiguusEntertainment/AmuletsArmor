@@ -1,4 +1,4 @@
-characterClassesArray = {
+local characterClassesArray = {
 	Citizen = {
 		class = "Citizen",
 		attributes = {
@@ -496,7 +496,7 @@ characterClassesArray = {
 	},
 };
 
-characterClasses = {}
+local characterClasses = {}
 
 characterClasses.findPrevious = function(class)
 	local previous = nil;
@@ -536,4 +536,6 @@ characterClasses.find = function(className)
 	return characterClassesArray[className];
 end
 
-return chraacterClasses;
+characterClasses.characterClassesArray = characterClassesArray;
+
+return characterClasses;

@@ -1,4 +1,4 @@
-mouseControl = {
+local mouseControl = {
 }
 
 local init = false; 
@@ -361,3 +361,5 @@ print("mouseControl.Finish");
 	-- No longer handling mouse events (at least for this ui)
 	mouse.popEventHandler()
 end
+
+return mouseControl

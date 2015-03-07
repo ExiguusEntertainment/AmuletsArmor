@@ -1,6 +1,6 @@
-require "AAGame/characterClasses"
+local characterClasses = require "AAGame/characterClasses"
 
-stats = {
+local stats = {
 	char = {},
 	templateChar = {
 		activeRunes = {},
