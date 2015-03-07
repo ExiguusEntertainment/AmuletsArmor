@@ -81,7 +81,7 @@ T_TxtboxID TxtboxCreate (T_word16 x1,
             GraphicSetPostCallBack (p_Txtbox->p_graphicID, TxtboxDrawCallBack, i);
             DebugCheck (p_Txtbox->p_graphicID!=NULL);
             p_graphic=(T_graphicStruct *)p_Txtbox->p_graphicID;
-            DebugCheck (p_graphic->graphicpic==NULL);
+            DebugCheck(p_graphic->png==PNG_BAD);
 
             /* allocate inital data char */
             p_Txtbox->data = MemAlloc(sizeof(T_byte8)*2);

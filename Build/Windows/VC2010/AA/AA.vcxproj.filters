@@ -42,6 +42,9 @@
     <Filter Include="Lib\zlib">
       <UniqueIdentifier>{23b26a80-0855-498b-949e-38856816e97c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\lodepng">
+      <UniqueIdentifier>{c62a7f9a-a736-4a13-90f5-a3c6ff540b8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Source\3D_COLLI.C">
@@ -349,6 +352,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\zip.c">
       <Filter>Lib\Minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\PNG.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Lib\lodepng\lodepng.c">
+      <Filter>Lib\lodepng</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -900,6 +909,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\zip.h">
       <Filter>Lib\Minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Include\PNG.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Lib\lodepng\lodepng.h">
+      <Filter>Lib\lodepng</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

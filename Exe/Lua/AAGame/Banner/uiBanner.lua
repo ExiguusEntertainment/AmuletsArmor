@@ -10,17 +10,17 @@ end
 function uiBanner:createBottomButtons()
     local i ;
 
-    self.bannerButtons[1] = button.create( 5,155,"UI/3DUI/MENUBUT1","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_INVENTORY),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[2] = button.create(22,155,"UI/3DUI/MENUBUT2","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_EQUIPMENT),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[3] = button.create(39,155,"UI/3DUI/MENUBUT3","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_STATISTICS),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[4] = button.create( 5,169,"UI/3DUI/MENUBUT4","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_OPTIONS),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[5] = button.create(22,169,"UI/3DUI/MENUBUT5","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_COMMUNICATE),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[6] = button.create(39,169,"UI/3DUI/MENUBUT6","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_FINANCES),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[7] = button.create( 5,183,"UI/3DUI/MENUBUT7","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_AMMUNITION),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[8] = button.create(22,183,"UI/3DUI/MENUBUT8","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_NOTES),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[9] = button.create(39,183,"UI/3DUI/MENUBUT9","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_JOURNAL),uiBanner.openFormByButton,uiBanner.closeFormByButton);
-    self.bannerButtons[10] = button.create(240,181,"UI/3DUI/CSTBUT2" ,"normal",0,keymap.getMap(keymap.mapping.KEYMAP_CAST_SPELL),SpellsCastSpell,nil);
-    self.bannerButtons[11] = button.create( 93,186,"UI/3DUI/MUSEBUT2" ,"normal",0,keymap.getMap(KEYMAP_USE),nil,nil);
+    self.bannerButtons[1] = button.create( 5,155,"UI/3DUI/MENUBUT1.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_INVENTORY),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[2] = button.create(22,155,"UI/3DUI/MENUBUT2.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_EQUIPMENT),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[3] = button.create(39,155,"UI/3DUI/MENUBUT3.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_STATISTICS),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[4] = button.create( 5,169,"UI/3DUI/MENUBUT4.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_OPTIONS),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[5] = button.create(22,169,"UI/3DUI/MENUBUT5.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_COMMUNICATE),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[6] = button.create(39,169,"UI/3DUI/MENUBUT6.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_FINANCES),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[7] = button.create( 5,183,"UI/3DUI/MENUBUT7.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_AMMUNITION),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[8] = button.create(22,183,"UI/3DUI/MENUBUT8.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_NOTES),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[9] = button.create(39,183,"UI/3DUI/MENUBUT9.png","toggle",keyboard.scankeys.KEY_SCAN_CODE_ALT, keymap.getMap(keymap.mapping.KEYMAP_JOURNAL),uiBanner.openFormByButton,uiBanner.closeFormByButton);
+    self.bannerButtons[10] = button.create(240,181,"UI/3DUI/CSTBUT2.png" ,"normal",0,keymap.getMap(keymap.mapping.KEYMAP_CAST_SPELL),SpellsCastSpell,nil);
+    self.bannerButtons[11] = button.create( 93,186,"UI/3DUI/MUSEBUT2.png" ,"normal",0,keymap.getMap(KEYMAP_USE),nil,nil);
 
     for i=1,9 do
         self.bannerButtons[i].setData(i);

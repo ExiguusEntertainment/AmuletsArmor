@@ -1,6 +1,6 @@
 #include "RESOURCE.H"
 #include "IRESOURC.H"
-#include "minizip/unzip.h"
+#include <unzip.h>
 #include "MEMORY.H"
 
 #if 0

@@ -23,6 +23,10 @@
 #define HEAP_CHECK_ON_ENTER_TOO     0
 #define HEAP_CHECK_LESS_OFTEN       100 // number of times to skip between checks
 
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+
 //#define COMPILE_OPTION_DEBUG_CHECK_VECTOR_TABLE
 
 /* The calling stack is a list of pointers to routine names defined
@@ -32,6 +36,7 @@ const char *G_CallStackFile[DEBUG_MAX_STACK_DEPTH] ;
 T_word16 G_CallStackLine[DEBUG_MAX_STACK_DEPTH] ;
 T_word32 G_CallStackTime[DEBUG_MAX_STACK_DEPTH] ;
 T_word16 G_CallStackTimeSlot[DEBUG_MAX_STACK_DEPTH] ;
+void *G_CallStackLuaState[DEBUG_MAX_STACK_DEPTH] ;
 T_word32 G_TimeSlots[MAX_TIME_SLOTS] ;
 
 /* The following tells where the last access to the calling stack has
@@ -51,6 +56,7 @@ static T_byte8 G_vectorTable[64 * 4] ;
 static T_byte8 G_savedPIC ;
 
 T_void IDebugReportTimeSlots(T_void) ;
+void LuaStackDump(void *state);
 
 /*-------------------------------------------------------------------------*
  * Routine:  DebugAddRoutine
@@ -92,6 +98,7 @@ T_void DebugAddRoutine(
         G_CallStackLine[G_StackPosition] = (T_word16)lineNum ;
         G_CallStack[G_StackPosition] = p_routineName ;
         G_CallStackTimeSlot[G_StackPosition] = DEBUG_NO_TIME ;
+        G_CallStackLuaState[G_StackPosition] = 0;
 #ifdef COMPILE_OPTION_DEBUG_WITH_TIME
         G_CallStackTime[G_StackPosition] = TickerGetAccruate() ;
 #endif
@@ -146,19 +153,36 @@ T_void DebugFail(const char *p_msg, const char *p_file, long line)
         /* Decrement the stack position. */
         G_StackPosition-- ;
 
-        /* Show/dump call item: */
-        fprintf(
-            fp,
-            "  %s (FILE: %s  LINE: %d)\n",
-            G_CallStack[G_StackPosition],
-            G_CallStackFile[G_StackPosition],
-            G_CallStackLine[G_StackPosition]) ;
-        fprintf(
-            stderr,
-            "  %s (FILE: %s  LINE: %d)\n",
-            G_CallStack[G_StackPosition],
-            G_CallStackFile[G_StackPosition],
-            G_CallStackLine[G_StackPosition]) ;
+        if (G_CallStackLuaState[G_StackPosition]) {
+            /* Show/dump call item: */
+            fprintf(
+                fp,
+                "  Lua file %s (FILE: %s  LINE: %d)\n",
+                G_CallStack[G_StackPosition],
+                G_CallStackFile[G_StackPosition],
+                G_CallStackLine[G_StackPosition]) ;
+            fprintf(
+                stderr,
+                "  Lua file %s (FILE: %s  LINE: %d)\n",
+                G_CallStack[G_StackPosition],
+                G_CallStackFile[G_StackPosition],
+                G_CallStackLine[G_StackPosition]) ;
+            LuaStackDump(G_CallStackLuaState[G_StackPosition]);
+        } else {
+            /* Show/dump call item: */
+            fprintf(
+                fp,
+                "  %s (FILE: %s  LINE: %d)\n",
+                G_CallStack[G_StackPosition],
+                G_CallStackFile[G_StackPosition],
+                G_CallStackLine[G_StackPosition]) ;
+            fprintf(
+                stderr,
+                "  %s (FILE: %s  LINE: %d)\n",
+                G_CallStack[G_StackPosition],
+                G_CallStackFile[G_StackPosition],
+                G_CallStackLine[G_StackPosition]) ;
+        }
     }
 
     /* Done with dump. */
@@ -360,6 +384,92 @@ T_void DebugCheckVectorTable(T_void)
 }
 #endif
 
+static void LuaStackDump(void *state)
+{
+    lua_State *L = (lua_State *)state;
+#if 0
+    int i;
+    int top = lua_gettop(L);
+    for (i = 1; i <= top; i++) { /* repeat for each level */
+        int t = lua_type(L, i);
+        switch (t) {
+
+            case LUA_TSTRING: /* strings */
+                printf("`%s'", lua_tostring(L, i));
+                break;
+
+            case LUA_TBOOLEAN: /* booleans */
+                printf(lua_toboolean(L, i) ? "true" : "false");
+                break;
+
+            case LUA_TNUMBER: /* numbers */
+                printf("%g", lua_tonumber(L, i));
+                break;
+
+            default: /* other types */
+                printf("%s", lua_typename(L, t));
+                if (strcmp(lua_typename(L, t), "thread") == 0) {
+                    fprintf(stderr, "In thread:\n");
+                    lua_getglobal(L, "debug");
+                    lua_getfield(L, -1, "traceback");
+                    lua_pushvalue(L, 1);
+                    lua_pushinteger(L, 2);
+                    lua_call(L, 2, 1);
+                    fprintf(stderr, "%s\n", lua_tostring(L, -1));
+                }
+                break;
+
+        }
+        printf("  "); /* put a separator */
+    }
+    printf("\n"); /* end the listing */
+#endif
+
+//        lua_getglobal(L, "debug");
+//        lua_getfield(L, -1, "tracebackWithCoRoutine");
+        //lua_getfield(L, LUA_GLOBALSINDEX, "_ErrorHandler");
+        lua_pushglobaltable(L);
+        lua_getfield(L,-1, "AADumpWithCoRoutine");
+        lua_remove(L,-2);
+        lua_pushvalue(L, 1);
+        lua_pushinteger(L, 2);
+        lua_call(L, 2, 1);
+        fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        //return 1;
+
+}
+
+void DebugLuaAdd(
+        const char *p_routineName,
+        void *state,
+        const char *p_filename,
+        long lineNum)
+{
+    /* We will place the routine's name on the call stack. */
+    DebugCheck(p_routineName != NULL) ;
+
+    /* First, determine if there is room on the stack for the name. */
+    if (G_StackPosition == DEBUG_MAX_STACK_DEPTH)  {
+        /* Error! Too many calls */
+        DebugFail("Call stack too deep!", __FILE__, __LINE__) ;
+    } else {
+        /* OK, just add to the stack. */
+        G_CallStackFile[G_StackPosition] = p_filename ;
+        G_CallStackLine[G_StackPosition] = (T_word16)lineNum ;
+        G_CallStack[G_StackPosition] = p_routineName ;
+        G_CallStackLuaState[G_StackPosition] = state;
+        G_CallStackTimeSlot[G_StackPosition] = DEBUG_NO_TIME ;
+#ifdef COMPILE_OPTION_DEBUG_WITH_TIME
+        G_CallStackTime[G_StackPosition] = TickerGetAccruate() ;
+#endif
+        G_StackPosition++ ;
+    }
+
+}
+void DebugLuaRemove(void)
+{
+    DebugRemoveRoutine();
+}
 #endif // !NDEBUG
 
 /** @} */

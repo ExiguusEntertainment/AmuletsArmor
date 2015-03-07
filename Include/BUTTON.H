@@ -11,6 +11,7 @@
 #include "KEYBOARD.H"
 #include "MOUSEMOD.H"
 #include "TEXT.H"
+#include "PNG.h"
 
 #define MAX_BUTTONS 100
 
@@ -26,8 +27,10 @@ typedef enum
 typedef struct
 {
 	T_graphicID p_graphicID;
-   T_resource normalpic;
-   T_resource selectpic;
+   //T_resource normalpic;
+   //T_resource selectpic;
+	T_png normalPNG;
+	T_png selectPNG;
 	T_word16  scancode;
 	E_Boolean toggle;
 	E_Boolean pushed;

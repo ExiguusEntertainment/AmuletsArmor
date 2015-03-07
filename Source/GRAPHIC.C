@@ -14,6 +14,7 @@
 #include "GRAPHIC.H"
 #include "MEMORY.H"
 #include "PICS.H"
+#include "PNG.h"
 
 static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, const char *bmname);
 static T_graphicID G_graphicarray[MAX_GRAPHICS];
@@ -53,55 +54,47 @@ T_graphicID GraphicCreate (T_word16 lx, T_word16 ly, const char *bmname)
  *  Initializes a graphic as well as allocates memory for it.
  *
  *<!-----------------------------------------------------------------------*/
-static T_graphicID GraphicInit (T_word16 lx, T_word16 ly, const char *bmname)
+static T_graphicID GraphicInit(T_word16 lx, T_word16 ly, const char *bmname)
 {
-	T_word32 size;
-	T_graphicStruct *myID;
-	T_byte8 *picptr;
+    T_word32 size;
+    T_graphicStruct *myID;
 
-	DebugRoutine ("GraphicInit");
+    DebugRoutine("GraphicInit");
 
 //    printf ("loading graphic %s\n",bmname);
 //    fflush (stdout);
 
-	DebugCheck (lx<=SCREEN_SIZE_X && ly<=SCREEN_SIZE_Y);
+    DebugCheck(lx<=SCREEN_SIZE_X && ly<=SCREEN_SIZE_Y);
 
-	size=sizeof(T_graphicStruct);         /* allocate mem for graphic */
-	myID=(T_graphicID)MemAlloc(size);
+    size = sizeof(T_graphicStruct); /* allocate mem for graphic */
+    myID = (T_graphicID)MemAlloc(size);
 
-	DebugCheck (myID!=NULL);
-	if (myID!=NULL)
-	{
-		if (bmname!=NULL)
-		{
-			myID->graphicpic=PictureFind (bmname);
-//printf ("loading picture <%s>\n",bmname);
-//fflush (stdout);
-			picptr=PictureLockQuick (myID->graphicpic);
-			PictureGetXYSize (picptr,&myID->width,&myID->height);
-			PictureUnlock (myID->graphicpic);
-		} else
-		{
-			myID->graphicpic=NULL;
-			myID->width=0;
-			myID->height=0;
-		}
-		myID->locx=lx;
-		myID->locy=ly;
-		myID->xoff=0;
-		myID->yoff=0;
-		myID->visible=TRUE;
-		myID->changed=TRUE;
-		myID->shadow=255;
-		myID->predrawcallback=NULL;
-		myID->postdrawcallback=NULL;
-		myID->predrawcbinfo=0;
-		myID->postdrawcbinfo=0;
-		DebugCheck (lx+myID->width<=SCREEN_SIZE_X);
-		DebugCheck (ly+myID->height<=SCREEN_SIZE_Y);
-	}
-	DebugEnd();
-	return (myID);
+    DebugCheck(myID!=NULL);
+    if (myID != NULL) {
+        if (bmname != NULL) {
+            myID->png = PNGLock(bmname);
+            PNGGetSize(myID->png, &myID->width, &myID->height);
+        } else {
+            myID->width = 0;
+            myID->height = 0;
+            myID->png = PNG_BAD;
+        }
+        myID->locx = lx;
+        myID->locy = ly;
+        myID->xoff = 0;
+        myID->yoff = 0;
+        myID->visible = TRUE;
+        myID->changed = TRUE;
+        myID->shadow = 255;
+        myID->predrawcallback = NULL;
+        myID->postdrawcallback = NULL;
+        myID->predrawcbinfo = 0;
+        myID->postdrawcbinfo = 0;
+        DebugCheck(lx+myID->width <= SCREEN_SIZE_X);
+        DebugCheck(ly+myID->height <= SCREEN_SIZE_Y);
+    }
+    DebugEnd();
+    return (myID);
 }
 
 
@@ -145,55 +138,52 @@ T_void GraphicSetPostCallBack (T_graphicID graphicID,
  *  Cleanup releases memory allocated to all 'graphics'
  *
  *<!-----------------------------------------------------------------------*/
-T_void GraphicDelete (T_graphicID graphicID)
+T_void GraphicDelete(T_graphicID graphicID)
 {
-	T_word16 i;
-	T_graphicStruct *p_graphic;
+    T_word16 i;
+    T_graphicStruct *p_graphic;
 
-	DebugRoutine ("GraphicDelete");
-	if (graphicID!=NULL)
-	{
-		for (i=0;i<MAX_GRAPHICS;i++)
-		{
-			if (G_graphicarray[i]==graphicID) //found it, now kill it
-			{
-				p_graphic = (T_graphicStruct *)graphicID;
-				if (p_graphic->graphicpic != RESOURCE_BAD)
-				{
-					PictureUnfind(p_graphic->graphicpic) ;
-				}
-				MemFree (G_graphicarray[i]);
-                MemCheck (400);
-                G_graphicarray[i]=NULL;
-				break;
-			}
-		}
-	}
+    DebugRoutine("GraphicDelete");
+    if (graphicID != NULL) {
+        for (i = 0; i < MAX_GRAPHICS; i++) {
+            if (G_graphicarray[i] == graphicID) {
+                //found it, now kill it
+                p_graphic = (T_graphicStruct *)graphicID;
+                if (p_graphic->png != PNG_BAD) {
+                    PNGUnlock(p_graphic->png);
+                    p_graphic->png = PNG_BAD;
+                }
+                MemFree(G_graphicarray[i]);
+                MemCheck(400);
+                G_graphicarray[i] = NULL;
+                break;
+            }
+        }
+    }
 
-	DebugEnd();
+    DebugEnd();
 }
 
 
-T_void GraphicCleanUp (T_void)
+T_void GraphicCleanUp(T_void)
 {
-	T_word16 i;
-	T_graphicStruct *p_graphic;
+    T_word16 i;
+    T_graphicStruct *p_graphic;
 
-	DebugRoutine ("GraphicCleanUp");
+    DebugRoutine("GraphicCleanUp");
 
-	for (i=0;i<MAX_GRAPHICS;i++)
-	if (G_graphicarray[i]!=NULL)
-	{
-		p_graphic = (T_graphicStruct *)G_graphicarray[i];
-		if (p_graphic->graphicpic != RESOURCE_BAD)
-		{
-			PictureUnfind(p_graphic->graphicpic) ;
-		}
-		MemFree (G_graphicarray[i]);
-        MemCheck (401);
-        G_graphicarray[i]=NULL;
-	}
-	DebugEnd();
+    for (i = 0; i < MAX_GRAPHICS; i++)
+        if (G_graphicarray[i] != NULL) {
+            p_graphic = (T_graphicStruct *)G_graphicarray[i];
+            if (p_graphic->png != PNG_BAD) {
+                PNGUnlock(p_graphic->png);
+                p_graphic->png = PNG_BAD;
+            }
+            MemFree(G_graphicarray[i]);
+            MemCheck(401);
+            G_graphicarray[i] = NULL;
+        }
+    DebugEnd();
 }
 
 
@@ -207,50 +197,39 @@ T_void GraphicCleanUp (T_void)
  *  will not draw graphic if visible or changed are set to FALSE.
  *
  *<!-----------------------------------------------------------------------*/
-T_void GraphicUpdate (T_graphicID graphicID)
+T_void GraphicUpdate(T_graphicID graphicID)
 {
-	T_byte8 *p_pic;
-	T_bitmap *p_bitmap ;
-	T_graphicStruct *p_graphic;
+    T_bitmap *p_bitmap;
+    T_graphicStruct *p_graphic;
 
-	DebugRoutine ("GraphicUpdate");
-	DebugCheck (graphicID!=NULL);
+    DebugRoutine("GraphicUpdate");
+    DebugCheck(graphicID!=NULL);
 
-	p_graphic = (T_graphicStruct *)graphicID ;
+    p_graphic = (T_graphicStruct *)graphicID;
 
-	if (p_graphic->changed==TRUE && p_graphic->visible==TRUE)
-	{
-		if (p_graphic->predrawcallback != NULL) p_graphic->predrawcallback(graphicID, p_graphic->predrawcbinfo);
+    if (p_graphic->changed == TRUE && p_graphic->visible == TRUE) {
+        if (p_graphic->predrawcallback != NULL)
+            p_graphic->predrawcallback(graphicID, p_graphic->predrawcbinfo);
 
-//		MouseHide();
-
-		if (p_graphic->graphicpic != NULL)
-		{
-
-			p_pic=PictureLockQuick (p_graphic->graphicpic);
-			p_bitmap = PictureToBitmap(p_pic) ;
+        if (p_graphic->png != PNG_BAD) {
+            p_bitmap = PNGGetBitmap(p_graphic->png);
 //			if (G_drawToActualScreen==TRUE) GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
-			if (p_graphic->shadow==255) //no shadowing needed
-			{
-				GrDrawBitmap (p_bitmap,
-							  p_graphic->locx+p_graphic->xoff,
-							  p_graphic->locy+p_graphic->yoff);
-			} else
-			{
-				GrDrawShadedBitmap (p_bitmap,
-									p_graphic->locx+p_graphic->xoff,
-									p_graphic->locy+p_graphic->yoff,
-									p_graphic->shadow);
-			}
-			PictureUnlock (p_graphic->graphicpic);
-		}
+            if (p_graphic->shadow == 255) {
+                //no shadowing needed
+                GrDrawBitmap(p_bitmap, p_graphic->locx + p_graphic->xoff,
+                        p_graphic->locy + p_graphic->yoff);
+            } else {
+                GrDrawShadedBitmap(p_bitmap, p_graphic->locx + p_graphic->xoff,
+                        p_graphic->locy + p_graphic->yoff, p_graphic->shadow);
+            }
+        }
 
-		if (p_graphic->postdrawcallback != NULL) p_graphic->postdrawcallback(graphicID, p_graphic->postdrawcbinfo);
-//		MouseShow();
+        if (p_graphic->postdrawcallback != NULL)
+            p_graphic->postdrawcallback(graphicID, p_graphic->postdrawcbinfo);
 
-		p_graphic->changed=FALSE;
-	}
-	DebugEnd();
+        p_graphic->changed = FALSE;
+    }
+    DebugEnd();
 }
 
 
@@ -345,31 +324,26 @@ T_void GraphicUpdateAllGraphicsBuffered (T_void)
  *  Draws the graphic at a specific x,y location passed in.
  *
  *<!-----------------------------------------------------------------------*/
-T_void GraphicDrawAt (T_graphicID graphicID, T_word16 lx, T_word16 ly)
+T_void GraphicDrawAt(T_graphicID graphicID, T_word16 lx, T_word16 ly)
 {
-	T_byte8 *p_pic;
-	T_bitmap *p_bitmap ;
-	T_graphicStruct *p_graphic;
+    T_bitmap *p_bitmap;
+    T_graphicStruct *p_graphic;
 
-	DebugRoutine ("GraphicDrawAt");
-	DebugCheck (graphicID!=NULL);
+    DebugRoutine("GraphicDrawAt");
+    DebugCheck(graphicID!=NULL);
 
-	p_graphic = (T_graphicStruct *)graphicID ;
-	DebugCheck (p_graphic->locx+p_graphic->xoff+p_graphic->width<=SCREEN_SIZE_X);
-	DebugCheck (p_graphic->locy+p_graphic->yoff+p_graphic->height<=SCREEN_SIZE_Y);
+    p_graphic = (T_graphicStruct *)graphicID;
+    DebugCheck((p_graphic->locx + p_graphic->xoff + p_graphic->width) <= SCREEN_SIZE_X);
+    DebugCheck((p_graphic->locy + p_graphic->yoff + p_graphic->height) <= SCREEN_SIZE_Y);
 
-	if (p_graphic->graphicpic != NULL)
-	{
-		p_pic=PictureLockQuick (p_graphic->graphicpic);
-		p_bitmap = PictureToBitmap(p_pic) ;
-//		MouseHide();
-//		if (G_drawToActualScreen==TRUE) GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
-	    if (p_graphic->shadow==255) GrDrawBitmap (p_bitmap,lx,ly);
-		else GrDrawShadedBitmap (p_bitmap,lx,ly,p_graphic->shadow);
-//		MouseShow();
-		PictureUnlock (p_graphic->graphicpic);
-	}
-	DebugEnd();
+    if (p_graphic->png != PNG_BAD) {
+        p_bitmap = PNGGetBitmap(p_graphic->png);
+        if (p_graphic->shadow == 255)
+            GrDrawBitmap(p_bitmap, lx, ly);
+        else
+            GrDrawShadedBitmap(p_bitmap, lx, ly, p_graphic->shadow);
+    }
+    DebugEnd();
 }
 
 
@@ -576,33 +550,55 @@ T_void GraphicDrawToCurrentScreen (T_void)
 }
 
 
-T_void GraphicSetResource (T_graphicID graphicID, T_resource newresource)
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicSetPNG
+ *-------------------------------------------------------------------------*/
+/**
+ *  Change the PNG used for this graphic.  It is assumed that the
+ *  graphic is exactly the same size.  Note that the graphic now has
+ *  ownership of the PNG.
+ *
+ *  @params [in] graphicID -- ID of graphic to change PNG
+ *  @params [in] aPNG -- Handle to PNG to change to.
+ *
+ *<!-----------------------------------------------------------------------*/
+T_void GraphicSetPNG(T_graphicID graphicID, T_png aPNG)
 {
-   T_graphicStruct *p_graphic;
-   DebugRoutine ("GraphicSetResource");
-   DebugCheck (graphicID != NULL);
+    T_graphicStruct *p_graphic;
+    DebugRoutine("GraphicSetPNG");
+    DebugCheck(graphicID != NULL);
 
-   p_graphic=(T_graphicStruct *)graphicID;
-   p_graphic->graphicpic=newresource;
-   p_graphic->changed=TRUE;
+    p_graphic = (T_graphicStruct *)graphicID;
+    p_graphic->png = aPNG;
+    p_graphic->changed = TRUE;
 
-   DebugEnd();
+    DebugEnd();
 }
 
-
-T_resource GraphicGetResource (T_graphicID graphicID)
+/*-------------------------------------------------------------------------*
+ * Routine:  GraphicGetPNG
+ *-------------------------------------------------------------------------*/
+/**
+ *  Get the PNG used for this graphic.
+ *
+ *  @params [in] graphicID -- ID of graphic to get PNG
+ *
+ *  @return T_png -- Handle of PNG, or PNG_BAD for none.
+ *<!-----------------------------------------------------------------------*/
+T_png GraphicGetPNG(T_graphicID graphicID)
 {
-   T_graphicStruct *p_graphic;
-   T_resource retvalue;
+    T_graphicStruct *p_graphic;
+    T_png retvalue;
 
-   DebugRoutine ("GraphicGetResource");
-   DebugCheck (graphicID != NULL);
+    DebugRoutine("GraphicGetPNG");
+    DebugCheck(graphicID != NULL);
 
-   p_graphic=(T_graphicStruct *)graphicID;
-   retvalue=p_graphic->graphicpic;
+    p_graphic = (T_graphicStruct *)graphicID;
+    retvalue=p_graphic->png;
 
-   DebugEnd();
-   return (retvalue);
+    DebugEnd();
+
+    return (retvalue);
 }
 
 T_void *GraphicGetStateBlock(T_void)

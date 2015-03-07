@@ -30,6 +30,8 @@ T_void DebugRemoveRoutine(T_void) ;
 #    define DebugCheckVectorTable() ((T_void)0)
 #    define DebugSaveVectorTable() ((T_void)0)
 #    define DebugCheckValidStack()
+#    define DebugLuaStart(state)
+#    define DebugLuaEnd(state)
 #  else
 
 #    define DebugCheck(cond)  ((cond)? (T_void)0 : \
@@ -40,11 +42,22 @@ T_void DebugRemoveRoutine(T_void) ;
 #        define DebugRoutine(name) T_word32 __debugCheckStackVar = __STACK_IS_VALID_DEBUG_VAR; DebugAddRoutine(name, __FILE__, __LINE__)
 #        define DebugCheckValidStack()      DebugCheck(__debugCheckStackVar == __STACK_IS_VALID_DEBUG_VAR)
 #        define DebugEnd()                  DebugCheckValidStack() ; DebugRemoveRoutine()
+#        define DebugLuaStart(name, state)  DebugLuaAdd(name, state, __FILE__, __LINE__)
+#        define DebugLuaEnd()               DebugLuaRemove()
 #    else
 #        define DebugCheckValidStack()
 #        define DebugRoutine(name) DebugAddRoutine(name, __FILE__, __LINE__)
 #        define DebugEnd()         DebugRemoveRoutine()
+#        define DebugLuaStart(name, state)  DebugLuaAdd(name, state, __FILE__, __LINE__)
+#        define DebugLuaEnd()               DebugLuaRemove()
 #    endif
+
+    void DebugLuaAdd(
+            const char *name,
+            void *state,
+            const char *p_filename,
+            long lineNum);
+     void DebugLuaRemove(void);
 
      T_void DebugGetCaller(const char **filename, long *line) ;
      const char *DebugGetCallerName(T_void) ;

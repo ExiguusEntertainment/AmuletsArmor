@@ -24,23 +24,23 @@ uiChooseCharacter.createForm = function()
 	form = Form.create(uiChooseCharacter.eventHandler);
 
 	-- Graphic: Background
-	form:addGraphic{id="background", x=0, y=0, picName="UI/LOGON/LOGON_BK"}
+	form:addGraphic{id="background", x=0, y=0, picName="UI/LOGON/LOGON_BK.png"}
 
 	-- Button: Load
 	form:addButton{id="load", x=162, y=49, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_L, picName="UI/LOGON/LOGON_B3"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_L, picName="UI/LOGON/LOGON_B3.png"}
 
 	-- Button: Create
 	form:addButton{id="create", x=200, y=49, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_C, picName="UI/LOGON/LOGON_B4"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_C, picName="UI/LOGON/LOGON_B4.png"}
 
 	-- Button: Delete
 	form:addButton{id="delete", x=238, y=49, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_D, picName="UI/LOGON/LOGON_B5"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_D, picName="UI/LOGON/LOGON_B5.png"}
 
 	-- Button: Exit
 	form:addButton{id="exit", x=276, y=49, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_E, picName="UI/LOGON/LOGON_B6"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_E, picName="UI/LOGON/LOGON_B6.png"}
 
 	-- Textbox: List of Characters (readonly scrolling list of text)
 	listChars = form:addTextbox{id="listChars", x=162, y=4, width=153, height=44,

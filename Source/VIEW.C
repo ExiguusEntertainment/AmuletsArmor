@@ -685,12 +685,12 @@ T_void ViewSetPalette(T_viewPalette viewPalette)
 {
     T_resource res ;
     T_palette *p_palette ;
-    T_byte8 name[20] ;
+    T_byte8 name[40] ;
 
     DebugRoutine("ViewSetPalette") ;
     DebugCheck(viewPalette < VIEW_PALETTE_UNKNOWN) ;
 
-    sprintf(name, "VIEW%02d.PAL", viewPalette) ;
+    sprintf(name, "Palettes/VIEW%02d.PAL", viewPalette) ;
     p_palette = (T_palette *)PictureLockData(name, &res) ;
 
 #ifdef OPTIONS_DARKCOLOR

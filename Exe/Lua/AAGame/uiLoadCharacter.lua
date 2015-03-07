@@ -25,19 +25,19 @@ print(inspect(char));
 	form = Form.create(uiLoadCharacter.eventHandler);
 
 	-- Graphic: Background
-	form:addGraphic{id="background", x=36, y=16, picName="UI/LOADC/LOADC_BK"}
+	form:addGraphic{id="background", x=36, y=16, picName="UI/LOADC/LOADC_BK.png"}
 
 	-- Button: Begin
 	form:addButton{id="begin", x=45, y=167, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_B, picName="UI/LOADC/LOADC_B1"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_B, picName="UI/LOADC/LOADC_B1.png"}
 
 	-- Button: Set password
 	form:addButton{id="set_password", x=122, y=167, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_S, picName="UI/LOADC/LOADC_B2"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_S, picName="UI/LOADC/LOADC_B2.png"}
 
 	-- Button: Exit
 	form:addButton{id="exit", x=199, y=167, scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT,
-		scankey2=keyboard.scankeys.KEY_SCAN_CODE_E, picName="UI/LOADC/LOADC_B3"}
+		scankey2=keyboard.scankeys.KEY_SCAN_CODE_E, picName="UI/LOADC/LOADC_B3.png"}
 
 	-- Textbox: Name
 	form:addTextbox{id="name", x=45, y=24, width=226, height=10, readonly=1,

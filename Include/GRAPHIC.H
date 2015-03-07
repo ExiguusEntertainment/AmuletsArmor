@@ -7,6 +7,7 @@
 
 #include "GENERAL.H"
 #include "RESOURCE.H"
+#include "PNG.h"
 
 #define MAX_GRAPHICS 200
 
@@ -22,7 +23,7 @@ typedef struct
 	T_word16 width;
 	T_word16 height;
 
-	T_resource graphicpic;
+	T_png png;
 
 	E_Boolean visible;
 	E_Boolean changed;
@@ -63,8 +64,11 @@ E_Boolean GraphicIsOffSet (T_graphicID graphicID);
 T_void GraphicDrawToActualScreen (T_void);
 T_void GraphicDrawToCurrentScreen (T_void);
 
-T_void GraphicSetResource (T_graphicID graphicID, T_resource newresource);
-T_resource GraphicGetResource (T_graphicID graphicID);
+//T_void GraphicSetResource (T_graphicID graphicID, T_resource newresource);
+//T_resource GraphicGetResource (T_graphicID graphicID);
+
+T_void GraphicSetPNG(T_graphicID graphicID, T_png aPNG);
+T_png GraphicGetPNG(T_graphicID graphicID);
 
 T_void *GraphicGetStateBlock(T_void) ;
 T_void GraphicSetStateBlock(T_void *p_state) ;

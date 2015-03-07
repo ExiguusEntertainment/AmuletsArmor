@@ -25,7 +25,7 @@ printf("hardform start %s", formName)
 
     if (true) then
         -- create hardform close button
-        hardform.closeButton = button.create(196, 5,"UI/COMMON/CLOSEWIN","normal",0, 0, nil, hardform.exit)
+        hardform.closeButton = button.create(196, 5,"UI/COMMON/CLOSEWIN.png","normal",0, 0, nil, hardform.exit)
     else
         hardform.closeButton = nil
     end

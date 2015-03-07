@@ -53,7 +53,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\zlib-1.2.8-dll\include;..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;..\..\..\..\Lib\zlib-1.2.8-dll\include;..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip;..\..\..\..\Lib\lodepng;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <SmallerTypeCheck>false</SmallerTypeCheck>
@@ -103,7 +103,7 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;..\..\..\..\Lib\zlib-1.2.8-dll\include;..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;..\..\..\..\Lib\zlib-1.2.8-dll\include;..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip;..\..\..\..\Lib\lodepng;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Lib\lodepng\lodepng.c" />
     <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\ioapi.c" />
     <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\iowin32.c" />
     <ClCompile Include="..\..\..\..\Lib\zlib-1.2.8-dll\contrib\minizip\mztools.c" />
@@ -208,6 +209,7 @@
     <ClCompile Include="..\..\..\..\Source\PEOPHERE.C" />
     <ClCompile Include="..\..\..\..\Source\PICS.C" />
     <ClCompile Include="..\..\..\..\Source\PLAYER.C" />
+    <ClCompile Include="..\..\..\..\Source\PNG.c" />
     <ClCompile Include="..\..\..\..\Source\PROFILE.C" />
     <ClCompile Include="..\..\..\..\Source\PROMPT.C" />
     <ClCompile Include="..\..\..\..\Source\RANDOM.C" />
@@ -327,6 +329,7 @@
     <ClInclude Include="..\..\..\..\Include\PEOPHERE.H" />
     <ClInclude Include="..\..\..\..\Include\PICS.H" />
     <ClInclude Include="..\..\..\..\Include\PLAYER.H" />
+    <ClInclude Include="..\..\..\..\Include\PNG.h" />
     <ClInclude Include="..\..\..\..\Include\PROFILE.H" />
     <ClInclude Include="..\..\..\..\Include\PROMPT.H" />
     <ClInclude Include="..\..\..\..\Include\RANDOM.H" />
@@ -376,6 +379,7 @@
     <ClInclude Include="..\..\..\..\Include\VIEWFILE.H" />
     <ClInclude Include="..\..\..\..\Include\VIEWREGN.H" />
     <ClInclude Include="..\..\..\..\Include\VM.H" />
+    <ClInclude Include="..\..\..\..\Lib\lodepng\lodepng.h" />
     <ClInclude Include="..\..\..\..\Lib\Lua\inc\lauxlib.h" />
     <ClInclude Include="..\..\..\..\Lib\Lua\inc\lua.h" />
     <ClInclude Include="..\..\..\..\Lib\Lua\inc\luaconf.h" />

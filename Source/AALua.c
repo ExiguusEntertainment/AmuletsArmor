@@ -176,6 +176,7 @@ void AALuaScriptLoadAndRun(const char *aFilename)
 
     p_file = FileLoad(filename, &size);
     if (p_file) {
+        DebugLuaStart(filename, L);
         lua_pushcfunction(L, traceback);
         error = luaL_loadbuffer(L, p_file, size, aFilename)
                 || lua_pcall(L, 0, 0, lua_gettop(L) - 1);
@@ -183,6 +184,7 @@ void AALuaScriptLoadAndRun(const char *aFilename)
             fprintf(stderr, "%s", lua_tostring(L, -1));
             lua_pop(L, 1); /* pop error message from the stack */
         }
+        DebugLuaEnd();
     } else {
         fprintf(stderr, "Could not load script %s!", filename);
     }

@@ -465,7 +465,7 @@ static T_void MainUClearPortraitArea()
     if (PictureExist ("UI/CREATEC/CHARINFO"))
     {
         res=PictureFind("UI/CREATEC/CHARINFO");
-        p_data=PictureLockQuick (res);
+        p_data=PictureLockByResource (res);
         DebugCheck (p_data != NULL);
         ColorUpdate(0) ;
         GrDrawBitmap (PictureToBitmap(p_data),x1,y1);

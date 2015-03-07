@@ -1726,7 +1726,7 @@ T_void StatsDisplayStatisticsPage (T_void)
    if (PictureExist (stmp))
    {
        res=PictureFind(stmp);
-       p_data=PictureLockQuick (res);
+       p_data=PictureLockByResource (res);
        DebugCheck (p_data != NULL);
        ColorUpdate(0) ;
        GrDrawBitmap (PictureToBitmap(p_data),215,27);
@@ -2099,7 +2099,7 @@ T_void StatsDrawCharacterPortrait (T_word16 x1, T_word16 y1)
     if (PictureExist (stmp))
     {
         res=PictureFind(stmp);
-        p_data=PictureLockQuick (res);
+        p_data=PictureLockByResource (res);
         DebugCheck (p_data != NULL);
         ColorUpdate(0) ;
         GrDrawBitmap (PictureToBitmap(p_data),x1,y1);

@@ -17,6 +17,23 @@ function AABacktrace(errmsg)
 	return errmsg;
 end
 
+function AADumpWithCoRoutine(errobj)
+	print("AADumpWithCoRoutine msg:")
+        local errStr = tostring(errobj) or ""
+        if( type(errobj)=='table' ) then
+          errStr = "Table: {" .. table.concat(errobj, ',') .. "}"
+        end
+        print("Error: \"" .. errStr .. "\"")
+        --for k,v in pairs(_G) do print("GLOBAL:" , k,v) end
+        if( type(errobj)=='thread' ) then
+        	print(">>> Showing thread:");
+            print(debug.traceback(errobj))
+            print("<<<");
+        else
+            print(debug.traceback('',2))
+        end
+end
+
 function protected_main()
 	print("** MAIN ENTERED **")
 	local lastTick = ticker.get();

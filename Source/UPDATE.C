@@ -25,6 +25,7 @@
 #include "PEOPHERE.H"
 #include "PICS.H"
 #include "PLAYER.H"
+#include "PNG.h"
 #include "SERVER.H"
 #include "SOUND.H"
 #include "SPELLS.H"
@@ -92,6 +93,7 @@ T_void UpdateGameBegin(T_void)
     ColorizeInitialize() ;
 #endif
     MouseInitialize() ;
+    PNGInit();
 
     puts("Script Init") ;
     ScriptInitialize() ;
@@ -212,6 +214,7 @@ T_void UpdateGameEnd(T_void)
     ColorizeFinish() ;
 #endif
     View3dCheckObjectListEmpty() ;
+    PNGFinish();
     PicturesFinish() ;
     KeyboardOff() ;
 ///    MemFlushDiscardable() ;

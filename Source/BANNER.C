@@ -431,7 +431,7 @@ T_void BannerOpenForm(E_bannerFormType formtype)
 
             if (PictureExist(stmp)) {
                 res = PictureFind(stmp);
-                p_data = PictureLockQuick(res);
+                p_data = PictureLockByResource(res);
                 DebugCheck(p_data != NULL);
                 GrDrawBitmap(PictureToBitmap(p_data), 215, 27);
                 PictureUnlockAndUnfind(res);
@@ -945,7 +945,7 @@ T_void PotionUpdate(T_void)
 
         /* Lock in and draw the next picture. */
         res = G_potionPics[potionFrame];
-        p_data = PictureLockQuick(res);
+        p_data = PictureLockByResource(res);
         DebugCheck(p_data != NULL);
         if (p_data != NULL) {
             GrDrawBitmap(PictureToBitmap(p_data), 61, 0);   //155

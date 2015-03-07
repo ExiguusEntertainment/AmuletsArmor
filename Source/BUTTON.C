@@ -99,8 +99,8 @@ static T_buttonID ButtonInit(
     if (myID != NULL ) {
         myID->p_graphicID = NULL;
         myID->p_graphicID = GraphicCreate(lx, ly, bmname);
-        myID->normalpic = GraphicGetResource(myID->p_graphicID);
-        myID->selectpic = NULL;
+        myID->normalPNG = GraphicGetPNG(myID->p_graphicID);
+        myID->selectPNG = PNG_BAD;
         DebugCheck(myID->p_graphicID != NULL);
         GraphicSetPreCallBack(myID->p_graphicID, ButtonDrawCallBack, 0);
         myID->toggle = toggletype;
@@ -130,12 +130,12 @@ T_void ButtonSetSelectPic(T_buttonID buttonID, char *picname)
     p_button = (T_buttonStruct *)buttonID;
 
     /* lock the resource */
-    if (p_button->selectpic != NULL ) {
+    if (p_button->selectPNG != PNG_BAD) {
         /* free alternate picture */
-        PictureUnfind(p_button->selectpic);
+        PNGUnlock(p_button->selectPNG);
     }
 
-    p_button->selectpic = PictureFind(picname);
+    p_button->selectPNG = PNGLock(picname);
 
     DebugEnd();
 }
@@ -165,10 +165,10 @@ T_void ButtonDelete(T_buttonID buttonID)
                 }
                 /* delete graphic */
                 GraphicDelete(p_button->p_graphicID);
-                if (p_button->selectpic != NULL ) {
+                if (p_button->selectPNG != PNG_BAD) {
                     /* free alternate picture */
-                    PictureUnfind(p_button->selectpic);
-                    p_button->selectpic = NULL;
+                    PNGUnlock(p_button->selectPNG);
+                    p_button->selectPNG = PNG_BAD;
                 }
                 if (p_button->textID != NULL )
                     TextDelete(p_button->textID);
@@ -197,10 +197,10 @@ T_void ButtonCleanUp(T_void)
             GraphicDelete(p_button->p_graphicID);
             if (p_button->textID != NULL )
                 TextDelete(p_button->textID);
-            if (p_button->selectpic != NULL ) {
+            if (p_button->selectPNG != PNG_BAD) {
                 /* free alternate picture */
-                PictureUnfind(p_button->selectpic);
-                p_button->selectpic = NULL;
+                PictureUnfind(p_button->selectPNG);
+                p_button->selectPNG = PNG_BAD;
             }
             MemFree(G_buttonarray[i]);
             MemCheck(201);
@@ -417,8 +417,8 @@ T_void ButtonDown(T_buttonID buttonID)
     if (p_button->pushed == FALSE && p_button->enabled == TRUE) {
         GraphicClear(p_button->p_graphicID, 0);
         GraphicSetOffSet(p_button->p_graphicID, 1, 1);
-        if (p_button->selectpic != NULL ) {
-            GraphicSetResource(p_button->p_graphicID, p_button->selectpic);
+        if (p_button->selectPNG != PNG_BAD) {
+            GraphicSetPNG(p_button->p_graphicID, p_button->selectPNG);
         } else {
             GraphicSetShadow(p_button->p_graphicID, 150);
         }
@@ -448,8 +448,8 @@ T_void ButtonDownNoAction(T_buttonID buttonID)
     if (p_button->pushed == FALSE && p_button->enabled == TRUE) {
         GraphicClear(p_button->p_graphicID, 0);
         GraphicSetOffSet(p_button->p_graphicID, 1, 1);
-        if (p_button->selectpic != NULL ) {
-            GraphicSetResource(p_button->p_graphicID, p_button->selectpic);
+        if (p_button->selectPNG != PNG_BAD) {
+            GraphicSetPNG(p_button->p_graphicID, p_button->selectPNG);
         } else {
             GraphicSetShadow(p_button->p_graphicID, 150);
         }
@@ -491,8 +491,8 @@ T_void ButtonUp(T_buttonID buttonID)
     if (p_button->pushed == TRUE && p_button->enabled == TRUE) {
         GraphicClear(p_button->p_graphicID, 0);
         GraphicSetOffSet(p_button->p_graphicID, 0, 0);
-        if (p_button->selectpic != NULL ) {
-            GraphicSetResource(p_button->p_graphicID, p_button->normalpic);
+        if (p_button->selectPNG != PNG_BAD) {
+            GraphicSetPNG(p_button->p_graphicID, p_button->normalPNG);
         } else {
             GraphicClear(p_button->p_graphicID, 0);
             GraphicSetOffSet(p_button->p_graphicID, 0, 0);
@@ -523,8 +523,8 @@ T_void ButtonUpNoAction(T_buttonID buttonID)
     if (p_button->pushed == TRUE && p_button->enabled == TRUE) {
         GraphicClear(p_button->p_graphicID, 0);
         GraphicSetOffSet(p_button->p_graphicID, 0, 0);
-        if (p_button->selectpic != NULL ) {
-            GraphicSetResource(p_button->p_graphicID, p_button->normalpic);
+        if (p_button->selectPNG != PNG_BAD) {
+            GraphicSetPNG(p_button->p_graphicID, p_button->normalPNG);
         } else {
             GraphicSetShadow(p_button->p_graphicID, 255);
         }

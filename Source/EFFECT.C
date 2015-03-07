@@ -828,7 +828,7 @@ T_void EffectDrawEffectIcons (T_word16 left,
         if (p_effect->p_effectpic != RESOURCE_BAD)
         {
 	        res = p_effect->p_effectpic;
-            p_pic = PictureLockQuick (res);
+            p_pic = PictureLockByResource (res);
             p_bitmap=PictureToBitmap(p_pic);
 
 //            printf ("l=%d r=%d t=%d b=%d\n",left,right,top,bottom);
