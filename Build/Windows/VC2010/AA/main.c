@@ -243,6 +243,8 @@ int SDL_main(int argc, char *argv[])
     SDL_Color white = { 255, 255, 255, 0 };
     //SDL_Surface* icon;
 
+    HINSTANCE hLib = LoadLibrary( "BlackBox.dll" );
+    printf("BlackBox hLib = %08X\n", hLib);
     if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0)
     {
           printf ("Could not initialize SDL: %s\n",SDL_GetError());
