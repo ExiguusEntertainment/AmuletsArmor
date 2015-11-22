@@ -1,0 +1,145 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Trapping Bugs with BlackBox</title>
+</head>
+
+<body>
+
+<h1>Trapping Bugs with BlackBox </h1>
+<p>Have you ever had an application crash on a customer's machine and have only,
+&quot;it just crashes and displays a funny message box&quot;, to go on in
+attempting to track down what the error was? Ever wish you could put some kind
+of &quot;watchdog&quot; that would monitor your application on the customers
+computer and then if it crashed, automatically scoop up where the crash
+happened, and allow the customer or mail this information to you? If so then
+BlackBox may be just what you're looking for!&nbsp;</p>
+<p>BlackBox (which I have since discovered is the name of a window manager for
+linux, so if anyone has any ideas about a better name, please feel free to let
+me know :) ) is a dll that you simply load up and then forget about. It will set
+a crash handler as soon as the library is loaded (in the DLLMain()), and then
+just waits patiently for your application to crash. If and/or when your application
+crashes, instead of just displaying an error message like &quot;Error writing to memory
+address 0XDEADBEEF&quot;, a nice little dialog comes up that displays the
+information in a fashion similar to Netscape's TalkBack, or the new error
+reporting dialog that pops up with the newer version of Microsoft's Internet
+Explorer. This dialog allows the user to then copy or save the crash data, and
+then email or be taken to an appropriate website where they can submit the
+information. This information can then be used by a programmer to have a much
+better idea of exactly where the problem occurred, as well as information about
+the machine that it crashed on.</p>
+<p><img border="0" src="BlackBoxUI.jpg" width="564" height="580"></p>
+<h3>Customization</h3>
+<p>You can customize the text that is displayed in the main label, by opening BlackBox.cpp and editing the following code:</p>
+<pre>
+const char* g_errorLable = 
+		&quot;This is my version of BlackBox - An error has occured ! You are screwed&quot;;
+								
+</pre>
+
+
+<p>By changing the <code> g_errorLable</code> variable, this will change what is displayed in
+the label in the top area of the dialog.</p>
+
+
+<p>In addition, you can customize the email address to use when the &quot;Mail
+to...&quot; button is clicked, and the URL that is used when the &quot;Submit
+bug...&quot; button is clicked. Again open
+BlackBox.cpp and editing the following code:</p>
+<pre>
+	const char* g_mailToAddress= 
+		&quot;mailto:me@wherever.com&quot; //change this to something useful 
+
+	const char* g_submitBugURL= 
+		&quot;http://www.mybugtrackingpage.html&quot; //change this to something useful 
+
+
+</pre>
+
+
+<h3>Usage</h3>
+
+
+<p>BlackBox displays a variety of information:</p>
+<ul>
+  <li>The Exception Reason</li>
+  <li>The Registers</li>
+  <li>The Stack Trace, a complete stack trace from where the error occured</li>
+  <li>The machine information, such as CPU, OS version, physical memory, etc. Clicking on the
+    &quot;Information...&quot; button will display this in a dialog.</li>
+  <li>The machine state - a list of ALL the processes running at the time of the
+    crash, and any DLLs loaded by the processes. Clicking on the
+    &quot;State...&quot; button will display this in a dialog.</li>
+</ul>
+<p>As a user, you can copy the contents to the clipboard by clicking on the
+&quot;Copy&quot; button. Clicking the &quot;Save...&quot; button will prompt you
+to save the contents to a file, with the default name being of the form: &quot;errorlog-&lt;GMT
+time, dd-mm-yyyy&gt;(&lt;time, hh:mm:ss&gt;).log&quot;. </p>
+<p>Click the &quot;Mail To...&quot; button and an attempt will be made to
+execute the mailto: command on your system. Assuming a properly installed email
+program, it will be brought up with the appropriate email address. See above for
+configuring these two features.</p>
+<p>The basics of the code is &quot;stolen&quot; from John Robbins excellent book
+<a href="http://www.microsoft.com/MSPress/books/4023.asp">Debugging Applications</a>
+that show how to do all sorts of gory low level things, among them performing a
+stack trace. To get the stack trace to provide something useful, however, you
+may have to make some modifications to your build settings for release builds.
+The stack tracing relies on certain system calls, as well as information in the
+executable itself. If the executable is a release build, then there will be
+almost no debug information, and as a result, your stack trace will show almost
+nothing, which for me, at least, is one of the critical reasons why I wrote this
+tool. To allow the symbol engine to successfully display information, you need
+to enable the generation of debug information (/debug) in the linker settings
+(you do NOT need to do this in your code generation or C++ settings), and you
+need to tell the linker to generate a mapfile (/map [&quot;filename&quot;] ).
+Then when you distribute your application make sure to also put the BlackBox.dll
+and the map file(typically the map file is the same name as the executable, but
+with a &quot;.map&quot; extension) in the same directory as your exe. Obviously
+this does mean you are &quot;exposing&quot; a bit more information to people
+(i.e. your customers), but the tradeoff is readable stack trace information that
+can be invaluable in locating where a crash happened. BlackBox will still work
+with an executable that does not supply a map file or linker debug information,
+it will just not display as much information. </p>
+<p>&nbsp;</p>
+<p>To actually use this in your application, you only need to do the following:</p>
+<pre>
+HINSTANCE hLib = LoadLibrary( &quot;BlackBox.dll&quot; );
+</pre>
+<p>That's it! To be a good Win32 citizen, you should unload the library when your app exits:</p>
+<pre>
+if ( NULL != hLib ) {
+    FreeLibrary( hLib );
+}
+</pre>
+<p>Everything else is handled internally in the BlackBox library.</p>
+<h3>To Do:</h3>
+<p>In the near future I would like to add support for encrypting the data, right
+now it is just plain text, and this may not be appropriate in certain cases. I
+would also like to write a server program that would run on a machine, and to
+which the BlackBox client program could simply send the encrypted data via
+sockets.</p>
+<h3>Further Customization:</h3>
+<p>Should you wish to do more radical customizations, the core UI code is all
+contained in the BlackBoxUI.cpp. This is what allocates all the memory, which is
+done using GlobalXXX functions, as we may not be able to use the local heap. The
+starting point for all of this is the <code>ShowBlackBoxUI()</code> function,
+which sets up all the information and then displays the main dialog. </p>
+<h3>Credits:</h3>
+<p><i>John Robbins</i>, Debugging Applications, Microsoft Press; ISBN:
+0735608865, 2000</p>
+<p>See <a href="http://www.wintellect.com/about/instructors/robbins/default.asp">this</a>
+for more information about John Robbins at Wintellect.</p>
+<p>The display code for the various processes was based on work that Emmanuel
+Kartmann did in his article <a href="http://www.codeproject.com/dll/displayloadedmodules.asp">Display
+Loaded Modules</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>
