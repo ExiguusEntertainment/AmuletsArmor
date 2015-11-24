@@ -6,11 +6,13 @@
     <LocalDebuggerCommandArguments>
     </LocalDebuggerCommandArguments>
     <LocalDebuggerCommand>$(ProjectDir)..\..\..\..\Exe\AA.exe</LocalDebuggerCommand>
+    <LocalDebuggerEnvironment>_NO_DEBUG_HEAP=1</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommandArguments>
     </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(ProjectDir)\..\..\..\..\..\Exe</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(ProjectDir)..\..\..\..\Exe</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommand>$(ProjectDir)..\..\..\..\Exe\AA.exe</LocalDebuggerCommand>
   </PropertyGroup>
 </Project>

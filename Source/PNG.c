@@ -484,3 +484,28 @@ void PNGGetSize(T_png aPNG, T_word16 *sizeX, T_word16 *sizeY)
     DebugEnd();
 }
 
+/*-------------------------------------------------------------------------*
+ * Routine:  PNGGetName
+ *-------------------------------------------------------------------------*/
+/**
+ *  Return the stored name of a given PNG for "(PNG_BAD)" for none.
+ *
+ *  @param [in] aPNG -- PNG to get size of
+ *
+ *<!-----------------------------------------------------------------------*/
+const char *PNGGetName(T_png aPNG)
+{
+    T_pngStruct *p = (T_pngStruct *)aPNG;
+    const char *p_name;
+
+    DebugRoutine("PNGGetSize");
+    if (aPNG == PNG_BAD)
+        p_name = "(PNG_BAD)";
+    else
+        p_name = p->iName;
+
+    DebugEnd();
+
+    return p_name;
+}
+

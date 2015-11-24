@@ -94,6 +94,8 @@ static T_graphicID GraphicInit(T_word16 lx, T_word16 ly, const char *bmname)
         DebugCheck(ly+myID->height <= SCREEN_SIZE_Y);
     }
     DebugEnd();
+
+printf("graphic ID created: %p (%s, %d, %d @ %d, %d)\n", myID, bmname, myID->width, myID->height, lx, ly);
     return (myID);
 }
 
@@ -201,6 +203,7 @@ T_void GraphicUpdate(T_graphicID graphicID)
 {
     T_bitmap *p_bitmap;
     T_graphicStruct *p_graphic;
+    T_word16 sizex, sizey;
 
     DebugRoutine("GraphicUpdate");
     DebugCheck(graphicID!=NULL);
@@ -208,12 +211,15 @@ T_void GraphicUpdate(T_graphicID graphicID)
     p_graphic = (T_graphicStruct *)graphicID;
 
     if (p_graphic->changed == TRUE && p_graphic->visible == TRUE) {
+printf("graphic ID changed and visible: %p\n", graphicID);
         if (p_graphic->predrawcallback != NULL)
             p_graphic->predrawcallback(graphicID, p_graphic->predrawcbinfo);
 
         if (p_graphic->png != PNG_BAD) {
             p_bitmap = PNGGetBitmap(p_graphic->png);
 //			if (G_drawToActualScreen==TRUE) GrScreenSet(GRAPHICS_ACTUAL_SCREEN) ;
+            PNGGetSize(p_graphic->png, &sizex, &sizey);
+printf("Drawing graphic's PNG: %s (%d, %d @ %d, %d)\n", PNGGetName(p_graphic->png), sizex, sizey, p_graphic->locx, p_graphic->locy);
             if (p_graphic->shadow == 255) {
                 //no shadowing needed
                 GrDrawBitmap(p_bitmap, p_graphic->locx + p_graphic->xoff,
@@ -266,6 +272,7 @@ T_void GraphicUpdateAllGraphicsForced (T_void)
 		if (G_graphicarray[i]!=NULL)
         {
             p_graphic=(T_graphicStruct *)G_graphicarray[i];
+printf("Forcing draw of %s (%p)\n", PNGGetName(p_graphic->png), p_graphic);
             p_graphic->changed=TRUE;
             GraphicUpdate (G_graphicarray[i]);
         }

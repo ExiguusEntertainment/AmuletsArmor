@@ -82,7 +82,7 @@
       <ShowProgress>NotSet</ShowProgress>
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib;liblua.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib;liblua.lib;advapi32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Psapi.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
       <NoEntryPoint>false</NoEntryPoint>
@@ -112,7 +112,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
-      <ExceptionHandling>false</ExceptionHandling>
+      <ExceptionHandling>Sync</ExceptionHandling>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <FloatingPointExceptions>
@@ -126,6 +126,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,10 +135,14 @@
       <ShowProgress>NotSet</ShowProgress>
       <GenerateMapFile>true</GenerateMapFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;sdl_net.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib;liblua.lib;advapi32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Psapi.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
     </Link>
+    <PostBuildEvent>
+      <Message>Copying AA.exe to executable directory.</Message>
+      <Command>copy $(ProjectDir)\Release\AA.exe $(ProjectDir)..\..\..\..\Exe\.</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Lib\lodepng\lodepng.c" />

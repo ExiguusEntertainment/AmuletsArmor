@@ -11,7 +11,7 @@ local smPlay = {
 }
 
 local isprinted = false
-function getAllData(t)
+local function getAllData(t)
 	local data = {}
 
 	if isprinted then
@@ -25,7 +25,7 @@ function getAllData(t)
 	end
 end
 
-function smPlayFunc()
+smPlay.cofunc = function()
 	local result;
 	
 	print("SMPlayFunc")
@@ -101,7 +101,7 @@ smPlay.isDone = function (self)
 end
 
 smPlay.init = function()
-	smPlay.co = coroutine.create(smPlayFunc);
+	smPlay.co = coroutine.create(smPlay.cofunc);
 end
 
 smPlay.update = function()

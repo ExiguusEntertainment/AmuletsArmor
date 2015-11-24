@@ -6,22 +6,38 @@
 local Form = require "AAEngine/form"
 
 local uiTown = {
-	bgPic = nil
 }
 
 local form
 
 uiTown.createForm = function()
 	local char
+	uiTown.isOnePlayer = true; -- TODO: hard code to single player for now
 	
 	--char = stats.get()
 	
 	form = Form.create(uiTown.eventHandler)
-	uiTown.bgPic = pics.lockBitmap("UI/TOWN/TOWNBACK")	
+	if (uiTown.isOnePlayer) then
+		form:addGraphic{id="background", x=4, y=3, picName="UI/TOWN/TWNBACK2.png"}
+		form:addButton{id="quest", x=6, y=17, scankey1=0,
+			scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, scankey2=keyboard.scankeys.KEY_SCAN_CODE_Q, 
+			picName="UI/TOWN/QUEST.png"}
+	else
+		form:addGraphic{id="background", x=4, y=3, picName="UI/TOWN/TWNBACK1.png"}
+		form:addButton{id="guild", x=6, y=17, scankey1=0,
+			scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, scankey2=keyboard.scankeys.KEY_SCAN_CODE_G, 
+			picName="UI/TOWN/GUILD.png"}
+	end
+	form:addButton{id="inn", x=57, y=17, scankey1=0,
+		scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, scankey2=keyboard.scankeys.KEY_SCAN_CODE_I, 
+		picName="UI/TOWN/INN.png"}
+	form:addButton{id="store", x=107, y=17, scankey1=0,
+		scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, scankey2=keyboard.scankeys.KEY_SCAN_CODE_I, 
+		picName="UI/TOWN/STORE.png"}
+	form:addButton{id="bank", x=157, y=17, scankey1=0,
+		scankey1=keyboard.scankeys.KEY_SCAN_CODE_ALT, scankey2=keyboard.scankeys.KEY_SCAN_CODE_I, 
+		picName="UI/TOWN/BANK.png"}
 
-	--form:addGraphic{id="twnbackground", x=4, y=44, picName="UI/TOWN/TOWNBACK"}
-
-	printf("Townhall Opened 44")
 	-- Textbox: Name
 	--form:addTextbox{id="name", x=125, y=73, width=148, height=14, readonly=1,
 	--	scrolling=0, font="FontMedium", mode="field", justify="center", text="Elmore's Retreat"}
@@ -46,7 +62,8 @@ end
 --------------------------------------
 function uiTown:DrawGraphics()
 	--printf("Drawing %s", self.bgPic)
-	graphics.drawPic(self.bgPic, 0, 0)
+	--graphics.drawPic(self.bgPic, 0, 0)
+	--graphic.forceUpdateAllGraphics()
 end
 
 ------------------------------------------------------------------------------
@@ -65,6 +82,7 @@ uiTown.start = function()
 	printf("uiTown start")
 	uiTown:init(uiTown)
 	form:start()
+	graphic.forceUpdateAllGraphics()
 end
 
 uiTown.finish = function()

@@ -22,5 +22,6 @@ void PNGRelease(T_png aPNG);
 void PNGReleaseUnlocked(void);
 void PNGGetSize(T_png aPNG, T_word16 *sizeX, T_word16 *sizeY);
 T_bitmap *PNGGetBitmap(T_png aPNG);
+const char *PNGGetName(T_png aPNG);
 
 #endif /* PNG_H_ */
