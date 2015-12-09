@@ -32,4 +32,8 @@ function graphic.updateAllGraphics()
 	aagraphic.UpdateAllGraphics()
 end
 
+function graphic.forceUpdateAllGraphics()
+	aagraphic.ForceUpdateAllGraphics()
+end
+
 return graphic

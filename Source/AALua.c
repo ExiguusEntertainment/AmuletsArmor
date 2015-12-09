@@ -1783,12 +1783,23 @@ static int lua_GraphicUpdateAllGraphics(lua_State *L)
     return 0;
 }
 
+static int lua_GraphicUpdateAllGraphicsForced(lua_State *L)
+{
+    DebugRoutine("lua_GraphicUpdateAllGraphicsForced");
+
+    GraphicUpdateAllGraphicsForced();
+
+    DebugEnd();
+    return 0;
+}
+
 int LUA_API luaopen_aagraphic(lua_State *L)
 {
     static struct luaL_Reg driver[] = {
             { "Create", lua_GraphicCreate },
             { "Delete", lua_GraphicDelete },
             { "UpdateAllGraphics", lua_GraphicUpdateAllGraphics },
+            { "ForceUpdateAllGraphics", lua_GraphicUpdateAllGraphicsForced },
             { NULL, NULL }, };
     luaL_newlib(L, driver);
     return 1;

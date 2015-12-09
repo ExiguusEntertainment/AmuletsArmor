@@ -30,8 +30,8 @@ T_void DebugRemoveRoutine(T_void) ;
 #    define DebugCheckVectorTable() ((T_void)0)
 #    define DebugSaveVectorTable() ((T_void)0)
 #    define DebugCheckValidStack()
-#    define DebugLuaStart(state)
-#    define DebugLuaEnd(state)
+#    define DebugLuaStart(name, state)
+#    define DebugLuaEnd()
 #  else
 
 #    define DebugCheck(cond)  ((cond)? (T_void)0 : \

@@ -398,7 +398,7 @@ T_resource ResourceFind(T_resourceFile resourceFile, const char *p_resourceName)
     if (p_file) {
         DebugCheck(p_file->iZipFile);
         if (p_file->iZipFile) {
-            dprintf("Finding %s : %s\n", p_file->iName, p_resourceName);
+printf("Finding %s : %s\n", p_file->iName, p_resourceName);
             // First, see if we have it already in our index
             p_resource = IResourceFileFindResourceByName(p_file,
                     p_resourceName);
