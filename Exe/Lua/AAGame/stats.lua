@@ -184,4 +184,22 @@ function stats.runeIsAvailable(runeIndex)
 	return stats.char.activeRunes[runeIndex];
 end
 
+function stats.DecimalAdjust(statVal)
+	return (statVal + 99) / 100;
+end
+
+function stats.GetCharacterHealthLabel(c)
+	local health = stats.DecimalAdjust(c.health);
+	local healthMax = stats.DecimalAdjust(c.healthMax);
+	
+	return health .. " / " .. healthMax;
+end
+
+function stats.GetCharacterManahLabel(c)
+	local mana = stats.DecimalAdjust(c.mana);
+	local manaMax = stats.DecimalAdjust(c.manaMax);
+
+	return mana .. " / " .. manaMax;
+end
+
 return stats

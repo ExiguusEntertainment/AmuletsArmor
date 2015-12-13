@@ -4,6 +4,8 @@ local uiBanner = {
 	type = "inventory",
 	buttonsCreated = false,
 	bannerButtons = {},
+	bannerStatsCreated = false,
+	bannerStatBoxes = {},
 }
 
 function uiBanner.openFormByButton()
@@ -41,6 +43,57 @@ function uiBanner:createBottomButtons()
     button.redrawAllButtons();
 end
 
+function uiBanner:bannerStatusBarUpdate()
+    if (self.bannerStatsCreated) then
+		local ch;
+	
+		--stats.set();	
+		ch = stats.get();
+		
+		self.bannerStatBoxes[0]:set(stats.GetCharacterHealthLabel(ch));
+--[[
+        Mana = StatsGetPlayerMana();
+        ManaMax = StatsGetPlayerMaxMana();
+        sprintf(stmp, "%d/%d", ((Mana + 99) / 100), ((ManaMax + 99) / 100));
+        TxtboxSetData(G_bannerStatBoxes[1], stmp);
+
+        Food = StatsGetPlayerFood();
+        sprintf(stmp, "%d%%", ((Food + 19) / 20));
+        TxtboxSetData(G_bannerStatBoxes[2], stmp);
+
+        Water = StatsGetPlayerWater();
+        sprintf(stmp, "%d%%", ((Water + 19) / 20));
+        TxtboxSetData(G_bannerStatBoxes[3], stmp);
+
+        load = (float)(StatsGetPlayerLoad() / 10.0);
+        sprintf(stmp, "%3.1f KG", load);
+        TxtboxSetData(G_bannerStatBoxes[4], stmp);
+]]--
+    end
+end
+
+function uiBanner:bannerStatusBarInit()
+    self.bannerStatsCreated = true;
+
+	self.bannerStatBoxes[0] = textbox.create(140, 156, 28, 6, "FontTiny", 0, 0, 0,
+            false, "center", "ro_textarea_noscroll", null);
+
+    self.bannerStatBoxes[1] = textbox.create(140, 164, 28, 6, "FontTiny", 0, 0, 0,
+            false, "center", "ro_textarea_noscroll", null);
+
+    self.bannerStatBoxes[2] = textbox.create(140, 172, 28, 6, "FontTiny", 0, 0, 0,
+            false, "center", "ro_textarea_noscroll", null);
+
+    self.bannerStatBoxes[3] = textbox.create(140, 180, 28, 6, "FontTiny", 0, 0, 0,
+            false, "center", "ro_textarea_noscroll", null);
+
+    self.bannerStatBoxes[4] = textbox.create(140, 188, 28, 6, "FontTiny", 0, 0, 0,
+            false, "center", "ro_textarea_noscroll", null);
+	
+    -- update initial values
+    uiBanner:bannerStatusBarUpdate();
+end
+
 function uiBanner:init()
 	local background = pics.lockBitmap("UI/3DUI/MAINBACK");
 	graphics.drawPic(background, 0, 0);
@@ -58,7 +111,7 @@ function uiBanner:init()
     --PotionInit();
 
     -- draw status bars
-    --BannerStatusBarInit();
+    uiBanner:bannerStatusBarInit();
 
     -- redraw any open menus
     --if (G_bannerIsOpen == TRUE)

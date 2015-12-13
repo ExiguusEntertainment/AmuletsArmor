@@ -36,6 +36,15 @@ function Form:foreach(func)
 	end
 end
 
+-- Walk all the objects within a form and return the matching form object by id
+function Form:getObjectById(id)
+	for i=1,#self.objects do
+		if (self.objects[i].id == id) then
+			return self.objects[i];
+		end
+	end
+end
+
 -- Create a new form (which is basically a collection of UI widgets)
 Form.create = function(eventHandler)
 	local new_instance = {
