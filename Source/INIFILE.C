@@ -107,7 +107,13 @@ T_iniFile INIFileOpen(T_byte8 *p_filename)
         if (fp != NULL)  {
             while (!feof(fp))  {
                 buffer[0] = '\0' ;
-                fgets(buffer, 160, fp) ;
+				fgets(buffer, 160, fp);
+
+#if (_MSC_VER == 1800)
+				if (strlen(buffer) == 0)
+					break;
+#endif
+
                 buffer[strlen(buffer)-1] = '\0' ;
 
                 if (isalnum(buffer[0]))  {

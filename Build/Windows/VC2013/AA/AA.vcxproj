@@ -1,0 +1,557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BAF2A194-8DF3-4C00-95A2-0D6FB30C60E7}</ProjectGuid>
+    <RootNamespace>AA</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>..\..\..\..\Lib\SDL-1.2.15\lib\x86;..\..\..\..\Lib\SDL_net-1.2.8\lib\x86;$(LibraryPath)</LibraryPath>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\..\..\..\Lib\SDL_net-1.2.8\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <FloatingPointExceptions>
+      </FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <BrowseInformation>true</BrowseInformation>
+      <ShowIncludes>false</ShowIncludes>
+      <DisableSpecificWarnings>4200;4100;4996</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ShowProgress>NotSet</ShowProgress>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Psapi.lib</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
+      <FunctionLevelLinking>
+      </FunctionLevelLinking>
+      <FloatingPointExceptions>
+      </FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <BrowseInformation>true</BrowseInformation>
+      <ShowIncludes>false</ShowIncludes>
+      <DisableSpecificWarnings>4200;4100;4996</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ShowProgress>NotSet</ShowProgress>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;SDL_net.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);Psapi.lib</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level1</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <FloatingPointExceptions>
+      </FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <BrowseInformation>true</BrowseInformation>
+      <ShowIncludes>false</ShowIncludes>
+      <DisableSpecificWarnings>4200;4100</DisableSpecificWarnings>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ShowProgress>NotSet</ShowProgress>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;sdl_net.lib</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+      <AssemblyDebug>true</AssemblyDebug>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level1</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\..\..\Include;..\..\..\..\Lib\SDL-1.2.15\include;..\..\..\..\Lib\SDL_net-1.2.8;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <UseUnicodeForAssemblerListing>false</UseUnicodeForAssemblerListing>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_MBCS;%(PreprocessorDefinitions);WIN32;NO_ASSEMBLY</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>false</ExceptionHandling>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <FloatingPointExceptions>
+      </FloatingPointExceptions>
+      <CreateHotpatchableImage>false</CreateHotpatchableImage>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <BrowseInformation>true</BrowseInformation>
+      <ShowIncludes>false</ShowIncludes>
+      <DisableSpecificWarnings>4200;4100</DisableSpecificWarnings>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ShowProgress>NotSet</ShowProgress>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>kernel32.lib;SDL.lib;SDLmain.lib;sdl_net.lib</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+      <AssemblyDebug>true</AssemblyDebug>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Source\3D_COLLI.C" />
+    <ClCompile Include="..\..\..\..\Source\3D_IO.C" />
+    <ClCompile Include="..\..\..\..\Source\3D_TRIG.C" />
+    <ClCompile Include="..\..\..\..\Source\3D_VIEW.C">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MaxSpeed</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MaxSpeed</Optimization>
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Speed</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Source\ACTIVITY.C" />
+    <ClCompile Include="..\..\..\..\Source\AREASND.C" />
+    <ClCompile Include="..\..\..\..\Source\BANKUI.C" />
+    <ClCompile Include="..\..\..\..\Source\BANNER.C" />
+    <ClCompile Include="..\..\..\..\Source\BUTTON.C" />
+    <ClCompile Include="..\..\..\..\Source\CLIENT.C" />
+    <ClCompile Include="..\..\..\..\Source\CLI_RECV.C" />
+    <ClCompile Include="..\..\..\..\Source\CLI_SEND.C" />
+    <ClCompile Include="..\..\..\..\Source\CMDQUEUE.C" />
+    <ClCompile Include="..\..\..\..\Source\COLOR.C" />
+    <ClCompile Include="..\..\..\..\Source\COLORIZE.C" />
+    <ClCompile Include="..\..\..\..\Source\COMWIN.C" />
+    <ClCompile Include="..\..\..\..\Source\CONFIG.C" />
+    <ClCompile Include="..\..\..\..\Source\CONTROL.C" />
+    <ClCompile Include="..\..\..\..\Source\CRELOGIC.C" />
+    <ClCompile Include="..\..\..\..\Source\CSYNCPCK.C" />
+    <ClCompile Include="..\..\..\..\Source\DBLLINK.C" />
+    <ClCompile Include="..\..\..\..\Source\DEBUG.C" />
+    <ClCompile Include="..\..\..\..\Source\DITALK.C" />
+    <ClCompile Include="..\..\..\..\Source\DOOR.C" />
+    <ClCompile Include="..\..\..\..\Source\EFFECT.C" />
+    <ClCompile Include="..\..\..\..\Source\EFX.C" />
+    <ClCompile Include="..\..\..\..\Source\ESCMENU.C" />
+    <ClCompile Include="..\..\..\..\Source\FILE.C" />
+    <ClCompile Include="..\..\..\..\Source\FORM.C" />
+    <ClCompile Include="..\..\..\..\Source\GRAPHIC.C" />
+    <ClCompile Include="..\..\..\..\Source\GRAPHICS.C" />
+    <ClCompile Include="..\..\..\..\Source\GUILDUI.C" />
+    <ClCompile Include="..\..\..\..\Source\HARDFORM.C" />
+    <ClCompile Include="..\..\..\..\Source\HOUSEUI.C" />
+    <ClCompile Include="..\..\..\..\Source\INIFILE.C" />
+    <ClCompile Include="..\..\..\..\Source\INNUI.C" />
+    <ClCompile Include="..\..\..\..\Source\INVENTOR.C" />
+    <ClCompile Include="..\..\..\..\Source\KEYBOARD.C" />
+    <ClCompile Include="..\..\..\..\Source\KEYMAP.C" />
+    <ClCompile Include="..\..\..\..\Source\LIGHT.C" />
+    <ClCompile Include="..\..\..\..\Source\LOOK.C" />
+    <ClCompile Include="..\..\..\..\Source\MAINUI.C" />
+    <ClCompile Include="..\..\..\..\Source\MAP.C" />
+    <ClCompile Include="..\..\..\..\Source\MAPANIM.C" />
+    <ClCompile Include="..\..\..\..\Source\MEMORY.C" />
+    <ClCompile Include="..\..\..\..\Source\MESSAGE.C" />
+    <ClCompile Include="..\..\..\..\Source\MOUSEMOD.C" />
+    <ClCompile Include="..\..\..\..\Source\NOTES.C" />
+    <ClCompile Include="..\..\..\..\Source\OBJECT.C" />
+    <ClCompile Include="..\..\..\..\Source\OBJGEN.C" />
+    <ClCompile Include="..\..\..\..\Source\OBJMOVE.C" />
+    <ClCompile Include="..\..\..\..\Source\OBJTYPE.C" />
+    <ClCompile Include="..\..\..\..\Source\OVERHEAD.C" />
+    <ClCompile Include="..\..\..\..\Source\OVERLAY.C" />
+    <ClCompile Include="..\..\..\..\Source\PACKETDT.C" />
+    <ClCompile Include="..\..\..\..\Source\PACKETPR.C" />
+    <ClCompile Include="..\..\..\..\Source\PEOPHERE.C" />
+    <ClCompile Include="..\..\..\..\Source\PICS.C" />
+    <ClCompile Include="..\..\..\..\Source\PLAYER.C" />
+    <ClCompile Include="..\..\..\..\Source\PROFILE.C" />
+    <ClCompile Include="..\..\..\..\Source\PROMPT.C" />
+    <ClCompile Include="..\..\..\..\Source\RANDOM.C" />
+    <ClCompile Include="..\..\..\..\Source\RESOURCE.C" />
+    <ClCompile Include="..\..\..\..\Source\SCHEDULE.C" />
+    <ClCompile Include="..\..\..\..\Source\SCRFORM.C" />
+    <ClCompile Include="..\..\..\..\Source\SCRIPT.C" />
+    <ClCompile Include="..\..\..\..\Source\SERVER.C" />
+    <ClCompile Include="..\..\..\..\Source\SERVERSH.C" />
+    <ClCompile Include="..\..\..\..\Source\SLIDER.C" />
+    <ClCompile Include="..\..\..\..\Source\SLIDR.C" />
+    <ClCompile Include="..\..\..\..\Source\SMACHINE.C" />
+    <ClCompile Include="..\..\..\..\Source\SMCCHOOS.C" />
+    <ClCompile Include="..\..\..\..\Source\SMCPLAY.C" />
+    <ClCompile Include="..\..\..\..\Source\SMMAIN.C" />
+    <ClCompile Include="..\..\..\..\Source\SOSEZ.C" />
+    <ClCompile Include="..\..\..\..\Source\SOUND.C" />
+    <ClCompile Include="..\..\..\..\Source\SPELLS.C" />
+    <ClCompile Include="..\..\..\..\Source\SQRTDAT.C" />
+    <ClCompile Include="..\..\..\..\Source\STATS.C" />
+    <ClCompile Include="..\..\..\..\Source\STORE.C" />
+    <ClCompile Include="..\..\..\..\Source\SYNCMEM.C" />
+    <ClCompile Include="..\..\..\..\Source\SYNCTIME.C" />
+    <ClCompile Include="..\..\..\..\Source\TESTME.C" />
+    <ClCompile Include="..\..\..\..\Source\TEXT.C" />
+    <ClCompile Include="..\..\..\..\Source\TICKER.C" />
+    <ClCompile Include="..\..\..\..\Source\TOWNUI.C" />
+    <ClCompile Include="..\..\..\..\Source\TXTBOX.C" />
+    <ClCompile Include="..\..\..\..\Source\TXTFLD.C" />
+    <ClCompile Include="..\..\..\..\Source\UI.C" />
+    <ClCompile Include="..\..\..\..\Source\UIBUTTON.C" />
+    <ClCompile Include="..\..\..\..\Source\UITEXT.C" />
+    <ClCompile Include="..\..\..\..\Source\UPDATE.C" />
+    <ClCompile Include="..\..\..\..\Source\VIEW.C" />
+    <ClCompile Include="..\..\..\..\Source\VM.C" />
+    <ClCompile Include="..\..\..\..\Source\Win32\ipx_client.cpp" />
+    <ClCompile Include="direct.cpp" />
+    <ClCompile Include="main.c">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
+    </ClCompile>
+    <ClCompile Include="misc.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Include\3D_COLLI.H" />
+    <ClInclude Include="..\..\..\..\Include\3D_IO.H" />
+    <ClInclude Include="..\..\..\..\Include\3D_TRIG.H" />
+    <ClInclude Include="..\..\..\..\Include\3D_VIEW.H" />
+    <ClInclude Include="..\..\..\..\Include\ACTIVITY.H" />
+    <ClInclude Include="..\..\..\..\Include\AREASND.H" />
+    <ClInclude Include="..\..\..\..\Include\BANKUI.H" />
+    <ClInclude Include="..\..\..\..\Include\BANNER.H" />
+    <ClInclude Include="..\..\..\..\Include\BUTTON.H" />
+    <ClInclude Include="..\..\..\..\Include\CLIENT.H" />
+    <ClInclude Include="..\..\..\..\Include\CLI_RECV.H" />
+    <ClInclude Include="..\..\..\..\Include\CLI_SEND.H" />
+    <ClInclude Include="..\..\..\..\Include\CMDQUEUE.H" />
+    <ClInclude Include="..\..\..\..\Include\COLOR.H" />
+    <ClInclude Include="..\..\..\..\Include\COLORIZE.H" />
+    <ClInclude Include="..\..\..\..\Include\COMIO.H" />
+    <ClInclude Include="..\..\..\..\Include\COMM.H" />
+    <ClInclude Include="..\..\..\..\Include\COMWIN.H" />
+    <ClInclude Include="..\..\..\..\Include\CONFIG.H" />
+    <ClInclude Include="..\..\..\..\Include\CONTROL.H" />
+    <ClInclude Include="..\..\..\..\Include\CREDATA.H" />
+    <ClInclude Include="..\..\..\..\Include\CREDATAO.H" />
+    <ClInclude Include="..\..\..\..\Include\CRELOGIC.H" />
+    <ClInclude Include="..\..\..\..\Include\CSYNCPCK.H" />
+    <ClInclude Include="..\..\..\..\Include\DBLLINK.H" />
+    <ClInclude Include="..\..\..\..\Include\DEBUG.H" />
+    <ClInclude Include="..\..\..\..\Include\DITALK.H" />
+    <ClInclude Include="..\..\..\..\Include\DOOR.H" />
+    <ClInclude Include="..\..\..\..\Include\EFFECT.H" />
+    <ClInclude Include="..\..\..\..\Include\EFX.H" />
+    <ClInclude Include="..\..\..\..\Include\EQUIP.H" />
+    <ClInclude Include="..\..\..\..\Include\ESCMENU.H" />
+    <ClInclude Include="..\..\..\..\Include\FILE.H" />
+    <ClInclude Include="..\..\..\..\Include\FILES.H" />
+    <ClInclude Include="..\..\..\..\Include\FILETRAN.H" />
+    <ClInclude Include="..\..\..\..\Include\FORM.H" />
+    <ClInclude Include="..\..\..\..\Include\GENBOR.H" />
+    <ClInclude Include="..\..\..\..\Include\GENERAL.H" />
+    <ClInclude Include="..\..\..\..\Include\GRAPHIC.H" />
+    <ClInclude Include="..\..\..\..\Include\GRAPHICS.H" />
+    <ClInclude Include="..\..\..\..\Include\GROUP.H" />
+    <ClInclude Include="..\..\..\..\Include\GUILDUI.H" />
+    <ClInclude Include="..\..\..\..\Include\HARDFORM.H" />
+    <ClInclude Include="..\..\..\..\Include\HOUSEUI.H" />
+    <ClInclude Include="..\..\..\..\Include\ICREDATA.H" />
+    <ClInclude Include="..\..\..\..\Include\INIFILE.H" />
+    <ClInclude Include="..\..\..\..\Include\INNUI.H" />
+    <ClInclude Include="..\..\..\..\Include\INVENTOR.H" />
+    <ClInclude Include="..\..\..\..\Include\IRESOURC.H" />
+    <ClInclude Include="..\..\..\..\Include\KEYBOARD.H" />
+    <ClInclude Include="..\..\..\..\Include\KEYMAP.H" />
+    <ClInclude Include="..\..\..\..\Include\KEYS.H" />
+    <ClInclude Include="..\..\..\..\Include\KEYSCAN.H" />
+    <ClInclude Include="..\..\..\..\Include\LIGHT.H" />
+    <ClInclude Include="..\..\..\..\Include\LL_COMM.H" />
+    <ClInclude Include="..\..\..\..\Include\LOOK.H" />
+    <ClInclude Include="..\..\..\..\Include\MAINUI.H" />
+    <ClInclude Include="..\..\..\..\Include\MAP.H" />
+    <ClInclude Include="..\..\..\..\Include\MAPANIM.H" />
+    <ClInclude Include="..\..\..\..\Include\MAPDIFF.H" />
+    <ClInclude Include="..\..\..\..\Include\MEMORY.H" />
+    <ClInclude Include="..\..\..\..\Include\MEMTRANS.H" />
+    <ClInclude Include="..\..\..\..\Include\MESSAGE.H" />
+    <ClInclude Include="..\..\..\..\Include\MOUSEMOD.H" />
+    <ClInclude Include="..\..\..\..\Include\NOTES.H" />
+    <ClInclude Include="..\..\..\..\Include\OBJECT.H" />
+    <ClInclude Include="..\..\..\..\Include\OBJGEN.H" />
+    <ClInclude Include="..\..\..\..\Include\OBJMOVE.H" />
+    <ClInclude Include="..\..\..\..\Include\OBJTYPE.H" />
+    <ClInclude Include="..\..\..\..\Include\OPTIONS.H" />
+    <ClInclude Include="..\..\..\..\Include\OVERHEAD.H" />
+    <ClInclude Include="..\..\..\..\Include\OVERLAY.H" />
+    <ClInclude Include="..\..\..\..\Include\PACKET.H" />
+    <ClInclude Include="..\..\..\..\Include\PACKETDT.H" />
+    <ClInclude Include="..\..\..\..\Include\PACKLOG.H" />
+    <ClInclude Include="..\..\..\..\Include\PEOPHERE.H" />
+    <ClInclude Include="..\..\..\..\Include\PICS.H" />
+    <ClInclude Include="..\..\..\..\Include\PLAYER.H" />
+    <ClInclude Include="..\..\..\..\Include\PROFILE.H" />
+    <ClInclude Include="..\..\..\..\Include\PROMPT.H" />
+    <ClInclude Include="..\..\..\..\Include\RANDOM.H" />
+    <ClInclude Include="..\..\..\..\Include\RESOURCE.H" />
+    <ClInclude Include="..\..\..\..\Include\SCHEDULE.H" />
+    <ClInclude Include="..\..\..\..\Include\SCRFORM.H" />
+    <ClInclude Include="..\..\..\..\Include\SCRIPT.H" />
+    <ClInclude Include="..\..\..\..\Include\SCRIPTEV.H" />
+    <ClInclude Include="..\..\..\..\Include\SERPLOG.H" />
+    <ClInclude Include="..\..\..\..\Include\SERVER.H" />
+    <ClInclude Include="..\..\..\..\Include\SERVERSH.H" />
+    <ClInclude Include="..\..\..\..\Include\SLIDER.H" />
+    <ClInclude Include="..\..\..\..\Include\SLIDR.H" />
+    <ClInclude Include="..\..\..\..\Include\SMACHINE.H" />
+    <ClInclude Include="..\..\..\..\Include\SMCCHOOS.H" />
+    <ClInclude Include="..\..\..\..\Include\SMCPLAY.H" />
+    <ClInclude Include="..\..\..\..\Include\SMMAIN.H" />
+    <ClInclude Include="..\..\..\..\Include\SOS.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSDATA.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSDEFS.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSEZ.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSFNCT.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSM.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSMDATA.H" />
+    <ClInclude Include="..\..\..\..\Include\SOSMFNCT.H" />
+    <ClInclude Include="..\..\..\..\Include\SOUND.H" />
+    <ClInclude Include="..\..\..\..\Include\SOUNDS.H" />
+    <ClInclude Include="..\..\..\..\Include\SPELLS.H" />
+    <ClInclude Include="..\..\..\..\Include\SPELTYPE.H" />
+    <ClInclude Include="..\..\..\..\Include\oldSTANDARD.H" />
+    <ClInclude Include="..\..\..\..\Include\STANDBOR.H" />
+    <ClInclude Include="..\..\..\..\Include\STATS.H" />
+    <ClInclude Include="..\..\..\..\Include\STORE.H" />
+    <ClInclude Include="..\..\..\..\Include\STOREDB.H" />
+    <ClInclude Include="..\..\..\..\Include\SYNCMEM.H" />
+    <ClInclude Include="..\..\..\..\Include\SYNCPACK.H" />
+    <ClInclude Include="..\..\..\..\Include\SYNCTIME.H" />
+    <ClInclude Include="..\..\..\..\Include\TEXT.H" />
+    <ClInclude Include="..\..\..\..\Include\TICKER.H" />
+    <ClInclude Include="..\..\..\..\Include\TOWNUI.H" />
+    <ClInclude Include="..\..\..\..\Include\TXTBOX.H" />
+    <ClInclude Include="..\..\..\..\Include\TXTFLD.H" />
+    <ClInclude Include="..\..\..\..\Include\TXTFRM.H" />
+    <ClInclude Include="..\..\..\..\Include\UI.H" />
+    <ClInclude Include="..\..\..\..\Include\UIBUTTON.H" />
+    <ClInclude Include="..\..\..\..\Include\UITEXT.H" />
+    <ClInclude Include="..\..\..\..\Include\UPDATE.H" />
+    <ClInclude Include="..\..\..\..\Include\VIEW.H" />
+    <ClInclude Include="..\..\..\..\Include\VIEWFILE.H" />
+    <ClInclude Include="..\..\..\..\Include\VIEWREGN.H" />
+    <ClInclude Include="..\..\..\..\Include\VM.H" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\begin_code.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\close_code.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_active.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_audio.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_byteorder.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_cdrom.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_dreamcast.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_macos.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_macosx.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_minimal.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_nds.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_os2.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_symbian.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_config_win32.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_copying.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_cpuinfo.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_endian.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_error.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_events.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_getenv.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_joystick.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_keyboard.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_keysym.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_loadso.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_main.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_mouse.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_mutex.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_name.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_opengl.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_platform.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_quit.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_rwops.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_stdinc.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_syswm.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_thread.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_timer.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_types.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_version.h" />
+    <ClInclude Include="..\..\..\..\Lib\SDL-1.2.15\include\SDL_video.h" />
+    <ClInclude Include="..\..\..\..\Source\Win32\ipx_client.h" />
+    <ClInclude Include="DIRECT.H" />
+    <ClInclude Include="options.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDL.lib" />
+    <Library Include="..\..\..\..\Lib\SDL-1.2.15\lib\x86\SDLmain.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="anaicon.ico" />
+    <None Include="app.ico" />
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
