@@ -306,7 +306,8 @@ T_void ClientSendGameStartPacket(
         T_word16 adventure,
         T_byte8 numPlayers,
         T_directTalkUniqueAddress *players,
-        T_word16 firstLevel)
+        T_word16 firstLevel,
+		T_word16 levelstatus)
 {
     T_packetLong packet;
     T_gameStartPacket *p_start;
@@ -326,7 +327,17 @@ T_void ClientSendGameStartPacket(
     p_start->timeOfDay = MapGetDayOffset();
     if (firstLevel == 0)
         firstLevel = adventure;
-    p_start->firstLevel = firstLevel;
+	if (levelstatus & LEVEL_STATUS_COMPLETE)
+	{
+		if (levelstatus & LEVEL_STATUS_SUCCESS)
+			p_start->firstLevel = LEVEL_STATUS_LEVEL_CODE_SUCCESS;
+		else
+			p_start->firstLevel = LEVEL_STATUS_LEVEL_CODE_COMPLETE;		
+	}
+	else
+	{
+		p_start->firstLevel = firstLevel;
+	}
 
 //printf("Send request to start %d %d\n", groupID, adventure) ;
     PeopleHereSendPacketToGroup(groupID, &packet, 140, 0, NULL);

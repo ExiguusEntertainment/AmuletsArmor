@@ -547,7 +547,7 @@ static T_void GuildUIDnDisplay (T_buttonID buttonID)
 
 
 /* adds a game to the list of active 'open' games */
-T_void GuildUIAddGame (T_word16 mapNumber, T_gameGroupID groupID)
+T_void GuildUIAddGame(T_word16 mapNumber, T_gameGroupID groupID, T_word16 questNumber)
 {
     T_gameDescriptionStruct *p_game;
 
@@ -555,6 +555,7 @@ T_void GuildUIAddGame (T_word16 mapNumber, T_gameGroupID groupID)
     p_game=MemAlloc(sizeof(T_gameDescriptionStruct));
     p_game->mapNumber=mapNumber;
     p_game->groupID = groupID ;
+	p_game->questNumber = questNumber;
     DoubleLinkListAddElementAtEnd (G_gameList,p_game);
 
     /* Only redraw the list if we are not joining or creating a game. */
@@ -914,6 +915,7 @@ static T_void GuildUIJoinGame   (T_buttonID buttonID)
 {
     T_word16 map ;
     T_gameGroupID groupID ;
+	T_word16 quest;
 
     DebugRoutine ("GuildUIJoinGame");
 
@@ -921,7 +923,7 @@ static T_void GuildUIJoinGame   (T_buttonID buttonID)
 //    GuildUIConfirmJoinGame();
 
     /* real it */
-    GuildUIGetSelectedGame(&map, &groupID) ;
+    GuildUIGetSelectedGame(&map, &groupID, &quest) ;
 
     if (map != 0)  {
         /* Request to join in the fun. */
@@ -929,6 +931,7 @@ static T_void GuildUIJoinGame   (T_buttonID buttonID)
         ClientSendRequestJoin(
             map,
             groupID) ;
+		StatsSetCurrentQuestNumber(quest);
     } else {
         MessageAdd("No game session selected.") ;
     }
@@ -1159,7 +1162,8 @@ static T_word16 GuildUIGetSelectedAdventure(T_void)
 
 T_void GuildUIGetSelectedGame(
                   T_word16 *p_mapNumber,
-                  T_gameGroupID *p_groupID)
+                  T_gameGroupID *p_groupID,
+				  T_word16 *p_quest)
 {
     T_word16 i, index ;
     T_gameDescriptionStruct *p_game ;
@@ -1179,10 +1183,12 @@ T_void GuildUIGetSelectedGame(
                     DoubleLinkListElementGetData(element) ;
         *p_mapNumber = p_game->mapNumber ;
         *p_groupID = p_game->groupID ;
+		*p_quest = p_game->questNumber;
     } else {
         /* Element not found?  Return zero. */
         *p_mapNumber = 0 ;
         *p_groupID = *DirectTalkGetNullBlankUniqueAddress() ;
+		*p_quest = 0 ;
     }
 
     DebugEnd() ;

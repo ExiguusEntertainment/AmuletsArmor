@@ -34,7 +34,9 @@ T_void ClientSendGameStartPacket(
         T_word16 adventure,
         T_byte8 numPlayers,
         T_directTalkUniqueAddress *players,
-        T_word16 firstLevel);
+        T_word16 firstLevel,
+		T_word16 levelstatus);
+
 #endif
 
 /****************************************************************************/

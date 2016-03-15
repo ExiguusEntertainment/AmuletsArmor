@@ -263,6 +263,9 @@ T_void ClientReceiveGameRespondJoinPacket(
     DebugEnd() ;
 }
 
+T_word16 G_CompletedPlayers;
+T_word16 G_SuccessPlayers;
+
 T_void ClientReceiveGameStartPacket(
            T_packetEitherShortOrLong *p_packet)
 {
@@ -270,6 +273,7 @@ T_void ClientReceiveGameStartPacket(
     T_word16 i ;
     T_directTalkUniqueAddress ourAddress ;
     T_gameGroupID groupID ;
+	T_word16 levelStatus = LEVEL_STATUS_STARTED;
 
     DebugRoutine("ClientReceiveGameStartPacket") ;
 
@@ -290,38 +294,69 @@ T_void ClientReceiveGameStartPacket(
             if (memcmp(&ourAddress, &p_start->players[i], sizeof(ourAddress)) == 0)
                 break ;
         }
+		//Level complete packet
+		if (p_start->firstLevel == LEVEL_STATUS_LEVEL_CODE_COMPLETE ||
+			p_start->firstLevel == LEVEL_STATUS_LEVEL_CODE_SUCCESS)
+		{
+			G_CompletedPlayers++;
+			if (p_start->firstLevel == LEVEL_STATUS_LEVEL_CODE_SUCCESS)
+				G_SuccessPlayers++;
 
-        /* Did we find a match? */
-        if (i != p_start->numPlayers)  {
-//puts("Matched") ;
-            /* Yes, we are on the list in the ith position. */
-            /* Set up the game setup and go. */
-            ClientSyncSetNumberPlayers(p_start->numPlayers) ;
-            ClientSetLoginId(i) ;
+			//if we got complete packets from everyone
+			if (G_CompletedPlayers == p_start->numPlayers)
+			{
+				levelStatus = LEVEL_STATUS_COMPLETE;
+				if (G_SuccessPlayers > 0)
+					levelStatus |= LEVEL_STATUS_SUCCESS;
 
-            /* Set up the next jump */
-            ClientSetNextPlace(p_start->firstLevel, 0) ;
-            ClientSetAdventureNumber(p_start->adventure) ;
-            ClientSyncInitPlayersHere() ;
+				TownUIFinishedQuest(levelStatus, p_start->numPlayers, StatsGetCurrentQuestNumber());
 
-            /* Clear all the messages */
-            MessageClear() ;
+				//once all players respond, quit the game
+				ClientSyncSetGameGroupID(*DirectTalkGetNullBlankUniqueAddress());
+				PeopleHereSetOurAdventure(0);
+				PeopleHereSetOurState(PLAYER_ID_STATE_NONE);
+			}
+		}
+		/* Did we find a match? */
+		else if (i != p_start->numPlayers)  
+		{
+			//Reset number of players completed
+			G_CompletedPlayers = 0;
+			G_SuccessPlayers = 0;
 
-            /* Copy all the player address over to the peophere module. */
-            for (i=0; i<p_start->numPlayers; i++)
-                PeopleHereSetUniqueAddr(i, (&p_start->players[i])) ;
-        } else {
-//puts("Not Matched") ;
-            /* Make sure we are still in the guild and if so drop us. */
-            if ((PeopleHereGetOurLocation() == PLAYER_ID_LOCATION_GUILD) &&
-                (PeopleHereGetOurState() == PLAYER_ID_STATE_JOINING_GAME))  {
-                /* Cancel that game we were joining, it left without us. */
-                GuildUICancelJoinGame(NULL);
+			//puts("Matched") ;
+			/* Yes, we are on the list in the ith position. */
+			/* Set up the game setup and go. */
+			ClientSyncSetNumberPlayers(p_start->numPlayers);
+			ClientSetLoginId(i);
 
-                /* Nope, we got excluded. */
-                MessageAdd("Game started without you.") ;
-            }
-        }
+			/* Set up the next jump */
+			ClientSetNextPlace(p_start->firstLevel, 0);
+			ClientSetAdventureNumber(p_start->adventure);
+			ClientSyncInitPlayersHere();
+
+			/* Clear all the messages */
+			MessageClear();
+
+			/* Copy all the player address over to the peophere module. */
+			for (i = 0; i < p_start->numPlayers; i++)
+			{
+				PeopleHereSetUniqueAddr(i, (&p_start->players[i]));
+			}
+		}
+		else 
+		{
+			//puts("Not Matched") ;
+			/* Make sure we are still in the guild and if so drop us. */
+			if ((PeopleHereGetOurLocation() == PLAYER_ID_LOCATION_GUILD) &&
+				(PeopleHereGetOurState() == PLAYER_ID_STATE_JOINING_GAME))  {
+				/* Cancel that game we were joining, it left without us. */
+				GuildUICancelJoinGame(NULL);
+
+				/* Nope, we got excluded. */
+				MessageAdd("Game started without you.");
+			}
+		}
     }
 
     DebugEnd() ;

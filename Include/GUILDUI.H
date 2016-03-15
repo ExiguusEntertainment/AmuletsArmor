@@ -25,6 +25,7 @@ typedef struct
 {
     T_word16 mapNumber;
     T_gameGroupID groupID ;
+	T_word16 questNumber;
 } T_gameDescriptionStruct;
 
 T_void GuildUIStart    (T_word32 formNum);
@@ -32,7 +33,7 @@ T_void GuildUIUpdate   (T_void);
 T_void GuildUIEnd      (T_void);
 
 T_void GuildUIRemoveGame (T_word16 mapNumber, T_gameGroupID groupID);
-T_void GuildUIAddGame (T_word16 mapNumber, T_gameGroupID groupID) ;
+T_void GuildUIAddGame (T_word16 mapNumber, T_gameGroupID groupID, T_word16 questNumber) ;
 T_void GuildUIAddPlayer (T_byte8 *playerName);
 T_void GuildUIRemovePlayer (T_byte8 *playerName);
 T_void GuildUIClearPlayers (T_void) ;
@@ -43,6 +44,7 @@ T_void GuildUICancelJoinGame (T_buttonID buttonID);
 
 T_void GuildUIGetSelectedGame(
                   T_word16 *p_mapNumber,
-                  T_gameGroupID *p_groupID) ;
+                  T_gameGroupID *p_groupID,
+				  T_word16 *p_quest);
 
 #endif

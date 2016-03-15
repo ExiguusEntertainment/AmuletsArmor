@@ -95,6 +95,8 @@ T_void PlayerTeleported(T_void) ;
 
 T_void PlayerUpdate(T_word32 delta);
 
+E_Boolean PlayerIsMoving(T_void);
+
 /****************************************************************************/
 /*    END OF FILE: PLAYER.H                                                 */
 /****************************************************************************/

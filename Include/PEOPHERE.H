@@ -8,6 +8,8 @@
 #include "SERVER.H"
 #include "CMDQUEUE.H"
 
+#define MAX_PLAYERS_PER_GAME  4
+
 // Routines to setup:
 T_void PeopleHereInitialize(T_void) ;
 T_void PeopleHereFinish(T_void) ;
@@ -55,6 +57,10 @@ T_void PeopleHereSendPacketToGroup(
         T_word16 retryTime,
         T_word32 extraData,
         T_cmdQPacketCallback p_callback);
+
+static T_directTalkUniqueAddress G_peopleNetworkIDInGame[MAX_PLAYERS_PER_GAME];
+
+T_void ISetupGame(T_gameGroupID groupID);
 
 #endif
 

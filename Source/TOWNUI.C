@@ -73,7 +73,6 @@ static T_void TownUISendChatMessage(T_TxtboxID TxtboxID);
 static T_void TownUIUpdateQuestInfo(T_void);
 static T_void TownUINextQuest(T_buttonID buttonID);
 static T_void TownUILastQuest(T_buttonID buttonID);
-static E_Boolean TownUIFinishedQuest(T_void);
 static T_void TownUIUserBoxUp(T_buttonID buttonID);
 static T_void TownUIUserBoxDn(T_buttonID buttonID);
 static T_void TownUIDescriptionBoxUp(T_buttonID buttonID);
@@ -85,7 +84,6 @@ T_void TownUIStart(T_word32 formNum)
 {
     T_word16 i;
     T_byte8 stmp[32];
-    T_word16 advNum;
     E_Boolean iSucceeded;
 
     const T_word16 menuX[4] = { 6, 57, 107, 157 };
@@ -244,31 +242,26 @@ T_void TownUIStart(T_word32 formNum)
     GraphicUpdateAllGraphics();
 
     /* Set up what we are out. */
-    ClientSyncSetGameGroupID(*DirectTalkGetNullBlankUniqueAddress());
+	//Code to quit current game.. need to defer until all clients confirm quest is over
+    /*ClientSyncSetGameGroupID(*DirectTalkGetNullBlankUniqueAddress());
     PeopleHereSetOurAdventure(0);
-    PeopleHereSetOurState(PLAYER_ID_STATE_NONE);
+	PeopleHereSetOurState(PLAYER_ID_STATE_NONE);*/
 
-    /* Ask for people to show themselves. */
-    PeopleHereReset();
+    /* Ask for people to show themselves. 
+		Only run here for single player or abort
+		In multiplayer, players are not in town until they report quest complete*/
+	if (G_isOnePlayer == TRUE || G_adventureComplete == FALSE)
+		PeopleHereReset();
 
     /* check for adventure complete */
-    if (G_adventureComplete == TRUE) {
-        iSucceeded = TownUIFinishedQuest();
+    if (G_adventureComplete == TRUE) 
+	{
+		iSucceeded = TownUIFinishedQuest(LEVEL_STATUS_STARTED, (T_byte8)PeopleHereGetNumInGroupGame(), StatsGetCurrentQuestNumber());//for multiplayer, assume we haven't won
         GraphicUpdateAllGraphicsForced();
-        if (G_isOnePlayer)
-            TownUIUpdateQuestInfo();
 
-        if (iSucceeded) {
-            advNum = 1 + StatsGetCurrentQuestNumber();
-            if (advNum != (T_word16)-1) { // TODO: Is this comparison correct?
-                if ((advNum > StatsGetCompletedAdventure())&&
-                (advNum < ADVENTURE_UNKNOWN)){
-                StatsSetCompletedAdventure((T_byte8)advNum);
-                MessageAdd("More items are available in the store");
-            }
-        }
+        if (G_isOnePlayer)
+            TownUIUpdateQuestInfo();		
     }
-}
 
     BannerUIModeOn();
     GraphicUpdateAllGraphics();
@@ -463,6 +456,40 @@ E_Boolean TownUIIsOpen(T_void)
     return (G_townIsOpen);
 }
 
+
+/* Checks if person is in chat area */
+E_Boolean TownPersonInChat(T_byte8 *personName)
+{
+	T_doubleLinkListElement element, nextElement;
+	T_byte8 *data;
+	T_word32 tocmp;
+	E_Boolean retval = FALSE;
+
+	DebugRoutine("TownPersonInChat");
+
+	if (G_isOnePlayer == FALSE) {
+		DebugCheck(G_chatList != DOUBLE_LINK_LIST_BAD);
+		/* search list for this string */
+		element = DoubleLinkListGetFirst(G_chatList);
+		while (element != DOUBLE_LINK_LIST_ELEMENT_BAD) {
+			nextElement = DoubleLinkListElementGetNext(element);
+			data = DoubleLinkListElementGetData(element);
+			tocmp = TxtboxCanFit(G_userListBox, data);
+
+			if (strncmp(data, personName, tocmp) == 0) {
+				retval = TRUE;
+				break;
+			}
+
+			element = nextElement;
+		}
+	}
+
+	DebugEnd();
+
+	return retval;
+}
+
 /* routine should be called by server - adds personName to list of people */
 /* in town hall chat area */
 T_void TownAddPerson(T_byte8 *personName)
@@ -475,20 +502,25 @@ T_void TownAddPerson(T_byte8 *personName)
 
     if (G_isOnePlayer == FALSE) {
         DebugCheck(G_chatList != DOUBLE_LINK_LIST_BAD);
-        /* alloc memory for string */
-        size = strlen(personName);
 
-        data = NULL;
-        data = MemAlloc(size + 1);
-        DebugCheck(data != NULL);
-        tocpy = TxtboxCanFit(G_userListBox, personName);
-        strncpy(data, personName, tocpy);
-        data[tocpy] = '\0';
-        /* add personName to list */
-        DoubleLinkListAddElementAtEnd(G_chatList, data);
+		//Only add player if not already in list
+		if (TownPersonInChat(personName) == FALSE)
+		{
+			/* alloc memory for string */
+			size = strlen(personName);
 
-        /* redraw list */
-        TownRedrawChatList();
+			data = NULL;
+			data = MemAlloc(size + 1);
+			DebugCheck(data != NULL);
+			tocpy = TxtboxCanFit(G_userListBox, personName);
+			strncpy(data, personName, tocpy);
+			data[tocpy] = '\0';
+			/* add personName to list */
+			DoubleLinkListAddElementAtEnd(G_chatList, data);
+
+			/* redraw list */
+			TownRedrawChatList();
+		}
     }
 
     DebugEnd();
@@ -801,15 +833,15 @@ T_void TownUISetAdventureCompleted(T_void)
 }
 
 /* presents reward or failure info for completed quest */
-static E_Boolean TownUIFinishedQuest(T_void)
+E_Boolean TownUIFinishedQuest(T_word16 multiplayerStatus, T_byte8 numPlayers, T_word16 currentQuest)
 {
     E_Boolean iSucceeded = FALSE;
-    T_word16 currentQuest;
     T_byte8 stmp[8192];
     T_word16 rewardGold = 0;
     T_word32 rewardExp = 0;
     T_word16 rewardItem = 0;
     T_word16 questItem = 0;
+	T_word16 sendStatus = 0;
     E_Boolean keepItem = TRUE;
     T_iniFile idata;
     T_byte8 vol;
@@ -819,8 +851,6 @@ static E_Boolean TownUIFinishedQuest(T_void)
     BannerCloseForm();
 
     G_adventureComplete = FALSE;
-    /* determine which quest we are doing */
-    currentQuest = StatsGetCurrentQuestNumber();
     /* determine success or failure for this quest */
 
     /* open ini file */
@@ -835,11 +865,11 @@ static E_Boolean TownUIFinishedQuest(T_void)
     if (questItem == 0) {
         iSucceeded = TRUE;
     } else {
-        if (InventoryHasItem(INVENTORY_PLAYER, questItem) > 0)
+		if (InventoryHasItem(INVENTORY_PLAYER, questItem) > 0)
             iSucceeded = TRUE;
     }
 
-    if (iSucceeded == TRUE) {
+	if (iSucceeded == TRUE || multiplayerStatus & LEVEL_STATUS_SUCCESS) {
         /* get reward info */
         INIFileGetString(idata, "main", "gold", stmp, 8192);
         rewardGold = atoi(stmp);
@@ -853,7 +883,7 @@ static E_Boolean TownUIFinishedQuest(T_void)
         else
             keepItem = TRUE;
         /* display success info */
-        if (G_isOnePlayer) {
+        if (G_isOnePlayer || multiplayerStatus & LEVEL_STATUS_SUCCESS) {
             INIFileGetString(idata, "success", "description", stmp, 8192);
             FormPush();
             PromptDisplayBulletin(stmp);
@@ -878,6 +908,14 @@ static E_Boolean TownUIFinishedQuest(T_void)
                 InventoryDestroySpecificItem(INVENTORY_PLAYER, questItem, 1);
                 GraphicUpdateAllGraphicsForced();
             }
+
+			//Divvy out based on number of players
+			if (G_isOnePlayer == FALSE)
+			{
+				rewardExp = (T_word32)(rewardExp / numPlayers);
+				rewardGold = (T_word32)(rewardGold / numPlayers);
+			}
+
             /* give player rewards */
             if (rewardGold != 0) {
                 INIFileGetString(idata, "main", "rewardgoldtext", stmp, 8192);
@@ -904,7 +942,7 @@ static E_Boolean TownUIFinishedQuest(T_void)
              GraphicUpdateAllGraphicsForced();
              }
              */
-            if (rewardExp != 0) {
+            if (rewardExp != 0) {				
                 sprintf(stmp, "^009You have gained ^018%d ^009experience!",
                         rewardExp);
                 FormPush();
@@ -914,12 +952,35 @@ static E_Boolean TownUIFinishedQuest(T_void)
                 StatsChangePlayerExperience(rewardExp);
                 GraphicUpdateAllGraphicsForced();
             }
+
+			//Only open up next store if success or multiplayer
+			if (iSucceeded || G_isOnePlayer == FALSE) 
+			{
+				currentQuest = 1 + StatsGetCurrentQuestNumber();
+				//modulos down to a normal quest number
+				// We just have to assume they are in the same order. 
+				//  i.e. Quest 8 = same level as Quest 1
+				//       Quest 14 = same level as Quest 7
+				while (currentQuest >= ADVENTURE_UNKNOWN)
+				{
+					currentQuest -= (ADVENTURE_UNKNOWN - 1);//step back by 7 quest numbers
+				}
+				if (currentQuest != (T_word16)-1)
+				{ // TODO: Is this comparison correct?
+					if ((currentQuest > StatsGetCompletedAdventure()) &&
+						(currentQuest < ADVENTURE_UNKNOWN))
+					{
+						StatsSetCompletedAdventure((T_byte8)currentQuest);
+						MessageAdd("More items are available in the store");
+					}
+				}
+			}
         } else {
             /* Make sure they don't have the quest item. */
-            InventoryDestroySpecificItem(INVENTORY_PLAYER, questItem, 1);
+            //InventoryDestroySpecificItem(INVENTORY_PLAYER, questItem, 1);
         }
     } else {
-        if (G_isOnePlayer) {
+		if (G_isOnePlayer || multiplayerStatus & LEVEL_STATUS_COMPLETE) {
             /* display failure info */
             INIFileGetString(idata, "failure", "description", stmp, 8192);
             FormPush();
@@ -932,6 +993,30 @@ static E_Boolean TownUIFinishedQuest(T_void)
             FormPop();
         }
     }
+
+	//If multiplayer, sync the results of a completed quest
+	if (G_isOnePlayer == FALSE && multiplayerStatus == LEVEL_STATUS_STARTED)
+	{
+		sendStatus = LEVEL_STATUS_COMPLETE;
+		if (iSucceeded)
+			sendStatus |= LEVEL_STATUS_SUCCESS;
+
+		/* Get the exact list of people that were in this game. */
+		ISetupGame(ClientSyncGetGameGroupID());
+
+		//use "start" packet to signal an end and the result
+		ClientSendGameStartPacket(ClientSyncGetGameGroupID(),
+			PeopleHereGetOurAdventure(), (T_byte8)PeopleHereGetNumInGroupGame(),
+			G_peopleNetworkIDInGame, 0,
+			sendStatus);
+	}
+	else
+	{
+		//Completed quest has been reported by all players
+		//	Reset them and show them in town
+		PeopleHereReset();
+		TownRedrawChatList();
+	}
 
 //  GraphicUpdateAllGraphicsForced();
 

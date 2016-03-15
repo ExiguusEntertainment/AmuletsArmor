@@ -139,13 +139,14 @@ typedef T_byte8 T_playerIDState ;
 #define PLAYER_ID_STATE_JOINING_GAME         2
 #define PLAYER_ID_STATE_UNKNOWN              3
 
-typedef struct { //46 bytes
+typedef struct { //48 bytes
     T_byte8 name[30] ;
     T_directTalkUniqueAddress uniqueAddress ;
     T_playerIDLocation location ;
     T_playerIDState state ;
     T_gameGroupID groupID ;
     T_word16 adventure ;
+	T_word16 quest;
 } T_playerIDSelf ;
 
 typedef struct {

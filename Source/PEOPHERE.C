@@ -25,7 +25,6 @@
  * Constants:
  *-------------------------------------------------------------------------*/
 #define MAX_PLAYERS_IN_WORLD  256
-#define MAX_PLAYERS_PER_GAME  4
 
 /*-------------------------------------------------------------------------*
  * Globals:
@@ -40,8 +39,6 @@ static T_playerIDState G_ourState = PLAYER_ID_STATE_NONE;
 static T_word16 G_ourAdventure = 0;
 //! Number of players in the current game group
 static T_word16 G_numPeopleInGame = 0;
-//! Unique address of each player in the current game
-static T_directTalkUniqueAddress G_peopleNetworkIDInGame[MAX_PLAYERS_PER_GAME];
 //! Names of the players in the current synchronized game
 static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENGTH];
 
@@ -51,7 +48,6 @@ static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENG
 static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID);
 static T_playerIDSelf *IFindByName(T_byte8 *p_name);
 static T_playerIDLocation IGetOurLocation(T_void);
-static T_void ISetupGame(T_gameGroupID groupID);
 
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereInitialize
@@ -240,6 +236,7 @@ T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
     p_self->state = G_ourState;
     p_self->groupID = ClientSyncGetGameGroupID();
     p_self->adventure = PeopleHereGetOurAdventure();
+	p_self->quest = StatsGetCurrentQuestNumber();
 
     DebugEnd();
 }
@@ -545,7 +542,8 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
                                 == PLAYER_ID_STATE_JOINING_GAME))) {
                     if (p_playerID->state == PLAYER_ID_STATE_CREATING_GAME) {
                         GuildUIAddGame(p_playerID->adventure,
-                                p_playerID->groupID);
+                                p_playerID->groupID,
+								p_playerID->quest);
                         PeopleHereGeneratePeopleInGame(p_playerID->groupID);
                     } else if (p_find->state == PLAYER_ID_STATE_CREATING_GAME) {
                         GuildUIRemoveGame(p_playerID->adventure,
@@ -658,7 +656,8 @@ T_void PeopleHereStartGame(T_word16 firstLevel)
 
     ClientSendGameStartPacket(ClientSyncGetGameGroupID(),
             PeopleHereGetOurAdventure(), (T_byte8)G_numPeopleInGame,
-            G_peopleNetworkIDInGame, firstLevel);
+            G_peopleNetworkIDInGame, firstLevel,
+			LEVEL_STATUS_STARTED);
 
     DebugEnd();
 }
@@ -673,7 +672,7 @@ T_void PeopleHereStartGame(T_word16 firstLevel)
  *  @param groupID -- Game group id
  *
  *<!-----------------------------------------------------------------------*/
-static T_void ISetupGame(T_gameGroupID groupID)
+T_void ISetupGame(T_gameGroupID groupID)
 {
     T_playerIDSelf *p = G_peopleList;
     T_word16 numFound = 0;
