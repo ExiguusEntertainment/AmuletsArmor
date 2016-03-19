@@ -63,6 +63,10 @@ static T_directTalkUniqueAddress G_peopleNetworkIDInGame[MAX_PLAYERS_PER_GAME];
 
 T_void ISetupGame(T_gameGroupID groupID);
 
+void GetPlayerLabel(T_playerIDSelf *p_playerID, char* buffer);
+
+T_playerIDSelf *IFindByName(T_byte8 *p_name);
+
 #endif
 
 /****************************************************************************/

@@ -40,13 +40,12 @@ static T_word16 G_ourAdventure = 0;
 //! Number of players in the current game group
 static T_word16 G_numPeopleInGame = 0;
 //! Names of the players in the current synchronized game
-static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][STATS_CHARACTER_NAME_MAX_LENGTH];
+static T_byte8 G_peopleNames[MAX_PLAYERS_PER_GAME][MAX_CHAT_NAME_STRING];
 
 /*-------------------------------------------------------------------------*
  * Prototypes:
  *-------------------------------------------------------------------------*/
 static T_playerIDSelf *ICreatePlayerID(T_playerIDSelf *p_playerID);
-static T_playerIDSelf *IFindByName(T_byte8 *p_name);
 static T_playerIDLocation IGetOurLocation(T_void);
 
 /*-------------------------------------------------------------------------*
@@ -123,7 +122,7 @@ T_void PeopleHereReset(T_void)
  *  @return Found player ID pointer or NULL
  *
  *<!-----------------------------------------------------------------------*/
-static T_playerIDSelf *IFindByName(T_byte8 *p_name)
+T_playerIDSelf *IFindByName(T_byte8 *p_name)
 {
     T_playerIDSelf *p_found = NULL;
     T_word16 i;
@@ -743,7 +742,7 @@ T_void PeopleHereIDPlayer(T_word16 playerNum, T_byte8 *p_name)
     DebugCheck(playerNum < MAX_PLAYERS_PER_GAME);
 
     // Build a complete name using pieces of the name
-    if (strlen(G_peopleNames[playerNum]) < 30)
+    if (strlen(G_peopleNames[playerNum]) < MAX_CHAT_NAME_STRING)
         strcat(G_peopleNames[playerNum], p_name);
 
     DebugEnd();

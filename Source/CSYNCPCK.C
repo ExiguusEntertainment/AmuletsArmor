@@ -581,6 +581,8 @@ static T_void IClientSyncDoPlayerAction(
     E_Boolean isTargetMe ;
     T_word16 item ;
     T_word16 locked ;
+	T_playerIDSelf *p_playerID;
+	char playerLabel[MAX_CHAT_NAME_STRING];
 
     DebugRoutine("IClientSyncDoPlayerAction") ;
     DebugCheck(p_playerObj != NULL) ;
@@ -956,10 +958,12 @@ static T_void IClientSyncDoPlayerAction(
             }
             break ;
         case PLAYER_ACTION_ID_SELF:
+			p_playerID = IFindByName((T_byte8 *)p_actionData);
+			GetPlayerLabel(p_playerID, playerLabel);
             /* Append this information to the player data names. */
             PeopleHereIDPlayer(
                 ObjectGetServerId(p_playerObj) - 9000,
-                (T_byte8 *)p_actionData) ;
+				playerLabel);
             break ;
     }
 
