@@ -998,27 +998,31 @@ E_Boolean TownUIFinishedQuest(T_word16 multiplayerStatus, T_byte8 numPlayers, T_
     }
 
 	//If multiplayer, sync the results of a completed quest
-	if (G_isOnePlayer == FALSE && multiplayerStatus == LEVEL_STATUS_STARTED)
+	if (G_isOnePlayer == FALSE)
 	{
-		sendStatus = LEVEL_STATUS_COMPLETE;
-		if (iSucceeded)
-			sendStatus |= LEVEL_STATUS_SUCCESS;
+		if (multiplayerStatus == LEVEL_STATUS_STARTED)
+		{
+			sendStatus = LEVEL_STATUS_COMPLETE;
+			if (iSucceeded)
+				sendStatus |= LEVEL_STATUS_SUCCESS;
 
-		/* Get the exact list of people that were in this game. */
-		ISetupGame(ClientSyncGetGameGroupID());
+			/* Get the exact list of people that were in this game. */
+			ISetupGame(ClientSyncGetGameGroupID());
 
-		//use "start" packet to signal an end and the result
-		ClientSendGameStartPacket(ClientSyncGetGameGroupID(),
-			PeopleHereGetOurAdventure(), (T_byte8)PeopleHereGetNumInGroupGame(),
-			G_peopleNetworkIDInGame, 0,
-			sendStatus);
-	}
-	else
-	{
-		//Completed quest has been reported by all players
-		//	Reset them and show them in town
-		PeopleHereReset();
-		TownRedrawChatList();
+			//use "start" packet to signal an end and the result
+			ClientSendGameStartPacket(ClientSyncGetGameGroupID(),
+				PeopleHereGetOurAdventure(), (T_byte8)PeopleHereGetNumInGroupGame(),
+				G_peopleNetworkIDInGame, 0,
+				sendStatus);
+		}
+		else
+		{
+			//Completed quest has been reported by all players
+			//	Reset them and show them in town
+			PeopleHereReset();
+			TownRedrawChatList();
+
+		}
 	}
 
 //  GraphicUpdateAllGraphicsForced();
