@@ -146,6 +146,8 @@ T_void TownUIStart(T_word32 formNum)
     }
 
     if (G_isOnePlayer == FALSE) {
+
+
         /* set up display textboxes for multiplayer chat room */
         G_userListBox = TxtboxCreate(6, 35, 61, 137, "FontTiny", 0, 0, FALSE,
                 Txtbox_JUSTIFY_CENTER, Txtbox_MODE_VIEW_SCROLL_FORM, NULL );
@@ -512,7 +514,8 @@ T_void TownAddPerson(T_byte8 *personName)
 			data = NULL;
 			data = MemAlloc(size + 1);
 			DebugCheck(data != NULL);
-			tocpy = TxtboxCanFit(G_userListBox, personName);
+			//tocpy = TxtboxCanFit(G_userListBox, personName);
+			tocpy = strlen(personName);
 			strncpy(data, personName, tocpy);
 			data[tocpy] = '\0';
 			/* add personName to list */

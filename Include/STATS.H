@@ -382,6 +382,8 @@ T_void StatsUpdatePastPlace(
            T_word16 mapNumber) ;
 T_word16 StatsFindPastPlace(T_word16 adventureNumber) ;
 
+char* StatsGetClassTitle(T_byte8 classType);
+
 #endif /* SERVER_ONLY */
 
 #endif

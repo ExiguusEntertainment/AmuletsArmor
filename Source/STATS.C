@@ -3651,6 +3651,19 @@ E_Boolean StatsSaveCharacter (T_byte8 selected)
     return (success);
 }
 
+char* StatsGetClassTitle(T_byte8 classType)
+{
+	DebugRoutine("StatsGetClassTitle");
+
+	//sanity check
+	if (classType >= NUM_CLASSES)
+		classType = 0;
+
+	DebugEnd();
+
+	return ((char*)G_statsCharacterTypeNames[classType]);
+}
+
 /* @} */
 /*-------------------------------------------------------------------------*
  * End of File:  STATS.C

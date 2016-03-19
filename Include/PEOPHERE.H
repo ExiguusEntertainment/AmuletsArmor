@@ -9,6 +9,7 @@
 #include "CMDQUEUE.H"
 
 #define MAX_PLAYERS_PER_GAME  4
+#define MAX_CHAT_NAME_STRING 96
 
 // Routines to setup:
 T_void PeopleHereInitialize(T_void) ;

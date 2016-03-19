@@ -707,7 +707,8 @@ T_void GuildUIAddPlayer (T_byte8 *playerName)
 
     DebugRoutine ("GuildUIAddPlayer");
 
-    size=TxtboxCanFit(G_displayBoxes[GUILD_GAME_DESC],playerName);
+    //size=TxtboxCanFit(G_displayBoxes[GUILD_GAME_DESC],playerName);
+	size = strlen(playerName);
 
     data=NULL;
     data=MemAlloc(size+1);

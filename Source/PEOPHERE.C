@@ -204,6 +204,9 @@ static T_playerIDLocation IGetOurLocation(T_void)
             location = PLAYER_ID_LOCATION_GUILD;
             break;
         case HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN:
+		case HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_BANK:
+		case HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_STORE:
+		case HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_INN:
             location = PLAYER_ID_LOCATION_TOWN;
             break;
     }
@@ -237,6 +240,8 @@ T_void PeopleHereGetPlayerIDSelfStruct(T_playerIDSelf *p_self)
     p_self->groupID = ClientSyncGetGameGroupID();
     p_self->adventure = PeopleHereGetOurAdventure();
 	p_self->quest = StatsGetCurrentQuestNumber();
+	p_self->classType = StatsGetPlayerClassType();
+	p_self->level = StatsGetPlayerLevel();
 
     DebugEnd();
 }
@@ -444,6 +449,16 @@ T_void PeopleHereRespondToJoin(
     DebugEnd();
 }
 
+//Concats player data (title, level, name) into buffer
+void GetPlayerLabel(T_playerIDSelf *p_playerID, char* buffer)
+{
+	DebugRoutine("GetPlayerLabel");
+
+	sprintf(buffer, "^003%s - ^007%s Level %d", p_playerID->name, StatsGetClassTitle(p_playerID->classType), p_playerID->level);
+
+	DebugEnd();
+}
+
 /*-------------------------------------------------------------------------*
  * Routine:  PeopleHereUpdatePlayer
  *-------------------------------------------------------------------------*/
@@ -460,6 +475,8 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
     T_playerIDSelf *p_find;
     T_playerIDLocation location;
     T_gameGroupID ourGroupID;
+	char playerLabel[MAX_CHAT_NAME_STRING];
+	char chatNotification[MAX_CHAT_NAME_STRING];
 
     DebugRoutine("PeopleHereUpdatePlayer");
     DebugCheck(p_playerID != NULL);
@@ -481,6 +498,9 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
 
     /* If either work, go ahead and update the status. */
     if (p_find) {
+		//Set up player ID string
+		GetPlayerLabel(p_find, playerLabel);
+
         /* Check if the location is changing */
         if (p_find->location != p_playerID->location) {
             /* There is a difference, either coming or going. */
@@ -495,7 +515,7 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
                         break;
                     case PLAYER_ID_LOCATION_TOWN:
                         /* Update the town list. */
-                        TownAddPerson(p_find->name);
+						TownAddPerson(playerLabel);
                         break;
                     case PLAYER_ID_LOCATION_GUILD:
                         /* Action is taken care of below. */
@@ -506,8 +526,8 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
                     default:
                         /* What? */
                         DebugCheck(FALSE);
-                        break;
-                }
+                        break;						
+                }				
             } else {
                 /* Exiting */
                 /* Do an action based on our location. */
@@ -516,8 +536,16 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
                         /* We both are nowhere. nothing happens. */
                         break;
                     case PLAYER_ID_LOCATION_TOWN:
-                        /* Update the town list. */
-                        TownRemovePerson(p_find->name);
+						//If player has left town for the guild
+						if (p_find->location == PLAYER_ID_LOCATION_TOWN && p_playerID->location == PLAYER_ID_LOCATION_NOWHERE)
+						{
+							//Notify chatbox
+							sprintf(chatNotification, "^001%s LEFT THE GAME", p_playerID->name);
+							TownUIAddMessage(NULL, chatNotification);
+						}
+
+						/* Update the town list. */
+						TownRemovePerson(playerLabel);
                         break;
                     case PLAYER_ID_LOCATION_GUILD:
                         /* Action is taken care of below. */
@@ -529,7 +557,7 @@ T_void PeopleHereUpdatePlayer(T_playerIDSelf *p_playerID)
                         /* What? */
                         DebugCheck(FALSE);
                         break;
-                }
+                }				
             }
         }
 
@@ -606,6 +634,7 @@ T_void PeopleHereGeneratePeopleInGame(T_gameGroupID groupID)
 {
     T_word16 i;
     T_playerIDSelf *p = G_peopleList;
+	char playerLabel[MAX_CHAT_NAME_STRING];
 
     DebugRoutine("PeopleHereGeneratePeopleInGame");
 
@@ -616,7 +645,8 @@ T_void PeopleHereGeneratePeopleInGame(T_gameGroupID groupID)
         for (i = 0; i < MAX_PLAYERS_IN_WORLD; i++, p++) {
             if ((CompareGameGroupIDs(p->groupID, groupID))
                     && (p->location == PLAYER_ID_LOCATION_GUILD)) {
-                GuildUIAddPlayer(p->name);
+				GetPlayerLabel(p, playerLabel);
+				GuildUIAddPlayer(playerLabel);
             }
         }
     }
