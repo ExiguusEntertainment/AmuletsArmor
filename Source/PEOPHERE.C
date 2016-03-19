@@ -453,7 +453,8 @@ void GetPlayerLabel(T_playerIDSelf *p_playerID, char* buffer)
 {
 	DebugRoutine("GetPlayerLabel");
 
-	sprintf(buffer, "^003%s - ^007%s Level %d", p_playerID->name, StatsGetClassTitle(p_playerID->classType), p_playerID->level);
+	if (p_playerID != NULL)
+		sprintf(buffer, "^003%s - ^007%s Level %d", p_playerID->name, StatsGetClassTitle(p_playerID->classType), p_playerID->level);
 
 	DebugEnd();
 }
