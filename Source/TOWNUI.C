@@ -614,7 +614,7 @@ T_void TownUIAddMessage(T_byte8 *playerName, T_byte8 *message)
     DebugCheck(strlen(message) < TOWN_MESSAGE_SIZE);
     DebugCheck(G_isOnePlayer==FALSE);
 
-	if (ClientGetCurrentPlace() == HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN)
+	if (IsTownHallChatActive() == TRUE)
 	{
 		if (playerName == NULL)
 			offset = 1;
