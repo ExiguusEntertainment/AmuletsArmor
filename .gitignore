@@ -1,2 +1,4 @@
 /Docs
 Build/Windows/VC2013/AA/Debug Multi/
+*.suo
+*.user

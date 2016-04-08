@@ -502,7 +502,7 @@ T_void TownAddPerson(T_byte8 *personName)
 
     DebugRoutine("TownAddPerson");
 
-    if (G_isOnePlayer == FALSE) {
+	if (IsTownHallChatActive() == TRUE) {
         DebugCheck(G_chatList != DOUBLE_LINK_LIST_BAD);
 
 		//Only add player if not already in list
@@ -539,7 +539,7 @@ T_void TownRemovePerson(T_byte8 *personName)
 
     DebugRoutine("TownRemovePerson");
 
-    if (G_isOnePlayer == FALSE) {
+	if (IsTownHallChatActive() == TRUE) {
         DebugCheck(G_chatList != DOUBLE_LINK_LIST_BAD);
         /* search list for this string */
         element = DoubleLinkListGetFirst(G_chatList);
@@ -614,45 +614,49 @@ T_void TownUIAddMessage(T_byte8 *playerName, T_byte8 *message)
     DebugCheck(strlen(message) < TOWN_MESSAGE_SIZE);
     DebugCheck(G_isOnePlayer==FALSE);
 
-    if (playerName == NULL )
-        offset = 1;
+	if (ClientGetCurrentPlace() == HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN)
+	{
+		if (playerName == NULL)
+			offset = 1;
 
-    if (G_messageLine < TOWN_NUM_MESSAGES - offset) {
-        /* add message here */
-        if (playerName != NULL ) {
-            sprintf(G_messages[G_messageLine], "^003%s^007:\r", playerName);
-            G_messageLine++;
-        }
+		if (G_messageLine < TOWN_NUM_MESSAGES - offset) {
+			/* add message here */
+			if (playerName != NULL) {
+				sprintf(G_messages[G_messageLine], "^003%s^007:\r", playerName);
+				G_messageLine++;
+			}
 
-        sprintf(G_messages[G_messageLine++], "%s\r", message);
-    } else {
-        /* scroll up messages by 2 */
-        for (i = 0; i < TOWN_NUM_MESSAGES - offset; i++) {
-            strcpy(G_messages[i], G_messages[i + offset]);
-        }
+			sprintf(G_messages[G_messageLine++], "%s\r", message);
+		}
+		else {
+			/* scroll up messages by 2 */
+			for (i = 0; i < TOWN_NUM_MESSAGES - offset; i++) {
+				strcpy(G_messages[i], G_messages[i + offset]);
+			}
 
-        /* add message here */
-        if (playerName != NULL )
-            sprintf(G_messages[TOWN_NUM_MESSAGES - 2], "^003%s^007:\r",
-                    playerName);
-        sprintf(G_messages[TOWN_NUM_MESSAGES - 1], "%s\r", message);
-    }
+			/* add message here */
+			if (playerName != NULL)
+				sprintf(G_messages[TOWN_NUM_MESSAGES - 2], "^003%s^007:\r",
+				playerName);
+			sprintf(G_messages[TOWN_NUM_MESSAGES - 1], "%s\r", message);
+		}
 
-    /* construct message block */
-    for (i = 0; i <= G_messageLine; i++) {
-        size += strlen(G_messages[i]) + 2;
-    }
+		/* construct message block */
+		for (i = 0; i <= G_messageLine; i++) {
+			size += strlen(G_messages[i]) + 2;
+		}
 
-    text = MemAlloc(size);
-    strcpy(text, "");
+		text = MemAlloc(size);
+		strcpy(text, "");
 
-    for (i = 0; i <= G_messageLine; i++) {
-        strcat(text, G_messages[i]);
-    }
+		for (i = 0; i <= G_messageLine; i++) {
+			strcat(text, G_messages[i]);
+		}
 
-    TxtboxSetData(G_listenBox, text);
-    TxtboxCursBot(G_listenBox);
-    MemFree(text);
+		TxtboxSetData(G_listenBox, text);
+		TxtboxCursBot(G_listenBox);
+		MemFree(text);
+	}
 
     DebugEnd();
 }
@@ -1106,6 +1110,20 @@ E_Boolean TownUICompletedMapLevel(T_word16 mapLevel)
     }
 
     return goToTown;
+}
+
+E_Boolean IsTownHallChatActive()
+{
+	E_Boolean retVal = FALSE;
+	
+	DebugRoutine("IsTownHallChatActive");
+
+	if (G_isOnePlayer == FALSE && ClientGetCurrentPlace() == HARDFORM_GOTO_PLACE_OFFSET + HARD_FORM_TOWN)
+		retVal = TRUE;
+
+	DebugEnd();
+
+	return retVal;
 }
 
 /* @} */
