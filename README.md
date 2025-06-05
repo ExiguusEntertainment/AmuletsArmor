@@ -31,6 +31,9 @@ During a synchronization round the client waits until it has received a sync pac
 `SYNCTIME.C` maintains a global synchronized clock. Other modules read it when scheduling events, and networking code advances it after each synchronization round.
 
 ### Modules
+
+A large number of modules make up the game. Examples include 3D rendering (`3D_VIEW.C`), creature logic (`CRELOGIC.C`), object movement (`OBJMOVE.C`), the packet queue (`CMDQUEUE.C`) and the server/client code (`SERVER.C`, `CLIENT.C`). The Doxygen configuration in the repository can generate full documentation listing every module.
+
 - `3D_COLLI.C`   - 3D collision routines
 - `3D_IO.C`      - 3D map loading/unloading
 - `3D_TRIG.C`    - 3D math utilities
@@ -124,6 +127,7 @@ During a synchronization round the client waits until it has received a sync pac
 - `DOS/DOSDTALK.C`   - DOS implementation of Direct Talk
 - `Win32/WINDTALK.C` - Windows implementation of Direct Talk
 - `Win32/ipx_client.*` - IPX networking over UDP (Windows)
+
 ## Learning more
 
 1. Run Doxygen using `Doxyfile` to browse module documentation.
