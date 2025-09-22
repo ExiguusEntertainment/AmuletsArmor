@@ -1,0 +1,6 @@
+# animated scroll
+TYPE
+SCROLL
+
+NUMSTACKABLE
+3

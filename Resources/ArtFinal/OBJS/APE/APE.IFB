@@ -1,0 +1,97 @@
+; OBJECT DEF: STEFAN --------------------------------------------
+5  ; Number type of stances
+30 ; Radius
+0  ; Extra attributes
+250
+0
+1
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths), 
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1 ; Stand
+0
+0
+0
+
+2 ; Walk
+20
+0
+1
+
+1 ; Got hit stance
+12
+0
+0
+
+1 ; Died
+12
+0
+-1
+
+1 ; Got hit stance
+12
+0
+0
+
+; STANCE 0: STAND ----------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+4
+
+; STANCE 0: FRAME 0: STAND -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+11
+21
+31
+
+; STANCE 1: WALK  ----------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+4
+4
+
+; STANCE 1: FRAME 0: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+11
+21
+31
+
+; STANCE 1: FRAME 1: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+2
+12
+22
+32
+
+; STANCE 2: GOT HIT --------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+4
+
+; STANCE 2: FRAME 0: GOT HIT -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1                 ; NOTE:  For now, use first walk animation frame
+11
+21
+31
+
+; STANCE 3: DYING ----------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+1
+
+; STANCE 3: FRAME 0: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+
+; STANCE 4: GOT HIT --------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+4
+
+; STANCE 4: FRAME 0: GOT HIT -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+101
+111
+121
+131
+

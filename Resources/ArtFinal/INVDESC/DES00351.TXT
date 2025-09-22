@@ -1,0 +1,16 @@
+# description file for a scroll of identify all
+TYPE
+SCROLL
+
+NUMSTACKABLE
+5
+
+EFFECT
+IDENTIFY ALL
+EFFECT TRIGGER
+USE
+END EFFECT
+
+DESTROY ON
+USE
+

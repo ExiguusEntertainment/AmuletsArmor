@@ -1,0 +1,36 @@
+; OBJECT DEF: stswstri.oaf
+1      ; Number of stances
+18     ; Radius
+35     ; Attributes
+10     ; Weight
+10000  ; Value
+0      ; Script
+0      ; Health
+256    ; ObjMoveAttr
+
+
+; STANCES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths),
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+
+; Stance: 0:
+1      ;numFrames
+0      ;speed
+0      ;type
+0      ;nextStance
+
+
+
+
+; Stance: 0:     Frame: 0:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+1        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; List of angle identifiers for STANCE 0: FRAME 0: -----------
+1       ; Angle 0:

@@ -1,0 +1,28 @@
+; OBJECT DEF: 0.oaf --------------------------------------------
+1   ; Number of stances
+32  ; Radius
+0   ; Attributes
+10000   ; Weight
+0   ; Value
+0   ; Script
+0  ; Health
+0  ; ObjMoveAttr
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths),
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1
+0
+0
+-1
+
+; STANCE 0: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+1
+0
+0
+0
+
+; Angles
+0

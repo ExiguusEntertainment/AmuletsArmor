@@ -1,0 +1,103 @@
+Number stances: 5
+Radius: 15
+Attributes: 0
+Weight: 350
+Value: 0
+Script: 17
+Health: 2000
+ObjMoveAttr: 0
+
+Object info:
+STANCE 0:  #F:4  SP:16  Ty:0  Nx:0
+STANCE 1:  #F:4  SP:12  Ty:0  Nx:1
+STANCE 2:  #F:5  SP:8  Ty:0  Nx:0
+STANCE 3:  #F:7  SP:6  Ty:0  Nx:-1
+STANCE 4:  #F:4  SP:12  Ty:0  Nx:0
+
+STANCE 0:  4 frames
+Frame 0, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 1, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 2, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 3, # Angles: 8, Sound #0, Sound radius:0, attr:0
+0)  1001  2001  3001  4001  5001 -4001 -3001 -2001
+1)  1002  2002  3002  4002  5002 -4002 -3002 -2002
+2)  1003  2003  3003  4003  5003 -4003 -3003 -2003
+3)  1004  2004  3004  4004  5004 -4004 -3004 -2004
+
+STANCE 1:  4 frames
+Frame 0, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 1, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 2, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 3, # Angles: 8, Sound #0, Sound radius:0, attr:0
+0)  1101  2101  3101  4101  5101 -4101 -3101 -2101
+1)  1102  2102  3102  4102  5102 -4102 -3102 -2102
+2)  1103  2103  3103  4103  5103 -4103 -3103 -2103
+3)  1104  2104  3104  4104  5104 -4104 -3104 -2104
+
+STANCE 2:  5 frames
+Frame 0, # Angles: 8, Sound #2016, Sound radius:500, attr:0
+Frame 1, # Angles: 8, Sound #2016, Sound radius:500, attr:0
+Frame 2, # Angles: 8, Sound #2016, Sound radius:500, attr:0
+Frame 3, # Angles: 8, Sound #2016, Sound radius:500, attr:0
+Frame 4, # Angles: 8, Sound #2016, Sound radius:500, attr:0
+0)  1201  2201  3201  4201  5201 -4201 -3201 -2201
+1)  1202  2202  3202  4202  5202 -4202 -3202 -2202
+2)  1203  2203  3203  4203  5203 -4203 -3203 -2203
+3)  1204  2204  3204  4204  5204 -4204 -3204 -2204
+4)  1205  2205  3205  4205  5205 -4205 -3205 -2205
+
+STANCE 3:  7 frames
+Frame 0, # Angles: 8, Sound #2014, Sound radius:500, attr:0
+Frame 1, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 2, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 3, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 4, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 5, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 6, # Angles: 8, Sound #0, Sound radius:0, attr:0
+0)  1301  2301  3301  4301  5301 -4301 -3301 -2301
+1)  1302  2302  3302  4302  5302 -4302 -3302 -2302
+2)  1303  2303  3303  4303  5303 -4303 -3303 -2303
+3)  1304  2304  3304  4304  5304 -4304 -3304 -2304
+4)  1305  2305  3305  4305  5305 -4305 -3305 -2305
+5)  1306  2306  3306  4306  5306 -4306 -3306 -2306
+6)  1307  2307  3307  4307  5307 -4307 -3307 -2307
+
+STANCE 4:  4 frames
+Frame 0, # Angles: 8, Sound #4025, Sound radius:500, attr:0
+Frame 1, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 2, # Angles: 8, Sound #0, Sound radius:0, attr:0
+Frame 3, # Angles: 8, Sound #0, Sound radius:0, attr:0
+0)  1401  2401  3401  4401  5401 -4401 -3401 -2401
+1)  1402  2402  3402  4402  5402 -4402 -3402 -2402
+2)  1403  2403  3403  4403  5403 -4403 -3403 -2403
+3)  1404  2404  3404  4404  5404 -4404 -3404 -2404
+
+Total frames: 24
+Saving file 'spider.OAF'
+  Writing stances ... OK
+  Writing frames ... 368
+448
+528
+608
+688
+768
+848
+928
+1008
+1088
+1168
+1248
+1328
+1408
+1488
+1568
+1648
+1728
+1808
+1888
+1968
+2048
+2128
+2208
+OK
+  Writing object pics ... OK

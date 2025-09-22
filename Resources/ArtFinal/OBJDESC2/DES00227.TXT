@@ -1,0 +1,2 @@
+SoulSeeker [5 dmg, +15 acc]
+

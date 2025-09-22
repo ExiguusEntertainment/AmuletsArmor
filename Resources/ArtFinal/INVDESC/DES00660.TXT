@@ -1,0 +1,9 @@
+# item9, broken blue and gray bowl
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

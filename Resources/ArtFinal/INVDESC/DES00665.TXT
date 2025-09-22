@@ -1,0 +1,9 @@
+# item14, small blue bowl
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

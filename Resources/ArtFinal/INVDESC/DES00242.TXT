@@ -1,0 +1,13 @@
+# description file for a mana drain bolt
+TYPE
+BOLT
+
+SUBTYPE
+MANA DRAIN
+
+NUMSTACKABLE
+10
+
+
+
+

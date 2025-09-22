@@ -1,0 +1,8 @@
+# description file for a treasure ring #1 
+TYPE
+RING
+
+NUMSTACKABLE
+1
+
+

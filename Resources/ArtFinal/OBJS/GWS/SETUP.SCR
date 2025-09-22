@@ -1,0 +1,20 @@
+;Graphic Workshop setup script
+program=Graphic Workshop for DOS
+directory=C:\\GWSDOS
+expander=ZIPPER.COM
+sourcefile=GWSDOS.ZIP
+message=Graphic Workshop has been installed on your hard drive.\n\n\
+This installation function will give you the opportunity to read GWS.DOC on line, and will then execute GWSINSTL so you can \
+configure the software and enter your registration number. You can \
+read GWS.DOC later on by typing EDIT GWS.DOC in your Graphic Workshop directory and \
+modify the configuration of Graphic Workshop later on by running GWSINSTL.
+sourcechecksum=7599
+sourcesize=1370834
+completeinstall=Graphic Workshop has been successfully installed.
+checkexpander=1
+nextapp=GWSINSTL.EXE
+textfile=GWS.DOC
+viewmargin=2
+
+
+

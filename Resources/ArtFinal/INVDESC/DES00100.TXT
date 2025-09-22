@@ -1,0 +1,15 @@
+# description file for a copper 1 coin
+TYPE
+COIN
+
+SUBTYPE
+COPPER
+
+EFFECT
+TAKE COIN
+EFFECT TRIGGER
+GET
+EFFECT DATA
+0,1,0
+END EFFECT
+

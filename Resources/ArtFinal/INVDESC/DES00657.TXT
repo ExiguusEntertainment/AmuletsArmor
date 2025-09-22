@@ -1,0 +1,9 @@
+# item6, white and brown striped bowl
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

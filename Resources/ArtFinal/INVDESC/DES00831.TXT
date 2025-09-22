@@ -1,0 +1,6 @@
+# potn3, purple fat, flat potion bottle
+TYPE
+THING
+
+NUMSTACKABLE
+3

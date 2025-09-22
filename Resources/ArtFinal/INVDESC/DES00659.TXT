@@ -1,0 +1,9 @@
+# item8, broken small blue and gray bottle
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

@@ -1,0 +1,16 @@
+# description file for a silver 5 coin
+TYPE
+COIN
+
+SUBTYPE
+SILVER
+
+EFFECT
+TAKE COIN
+EFFECT TRIGGER
+GET
+EFFECT DATA
+1,5,0
+END EFFECT
+
+

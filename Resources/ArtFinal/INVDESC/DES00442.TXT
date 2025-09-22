@@ -1,0 +1,7 @@
+# Amulet 1
+TYPE
+AMULET
+
+NUMSTACKABLE
+1
+

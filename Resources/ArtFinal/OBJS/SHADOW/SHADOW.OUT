@@ -1,0 +1,50 @@
+Number stances: 5
+Radius: 32
+Attributes: 0
+
+Object info:
+STANCE 0:  #F:1  SP:0  Ty:0  Nx:0
+STANCE 1:  #F:4  SP:12  Ty:0  Nx:1
+STANCE 2:  #F:1  SP:40  Ty:0  Nx:0
+STANCE 3:  #F:5  SP:12  Ty:0  Nx:-1
+STANCE 4:  #F:1  SP:40  Ty:0  Nx:0
+
+STANCE 0:  1 frames
+Frame 0, # Angles: 4
+0)     1     3     5     7
+
+STANCE 1:  4 frames
+Frame 0, # Angles: 4
+Frame 1, # Angles: 4
+Frame 2, # Angles: 4
+Frame 3, # Angles: 4
+0)     1     3     5     7
+1)    11    13    15    17
+2)    21    23    25    27
+3)    31    33    35    37
+
+STANCE 2:  1 frames
+Frame 0, # Angles: 4
+0)    51    53    55    57
+
+STANCE 3:  5 frames
+Frame 0, # Angles: 1
+Frame 1, # Angles: 1
+Frame 2, # Angles: 1
+Frame 3, # Angles: 1
+Frame 4, # Angles: 1
+0)  1001
+1)  1002
+2)  1003
+3)  1004
+4)  1005
+
+STANCE 4:  1 frames
+Frame 0, # Angles: 4
+0)    41    43    45    47
+
+Total frames: 12
+Saving file 'shadow.OAF'
+  Writing stances ... OK
+  Writing frames ... OK
+  Writing object pics ... OK

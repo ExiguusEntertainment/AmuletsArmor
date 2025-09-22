@@ -1,0 +1,129 @@
+6
+man2la.mpr
+man2ll.mpr
+man2rl.mpr
+man2bdy.mpr
+man2raso.mpr
+man2dagh.mpr
+
+START
+; Standing stances 1-8
+STANCE 0
+baeacadaaa*
+bacadaaaea*
+bacadaaaea*
+bacadaaaea*
+bacadaaaea*
+eacadaaaba*
+eacadaaaba*
+eacadaaaba*
+
+; Walk 1 stances (left leg forward, right leg back)
+STANCE 1
+efccdbaabc*
+bcccdbaaef*
+bcccdbaaef*
+bcccdbaaef*
+bcccdbaaef*
+efdbccaabc*
+efdbccaabc*
+efdbccaabc*
+
+; Walk 2 stances (left leg back, right leg forward)
+STANCE 2
+egdccbaabb*
+bbcbdcaaeg*
+bbcbdcaaeg*
+bbcbdcaaeg*
+bbcbdcaaeg*
+egdccbaabb*
+egdccbaabb*
+egdccbaabb*
+
+; Attacking punch stance (standing straight with right arm out)
+STANCE 3
+bbccdcaaec*
+bbccdcaaec*
+bbccdcaaec*
+bbccdcaaec*
+ecccdcbaba*
+ecccdcbaba*
+ecccdcbaba*
+ecccdcbaba*
+
+; Dagger in bent right arm
+STANCE 4
+bacadaaaebfb*
+bacadaaafbeb*
+bacadaaafbeb*
+bacadaaafbeb*
+fbebcadaaaba*
+ebfbcadaaaba*
+ebfbcadaaaba*
+ebfbcadaaaba*
+
+; Dagger in right hand and walk 1
+STANCE 5
+bccbdbaaebfb*
+bccbdbaafbeb*
+bccbdbaafbeb*
+bccbdbaafbeb*
+fbebcbdbcaba*
+ebfbcbdbcaba*
+ebfbcbdbcaba*
+ebfbcbdbcaba*
+
+; Dagger in right hand and walk 2
+STANCE 6
+bbccdcaaebfb*
+bbccdcaafbeb*
+bbccdcaafbeb*
+bbccdcaafbeb*
+fbebccdcbaba*
+ebfbccdcbaba*
+ebfbccdcbaba*
+ebfbccdcbaba*
+
+; Dagger in right hand attacking
+STANCE 7
+bbccdcaaecfc*
+bbccdcaafcec*
+bbccdcaafcec*
+bbccdcaafcec*
+fcecccdcbaba*
+ecfcccdcbaba*
+ecfcccdcbaba*
+ecfcccdcbaba*
+
+END
+
+TABLE
+aa BDY         ; Middle body
+
+ba LA          ; Left Arm straight
+bb LAF3        ; Left Arm forward 30 degrees
+bc LAB3        ; back 30
+
+ca LL          ; Left leg straight
+cb LLB3        ; Left leg back 30 degrees
+cc LLF3        ; forward 30
+
+da RL          ; Right leg straight
+db RLB3        ; back 30
+dc RLF3        ; foward 30
+
+ea RA          ; Right arm straight
+eb RA90        ; Bent at 90 degrees
+ec RASO        ; Straight out (high)
+ed RA_M        ; Medium
+ee RA_L        ; Low
+ef RAF3        ; Foward 30
+eg RAB3        ; back 30
+
+fa DAG         ; Dagger in straight right arm
+fb DAG9        ; in 90 degree right arm
+fc DAGH        ; High
+fd DAGM        ; Medium
+fe DAGL        ; Low
+
+END

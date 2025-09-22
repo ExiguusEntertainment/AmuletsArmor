@@ -1,0 +1,9 @@
+# item1, a medium blue bottle
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

@@ -1,0 +1,6 @@
+# scrl5
+TYPE
+SCROLL
+
+NUMSTACKABLE
+3

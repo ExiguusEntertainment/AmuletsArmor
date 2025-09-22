@@ -1,0 +1,2 @@
+Mushroom [-5 health, +5 mana]
+

@@ -1,0 +1,10 @@
+# description file for a ruby  
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3
+

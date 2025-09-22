@@ -1,0 +1,9 @@
+# thing11, broken small tan cup/vase
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

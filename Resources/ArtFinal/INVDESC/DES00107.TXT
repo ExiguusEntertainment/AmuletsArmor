@@ -1,0 +1,16 @@
+# description file for a platinum 5 coin
+TYPE
+COIN
+
+SUBTYPE
+PLATINUM
+
+EFFECT
+TAKE COIN
+EFFECT TRIGGER
+GET
+EFFECT DATA
+3,5,0
+END EFFECT
+
+

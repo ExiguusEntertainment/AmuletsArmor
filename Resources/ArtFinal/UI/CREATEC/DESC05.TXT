@@ -1,0 +1,7 @@
+Rogues specialize in sneaking around and picking locks and pockets.  They are very quick but rely on stealth instead of combat.
+
+Armor Types: Leather
+Weapon Types: No longsword
+Magik System: Arcane
+
+

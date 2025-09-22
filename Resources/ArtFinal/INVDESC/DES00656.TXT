@@ -1,0 +1,10 @@
+# item5, large cup-like tan vase
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3
+

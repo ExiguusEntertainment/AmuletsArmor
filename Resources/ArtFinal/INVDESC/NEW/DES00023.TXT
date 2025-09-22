@@ -1,0 +1,9 @@
+# description file for a swamp plant
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+5

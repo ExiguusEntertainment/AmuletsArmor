@@ -1,0 +1,10 @@
+# broken pot 1
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3
+

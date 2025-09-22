@@ -1,0 +1,12 @@
+# description file for a fire bolt
+TYPE
+BOLT
+
+SUBTYPE
+FIRE
+
+NUMSTACKABLE
+10
+
+
+

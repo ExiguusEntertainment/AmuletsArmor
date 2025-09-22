@@ -1,0 +1,6 @@
+# potn1, red potion
+TYPE
+THING
+
+NUMSTACKABLE
+3

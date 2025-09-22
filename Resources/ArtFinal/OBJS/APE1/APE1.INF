@@ -1,0 +1,246 @@
+; OBJECT DEF: APE.oaf --------------------------------------------
+5   ; Number of stances
+30  ; Radius
+0   ; Attributes
+250  ; Weight
+0   ; Value
+1   ; Script
+1500  ; Health
+ 0  ; ObjMoveAttr
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths),
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1
+0
+0
+0
+
+4
+12
+0
+1
+
+1
+40
+0
+0
+
+12
+12
+0
+-1
+
+1
+40
+0
+0
+
+; STANCE 0: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+0
+0
+0
+
+
+; STANCE 0: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+0
+2
+4
+6
+
+; STANCE 1: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+0
+0
+0
+
+4
+0
+0
+0
+
+4
+0
+0
+0
+
+4
+0
+0
+0
+
+; STANCE 1: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+0
+2
+4
+6
+
+; STANCE 1: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+0
+2
+4
+6
+
+; STANCE 1: FRAME 2: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+100
+102
+104
+106
+
+; STANCE 1: FRAME 3: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+100
+102
+104
+106
+
+; STANCE 2: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+82
+1000
+0
+
+
+; STANCE 2: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+0
+2
+4
+6
+
+; STANCE 3: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+1
+83
+1000
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+1
+0
+0
+0
+
+
+; STANCE 3: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20000
+
+; STANCE 3: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20100
+
+; STANCE 3: FRAME 2: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20200
+
+; STANCE 3: FRAME 3: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20300
+
+; STANCE 3: FRAME 4: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20400
+
+; STANCE 3: FRAME 5: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20500
+
+; STANCE 3: FRAME 6: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20600
+
+; STANCE 3: FRAME 7: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20700
+
+; STANCE 3: FRAME 8: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20700
+
+; STANCE 3: FRAME 9: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20700
+
+; STANCE 3: FRAME 10: ------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20700
+
+; STANCE 3: FRAME 11: ------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20700
+
+
+; STANCE 4: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+81
+500
+0
+
+
+; STANCE 4: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10000
+10002
+10004
+10006
+

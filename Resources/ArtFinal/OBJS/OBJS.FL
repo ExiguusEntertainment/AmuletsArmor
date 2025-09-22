@@ -1,0 +1,542 @@
+column\column.res       00011           // Gray Column 128 high
+tomato\tomato.res       00012           // Tomato
+head_1\head_1.res       00013           // Large glowing head
+barrel1\barrel1.res     00014           // Tall barrel
+barrel3\barrel3.res     00015           // Short barrle
+bucket\bucket.res       00016           // Bucket
+rock_1\rock_1.res       00018           // Medium sized rock (roundish)
+greenapp\greenapp.res   00019           // Green apple
+mossrock\mossrock.res   00020           // Mossy rock (fairly wide)
+head_5\head_5.res       00021           // Throne of bone
+swpplt01\swpplt01.res   00023           // Small swamp plant
+swpplt02\swpplt02.res   00024           // Medium sized swamp plant
+swpplt03\swpplt03.res   00025           // Large sized swamp plant
+swpplt03\swpplt03.res   00026           // Large sized swamp plant--don't use
+torch1\torch1.res       00027           // Flaming torch
+xbow\xbow.res           00028           // Old crossbow -- don't use
+glower\glower.res       00030           // Flashing glower/obstacle
+fireball\fireball.res   00031           // Spinning Star missile
+fblsmgr\fblsmgr.res     00032           // Green small blob missile
+fblsmbl\fblsmbl.res     00033           // Blue small blob missile
+fblsmtn\fblsmtn.res     00034           // Tan small blob missile
+fblsmrd\fblsmrd.res     00035           // Small red blob missile
+fblbggr\fblbggr.res     00036           // Large green blob missile
+fblbgtn\fblbgtn.res     00037           // Large tan blob missile
+trophy\trophy.res       00038           // Large flaming "trophy"
+pole\pole.res           00039           // Column with shadow creature
+bifflam\bifflam.res     00040           // Glowing biff lamp
+brafir\brafir.res       00041           // Hanging brazar
+gong\gong.res           00042           // Biff holding gong
+block\block.res         00043           // 4 sided block holding in biff king
+bonethr\bonethr.res     00044           // Bone Throne in dead position
+cb01\cb01.res           00045           // Crystal ball 1
+cb02\cb02.res           00046           // Crystal ball 2
+cb03\cb03.res           00047           // Crystal ball 3
+cb04\cb04.res           00048           // Crystal ball 4
+bonesa\bonesa.res       00049           // Bones without head, face down
+bonesb\bonesb.res       00050           // Bones without head, lying up
+bonesc\bonesc.res       00051           // Leg bones lying up
+bonesd\bonesd.res       00052           // Chest bones, lying up
+bonznroc\bonznroc.res   00053           // Skull and bones on rock
+bottleem\bottleem.res   00054           // Empty bottle, white
+bottlefl\bottlefl.res   00055           // Full bottle, greenish
+idol\idol.res           00058           // Horse head idol
+jaw\jaw.res             00059           // single jaw bone
+pouch\pouch.res         00060           // Pouch 
+scrollcl\scrollcl.res   00061           // Scroll closed
+scrollop\scrollop.res   00062           // Scroll opened -- not used
+shroom\shroom.res       00063           // Mushroom (or is it a toadstole?)
+skull\skull.res         00065           // Skull, no jaw, side view
+skullfrg\skullfrg.res   00071           // Skull, side view, facing up
+stone\stone.res         00072           // Small yellow stone.
+rball1\rball1.res       00077           // Small red super ball
+rball2\rball2.res       00078           // Large red super ball (basketball?)
+bigtree\bigtree.res     00079           // Big pear shaped tree
+medtree\medtree.res     00080           // Medium pear shaped tree
+myrock1\myrock1.res     00081           // Small to medium sized rock
+efxa\efxa.res           00082
+efxb\efxb.res           00083
+efxc\efxc.res           00084
+efxd\efxd.res           00085
+efxe\efxe.res           00086
+efxf\efxf.res           00087
+fire\fire.res           00088
+gas\gas.res             00089
+efxg\efxg.res           00090
+efxh\efxh.res           00091
+efxi\efxi.res           00092
+efxj\efxj.res           00093
+efxk\efxk.res           00094
+efxl\efxl.res           00095
+efxm\efxm.res           00096
+efxn\efxn.res           00097
+efxo\efxo.res           00098
+ccoin1\ccoin1.res       00100           // Copper 1 piece
+ccoin5\ccoin5.res       00101           // Copper 5 piece
+scoin1\scoin1.res       00102           // Silver 1 piece
+scoin5\scoin5.res       00103           // Silver 5 piece
+gcoin1\gcoin1.res       00104           // Gold 1 piece
+gcoin5\gcoin5.res       00105           // Gold 5 piece
+pcoin1\pcoin1.res       00106           // Platinum 1 piece
+pcoin5\pcoin5.res       00107           // Platinum 5 piece
+gem1\gem1.res           00110        // Diamond
+gem2\gem2.res           00111        // Emerald
+gem3\gem3.res           00112        // Ruby   
+gem4\gem4.res           00113        // Sapphire (purple currently)
+smvase\smvase.res       00114        // Small vase
+bgvase\bgvase.res       00115        // Big vase   
+glass\glass.res         00116        // Glass (see through)
+chest\chest.res         00117        // Chest breeming with gold
+flask\flask.res         00118        // White flask
+pobot\pobot.res         00119           // Better looking bottle
+stal1\stal1.res         00120           // Large grey stalagtite
+stal2\stal2.res         00121           // Large light brown stalagtite
+stal3\stal3.res         00122           // Small grey stalagtite
+stal4\stal4.res         00123           // Medium grey stalagtite
+stal5\stal5.res         00124           // Tall grey stalagtite
+stal6\stal6.res         00125           // Medium grey stalagtite #2
+stal7\stal7.res         00126           // Small brown stalagtite
+stal9\stal9.res         00128           // Long and tall stalagtite
+stal10\stal10.res       00129           // Medium brown stalagtite
+stal11\stal11.res       00130           // Medium grey and brown stalagtite
+stal12\stal12.res       00131           // Medium detailed grey stalagtite
+stal13\stal13.res       00132           // Medium, but tall grey stalagtite
+stal14\stal14.res       00133           // Not used
+stal15\stal15.res       00134           // Medium detailed grey stalagtite
+stal16\stal16.res       00135           // Tall detailed grey and brown stal.
+stal17\stal17.res       00136           // Not used
+chair01\chair01.res     00137           // Tall fancy chair
+table01\table01.res     00138           // Square table
+table02\table02.res     00139           // Long table
+tomb1\tomb1.res         00140
+tomb2\tomb2.res         00141
+tomb3\tomb3.res         00142
+rtools\rtools.res       00143           //thieve's tools
+quiver\quiver.res       00144           //quiver of bolts
+quivfi\quivfi.res       00145           //quiver of fire bolts
+quivpo\quivpo.res       00146           //quiver of poison bolts
+quivac\quivac.res       00147           //quiver of pierce bolts (was quivpi)
+quivpi\quivpi.res       00148           //quiver of acid bolts (was quivac)
+quivel\quivel.res       00149           //quiver of electric bolts
+quivmd\quivmd.res       00150           //quiver of mana drain bolts
+statue\statue.res       00151          // Statue pointing
+dagger\dagger.res       00200        // Iron dagger
+mace\mace.res           00201        // Iron mace
+staff\staff.res         00202        // Iron staff
+stswd\stswd.res         00203        // Iron short sword
+lgswd\lgswd.res         00204        // Iron long  sword
+axe\axe.res             00205        // Iron Axe
+xbowbolt\xbowbolt.res   00206        // Iron Bolt
+dagstri\dagstri.res     00210        // Dagger of striking
+stswstri\stswstri.res   00211        // Short sw. striking
+lgswstri\lgswstri.res         00212        // Long sword striking
+xbowbolt\xbowbolt.res         00213        // Bolts  of striking ** don't use!
+dagsli\dagsli.res       00214        // Dagger of slicing ** now fire.
+dagpir\dagpir.res       00215        // Dagger of piercing
+stswdpir\stswdpir.res   00216        // Short sw or piercing
+lgswdpir\lgswdpir.res   00217        // Long sword of piercing
+boltpir\boltpir.res     00218        // Bolts of fire (was piercing)
+staffpoi\staffpoi.res         00219        // Staff of poison 
+dagpoi\dagpoi.res       00220        // Dagger of Poison
+stswdpoi\stswdpoi.res   00221        // Short sword of poison
+boltpoi\boltpoi.res     00222        // Bolts of poison
+dagspe\dagspe.res       00223        // Dagger of speed
+macespe\macespe.res     00224        // Mace of speed
+staffspe\staffspe.res         00225        // Staff of speed 
+lgswdspe\lgswdspe.res   00226        // Long sword of speed
+dagacc\dagacc.res       00227        // Dagger of accuracy
+axeac\axeac.res         00228        // Axe  of accuracy
+boltwht\boltwht.res     00229        // Bolts of Piercing (was accuracy)
+dagacid\dagacid.res         00230        // Dagger of acid 
+macepoi\macepoi.res     00231        // Mace of Poison
+axepow\axepow.res       00232        // Axe  of power
+staffpow\staffpow.res         00233  // Staff of power
+maceelec\maceelec.res   00234        // mace of electricity
+boltacc\boltacc.res     00240        // Bolt of acid (currently blue)
+boltyel\boltyel.res     00241        // Bolt of electricity
+boltpur\boltpur.res     00242        // Bolt of mana drain
+beri\beri.res           00243  // berries
+cart\cart.res           00244  // carrot
+chri\chri.res           00245  // cherry
+grd\grd.res             00246  // water gourd
+kfc\kfc.res             00247  // chicken
+grpe\grpe.res           00248  // grape
+nana\nana.res           00249  // banana
+pnaple\pnaple.res       00251  // pineapple
+prtgrn\prtgrn.res       00252  // ground decoration
+prtgrn2\prtgrn2.res     00253
+prtgrn3\prtgrn3.res     00254
+prtgrn4\prtgrn4.res     00255
+prtgrn5\prtgrn5.res     00256
+key1\key1.res           00257  // keys
+key2\key2.res           00258
+key3\key3.res           00259
+key4\key4.res           00260
+key5\key5.res           00261
+key6\key6.res           00262
+key7\key7.res           00263
+key8\key8.res           00264
+key9\key9.res           00265
+plnt1\plnt1.res         00266  // plants
+plnt2\plnt2.res         00267
+plnt3\plnt3.res         00268
+plnt5\plnt5.res         00269
+plnt6\plnt6.res         00270
+plnt7\plnt7.res         00271
+plnt8\plnt8.res         00272
+plnt9\plnt9.res         00273
+rock\rock.res           00274  // rocks
+rock2\rock2.res         00275
+plnt4\plnt4.res         00276
+ch1\ch1.res             00277  // roamad statues
+ch2\ch2.res             00278
+ch3\ch3.res             00279
+ch4\ch4.res             00280
+ch5\ch5.res             00281
+rubl1\rubl1.res         00282  // rubble
+rubl2\rubl2.res         00283
+rubl3\rubl3.res         00284
+rubl4\rubl4.res         00285
+brkpot1\brkpot1.res     00286  // broken pots
+brkpot2\brkpot2.res     00287
+brkpot3\brkpot3.res     00288
+brkpot4\brkpot4.res     00289
+brkpot5\brkpot5.res     00290
+brkpot6\brkpot6.res     00291
+brkpot7\brkpot7.res     00292
+brkpot8\brkpot8.res     00293
+candab1\candab1.res     00294  // candleabras
+candab2\candab2.res     00295               
+candstk1\candstk1.res   00296  // candle stick
+candstk2\candstk2.res   00297
+loaf\loaf.res           00298  // Loaf of bread created through spell
+rune00\rune00.res       00300        // Rune arcane_1 (also mage_1)
+rune01\rune01.res       00301        // Rune arcane_2 (also mage_2)
+rune02\rune02.res       00302        // Rune arcane_3 (also mage_3)
+rune03\rune03.res       00303        // Rune arcane_4 (also mage_4)
+rune04\rune04.res       00304        // Rune mage_5
+rune05\rune05.res       00305        // Rune mage_6
+rune06\rune06.res       00306        // Rune mage_7
+rune07\rune07.res       00307        // Rune mage_8
+rune08\rune08.res       00308        // Rune mage_9
+rune09\rune09.res       00309        // Rune arcane_5 (also cleric_1)
+rune10\rune10.res       00310        // Rune arcane_6 (also cleric_2)
+rune11\rune11.res       00311        // Rune arcane_7 (also cleric_3)
+rune12\rune12.res       00312        // Rune arcane_8 (also cleric_4)
+rune13\rune13.res       00313        // Rune arcane_9 (also cleric_5)
+rune14\rune14.res       00314        // Rune cleric_6
+rune15\rune15.res       00315        // Rune cleric_7
+rune16\rune16.res       00316        // Rune cleric_8
+rune17\rune17.res       00317        // Rune cleric_9
+scroll00\scroll00.res   00350       // Scroll of Identify Equipment
+scroll01\scroll01.res   00351       // Scroll of Identify All
+scroll02\scroll02.res   00352       // Scroll of Recall 3
+scroll03\scroll03.res   00353       // Scroll of Recall 4
+scroll04\scroll04.res   00354       // Scroll of Health 1
+scroll05\scroll05.res   00355       // Scroll of Health 2
+scroll06\scroll06.res   00356       // Scroll of Health 3
+scroll07\scroll07.res   00357       // Scroll of Regneratation 1
+scroll08\scroll08.res   00358       // Scroll of Armor
+scroll09\scroll09.res   00359       // Scroll of Earthquake
+scroll10\scroll10.res   00360       // Scroll of Flying
+scroll11\scroll11.res   00361       // Scroll of Invisibility
+scroll12\scroll12.res   00362       // Gain mana scroll #1
+scroll13\scroll13.res   00363       // Gain mana scroll #2
+scroll14\scroll14.res   00364       // Gain strength scroll
+scroll15\scroll15.res   00365       // Gain accuracy scroll
+scroll16\scroll16.res   00366       // Gain stealth scroll
+scroll17\scroll17.res   00367       // Gain magic scroll
+scroll18\scroll18.res   00368       // Gain gain speed scroll
+scroll19\scroll19.res   00369       // Gain experience scroll
+scroll20\scroll20.res   00370       // Gain 'electric melee attack' scroll
+scroll21\scroll21.res   00371       // Gain 'firey melee attack' scroll
+scroll22\scroll22.res   00372       // Gain 'mana
+scrl1\scrl1.res         00373
+scrl2\scrl2.res         00374
+scrl3\scrl3.res         00375
+scrl4\scrl4.res         00376
+scrl5\scrl5.res         00377
+scrl6\scrl6.res         00378
+scrl7\scrl7.res         00379
+scrl8\scrl8.res         00380       //Elymas' Journal Notes
+scrl9\scrl9.res         00381
+scrl10\scrl10.res       00382
+scrl11\scrl11.res       00383
+scroll23\scroll23.res   00384
+ring00\ring00.res         00400     // Ring of water walk
+ring01\ring01.res         00401     // Ring of water breathing
+ring02\ring02.res         00402     // Ring of Marksmanship 1
+ring03\ring03.res         00403     // Ring of Marksmanship 2
+ring04\ring04.res         00404     // Ring of Marksmanship 3
+ring05\ring05.res         00405     // Ring of Regen 1
+ring06\ring06.res         00406     // Ring of Regen 2
+ring07\ring07.res         00407     // Ring of Strength 1
+ring08\ring08.res         00408     // Ring of Strength 2
+ring09\ring09.res         00409     // Ring of Strength 3
+ring10\ring10.res         00410     // Ring of Strength 4
+ring11\ring11.res         00411     // Ring of Strength 5
+ring12\ring12.res         00412     // Treasure ring #1
+ring13\ring13.res         00413     // Treasure ring #2
+ring14\ring14.res         00414     // Treasure ring #3
+ring15\ring15.res         00415     // Ring of Armor 1
+ring16\ring16.res         00416     // Ring of Armor 2
+ring17\ring17.res         00417     // Ring of Armor 3
+ring18\ring18.res         00418     // Ring of Armor 4
+ring19\ring19.res         00419     // Ring of Armor 5
+ring20\ring20.res         00420     // Ring of Accuracy 1
+ring21\ring21.res         00421     // Ring of Accuracy 2
+ring22\ring22.res         00422     // Ring of Accuracy 3
+ring23\ring23.res         00423     // Ring of Accuracy 4
+ring24\ring24.res         00424     // Ring of Accuracy 5
+ring25\ring25.res         00425     // Treasure ring #4
+ring26\ring26.res         00426     // Ring of Food consurvation
+ring27\ring27.res         00427     // Ring of Water conservation
+ring28\ring28.res         00428     // Ring of Speed 4
+ring29\ring29.res         00429     // Ring of Speed 1
+ring30\ring30.res         00430     // Ring of Speed 2
+ring31\ring31.res         00431     // Ring of Speed 3
+ring32\ring32.res         00432     // Ring of Sticky Feet
+ring33\ring33.res         00433     // Treasure ring #5
+ring34\ring34.res         00434     // Ring of Jumping
+ring35\ring35.res         00435     // Ring of Map
+ring36\ring36.res         00436     // Ring of Shield #1  !don't use!
+ring37\ring37.res         00437     // Ring of Shield #2  !don't use!
+ring38\ring38.res         00438     // Ring of Stealth
+head002\head002.res       00510      // Piecewise player character
+chest002\chest002.res     00511      // Plate
+larm002\larm002.res       00512
+rarm002\rarm002.res       00513
+legs002\legs002.res       00514
+weapon02\weapon02.res     00515      // Piecewise fist
+shield02\shield02.res     00516
+head003\head003.res       00520      // Piecewise player character
+chest003\chest003.res     00521
+larm003\larm003.res       00522
+rarm003\rarm003.res       00523
+legs003\legs003.res       00524      // Cloth/Leather
+weapon03\weapon03.res     00525
+shield03\shield03.res     00526
+head004\head004.res       00530      // Piecewise player character
+chest004\chest004.res     00531
+larm004\larm004.res       00532
+rarm004\rarm004.res       00533
+legs004\legs004.res       00534      // Chain mail
+weapon04\weapon04.res     00535
+shield04\shield04.res     00536
+weapon05\weapon05.res     00540
+weapon06\weapon06.res     00541
+weapon07\weapon07.res     00542
+weapon08\weapon08.res     00543
+weapon09\weapon09.res     00544
+amulet00\amulet00.res       00600      // Amulet of Spell Focus
+amulet01\amulet01.res       00601      // Amulet of Regeneration
+amulet02\amulet02.res       00602      // Amulet of Speed
+amulet03\amulet03.res       00603      // Amulet of Stealth
+amulet04\amulet04.res       00604      // Amulet of Strength
+amulet05\amulet05.res       00605      // Amulet of Accuracy
+amulet06\amulet06.res       00606      // AMulet of Poison protection
+amulet07\amulet07.res       00607      // AMulet of Fire protection
+amulet08\amulet08.res       00608      // AMulet of Lava walk
+amulet09\amulet09.res       00609      // Amulet of Hiding
+amulet10\amulet10.res       00610      // Amulet of Eternal Nourishment
+amulet11\amulet11.res       00611      // Amulet of Quickness
+amulet12\amulet12.res       00612      // Amulet of Jumping
+amulet13\amulet13.res       00613      // AMulet of Flying
+amulet14\amulet14.res       00614      // Amulet of Falling
+amulet15\amulet15.res       00615      // Amulet of Super Armor
+amulet16\amulet16.res       00616      // Amulet of acid protection
+amulet17\amulet17.res       00617      // Amulet of electricity protection
+amulet18\amulet18.res       00618      // Amulet of mana drain protection
+amulet19\amulet19.res       00619      // Amulet of mana regeneration
+dedtre\dedtre.res       00650          // Dead tree hanging to left
+dedtre2\dedtre2.res     00651          // Dead tree hanging to left with more
+item1\item1.res         00652          // Medium blue bottle
+item2\item2.res         00653          // Large blue and gray bottle
+item3\item3.res         00654          // Gray blue and gray bowl
+item4\item4.res         00655          // Small cup like tan vase
+item5\item5.res         00656          // Large cup like tan vase
+item6\item6.res         00657          // white and brown striped bowl
+item7\item7.res         00658          // small blue and gray bottle
+item8\item8.res         00659          // broken small blue and gray bottle
+item9\item9.res         00660          // broken blue and gray bowl
+item10\item10.res       00661          // broken white and brown striped bowl
+item11\item11.res       00662          // broken small tan cup/vase
+item12\item12.res       00663          // small brown with white stripe bowl
+item13\item13.res       00664          // broken small brown and white bowl
+item14\item14.res       00665          // small blue bowl
+item15\item15.res       00666          // Green shrubbery with purple flowers
+item16\item16.res       00667          // Flat weeds with couplepurpleflowers
+item17\item17.res       00668          // Small flat clump with small rocks
+fntn\fntn.res           00669          // Tall fountain
+pkax\pkax.res           00670
+pkax1\pkax1.res         00671
+rkwg1\rkwg1.res         00672
+rkwg2\rkwg2.res         00673
+rkwg3\rkwg3.res         00674
+rkwg4\rkwg4.res         00675
+rkwg5\rkwg5.res         00676
+rkwg6\rkwg6.res         00677
+scanm\scanm.res         00678
+rchest\rchest.res       00701           //leather/cloth armor
+rarm\rarm.res           00702
+clothleg\clothleg.res   00703
+mailhead\mailhead.res   00704          //Regular/Iron light/chain armor
+mailchst\mailchst.res   00705
+mailrarm\mailrarm.res   00706
+maillegs\maillegs.res   00707
+plathelm\plathelm.res   00708           // Regular/Iron heavy/plate armor
+platchst\platchst.res   00709
+platrarm\platrarm.res   00710
+platlegs\platlegs.res   00711
+shield02\shield02.res     00712      // Regular/Iron shield  *
+potion00\potion00.res     00800      // Potion of Healing 1
+potion01\potion01.res     00801      // Potion of Healing 2
+potion02\potion02.res     00802      // Potion of Healing 3
+potion03\potion03.res     00803      // Potion of Regen 1
+potion04\potion04.res     00804      // Potion of Regen. 2
+potion05\potion05.res     00805      // Potion of Flying
+potion06\potion06.res     00806      // Potion of Cure Poison 1
+potion07\potion07.res     00807      // Potion of Cure Poison 2
+potion08\potion08.res     00808      // Potion of Armor   1
+potion09\potion09.res     00809      // Potion of Armor   3
+potion10\potion10.res     00810      // Potion of Armor   4
+potion11\potion11.res     00811      // Potion of Armor   5
+potion12\potion12.res     00812      // Potion of Waterwalking
+potion13\potion13.res     00813      // Potion of Lavawalking
+potion14\potion14.res     00814      // Potion of Speed
+potion15\potion15.res     00815      // Potion of Invisibility
+potion16\potion16.res     00816      // Potion of Translucency
+potion17\potion17.res     00817      // Potion of Featherfalling
+potion18\potion18.res     00818      // Potion of Giant Strength
+potion19\potion19.res     00819      // Potion of Holy Strength
+potion20\potion20.res     00820      // Potion of Demon Strength
+potion21\potion21.res     00821      // Potion of Food
+potion22\potion22.res     00822      // Potion of Water
+potion23\potion23.res     00823      // Potion of Night Vision
+potion24\potion24.res     00824      // Potion of Traction
+potion25\potion25.res     00825      // Potion of Poison
+potion26\potion26.res     00826      // Potion of Fire
+potion27\potion27.res     00827      // Potion of Hurt
+potn\potn.res             00828
+potn1\potn1.res           00829
+potn2\potn2.res           00830
+potn3\potn3.res           00831
+potn4\potn4.res           00832
+holypot\holypot.res       00833      //heal potion created by cleric spell
+elmark\elmark.res         00834      //Elmore's Mark
+arrow1\arrow1.res         00886      // Gray bolt
+arrow2\arrow2.res         00887      // Green poison bolt
+arrow7\arrow7.res         00888      // White piercing bolt
+arrow5\arrow5.res         00889      // Yellow electric bolt
+arrow4\arrow4.res         00890      // Red fire bolt
+arrow6\arrow6.res         00891      // Purple mana drain bolt
+arrow1\arrow1.res         00892      // Brown acid bolt
+wand00\wand00.res         00900      // Dart wand
+wand01\wand01.res         00901      // Homing dart wand
+wand02\wand02.res         00902      // Acid wand
+wand03\wand03.res         00903      // Fireball wand
+wand04\wand04.res         00904      // Homing fireball wand
+wand05\wand05.res         00905      // Homing deathball
+wand06\wand06.res         00906      // Earthsmite wand
+wand07\wand07.res         00907      // Lighting bolt wand
+wand08\wand08.res         00908      // Mana drain wand
+wand09\wand09.res         00909      // dispel magic 1 wand
+wand10\wand10.res         00910      // dispel magic 2 wand
+wand11\wand11.res         00911      // Earthbind wand
+wand12\wand12.res         00912      // Poison missile wand
+wand13\wand13.res         00913      // Confusion missile wnad
+wand14\wand14.res         00914      // Berserk missile wand
+wand15\wand15.res         00915      // Wand of Pushing
+wand16\wand16.res         00916      // Wand of Pulling
+wand17\wand17.res         00917      // Slow wand
+wand18\wand18.res         00918      // Wand of Disintegrate (plasma)
+wand19\wand19.res         00919      // Lock door wand
+wand20\wand20.res         00920      // Unlock door wand
+light\light.res           00924      // Object used for lighting
+orb1\orb1.res             00950
+orb2\orb2.res             00951
+orb3\orb3.res             00952
+orb4\orb4.res             00953
+orb5\orb5.res             00954      // Orb of Defense
+orb6\orb6.res             00955      // Orb of Undead
+orb7\orb7.res             00956      // Orb of Destruction
+book\book.res             00957      // Jugurtha's Book
+necklace\necklace.res     00958      // Necklace of Andrew
+redwiz\redwiz.res         01002      // Red wizard
+shadow\shadow.RES         01003      // Poltergeist/Shadow creature
+dragon\dragon.res         01005      // Wyvern
+wizevl\wizevl.res         01006      // Evil orange wizard
+biff\biff.res             01007      // Biff/Gargoyle
+knithrs\knithrs.res       01008      // Knights of Andreas on Horseback
+kxw\kxw.res               01009      // KOA .. on foot
+apollo\apollo.res         01010      // Apollo
+roman\roman.res           01011      // Legionaires
+banshee\banshee.res       01012      // Banshee
+evilarch\evilarch.res     01014      // Eastern archer (evil archer)
+giantarc\giantarc.res     01015      // Giant EAstern Archer (god)
+elk\elk.res               01016      // Elk
+dog\dog.res               01017      // New Wolf
+archer\archer.res         01018      // Elf archer
+druid\druid.res           01019      // Druid
+lich\lich.res             01020      // Lich 
+dragon2\dragon2.res       01021      // Dragon (orange/red/yellow)
+hydra\hydra.res           01022      // Hydra
+griffon\griffon.res       01023      // Griffon
+dragon\dragon.res         01024      // Orange/Red dragon
+newskel\newskel.res       01025      // New Skeleton
+boulder\boulder.res       01026      // Boulder
+wizorng\wizorng.res       01032      // Orange wizard/sorcerer
+skelknt\skelknt.res       01033      // Skeleton
+wolf\wolf.res             01034      // Wolf
+badknit\badknit.res       01035      // New Evil Knight
+elmore\elmore.res         01036      //Elmore(hero)
+dragon4\dragon4.res       01037      //Big DRAGON
+wizblue\wizblue.res       01038      // Blue wizard
+spider\spider.res         01040      // Spider
+bronze\bronze.res         03000      // Bronze Barbarian
+gus\gus.res               03001      // Black barbarian
+phil\phil.res             03002      // White barbarian
+blue\blue.res             03003      // Blue barbarian (blu)
+deadbrz\deadbrz.res       03100      // Dead body of bronze barbarian
+deadgus\deadgus.res       03101      // Dead body of black barbarian
+deadblu\deadblu.res       03103      // Dead body of blue barbarian
+dead01\dead.res           03104      // Dead body
+missile1\missile1.res     04000
+missile2\missile2.res     04001
+missile3\missile3.res     04002
+missile4\missile4.res     04003
+missile5\missile5.res     04004
+missile6\missile6.res     04005
+missile7\missile7.res     04006
+missile8\missile8.res     04007
+missile9\missile9.res     04008
+missil10\missil10.res     04009
+missil11\missil11.res     04010
+missil12\missil12.res     04011
+missil13\missil13.res     04012
+missil14\missil14.res     04013
+missil15\missil15.res     04014
+missil16\missil16.res     04015
+earthbnd\earthbnd.res     04016
+pball\pball.res           04017
+hmiss12\hmiss12.res       04018
+hmiss5\hmiss5.res         04019
+hmiss6\hmiss6.res         04020
+bluexplo\bluexplo.res     04067      // Blue explosion
+tree1\tree1.res         04071
+tree2\tree2.res         04072
+tree3\tree3.res         04073
+tree4\tree4.res         04074
+tree5\tree5.res         04075
+tree6\tree6.res         04076
+tree7\tree7.res         04077
+tree8\tree8.res         04078
+tree9\tree9.res         04079
+evilknt\evilknt.res     04080
+impaled\impaled.res     04082
+torch2\torch2.res       04083
+bloodspt\bloodspt.res   04084
+wallhit\wallhit.res     04085
+fireface\fireface.res   04090
+teleport\teleport.res   04091
+usa\usa.res             04092

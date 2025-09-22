@@ -1,0 +1,12 @@
+# description file for an acid bolt
+TYPE
+BOLT
+
+SUBTYPE
+ACID
+
+NUMSTACKABLE
+10
+
+
+

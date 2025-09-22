@@ -1,0 +1,12 @@
+# description file for a poison bolt
+TYPE
+BOLT
+
+SUBTYPE
+POISON
+
+NUMSTACKABLE
+10
+
+
+

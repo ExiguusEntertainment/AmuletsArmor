@@ -1,0 +1,10 @@
+call ressub AXE
+call ressub dagger
+call ressub FIST
+call ressub mace
+call ressub MAGIC
+call ressub null
+call ressub staff
+call ressub SWORD
+call ressub XBOW
+call res weapons

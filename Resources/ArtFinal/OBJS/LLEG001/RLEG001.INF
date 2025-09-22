@@ -1,0 +1,330 @@
+; OBJECT DEF: -------------------------------------------
+5     ; Number of stances
+20    ; Radius
+0     ; Attributes
+350   ; Weight
+0     ; Value
+0     ; Script
+1000  ; Health
+0     ; ObjMoveAttr
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths),
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1
+0
+0
+0
+
+6
+12
+0
+1
+
+1
+0
+0
+0
+
+7
+12
+0
+-1
+
+2
+5
+0
+0
+
+; STANCE 0: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+
+; STANCE 0: FRAME 0: -------------------------------------------
+; Just standing there.  Use walker # 1.
+; List of angles.  Number is normal picture, negative to flip image
+10000
+10100
+10200
+10300
+10400
+10500
+10600
+10700
+
+; STANCE 1: ----------------------------------------------------
+; Walking.
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+
+; STANCE 1: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10000
+10100
+10200
+10300
+10400
+10500
+10600
+10700
+
+; STANCE 1: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10001
+10101
+10201
+10301
+10401
+10501
+10601
+10701
+
+; STANCE 1: FRAME 2: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10002
+10102
+10202
+10302
+10402
+10502
+10602
+10702
+
+; STANCE 1: FRAME 3: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10003
+10103
+10203
+10303
+10403
+10503
+10603
+10703
+
+; STANCE 1: FRAME 4: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10004
+10104
+10204
+10304
+10404
+10504
+10604
+10704
+
+; STANCE 1: FRAME 5: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10005
+10105
+10205
+10305
+10405
+10505
+10605
+10705
+
+; STANCE 2: ----------------------------------------------------
+; Hurt.  We have no frames for this.  Just use the dying #2 frame
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+
+; STANCE 2: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20001
+20101
+20201
+20301
+20401
+20501
+20601
+20701
+
+; STANCE 3: ----------------------------------------------------
+; Dying. 
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+1
+
+8
+0
+0
+1
+
+8
+0
+0
+1
+
+8
+0
+0
+1
+
+; STANCE 3: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20000
+20100
+20200
+20300
+20400
+20500
+20600
+20700
+
+; STANCE 3: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20001
+20101
+20201
+20301
+20401
+20501
+20601
+20701
+
+; STANCE 3: FRAME 2: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20002
+20102
+20202
+20302
+20402
+20502
+20602
+20702
+
+; STANCE 3: FRAME 3: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20003
+20103
+20203
+20303
+20403
+20503
+20603
+20703
+
+; STANCE 3: FRAME 4: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20003
+20103
+20203
+20303
+20403
+20503
+20603
+20703
+
+; STANCE 3: FRAME 5: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20003
+20103
+20203
+20303
+20403
+20503
+20603
+20703
+
+; STANCE 3: FRAME 6: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+20003
+20103
+20203
+20303
+20403
+20503
+20603
+20703
+
+; STANCE 4: ----------------------------------------------------
+; Attacking!
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+; STANCE 4: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00000
+00100
+00200
+00300
+00400
+00500
+00600
+00700
+
+; STANCE 4: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00001
+00101
+00201
+00301
+00401
+00501
+00601
+00701
+
+

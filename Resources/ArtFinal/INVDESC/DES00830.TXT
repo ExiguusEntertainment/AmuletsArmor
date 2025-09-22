@@ -1,0 +1,6 @@
+# potn2, fat potion bottle
+TYPE
+THING
+
+NUMSTACKABLE
+3

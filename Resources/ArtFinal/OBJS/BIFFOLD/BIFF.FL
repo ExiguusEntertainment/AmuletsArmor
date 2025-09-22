@@ -1,0 +1,39 @@
+biff1.CPC        00001
+BIFF1D.CPC       00003
+BIFF1C.CPC       00005
+biff1B.CPC       00007
+
+biff2.CPC        00011
+BIFF2D.CPC       00013
+BIFF2C.CPC       00015
+biff2B.CPC       00017
+
+biff3.CPC        00021
+BIFF3D.CPC       00023
+BIFF3C.CPC       00025
+biff3B.CPC       00027
+                  
+biff4.CPC        00031
+BIFF4D.CPC       00033
+BIFF4C.CPC       00035
+biff4B.CPC       00037
+                   
+biffatk1.CPC     00041
+biffatk2.CPC     00043
+biffatk3.CPC     00045
+biffatk4.CPC     00047
+
+biffhit1.CPC     00051
+biffhit2.CPC     00053
+biffhit3.CPC     00055
+biffhit4.CPC     00057
+
+biffdie1.CPC     01001
+biffdie2.CPC     01002
+biffdie3.CPC     01003
+biffdie4.CPC     01004
+
+deadbiff.CPC     01005
+
+biff.oaf         Info
+

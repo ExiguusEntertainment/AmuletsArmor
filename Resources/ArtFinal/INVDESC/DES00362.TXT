@@ -1,0 +1,18 @@
+# description file for a scroll of gain mana (1)
+TYPE
+SCROLL
+
+NUMSTACKABLE
+5
+
+EFFECT
+MOD PLAYER MANA
+EFFECT TRIGGER
+USE
+EFFECT POWER
+2000
+END EFFECT
+
+DESTROY ON
+USE
+

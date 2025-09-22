@@ -1,0 +1,9 @@
+# thing10, broken white and brown striped bowl
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

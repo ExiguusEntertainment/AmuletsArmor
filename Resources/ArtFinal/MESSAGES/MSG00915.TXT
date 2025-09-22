@@ -1,0 +1,1 @@
+This wand emits a cool white light.

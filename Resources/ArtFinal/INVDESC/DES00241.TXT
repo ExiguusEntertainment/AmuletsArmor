@@ -1,0 +1,12 @@
+# description file for an electric bolt
+TYPE
+BOLT
+
+SUBTYPE
+ELECTRICITY
+
+NUMSTACKABLE
+10
+
+
+

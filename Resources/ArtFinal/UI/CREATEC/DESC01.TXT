@@ -1,0 +1,7 @@
+Characters of the Knight class are specialized in melee combat.  Knights receive bonuses to damage done with melee weapons.
+
+Armor Types: All
+Weapon Types: All
+Magik System: Arcane
+
+

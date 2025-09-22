@@ -1,0 +1,135 @@
+; OBJECT DEF: SHADOW --------------------------------------------
+5  ; Number type of stances
+32 ; Radius
+0  ; Extra attributes
+100
+0
+3
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths), 
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1 ; Stand
+0
+0
+0
+
+4 ; Walk
+12
+0
+1
+
+1 ; Got hit stance
+40
+0
+0
+
+5 ; Died
+12
+0
+-1
+
+1 ; Attack
+40
+0
+0
+
+; STANCE 0: STAND ----------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+
+; STANCE 0: FRAME 0: STAND -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+3
+5
+7
+
+; STANCE 1: WALK  ----------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+4
+4
+4
+
+; STANCE 1: FRAME 0: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+3
+5
+7
+
+; STANCE 1: FRAME 1: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+11
+13
+15
+17
+
+; STANCE 1: FRAME 2: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+21
+23
+25
+27
+
+; STANCE 1: FRAME 3: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+31
+33
+35
+37
+
+; STANCE 2: GOT HIT --------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+
+; STANCE 2: FRAME 0: GOT HIT -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+51                      
+53
+55 
+57
+
+; STANCE 3: DYING ----------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+1
+1
+1
+1
+1
+
+; STANCE 3: FRAME 0: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1001
+
+; STANCE 3: FRAME 1: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1002
+
+; STANCE 3: FRAME 2: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1003
+
+; STANCE 3: FRAME 3: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1004
+
+; STANCE 3: FRAME 4: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1005
+
+; STANCE 4: ATTACK ---------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+4
+
+; STANCE 0: FRAME 0: ATTACK ------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+41
+43
+45
+47
+
+
+

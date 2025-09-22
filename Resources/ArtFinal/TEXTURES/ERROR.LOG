@@ -1,0 +1,11 @@
+Failure: file != FILE_BAD (FILE: file.c  LINE: 239)
+Call stack:
+  FileRead (FILE: file.c  LINE: 238)
+Failure: p_mipTexture != NULL (FILE: source\mipmap.c  LINE: 67)
+Call stack:
+  MipMap (FILE: source\mipmap.c  LINE: 51)
+  main (MIPMAP.EXE) (FILE: source\mipmap.c  LINE: 155)
+Failure: p_mipTexture != NULL (FILE: source\mipmap.c  LINE: 67)
+Call stack:
+  MipMap (FILE: source\mipmap.c  LINE: 51)
+  main (MIPMAP.EXE) (FILE: source\mipmap.c  LINE: 155)

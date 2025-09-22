@@ -1,0 +1,15 @@
+# description file for a gold 1 coin
+TYPE
+COIN
+
+SUBTYPE
+GOLD
+
+EFFECT
+TAKE COIN
+EFFECT TRIGGER
+GET
+EFFECT DATA
+2,1,0
+END EFFECT
+

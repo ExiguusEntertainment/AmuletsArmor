@@ -1,0 +1,10 @@
+# description file for a purple gem  
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3
+

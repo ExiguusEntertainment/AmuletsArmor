@@ -1,0 +1,21 @@
+# description file for a scroll of blink
+TYPE
+SCROLL
+
+NUMSTACKABLE
+3
+
+EFFECT
+JUMP FORWARD
+
+EFFECT POWER
+600
+
+EFFECT TRIGGER
+USE
+
+END EFFECT
+
+DESTROY ON
+USE
+

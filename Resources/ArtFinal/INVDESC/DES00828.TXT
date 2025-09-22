@@ -1,0 +1,6 @@
+# potn,
+TYPE
+THING
+
+NUMSTACKABLE
+3

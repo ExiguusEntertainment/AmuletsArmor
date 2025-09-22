@@ -1,0 +1,36 @@
+Current setup of journal pages:
+
+
+Note0000 - Intro page / Title
+Note0001 - Menu Control Buttons
+Note0002 - Inventory Description
+Note0003 - Equipment Description
+Note0004 - Statistics 
+Note0005 - Options
+Note0006 - Communicate
+Note0007 - Finances
+Note0008 - Ammo
+Note0009 - Notes
+Note0010 - Journal
+Note0011 - Potion help
+Note0012 - Ready box
+Note0013 - Digital display
+Note0014 - Magic area
+Note0015 - Rune keypad
+Note0016 - Key Movement
+Note0017 - Mouse Movement
+Note0018 - Looking 
+Note0019 - Manipulating
+Note0020 - Casting spells
+Note0021 - Notes
+
+Note0030 - Guild help
+Note0031 - Inn
+Note0032 - Store
+Note0033 - Bank 
+
+Note0099 - Spell display key title
+Note0100 - Note0199     : Mage Spell Notes
+Note0200 - Note0299     : Arcane Spell Notes
+Note0300 - Note0399     : Cleric Spell Notes
+

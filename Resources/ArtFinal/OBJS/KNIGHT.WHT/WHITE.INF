@@ -1,0 +1,283 @@
+; OBJECT DEF: WHITE.oaf -----------------------------------------
+; White knight player character
+5   ; Number of stances
+20  ; Radius
+2049   ; Attributes (PASSABLE, MARK_IMPASSIBLE_WHEN_FREE)
+350  ; Weight
+0   ; Value
+0   ; Script
+1000  ; Health
+ 0  ; ObjMoveAttr
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths),
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1
+0
+0
+0
+
+4
+12
+0
+1
+
+1
+0
+0
+0
+
+1
+0
+0
+-1
+
+7
+5
+0
+0
+
+; STANCE 0: ----------------------------------------------------
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+
+; STANCE 0: FRAME 0: -------------------------------------------
+; Just standing there.  Use walker # 1.
+; List of angles.  Number is normal picture, negative to flip image
+10001
+10101
+10201
+10301
+10401
+10501
+10601
+10701
+
+; STANCE 1: ----------------------------------------------------
+; Walking.
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+
+; STANCE 1: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10001
+10101
+10201
+10301
+10401
+10501
+10601
+10701
+
+; STANCE 1: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10002
+10102
+10202
+10302
+10402
+10502
+10602
+10702
+
+; STANCE 1: FRAME 2: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10003
+10103
+10203
+10303
+10403
+10503
+10603
+10703
+
+; STANCE 1: FRAME 3: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10004
+10104
+10204
+10304
+10404
+10504
+10604
+10704
+
+; STANCE 2: ----------------------------------------------------
+; Hurt.  We have no frames for this.  Just use the walker #1
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+
+; STANCE 2: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10001
+10101
+10201
+10301
+10401
+10501
+10601
+10701
+
+; STANCE 3: ----------------------------------------------------
+; Dying.  We have no frames for this.  Just use walker # 1.
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+; STANCE 3: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+10001
+10101
+10201
+10301
+10401
+10501
+10601
+10701
+
+; STANCE 4: ----------------------------------------------------
+; Attacking!
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+8
+0
+0
+0
+
+; STANCE 4: FRAME 0: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00001
+00101
+00201
+00301
+00401
+00501
+00601
+00701
+
+; STANCE 4: FRAME 1: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00002
+00102
+00202
+00302
+00402
+00502
+00602
+00702
+
+; STANCE 4: FRAME 2: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00003
+00103
+00203
+00303
+00403
+00503
+00603
+00703
+
+; STANCE 4: FRAME 3: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00004
+00104
+00204
+00304
+00404
+00504
+00604
+00704
+
+; STANCE 4: FRAME 4: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00005
+00105
+00205
+00305
+00405
+00505
+00605
+00705
+
+; STANCE 4: FRAME 5: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00006
+00106
+00206
+00306
+00406
+00506
+00606
+00706
+
+; STANCE 4: FRAME 6: -------------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+00007
+00107
+00207
+00307
+00407
+00507
+00607
+00707
+
+

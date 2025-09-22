@@ -1,0 +1,9 @@
+# item2, large blue and gray bottle
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

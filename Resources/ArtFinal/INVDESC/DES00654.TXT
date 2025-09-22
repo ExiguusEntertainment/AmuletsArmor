@@ -1,0 +1,11 @@
+# item3, gray blue and gray bowl
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3
+
+

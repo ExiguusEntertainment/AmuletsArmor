@@ -1,0 +1,67 @@
+Number stances: 5
+Radius: 32
+Attributes: 0
+Weight: 350
+Value: 0
+Script: 2
+Health: 2000
+ObjMoveAttr: 0
+
+Object info:
+STANCE 0:  #F:1  SP:0  Ty:0  Nx:0
+STANCE 1:  #F:4  SP:12  Ty:0  Nx:1
+STANCE 2:  #F:1  SP:40  Ty:0  Nx:0
+STANCE 3:  #F:5  SP:12  Ty:0  Nx:-1
+STANCE 4:  #F:1  SP:40  Ty:0  Nx:0
+
+STANCE 0:  1 frames
+Frame 0, # Angles: 4, Sound #0, Sound radius:0, attr:0
+0)     1     3     5     7
+
+STANCE 1:  4 frames
+Frame 0, # Angles: 4, Sound #0, Sound radius:0, attr:0
+Frame 1, # Angles: 4, Sound #0, Sound radius:0, attr:0
+Frame 2, # Angles: 4, Sound #0, Sound radius:0, attr:0
+Frame 3, # Angles: 4, Sound #0, Sound radius:0, attr:0
+0)     1     3     5     7
+1)    11    13    15    17
+2)    21    23    25    27
+3)    31    33    35    37
+
+STANCE 2:  1 frames
+Frame 0, # Angles: 4, Sound #92, Sound radius:1000, attr:0
+0)    51    53    55    57
+
+STANCE 3:  5 frames
+Frame 0, # Angles: 1, Sound #93, Sound radius:500, attr:0
+Frame 1, # Angles: 1, Sound #0, Sound radius:0, attr:0
+Frame 2, # Angles: 1, Sound #0, Sound radius:0, attr:0
+Frame 3, # Angles: 1, Sound #0, Sound radius:0, attr:0
+Frame 4, # Angles: 1, Sound #0, Sound radius:0, attr:1
+0)  1001
+1)  1002
+2)  1003
+3)  1004
+4)  1005
+
+STANCE 4:  1 frames
+Frame 0, # Angles: 4, Sound #91, Sound radius:500, attr:0
+0)    41    43    45    47
+
+Total frames: 12
+Saving file 'biff.OAF'
+  Writing stances ... OK
+  Writing frames ... 220
+260
+300
+340
+380
+420
+430
+440
+450
+460
+470
+510
+OK
+  Writing object pics ... OK

@@ -1,0 +1,19 @@
+S 268
+0      ; X texture offset
+0      ; Y texture offset
+0      ; X velocity add
+0      ; Y velocity add
+0      ; Z velocity add
+1024   ; gravity (no shifting)
+2      ; friction
+0      ; damage amount
+0      ; water dipping amount
+C 268 269
+C 268 270
+C 268 271
+C 268 272
+C 268 274
+C 268 275
+C 268 279
+C 268 280
+E

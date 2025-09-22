@@ -1,0 +1,11 @@
+# key4
+TYPE
+THING
+
+SUBTYPE
+KEY
+
+NUMSTACKABLE
+3
+
+

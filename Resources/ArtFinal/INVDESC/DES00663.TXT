@@ -1,0 +1,9 @@
+# item12, small brown with white stripe bowl
+TYPE
+THING
+
+SUBTYPE
+THING
+
+NUMSTACKABLE
+3

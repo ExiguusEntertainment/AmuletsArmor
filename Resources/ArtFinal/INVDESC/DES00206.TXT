@@ -1,0 +1,12 @@
+# description file for a normal bolt
+TYPE
+BOLT
+
+SUBTYPE
+NORMAL
+
+NUMSTACKABLE
+10
+
+
+

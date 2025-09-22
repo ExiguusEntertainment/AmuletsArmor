@@ -1,0 +1,1038 @@
+00012 tomato\tomato.INF                   weight:     5   value:     3
+      tomato
+      Tomato [+25 food]
+00016 bucket\bucket.INF                   weight:     5   value:     5
+      wooden bucket
+      Wooden Bucket
+00019 greenapp\greenapp.INF               weight:     5   value:     3
+      green apple
+      Green Apple [+25 food]
+00023 swpplt01\swpplt01.INF               weight:    40   value:     0
+      small swamp weed
+      Small Swamp Weed [-5 health +25 food]
+00028 xbow\xbow.INF                       weight:    50   value:   400
+      crossbow
+      Crossbow
+00029 sword\sword.INF                     weight:    35   value:  1200
+      It appears to be a long sword.
+      It appears to be a long sword.
+00054 bottleem\bottleem.INF               weight:     3   value:     5
+      empty bottle       
+      Empty Bottle     
+00055 bottlefl\bottlefl.INF               weight:     5   value:     5
+      bottle holding greenish liquid
+      Bottle Holding a Useless Substance
+00056 gems\gems.INF                       weight:     1   value:     0
+      You see some gems.
+      You see some gems.
+00057 hooka\hooka.INF                     weight:    30   value:    10
+      It looks like a hooka... 
+      It looks like a hooka... 
+00058 idol\idol.INF                       weight:     1   value:     0
+      You see some sort of primitive, stone idol.
+      You see some sort of primitive, stone idol.
+00059 jaw\jaw.INF                         weight:     1   value:     0
+      jaw bone
+      Jaw Bone
+00060 pouch\pouch.INF                     weight:     1   value:     1
+      pouch
+      Pouch
+00061 scrollcl\scrollcl.INF               weight:     1   value:     0
+      scroll 
+      Scroll 
+00062 scrollop\scrollop.INF               weight:     1   value:     0
+      scroll
+      Useless Scroll
+00063 shroom\shroom.INF                   weight:     1   value:     3
+      mushroom
+      Mushroom [-5 health, +5 mana]
+00064 shurikn\shurikn.INF                 weight:     1   value:     0
+      It's a shuriken that someone must have dropped. 
+      It's a shuriken that someone must have dropped. 
+00065 skull\skull.INF                     weight:     5   value:     0
+      skull
+      Skull
+00066 skull2\skull.INF                    weight:     1   value:     0
+      skull
+      Skull
+00067 skull3\skull.INF                    weight:     1   value:     0
+      skull
+      Skull
+00068 skull4\skull.INF                    weight:     1   value:     0
+      skull
+      Skull
+00069 skull5\skull.INF                    weight:     1   value:     0
+      It's a skull
+      Skull
+00070 skull6\skull.INF                    weight:     1   value:     0
+      It's a skull
+      Skull
+00071 skullfrg\skullfrg.INF               weight:     5   value:     0
+      skull
+      Skull
+00072 stone\stone.INF                     weight:     5   value:     0
+      small stone
+      Small Stone
+00073 wanda\wanda.INF                     weight:     1   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00073.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00073.TXT)
+00074 wandb\wandb.INF                     weight:     1   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00074.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00074.TXT)
+00075 wandc\wandc.INF                     weight:     1   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00075.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00075.TXT)
+00076 wandd\wandd.INF                     weight:     1   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00076.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00076.TXT)
+00077 rball1\rball1.INF                   weight:    40   value:    50
+      small ball
+      Small Bouncy Ball
+00078 rball2\rball2.INF                   weight:    40   value:    50
+      large ball
+      Large Bouncy Ball
+00081 myrock1\myrock1.INF                 weight:    20   value:     0
+      small rock
+      Small Rock
+00100 ccoin1\ccoin1.INF                   weight:     0   value:     1
+      copper coin
+      Copper Coin
+00101 ccoin5\ccoin5.INF                   weight:     0   value:     5
+      copper five-piece
+      Copper Five-Coin
+00102 scoin1\scoin1.INF                   weight:     0   value:    10
+      silver coin
+      Silver Coin
+00103 scoin5\scoin5.INF                   weight:     0   value:    50
+      silver five-coin
+      Silver Five-Coin
+00104 gcoin1\gcoin1.INF                   weight:     0   value:   100
+      gold coin
+      Gold Coin
+00105 gcoin5\gcoin5.INF                   weight:     0   value:   500
+      gold five-coin
+      Gold Five-Coin
+00106 pcoin1\pcoin1.INF                   weight:     0   value:  1000
+      platinum coin
+      platinum coin
+00107 pcoin5\pcoin5.INF                   weight:     0   value:  5000
+      platinum five-coin
+      Platinum Five-Coin
+00108 sword\sword.INF                     weight:    35   value:  1200
+      A crossbow bolt is there.
+      A crossbow bolt is there.
+00109 sword\sword.INF                     weight:    35   value:  1200
+      A large axe sits before you.
+      A large axe sits before you.
+00110 gem1\gem1.INF                       weight:     0   value: 15000
+      gem
+      Diamond
+00111 gem2\gem2.INF                       weight:     0   value:  5000
+      gem
+      Emerald
+00112 gem3\gem3.INF                       weight:     0   value:  9000
+      gem
+      Ruby
+00113 gem4\gem4.INF                       weight:     0   value:  2500
+      gem
+      Sapphire
+00114 smvase\smvase.INF                   weight:     0   value:     3
+      small vase
+      Small Vase
+00115 bgvase\bgvase.INF                   weight:    30   value:     5
+      large vase
+      Large Vase
+00116 glass\glass.INF                     weight:     2   value:    20
+      wine glass
+      Wine Glass
+00117 chest\chest.INF                     weight:   100   value: 10000
+      chest
+      Chest Full of Gold
+00118 flask\flask.INF                     weight:    15   value:     4
+      white flask
+      White Flask
+00119 pobot\pobot.INF                     weight:    15   value:     4
+      bottle
+      Useless Bottle
+00143 rtools\rtools.INF                   weight:     1   value:     1
+      tools
+      Rogue's Tools
+00144 quiver\quiver.INF                   weight:     5   value:    12
+      quiver of bolts
+      Quiver of Bolts
+00145 quivfi\quivfi.INF                   weight:     0   value:  1200
+      quiver of red bolts
+      Quiver of Fire Bolts
+00146 quivpo\quivpo.INF                   weight:     0   value:  1200
+      quiver of green bolts
+      Quiver of Poison Bolts
+00147 quivac\quivac.INF                   weight:     0   value:  1200
+      quiver of white bolts
+      Quiver of Piercing Bolts
+00148 quivpi\quivpi.INF                   weight:     0   value:  1200
+      quiver of brown bolts
+      Quiver of Acid Bolts
+00149 quivel\quivel.INF                   weight:     0   value:  1200
+      quiver of yellow bolts
+      Quiver of Electric Bolts
+00150 quivmd\quivmd.INF                   weight:     0   value:  1200
+      quiver of purple bolts
+      Quiver of Mana Drain Bolts
+00200 dagger\dagger.INF                   weight:     5   value:    50
+      iron dagger
+      Iron Dagger [3 dmg]
+00201 mace\mace.INF                       weight:    20   value:   100
+      iron mace
+      Iron Mace [5 dmg]
+00202 staff\staff.INF                     weight:    30   value:    75
+      iron shod staff
+      Iron Shod Staff [4 dmg]
+00203 stswd\stswd.INF                     weight:    10   value:   100
+      iron short sword
+      Iron Short Sword [5 dmg]
+00204 lgswd\lgswd.INF                     weight:    20   value:   300
+      iron long sword
+      Iron Long Sword [6 dmg]
+00205 axe\axe.INF                         weight:    40   value:   350
+      iron axe
+      Iron Axe [5.5 dmg]
+00206 xbowbolt\xbowbolt.INF               weight:     0   value:     2
+      iron bolt
+      Iron Bolt [5 dmg]
+00210 dagstri\dagstri.INF                 weight:     5   value:  5000
+      blue bladed dagger
+      Fang Blade [7 dmg]
+00211 stswstri\stswstri.INF               weight:    10   value: 10000
+      blue bladed short sword
+      The Razor [9 dmg]
+00212 lgswstri\lgswstri.INF               weight:    20   value: 20000
+      glowing long sword
+      DiamondEdge [10 dmg]
+00213 xbowbolt\xbowbolt.INF               weight:     0   value:     2
+      
+      Bolts of Striking
+00214 dagsli\dagsli.INF                   weight:     5   value:  5000
+      red bladed dagger
+      Flameblade [6 fire dmg]
+00215 dagpir\dagpir.INF                   weight:     5   value:  5000
+      red bladed dagger
+      Azok's Penetrator [6 pierce dmg]
+00216 stswdpir\stswdpir.INF               weight:    10   value: 10000
+      bloody short sword
+      SpiritBane [8 pierce dmg]
+00217 lgswdpir\lgswdpir.INF               weight:    20   value: 20000
+      bloody long sword
+      Sword of Justice [9 pierce dmg]
+00218 boltpir\boltpir.INF                 weight:     0   value:   100
+      red tipped bolt
+      Bolts of Fire [5 Fire dmg]
+00219 staffpoi\staffpoi.INF               weight:    25   value: 15000
+      green studded staff
+      The Sickener [6 poison dmg]
+00220 dagpoi\dagpoi.INF                   weight:     5   value:  5000
+      green bladed dagger
+      BloodRot [5 poison dmg]
+00221 stswdpoi\stswdpoi.INF               weight:    10   value: 10000
+      curvy green bladed sword
+      Venom [7 poison dmg]
+00222 boltpoi\boltpoi.INF                 weight:     0   value:   100
+      green tipped bolts
+      Bolts of Poison [5 poison dmg]
+00223 dagspe\dagspe.INF                   weight:     5   value:  5000
+      orange dagger
+      WindBite [5 dmg, +20 spd]
+00224 macespe\macespe.INF                 weight:    20   value: 15000
+      glowing mace
+      Joh's Bludgeon [8 dmg, +30 spd]
+00225 staffspe\staffspe.INF               weight:    25   value: 15000
+      vibrating staff
+      Schtick [7 dmg, +30 spd]
+00226 lgswdspe\lgswdspe.INF               weight:    20   value: 20000
+      gore splattered longsword
+      Vindicator [8 dmg, +20 spd]
+00227 dagacc\dagacc.INF                   weight:     5   value:  5000
+      ornate silver dagger
+      SoulSeeker [5 dmg, +15 acc]
+00228 axeac\axeac.INF                     weight:    40   value: 30000
+      red ornate axe
+      Vitreaxe [7.5 dmg, +15 acc]
+00229 boltwht\boltwht.INF                 weight:     0   value:   100
+      white tipped bolt
+      Bolts of Piercing [5 pierce dmg]
+00230 dagacid\dagacid.INF                 weight:     5   value:  5000
+      strange looking dagger
+      WormTooth [6 acid dmg]
+00231 macepoi\macepoi.INF                 weight:    20   value: 15000
+      green mace
+      Mace of Venom [5 poison damage]
+00232 axepow\axepow.INF                   weight:    40   value: 30000
+      reflective green axe
+      Asnoth's Bane [6.5 dmg, +15 mregen]
+00233 staffpow\staffpow.INF               weight:    25   value: 15000
+      ornate staff
+      Staff of Power [6 dmg, +30 mregen]
+00234 maceelec\maceelec.INF               weight:    20   value: 15000
+      glowing mace
+      Lightning Rod [5 elec dmg.]
+00240 boltacc\boltacc.INF                 weight:     0   value:   100
+      brown tipped bolt
+      Bolt of Acid [5 acid dmg]
+00241 boltyel\boltyel.INF                 weight:     0   value:   100
+      yellow tipped bolt
+      Bolt of Electricity [5 elect. dmg]
+00242 boltpur\boltpur.INF                 weight:     0   value:   100
+      purple tipped bolt
+      Bolt of Mana Drain [5 drain dmg]
+00243 beri\beri.INF                       weight:     1   value:     1
+      berry
+      Berry [+10 food]
+00244 cart\cart.INF                       weight:     2   value:     3
+      carrot
+      Carrot [+15 food, night vision +10]
+00245 chri\chri.INF                       weight:     1   value:     2
+      cherries
+      Cherries [+10 food]
+00246 grd\grd.INF                         weight:    10   value:    10
+      water gourd
+      Water Gourd [+50 water]
+00247 kfc\kfc.INF                         weight:     3   value:     5
+      piece of meat
+      Portion of Meat [+50 food]
+00248 grpe\grpe.INF                       weight:     1   value:     2
+      grapes
+      Grapes [+25 food]
+00249 nana\nana.INF                       weight:     1   value:     3
+      banana
+      Banana [+25 food]
+00251 pnaple\pnaple.INF                   weight:     4   value:     3
+      pineapple
+      Pineapple [+50 food]
+00257 key1\key1.INF                       weight:     1   value:     0
+      key
+      Iron Key
+00258 key2\key2.INF                       weight:     1   value:     0
+      key
+      Red Key
+00259 key3\key3.INF                       weight:     1   value:     0
+      key
+      Blue Key
+00260 key4\key4.INF                       weight:     1   value:     0
+      key
+      Green Key
+00261 key5\key5.INF                       weight:     1   value:     0
+      key
+      Ring of Keys
+00262 key6\key6.INF                       weight:     1   value:     0
+      key
+      Brass Key
+00263 key7\key7.INF                       weight:     1   value:     0
+      key
+      Tiny Key
+00264 key8\key8.INF                       weight:     1   value:     0
+      key
+      Pentagram Key
+00265 key9\key9.INF                       weight:     1   value:     0
+      key
+      Brass and Gold Key
+00286 brkpot1\brkpot1.INF                 weight:    10   value:     0
+      smashed bowl
+      Smashed Bowl
+00287 brkpot2\brkpot2.INF                 weight:     1   value:     0
+      broken pot
+      Broken Pot
+00288 brkpot3\brkpot3.INF                 weight:     5   value:     0
+      shattered flask
+      Shattered Flask
+00289 brkpot4\brkpot4.INF                 weight:     1   value:     0
+      broken vase
+      Broken Vase
+00290 brkpot5\brkpot5.INF                 weight:    15   value:     0
+      cracked bottle
+      Cracked Bottle
+00291 brkpot6\brkpot6.INF                 weight:    13   value:     0
+      cracked pot
+      Cracked Pot
+00292 brkpot7\brkpot7.INF                 weight:    15   value:     0
+      broken vase
+      Broken Vase
+00293 brkpot8\brkpot8.INF                 weight:    15   value:     0
+      broken bowl
+      Broken Bowl
+00298 loaf\loaf.INF                       weight:     1   value:     0
+      loaf of bread
+      Loaf of Bread
+00300 rune00\rune00.INF                   weight:     1   value:     0
+      rune
+      Negate Rune [Mage/Arcane]
+00301 rune01\rune01.INF                   weight:     1   value:     0
+      rune
+      Body Rune [Mage/Arcane]
+00302 rune02\rune02.INF                   weight:     1   value:     0
+      rune
+      Mind Rune [Mage/Arcane]
+00303 rune03\rune03.INF                   weight:     1   value:     0
+      rune
+      Focus Rune [Mage/Arcane]
+00304 rune04\rune04.INF                   weight:     1   value:     0
+      rune
+      Element Rune [Mage]
+00305 rune05\rune05.INF                   weight:     1   value:     0
+      rune
+      Matter Rune [Mage]
+00306 rune06\rune06.INF                   weight:     1   value:     0
+      rune
+      Control Rune [Mage]
+00307 rune07\rune07.INF                   weight:     1   value:     0
+      rune
+      Spirit Rune [Mage]
+00308 rune08\rune08.INF                   weight:     1   value:     0
+      rune
+      Summon Rune [Mage]
+00309 rune09\rune09.INF                   weight:     1   value:     0
+      rune
+      Earth Rune [Cleric/Arcane]
+00310 rune10\rune10.INF                   weight:     1   value:     0
+      rune
+      Manipulate Rune [Cleric/Arcane]
+00311 rune11\rune11.INF                   weight:     1   value:     0
+      rune
+      Wind Rune [Cleric/Arcane]
+00312 rune12\rune12.INF                   weight:     1   value:     0
+      rune
+      Create Rune [Cleric/Arcane]
+00313 rune13\rune13.INF                   weight:     1   value:     0
+      rune
+      Blood Rune [Cleric/Arcane]
+00314 rune14\rune14.INF                   weight:     1   value:     0
+      rune
+      Destroy Rune [Cleric]
+00315 rune15\rune15.INF                   weight:     1   value:     0
+      rune
+      Communion Rune [Cleric]
+00316 rune16\rune16.INF                   weight:     1   value:     0
+      rune
+      Bind Rune [Cleric]
+00317 rune17\rune17.INF                   weight:     1   value:     0
+      rune
+      Soul Rune [Cleric]
+00350 scroll00\scroll00.INF               weight:     3   value:  1000
+      metallic blue scroll
+      Scroll of Identify Equipped
+00351 scroll01\scroll01.INF               weight:     3   value:  1000
+      worn paper scroll
+      Scroll of Identify All
+00352 scroll02\scroll02.INF               weight:     3   value:  1000
+      brown paper scroll
+      Protection from Poison Scroll
+00353 scroll03\scroll03.INF               weight:     3   value:  1000
+      scroll made of skin
+      Protection from Fire Scroll
+00354 scroll04\scroll04.INF               weight:     3   value:   500
+      orangish metallic scroll
+      Scroll of Health [+10]
+00355 scroll05\scroll05.INF               weight:     3   value:  1000
+      reddish metallic scroll
+      Scroll of Health [+30]
+00356 scroll06\scroll06.INF               weight:     3   value:  1500
+      golden scroll
+      Scroll of Health [+100]
+00357 scroll07\scroll07.INF               weight:     3   value:   750
+      blue-tinged scroll
+      Scroll of Regenerate Health [+50]
+00358 scroll08\scroll08.INF               weight:     3   value:   200
+      brown scroll
+      Scroll of Shielding [+40]
+00359 scroll09\scroll09.INF               weight:     3   value:  1200
+      ruddy brown scroll
+      Scroll of Earthquake
+00360 scroll10\scroll10.INF               weight:     3   value:   750
+      moldy old scroll
+      Scroll of Flying
+00361 scroll11\scroll11.INF               weight:     3   value:   800
+      purple scroll
+      Scroll of Invisibility
+00362 scroll12\scroll12.INF               weight:     3   value:   500
+      metallic green scroll
+      Scroll of Gain Mana [+20]
+00363 scroll13\scroll13.INF               weight:     3   value:   750
+      stony grey scroll
+      Scroll of Gain Mana [+100]
+00364 scroll14\scroll14.INF               weight:     3   value:   500
+      aged paper scroll
+      Scroll of Strength [+25]
+00365 scroll15\scroll15.INF               weight:     3   value:   500
+      grey scroll with brown spots
+      Scroll of Accuracy [+25]
+00366 scroll16\scroll16.INF               weight:     3   value:   500
+      bronze plated scroll
+      Scroll of Stealth [+25]
+00367 scroll17\scroll17.INF               weight:     3   value:   500
+      stone scroll with blood stains
+      Scroll of Magic [+25]
+00368 scroll18\scroll18.INF               weight:     3   value:   500
+      finely engraved scroll
+      Scroll of Speed [+25]
+00369 scroll19\scroll19.INF               weight:     3   value:  1500
+      worn scroll with green smudges
+      Scroll of Experience [+15000]
+00370 scroll20\scroll20.INF               weight:     3   value:   750
+      metallic brownish-green scroll
+      Scroll of Shocking Grasp
+00371 scroll21\scroll21.INF               weight:     3   value:   750
+      slate grey scroll
+      Scroll of Flame Fist
+00372 scroll22\scroll22.INF               weight:     3   value:   750
+      plain white scroll
+      Scroll of Mana Drain
+00373 scrl1\scrl1.INF                     weight:     0   value:     0
+      a parchment
+      Journal Entry
+00374 scrl2\scrl2.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00374.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00374.TXT)
+00375 scrl3\scrl3.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00375.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00375.TXT)
+00376 scrl4\scrl4.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00376.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00376.TXT)
+00377 scrl5\scrl5.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00377.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00377.TXT)
+00378 scrl6\scrl6.INF                     weight:     0   value:     0
+      a note
+      Journal Entry
+00379 scrl7\scrl7.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00379.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00379.TXT)
+00380 scrl8\scrl8.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00380.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00380.TXT)
+00381 scrl9\scrl9.INF                     weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00381.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00381.TXT)
+00382 scrl10\scrl10.INF                   weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00382.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00382.TXT)
+00383 scrl11\scrl11.INF                   weight:     0   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00383.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00383.TXT)
+00384 scroll23\scroll23.INF               weight:     3   value:   500
+      orangish scroll
+      Scroll of Blink
+00400 ring00\ring00.INF                   weight:     1   value:   750
+      blue ring
+      Ring of Water Walking
+00401 ring01\ring01.INF                   weight:     1   value:   750
+      blue ring with purple highlights
+      Ring of Water Breathing
+00402 ring02\ring02.INF                   weight:     1   value:   750
+      wooden ring
+      Ring of Accuracy [+10]
+00403 ring03\ring03.INF                   weight:     1   value:  1000
+      brown metallic ring
+      Ring of Accuracy [+15]
+00404 ring04\ring04.INF                   weight:     1   value:  1250
+      dingy brown ring
+      Ring of Accuracy [+20]
+00405 ring05\ring05.INF                   weight:     1   value:  1000
+      red ring
+      Ring of Regeneration [+20]
+00406 ring06\ring06.INF                   weight:     0   value:  1500
+      glimmering ring
+      Ring of Regeneration [+40]
+00407 ring07\ring07.INF                   weight:     1   value:   800
+      plain silver ring
+      Lesser Ring of Strength [+5]
+00408 ring08\ring08.INF                   weight:     1   value:  1200
+      tarnished silver ring
+      Ring of Strength [+10]
+00409 ring09\ring09.INF                   weight:     1   value:  1600
+      polished silver ring
+      Greater Ring of Strength [+15]
+00410 ring10\ring10.INF                   weight:     1   value:  2250
+      sparkling ring
+      Ring of Ogre Strength [+20]
+00411 ring11\ring11.INF                   weight:     1   value:     5
+      dingy tin ring
+      Ring of Godly Might [+25]
+00412 ring12\ring12.INF                   weight:     1   value:    20
+      thin blue ring
+      Ring of Ornament
+00413 ring13\ring13.INF                   weight:     1   value:    40
+      metallic blue ring
+      Ring of Ornament
+00414 ring14\ring14.INF                   weight:     1   value:    60
+      metallic blue ring with a gem
+      Ring of Ornament
+00415 ring15\ring15.INF                   weight:     1   value:   800
+      plain golden ring
+      Ring of Lesser Shielding [+5]
+00416 ring16\ring16.INF                   weight:     1   value:  1200
+      tarnished golden ring
+      Ring of Shielding [+10]
+00417 ring17\ring17.INF                   weight:     1   value:  1600
+      bright golden ring
+      Ring of Greater Shielding [+15]
+00418 ring18\ring18.INF                   weight:     1   value:  2000
+      beautiful golden ring
+      Ring of Barriers [+18]
+00419 ring19\ring19.INF                   weight:     1   value:  2500
+      finely wrought golden ring
+      Ring of ForceFields [+20]
+00420 ring20\ring20.INF                   weight:     1   value:   800
+      plain wooden ring
+      Ring of Targeting [+5]
+00421 ring21\ring21.INF                   weight:     1   value:  1200
+      tarnished copper ring
+      Ring of Targeting [+10]
+00422 ring22\ring22.INF                   weight:     1   value:  1600
+      lacqured brown ring
+      Ring of Accuracy [+15]
+00423 ring23\ring23.INF                   weight:     1   value:  2000
+      rusty metal ring
+      Ring of Marksmanship [+20]
+00424 ring24\ring24.INF                   weight:     1   value:  2500
+      engraved copper ring
+      Ring of the Hunter [+25]
+00425 ring25\ring25.INF                   weight:     1   value:    80
+      bright green ring
+      Ring of Ornament
+00426 ring26\ring26.INF                   weight:     1   value:   750
+      deep blue ring
+      Ring of Food Conservation
+00427 ring27\ring27.INF                   weight:     1   value:   750
+      metallic blue ring
+      Ring of Water Conservation
+00428 ring28\ring28.INF                   weight:     1   value:  2000
+      plain steel ring
+      Ring of Incredible Speed [+20]
+00429 ring29\ring29.INF                   weight:     1   value:   800
+      engraved steel ring
+      Ring of Speed [+5]
+00430 ring30\ring30.INF                   weight:     1   value:  1200
+      twisted steel ring
+      Ring of Movement [+10]
+00431 ring31\ring31.INF                   weight:     1   value:  1600
+      polished steel ring
+      Ring of Masterful Movement [+15]
+00432 ring32\ring32.INF                   weight:     1   value:   750
+      strangely colored ring
+      Ring of Ignore Terrain
+00433 ring33\ring33.INF                   weight:     1   value:   100
+      strange green ring
+      Ring of Ornament
+00434 ring34\ring34.INF                   weight:     1   value:   750
+      firey red ring
+      Ring of Jumping
+00435 ring35\ring35.INF                   weight:     1   value:  5000
+      burning yellow ring
+      Ring of Mapping
+00436 ring36\ring36.INF                   weight:     1   value:     5
+      bright purple ring
+      You shouldn't have this ring.
+00437 ring37\ring37.INF                   weight:     1   value:     5
+      flashing ring
+      You shouldn't have this ring
+00438 ring38\ring38.INF                   weight:     1   value:   750
+      brown ring
+      Ring of the Thief [+20]
+00440 amulet01\amulet01.INF               weight:     5   value: 10000
+      It's some kind of amulet.
+      It's some kind of amulet.
+00441 amulet02\amulet02.INF               weight:     5   value: 10000
+      It's some kind of amulet.
+      It's some kind of amulet.
+00442 amulet03\amulet03.INF               weight:     5   value: 10000
+      It's some kind of amulet.
+      It's some kind of amulet.
+00450 rhead\rhead.INF                     weight:     0   value:     0
+      Looks like a pyrite helm to me.
+      Looks like a pyrite helm to me.
+00451 rchest\rchest.INF                   weight:    30   value:   225
+      It's some pyrite chest armor.
+      It's some pyrite chest armor.
+00452 rarm\rarm.INF                       weight:    10   value:   100
+      It's a piece of pyrite arm plate.
+      It's a piece of pyrite arm plate.
+00453 rleg\rleg.INF                       weight:    40   value:     0
+      It's a pyrite plate legging.
+      It's a pyrite plate legging.
+00600 amulet00\amulet00.INF               weight:     5   value: 10000
+      purple amulet
+      Amulet of Magic [+25]
+00601 amulet01\amulet01.INF               weight:     5   value: 10000
+      golden red amulet
+      Amulet of Regeneration [+50]
+00602 amulet02\amulet02.INF               weight:     5   value: 10000
+      strange brown amulet
+      Amulet of Speed [+25]
+00603 amulet03\amulet03.INF               weight:     5   value: 10000
+      flashing red amulet
+      Amulet of Stealth [+25]
+00604 amulet04\amulet04.INF               weight:     5   value: 10000
+      flaming red amulet
+      Amulet of Strength [+25]
+00605 amulet05\amulet05.INF               weight:     5   value: 10000
+      strange metallic amulet
+      Amulet of Accuracy [+25]
+00606 amulet06\amulet06.INF               weight:     5   value: 10000
+      worn blue amulet
+      Amulet of Poison Protection
+00607 amulet07\amulet07.INF               weight:     5   value: 10000
+      bright green amulet
+      Amulet of Fire Protection
+00608 amulet08\amulet08.INF               weight:     5   value: 10000
+      ornate red amulet
+      Amulet of Lava Walking
+00609 amulet09\amulet09.INF               weight:     5   value: 10000
+      plain purple amulet
+      Amulet of Hiding
+00610 amulet10\amulet10.INF               weight:     5   value: 10000
+      tarnished green amulet
+      Amulet of Eternal Nourishment
+00611 amulet11\amulet11.INF               weight:     5   value: 10000
+      flesh colored amulet
+      Amulet of Quickness [+15]
+00612 amulet12\amulet12.INF               weight:     5   value: 10000
+      ornate stone amulet
+      Amulet of Jumping
+00613 amulet13\amulet13.INF               weight:     5   value: 10000
+      golden amulet
+      Amulet of Flying
+00614 amulet14\amulet14.INF               weight:     5   value: 10000
+      yellow and red amulet
+      Amulet of Falling
+00615 amulet15\amulet15.INF               weight:     5   value: 10000
+      mottled green amulet
+      Amulet of Armor [+50]
+00616 amulet16\amulet16.INF               weight:     5   value: 10000
+      purple velvet amulet
+      Amulet of Acid Protection
+00617 amulet17\amulet17.INF               weight:     5   value: 10000
+      cold blue amulet
+      Amulet of Electricity Protection
+00618 amulet18\amulet18.INF               weight:     5   value: 10000
+      hot red amulet
+      Amulet of Mana Drain Protection
+00619 amulet19\amulet19.INF               weight:     5   value: 10000
+      steel amulet
+      Amulet of Mana Regeneration [+50]
+00652 item1\item1.INF                     weight:    10   value:     4
+      blue bottle
+      Blue Bottle
+00653 item2\item2.INF                     weight:    10   value:     4
+      blue and gray bottle
+      Blue and Gray Bottle
+00654 item3\item3.INF                     weight:    10   value:     2
+      colorful bowl
+      Colorful Bowl
+00655 item4\item4.INF                     weight:    10   value:     1
+      small tan vase
+      Small Tan Vase
+00656 item5\item5.INF                     weight:    15   value:     2
+      large tan vase
+      Large Tan Vase
+00657 item6\item6.INF                     weight:    10   value:     1
+      bowl
+      Bowl
+00658 item7\item7.INF                     weight:    10   value:     3
+      small bottle
+      Small Bottle
+00659 item8\item8.INF                     weight:    10   value:     0
+      cracked small bottle
+      Cracked Small Bottle
+00660 item9\item9.INF                     weight:    10   value:     0
+      cracked blue and gray bowl
+      Cracked Blue and Gray Bowl
+00661 item10\item10.INF                   weight:    10   value:     0
+      broken bowl
+      Broken Bowl
+00662 item11\item11.INF                   weight:    10   value:     0
+      small broken vase
+      Small Broken Vase
+00663 item12\item12.INF                   weight:    10   value:     2
+      small bowl
+      Small Bowl
+00664 item13\item13.INF                   weight:    10   value:     0
+      small broken bowl
+      Small Broken Bowl
+00665 item14\item14.INF                   weight:    10   value:     2
+      small blue bowl
+      Small Blue Bowl
+00671 pkax1\pkax1.INF                     weight:     8   value:     0
+      pick axe
+      Pick Axe
+00678 scanm\scanm.INF                     weight:     1   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00678.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00678.TXT)
+00700 rhead\rhead.INF                     weight:     0   value:     0
+      leather hat
+      Leather Hat
+00701 rchest\rchest.INF                   weight:    30   value:   225
+      iron studded leather jerkin
+      Iron Studded Leather Jerkin [6]
+00702 rarm\rarm.INF                       weight:    10   value:   100
+      iron studded leather gauntlet
+      Iron Studded Leather Gauntlet [6]
+00703 clothleg\clothleg.INF               weight:    20   value:   175
+      iron studded leather leggings
+      Iron Studded Leather Leggings [6]
+00704 mailhead\mailhead.INF               weight:    20   value:   600
+      iron chain mail coif
+      Iron Chain Mail Coif [12]
+00705 mailchst\mailchst.INF               weight:    55   value:  2400
+      iron chain mail tunic
+      Iron Chain Mail Tunic [12]
+00706 mailrarm\mailrarm.INF               weight:    10   value:   400
+      iron chain mail bracer
+      Iron Chain Mail Bracer [12]
+00707 maillegs\maillegs.INF               weight:    45   value:  1200
+      iron chain mail leggings
+      Iron Chain Mail Leggings [12]
+00708 plathelm\plathelm.INF               weight:    30   value:  1200
+      iron plate helmet
+      Iron Plate Helmet [20]
+00709 platchst\platchst.INF               weight:    80   value:  4800
+      iron plate breast plate
+      Iron Plate Breast Plate [20]
+00710 platrarm\platrarm.INF               weight:    15   value:   800
+      iron plate gauntlet
+      Iron Plate Gauntlet [20]
+00711 platlegs\platlegs.INF               weight:    70   value:  2400
+      iron plate leggings
+      Iron Plate Leggings [20]
+00800 potion00\potion00.INF               weight:     2   value:    50
+      purple potion
+      Potion of Healing [+10]
+00801 potion01\potion01.INF               weight:     3   value:   500
+      speckled blue potion
+      Potion of Health [+25]
+00802 potion02\potion02.INF               weight:     3   value:   750
+      grey colored potion
+      Potion of Health [+50]
+00803 potion03\potion03.INF               weight:     2   value:   400
+      hot yellow potion
+      Potion of Regeneration [+30]
+00804 potion04\potion04.INF               weight:     2   value:   700
+      bright orange potion
+      Potion of Regeneration [+60]
+00805 potion05\potion05.INF               weight:     2   value:   500
+      dull blue potion
+      Potion of Flying
+00806 potion06\potion06.INF               weight:     2   value:   250
+      earth green potion
+      Potion of Reduce Poison 
+00807 potion07\potion07.INF               weight:     2   value:   600
+      flourescent green potion
+      Potion of Cure Poison
+00808 potion08\potion08.INF               weight:     2   value:   300
+      speckled violet potion
+      Potion of Shielding [+10]
+00809 potion09\potion09.INF               weight:     2   value:   500
+      swirling violet potion
+      Potion of Shielding [+15]
+00810 potion10\potion10.INF               weight:     2   value:   700
+      clear purple potion
+      Potion of Barkskin [+15]
+00811 potion11\potion11.INF               weight:     2   value:   900
+      tan potion
+      Potion of Ironskin [+25]
+00812 potion12\potion12.INF               weight:     2   value:   300
+      dull blue potion
+      Potion of Waterwalking
+00813 potion13\potion13.INF               weight:     2   value:   300
+      firey red potion
+      Potion of Lavawalking
+00814 potion14\potion14.INF               weight:     2   value:   275
+      flesh colored potion
+      Potion of Speed [+15]
+00815 potion15\potion15.INF               weight:     2   value:   500
+      stone grey potion
+      Potion of Invisibility
+00816 potion16\potion16.INF               weight:     2   value:   350
+      light brown potion
+      Potion of Translucency
+00817 potion17\potion17.INF               weight:     2   value:   250
+      glowing orange potion
+      Potion of Featherfall
+00818 potion18\potion18.INF               weight:     2   value:   250
+      dull brown potion
+      Potion of Giant Strength [+10]
+00819 potion19\potion19.INF               weight:     2   value:   400
+      dark brown potion
+      Potion of Demon Strength [+15]
+00820 potion20\potion20.INF               weight:     2   value:   650
+      speckled orange potion
+      Potion of Holy Strength [+20]
+00821 potion21\potion21.INF               weight:     2   value:   100
+      chunky potion
+      Potion of Food [+100]
+00822 potion22\potion22.INF               weight:     2   value:   100
+      clear potion
+      Potion of Water [+100]
+00823 potion23\potion23.INF               weight:     2   value:   350
+      solid blue potion
+      Potion of Owl Sight
+00824 potion24\potion24.INF               weight:     2   value:   250
+      dirty brown potion
+      Potion of Traction
+00825 potion25\potion25.INF               weight:     2   value:     0
+      flourescent green potion
+      Potion of Poison
+00826 potion26\potion26.INF               weight:     2   value:     0
+      dark red potion
+      Potion of Fire
+00827 potion27\potion27.INF               weight:     2   value:     0
+      plain grey potion
+      Potion of Pain
+00828 potn\potn.INF                       weight:     1   value:     0
+      small flask
+      Small Flask
+00829 potn1\potn1.INF                     weight:     1   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00829.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00829.TXT)
+00830 potn2\potn2.INF                     weight:     1   value:     0
+      small yellow bottle
+      Small Yellow Bottle
+00831 potn3\potn3.INF                     weight:     1   value:     0
+      oddly shaped flask
+      Oddly Shaped Flask
+00832 potn4\potn4.INF                     weight:     5   value:     0
+      large yellow bottle
+      Large Yellow Bottle
+00833 holypot\holypot.INF                 weight:     2   value:     0
+      speckled blue potion
+      Potion of Healing []
+00850 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Health
+      Powerup Health
+00851 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Better Health
+      Powerup Better Health
+00852 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Super Health
+      Powerup Super Health
+00853 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Invulnerability
+      Powerup Invulnerability
+00854 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Strength
+      Powerup Strength
+00855 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Accuracy
+      Powerup Accuracy
+00856 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Speed
+      Powerup Speed
+00857 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Fly
+      Powerup Fly
+00858 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Lava Walk
+      Powerup Lava Walk
+00859 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Water Walk
+      Powerup Water Walk
+00860 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Translucency
+      Powerup Translucency
+00861 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Regeneration
+      Powerup Regeneration
+00862 tomato\tomato.INF                   weight:     5   value:     3
+      Powerup Invisibility
+      Powerup Invisibility
+00880 tomato\tomato.INF                   weight:     5   value:     3
+      Powerdown Slow
+      Powerdown Slow
+00881 tomato\tomato.INF                   weight:     5   value:     3
+      Powerdown Poison
+      Powerdown Poison
+00882 tomato\tomato.INF                   weight:     5   value:     3
+      Powerdown Weakness
+      Powerdown Weakness
+00883 tomato\tomato.INF                   weight:     5   value:     3
+      Powerdown Hurt
+      Powerdown Hurt
+00884 tomato\tomato.INF                   weight:     5   value:     3
+      Powerdown Mana Loss
+      Powerdown Mana Loss
+00885 tomato\tomato.INF                   weight:     5   value:     3
+      Powerdown Total Mana Loss
+      Powerdown Total Mana Loss
+00900 wand00\wand00.INF                   weight:     5   value:  5000
+      thin metallic wand
+      Wand of Magic Darts
+00901 wand01\wand01.INF                   weight:     5   value:  5000
+      wand with a glowing red tip
+      Wand of Homing Darts
+00902 wand02\wand02.INF                   weight:     5   value:  5000
+      ornate green wand
+      Wand of Acid
+00903 wand03\wand03.INF                   weight:     5   value:  5000
+      steel wand
+      Wand of Fire
+00904 wand04\wand04.INF                   weight:     5   value:  5000
+      steel wand with a forked tip
+      Wand of Fireballs
+00905 wand05\wand05.INF                   weight:     5   value:  5000
+      twisted wooden stick
+      Wand of Death
+00906 wand06\wand06.INF                   weight:     5   value:  5000
+      wand with a forked tip
+      Wand of Earthsmite
+00907 wand07\wand07.INF                   weight:     5   value:  5000
+      wand with a circular edged tip
+      Wand of Lightning
+00908 wand08\wand08.INF                   weight:     5   value:  5000
+      green metallic tipped wand
+      Wand of Draining
+00909 wand09\wand09.INF                   weight:     5   value:  5000
+      metallic red wand
+      Wand of Dispell Magic
+00910 wand10\wand10.INF                   weight:     5   value:  5000
+      thin brown wand
+      Wand of Dispell Magic
+00911 wand11\wand11.INF                   weight:     5   value:  5000
+      ornate carved stick
+      Wand of Earthbind
+00912 wand12\wand12.INF                   weight:     5   value:  5000
+      purple wand with a red top
+      Wand of Poison
+00913 wand13\wand13.INF                   weight:     5   value:  5000
+      brown bone tipped wand
+      Wand of Confusion
+00914 wand14\wand14.INF                   weight:     5   value:  5000
+      gold wand with a red handle
+      Wand of Berserking
+00915 wand15\wand15.INF                   weight:     5   value:  5000
+      multi-colored forked wand
+      Wand of Pushing
+00916 wand16\wand16.INF                   weight:     5   value:  5000
+      shimmering wand
+      Wand of Pulling
+00917 wand17\wand17.INF                   weight:     5   value:  5000
+      wand with an orange handle
+      Wand of the Snail
+00918 wand18\wand18.INF                   weight:     5   value:  5000
+      multi colored wand
+      Wand of Disintegrate
+00919 wand19\wand19.INF                   weight:     5   value:  5000
+      engraved wooden wand
+      Wand of Locking
+00920 wand20\wand20.INF                   weight:     5   value:  5000
+      red glowing wand
+      Wand of Knocking
+00921 wand1\wand1.INF                     weight:     5   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00921.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00921.TXT)
+00922 wand2\wand2.INF                     weight:     5   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00922.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00922.TXT)
+00923 wand3\wand3.INF                     weight:     5   value:     0
+      !!! No unidentified description !!! (OBJDESC\DES00923.TXT)
+      !!! No identified description !!! (OBJDESC2\DES00923.TXT)
+04089 platlarm\platlarm.INF               weight:    10   value:   500
+      !!! No unidentified description !!! (OBJDESC\DES04089.TXT)
+      !!! No identified description !!! (OBJDESC2\DES04089.TXT)

@@ -1,0 +1,159 @@
+; OBJECT DEF: STEFAN --------------------------------------------
+4  ; Number type of stances
+20 ; Radius
+0  ; Extra attributes
+250
+0
+1
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths), 
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+1 ; Stand
+0
+0
+0
+
+6 ; Walk
+12
+0
+1
+
+1 ; Got hit stance
+12
+0
+0
+
+4 ; Died
+12
+0
+-1
+
+; STANCE 0: STAND ----------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+8
+
+; STANCE 0: FRAME 0: STAND -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+7
+13
+19
+25
+31
+37
+43
+
+; STANCE 1: WALK  ----------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+8
+8
+8
+8
+8
+8
+
+; STANCE 1: FRAME 0: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+7
+13
+19
+25
+31
+37
+43
+
+; STANCE 1: FRAME 1: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+2
+8
+14
+20
+26
+32
+38
+44
+
+; STANCE 1: FRAME 2: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+3
+9
+15
+21
+27
+33
+39
+45
+
+; STANCE 1: FRAME 3: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+4
+10
+16
+22
+28
+34
+40
+46
+
+; STANCE 1: FRAME 4: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+5
+11
+17
+23
+29
+35
+41
+47
+
+; STANCE 1: FRAME 5: WALK  -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+6
+12
+18
+24
+30
+36
+42
+48
+
+; STANCE 2: GOT HIT --------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+8
+
+; STANCE 2: FRAME 0: GOT HIT -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1                 ; NOTE:  For now, use first walk animation frame
+7
+13
+19
+25
+31
+37
+43
+
+; STANCE 3: DYING ----------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+1
+1
+1
+1
+
+; STANCE 3: FRAME 0: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1001
+
+; STANCE 3: FRAME 1: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1002
+
+; STANCE 3: FRAME 2: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1003
+
+; STANCE 3: FRAME 3: DYING -------------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1004

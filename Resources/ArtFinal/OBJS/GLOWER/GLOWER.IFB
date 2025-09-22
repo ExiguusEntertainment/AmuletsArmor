@@ -1,0 +1,39 @@
+; OBJECT DEF: STEFAN --------------------------------------------
+1  ; Number type of stances
+15 ; Radius
+0  ; Extra attributes
+75
+0
+0
+
+; FRAMES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths), 
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+4 ; Glow
+20
+1
+0
+
+; STANCE 0: GLOW -- --------------------------------------------
+; Number of angles (This can ONLY be 1 or 8) for each frame
+1
+1
+1
+1
+
+; STANCE 0: FRAME 0: GLOW -- -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+0
+
+; STANCE 0: FRAME 1: GLOW -- -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+1
+
+; STANCE 0: FRAME 2: GLOW -- -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+2
+
+; STANCE 0: FRAME 3: GLOW -- -----------------------------------
+; List of angles.  Number is normal picture, negative to flip image
+3

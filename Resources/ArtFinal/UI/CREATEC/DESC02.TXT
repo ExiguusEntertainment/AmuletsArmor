@@ -1,0 +1,7 @@
+Mages wield powerful magiks but are physically weak.  Mages rely solely on magik to make them formidable characters. 
+
+Armor Types: Leather
+Weapon Types: Staff/Dagger
+Magik System: Mage
+
+

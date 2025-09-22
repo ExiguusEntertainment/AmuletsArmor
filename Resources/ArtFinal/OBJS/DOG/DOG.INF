@@ -1,0 +1,411 @@
+; OBJECT DEF: dog.oaf
+5      ; Number of stances
+20     ; Radius
+0      ; Attributes
+0      ; Weight
+0      ; Value
+17     ; Script
+0      ; Health
+0      ; ObjMoveAttr
+
+
+; STANCES --------------------------------------------------------
+; Num frames for stance, speed (delay between frames in 70ths),
+;                  and type of animation (0=normal), next stance
+;                  (-1 stop with no more animation)
+
+; Stance: 4:
+1      ;numFrames
+0      ;speed
+0      ;type
+0      ;nextStance
+
+
+; Stance: 1:
+5      ;numFrames
+7      ;speed
+0      ;type
+1      ;nextStance
+
+
+; Stance: 2:
+1      ;numFrames
+7      ;speed
+0      ;type
+0      ;nextStance
+
+
+; Stance: 3:
+5      ;numFrames
+8      ;speed
+0      ;type
+-1     ;nextStance
+
+
+; Stance: 0:
+6      ;numFrames
+7      ;speed
+0      ;type
+0      ;nextStance
+
+
+; Stance: 4:     Frame: 0:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; List of angle identifiers for STANCE 4: FRAME 0: -----------
+70      ; Angle 0:
+-7       ; Angle 1:
+-76      ; Angle 2:
+-1       ; Angle 3:
+29      ; Angle 4:
+1       ; Angle 5:
+76      ; Angle 6:
+7       ; Angle 7:
+
+
+; Stance: 1:     Frame: 0:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 1:     Frame: 1:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 1:     Frame: 2:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 1:     Frame: 3:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 1:     Frame: 4:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; List of angle identifiers for STANCE 1: FRAME 0: -----------
+65      ; Angle 0:
+-13      ; Angle 1:
+-82      ; Angle 2:
+-21      ; Angle 3:
+19      ; Angle 4:
+21      ; Angle 5:
+82      ; Angle 6:
+13      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 1: FRAME 1: -----------
+66      ; Angle 0:
+-14      ; Angle 1:
+-83      ; Angle 2:
+-22      ; Angle 3:
+20      ; Angle 4:
+22      ; Angle 5:
+83      ; Angle 6:
+14      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 1: FRAME 2: -----------
+67      ; Angle 0:
+-15      ; Angle 1:
+-84      ; Angle 2:
+-23      ; Angle 3:
+19      ; Angle 4:
+23      ; Angle 5:
+84      ; Angle 6:
+15      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 1: FRAME 3: -----------
+68      ; Angle 0:
+-16      ; Angle 1:
+-85      ; Angle 2:
+-24      ; Angle 3:
+20      ; Angle 4:
+24      ; Angle 5:
+85      ; Angle 6:
+16      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 1: FRAME 4: -----------
+69      ; Angle 0:
+-17      ; Angle 1:
+-86      ; Angle 2:
+-25      ; Angle 3:
+20      ; Angle 4:
+25      ; Angle 5:
+86      ; Angle 6:
+17      ; Angle 7:
+
+
+; Stance: 2:     Frame: 0:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; List of angle identifiers for STANCE 2: FRAME 0: -----------
+51      ; Angle 0:
+-56      ; Angle 1:
+-61      ; Angle 2:
+-46      ; Angle 3:
+40      ; Angle 4:
+46      ; Angle 5:
+61      ; Angle 6:
+56      ; Angle 7:
+
+
+; Stance: 3:     Frame: 0:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 3:     Frame: 1:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 3:     Frame: 2:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 3:     Frame: 3:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 3:     Frame: 4:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+1        ; objectAttributes
+
+
+
+; List of angle identifiers for STANCE 3: FRAME 0: -----------
+50      ; Angle 0:
+-55      ; Angle 1:
+-60      ; Angle 2:
+-45      ; Angle 3:
+40      ; Angle 4:
+45      ; Angle 5:
+60      ; Angle 6:
+55      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 3: FRAME 1: -----------
+51      ; Angle 0:
+-56      ; Angle 1:
+-61      ; Angle 2:
+-46      ; Angle 3:
+41      ; Angle 4:
+46      ; Angle 5:
+61      ; Angle 6:
+56      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 3: FRAME 2: -----------
+52      ; Angle 0:
+-57      ; Angle 1:
+-62      ; Angle 2:
+-47      ; Angle 3:
+42      ; Angle 4:
+47      ; Angle 5:
+62      ; Angle 6:
+57      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 3: FRAME 3: -----------
+53      ; Angle 0:
+-58      ; Angle 1:
+-63      ; Angle 2:
+-48      ; Angle 3:
+43      ; Angle 4:
+48      ; Angle 5:
+63      ; Angle 6:
+58      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 3: FRAME 4: -----------
+54      ; Angle 0:
+-59      ; Angle 1:
+-64      ; Angle 2:
+-49      ; Angle 3:
+44      ; Angle 4:
+49      ; Angle 5:
+64      ; Angle 6:
+59      ; Angle 7:
+
+
+; Stance: 0:     Frame: 0:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 0:     Frame: 1:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 0:     Frame: 2:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 0:     Frame: 3:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 0:     Frame: 4:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; Stance: 0:     Frame: 5:
+; Number of angles (This can ONLY be 1, 4, or 8) for each frame
+8        ; numAngles
+0        ; soundNum
+0        ; soundRadius
+0        ; objectAttributes
+
+
+
+; List of angle identifiers for STANCE 0: FRAME 0: -----------
+70      ; Angle 0:
+-7       ; Angle 1:
+-76      ; Angle 2:
+-1       ; Angle 3:
+29      ; Angle 4:
+1       ; Angle 5:
+76      ; Angle 6:
+7       ; Angle 7:
+
+
+; List of angle identifiers for STANCE 0: FRAME 1: -----------
+71      ; Angle 0:
+-8       ; Angle 1:
+-77      ; Angle 2:
+-2       ; Angle 3:
+30      ; Angle 4:
+2       ; Angle 5:
+77      ; Angle 6:
+8       ; Angle 7:
+
+
+; List of angle identifiers for STANCE 0: FRAME 2: -----------
+72      ; Angle 0:
+-9       ; Angle 1:
+-78      ; Angle 2:
+-3       ; Angle 3:
+31      ; Angle 4:
+3       ; Angle 5:
+78      ; Angle 6:
+9       ; Angle 7:
+
+
+; List of angle identifiers for STANCE 0: FRAME 3: -----------
+73      ; Angle 0:
+-10      ; Angle 1:
+-79      ; Angle 2:
+-4       ; Angle 3:
+32      ; Angle 4:
+4       ; Angle 5:
+79      ; Angle 6:
+10      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 0: FRAME 4: -----------
+74      ; Angle 0:
+-11      ; Angle 1:
+-80      ; Angle 2:
+-5       ; Angle 3:
+33      ; Angle 4:
+5       ; Angle 5:
+80      ; Angle 6:
+11      ; Angle 7:
+
+
+; List of angle identifiers for STANCE 0: FRAME 5: -----------
+75      ; Angle 0:
+-12      ; Angle 1:
+-81      ; Angle 2:
+-6       ; Angle 3:
+34      ; Angle 4:
+6       ; Angle 5:
+81      ; Angle 6:
+12      ; Angle 7:
+
+

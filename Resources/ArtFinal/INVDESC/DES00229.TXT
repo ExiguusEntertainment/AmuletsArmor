@@ -1,0 +1,13 @@
+# description file for a piercing bolt
+TYPE
+BOLT
+
+SUBTYPE
+PIERCING
+
+NUMSTACKABLE
+10
+
+
+
+

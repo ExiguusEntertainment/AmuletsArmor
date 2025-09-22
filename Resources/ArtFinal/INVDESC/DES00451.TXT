@@ -1,0 +1,12 @@
+# description file for a red breastplate
+TYPE
+ARMOR
+
+SUBTYPE
+BREASTPLATE PLATE
+
+ARMOR VALUE
+50
+
+
+

@@ -1,0 +1,7 @@
+Warlocks are mages trained especially for combat.  They are not as powerful in the magiks as mages, but have devoted time to studying melee combat techniques.
+Armor Types: Up to chain
+Weapon Types: No crossbow
+Magik System: Mage
+
+
+
