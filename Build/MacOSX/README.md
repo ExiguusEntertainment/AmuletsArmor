@@ -1,26 +1,23 @@
-# macOS Build (Initial Port)
+# macOS Build
 
-This is the first native macOS build path for Amulets & Armor.
+This is the native macOS build path for Amulets & Armor.
 
 ## Scope
 
 - Uses CMake as the build system.
 - Uses the Windows source list as the baseline.
-- Builds a playable binary with IPX networking disabled by default.
+- IPX networking is always enabled.
 
 ## Prerequisites
 
-Install required tools:
-
 ```sh
-brew install cmake ninja pkg-config sdl12-compat sdl2
+brew install cmake ninja pkg-config sdl12-compat sdl2 sdl2_net
 ```
 
 Notes:
 - `sdl12-compat` provides SDL 1.2 API compatibility on modern macOS.
 - `sdl2` is the backend loaded at runtime by `sdl12-compat`.
-- The default build (`AA_ENABLE_IPX=OFF`) expects only the pkg-config package `sdl`.
-- If you later enable IPX, also install `sdl2_net` and adapt pkg-config lookup to your local package name.
+- `sdl2_net` provides UDP networking for IPX-over-UDP multiplayer.
 
 ## Build Scripts
 
@@ -62,13 +59,30 @@ and `Build/DOS/clean.bat`.
 ./Build/MacOSX/clean.sh
 ```
 
+## Multiplayer
+
+Pass the server IP as the first argument and an optional port as the second.
+The port defaults to 213 (the original IPX-over-UDP port).
+
+```sh
+cd Exe
+../out/macos-asan/amulets-armor <server-ip> [<port>]
+```
+
+Example against a local AAServer running on port 2130:
+
+```sh
+cd Exe
+../out/macos-asan/amulets-armor 127.0.0.1 2130
+```
+
 ## Manual CMake commands
 
 If you prefer to drive CMake directly:
 
 ```sh
 # Configure
-cmake -S . -B out/macos -G Ninja -DAA_ENABLE_IPX=OFF -DCMAKE_BUILD_TYPE=Debug
+cmake -S . -B out/macos -G Ninja -DCMAKE_BUILD_TYPE=Debug
 
 # Build
 cmake --build out/macos --target amulets-armor -j
