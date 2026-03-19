@@ -77,11 +77,3 @@ cmake --build out/macos --target amulets-armor -j
 cd Exe
 ../out/macos/amulets-armor
 ```
-
-## VS Code Tasks
-
-Use these tasks from `.vscode/tasks.json`:
-
-- Configure (macOS CMake)
-- Build (macOS game)
-- Run (macOS game)
