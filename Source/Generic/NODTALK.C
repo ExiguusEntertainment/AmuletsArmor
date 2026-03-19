@@ -1,8 +1,8 @@
 /****************************************************************************/
 /*    FILE:  DOSDTALK.C                                                     */
 /****************************************************************************/
-#include "..\INCLUDE\DITALK.H"
-#include "..\DITALKP.H"
+#include "DITALK.H"
+#include "DITALKP.H"
 #include "MEMORY.H"
 
 /* Callback routines to handle receiving and requests to send. */

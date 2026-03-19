@@ -9,9 +9,49 @@
 
 /** If I'm on a unix box, grab some system typedefs as well. **/
 #ifdef TARGET_UNIX
+#  include <stdio.h>
 #  include <sys/types.h>
+#  include <strings.h>
+#  include <limits.h>
+#  include <unistd.h>
 
 typedef time_t T_time;
+
+#  ifndef O_BINARY
+#    define O_BINARY 0
+#  endif
+
+#  ifndef stricmp
+#    define stricmp strcasecmp
+#  endif
+
+#  ifndef strcmpi
+#    define strcmpi strcasecmp
+#  endif
+
+#  ifndef strnicmp
+#    define strnicmp strncasecmp
+#  endif
+
+#  ifndef inp
+#    define inp(port) (0)
+#  endif
+
+#  ifndef outp
+#    define outp(port, value) ((void)0)
+#  endif
+
+#  ifndef itoa
+static inline char *aa_itoa(int value, char *buffer, int base)
+{
+    if (base == 16)
+        sprintf(buffer, "%x", value);
+    else
+        sprintf(buffer, "%d", value);
+    return buffer;
+}
+#    define itoa(v, b, base) aa_itoa((v), (b), (base))
+#  endif
 
 #endif
 
@@ -56,6 +96,13 @@ typedef signed short T_sword16 ;
 
 typedef unsigned int T_word32 ;
 typedef signed int T_sword32 ;
+
+#ifdef TARGET_UNIX
+#  include <stdint.h>
+typedef uintptr_t T_uintptr_t ;
+#else
+typedef T_word32 T_uintptr_t ;
+#endif
 
 typedef unsigned long T_word64 ;
 typedef signed long T_sword64 ;

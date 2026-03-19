@@ -359,18 +359,54 @@ T_void GrDrawBitmap(
     T_byte8 *p_screen ;
     T_word16 y_count ;
     T_word16 x_size ;
+#ifdef TARGET_UNIX
+    T_word16 y_size ;
+#endif
 
     DebugRoutine("GrDrawBitmap") ;
+#ifndef TARGET_UNIX
     DebugCheck(x_left < 320) ;
     DebugCheck(y_top < 200) ;
     DebugCheck(x_left+p_bitmap->sizex <= 320) ;
     DebugCheck(y_top+p_bitmap->sizey <= 200) ;
+#endif
+
+#ifdef TARGET_UNIX
+    if (x_left >= 320 || y_top >= 240) {
+    DebugEnd() ;
+    return ;
+    }
+
+    x_size = p_bitmap->sizex ;
+    y_size = p_bitmap->sizey ;
+    if (x_left + x_size > 320)
+    x_size = 320 - x_left ;
+    if (y_top + y_size > 240)
+    y_size = 240 - y_top ;
+
+    if (x_size == 0 || y_size == 0) {
+    DebugEnd() ;
+    return ;
+    }
+#endif
 
     GrInvalidateRect(
         x_left,
         y_top,
-        x_left+p_bitmap->sizex,
-        y_top+p_bitmap->sizey) ;
+    x_left+
+#ifdef TARGET_UNIX
+    x_size
+#else
+    p_bitmap->sizex
+#endif
+    ,
+    y_top+
+#ifdef TARGET_UNIX
+    y_size
+#else
+    p_bitmap->sizey
+#endif
+    ) ;
 
     p_screen = G_ActiveScreen+(y_top<<8)+(y_top<<6)+x_left ;
     p_bitmapData = p_bitmap->data ;
@@ -378,7 +414,13 @@ T_void GrDrawBitmap(
 
     /* This is the fastest way to blip an unmasked bitmap on the screen */
     /* Without going into assembly language. */
-    for (y_count=p_bitmap->sizey; y_count>0; y_count--)  {
+    for (y_count=
+#ifdef TARGET_UNIX
+            y_size
+#else
+            p_bitmap->sizey
+#endif
+        ; y_count>0; y_count--)  {
         /* Copy the bitmap line from the picture to the screen. */
         memcpy(p_screen, p_bitmapData, x_size) ;
 
@@ -386,7 +428,7 @@ T_void GrDrawBitmap(
         p_screen += 320 ;
 
         /* Skip down to the next bitmap line. */
-        p_bitmapData += x_size ;
+        p_bitmapData += p_bitmap->sizex ;
     }
 
     DebugEnd() ;
@@ -425,18 +467,54 @@ T_void GrDrawShadedBitmap(
     T_word16 x_size ;
     T_word16 x ;
     T_byte8 *p_shadeLookup ;
+#ifdef TARGET_UNIX
+    T_word16 y_size ;
+#endif
 
     DebugRoutine("GrDrawShadedBitmap") ;
+#ifndef TARGET_UNIX
     DebugCheck(x_left < 320) ;
     DebugCheck(y_top < 200) ;
     DebugCheck(x_left+p_bitmap->sizex <= 320) ;
     DebugCheck(y_top+p_bitmap->sizey <= 200) ;
+#endif
+
+#ifdef TARGET_UNIX
+    if (x_left >= 320 || y_top >= 240) {
+    DebugEnd() ;
+    return ;
+    }
+
+    x_size = p_bitmap->sizex ;
+    y_size = p_bitmap->sizey ;
+    if (x_left + x_size > 320)
+    x_size = 320 - x_left ;
+    if (y_top + y_size > 240)
+    y_size = 240 - y_top ;
+
+    if (x_size == 0 || y_size == 0) {
+    DebugEnd() ;
+    return ;
+    }
+#endif
 
     GrInvalidateRect(
         x_left,
         y_top,
-        x_left+p_bitmap->sizex,
-        y_top+p_bitmap->sizey) ;
+    x_left+
+#ifdef TARGET_UNIX
+    x_size
+#else
+    p_bitmap->sizex
+#endif
+    ,
+    y_top+
+#ifdef TARGET_UNIX
+    y_size
+#else
+    p_bitmap->sizey
+#endif
+    ) ;
 
     p_screen = G_ActiveScreen+(y_top<<8)+(y_top<<6)+x_left ;
     p_bitmapData = p_bitmap->data ;
@@ -446,7 +524,13 @@ T_void GrDrawShadedBitmap(
 
     /* This is the fastest way to blip an unmasked bitmap on the screen */
     /* Without going into assembly language. */
-    for (y_count=p_bitmap->sizey; y_count>0; y_count--)  {
+    for (y_count=
+#ifdef TARGET_UNIX
+            y_size
+#else
+            p_bitmap->sizey
+#endif
+        ; y_count>0; y_count--)  {
         /* Draw the shaded version of each pixel on the screen. */
         for (x=0; x<x_size; x++)
             p_screen[x] = p_shadeLookup[p_bitmapData[x]] ;
@@ -455,7 +539,7 @@ T_void GrDrawShadedBitmap(
         p_screen += 320 ;
 
         /* Skip down to the next bitmap line. */
-        p_bitmapData += x_size ;
+        p_bitmapData += p_bitmap->sizex ;
     }
 
     DebugEnd() ;
@@ -474,18 +558,54 @@ T_void GrDrawShadedAndMaskedBitmap(
     T_word16 x_size ;
     T_word16 x ;
     T_byte8 *p_shadeLookup ;
+#ifdef TARGET_UNIX
+    T_word16 y_size ;
+#endif
 
     DebugRoutine("GrDrawShadedBitmap") ;
+#ifndef TARGET_UNIX
     DebugCheck(x_left < 320) ;
     DebugCheck(y_top < 200) ;
     DebugCheck(x_left+p_bitmap->sizex <= 320) ;
     DebugCheck(y_top+p_bitmap->sizey <= 200) ;
+#endif
+
+#ifdef TARGET_UNIX
+    if (x_left >= 320 || y_top >= 240) {
+    DebugEnd() ;
+    return ;
+    }
+
+    x_size = p_bitmap->sizex ;
+    y_size = p_bitmap->sizey ;
+    if (x_left + x_size > 320)
+    x_size = 320 - x_left ;
+    if (y_top + y_size > 240)
+    y_size = 240 - y_top ;
+
+    if (x_size == 0 || y_size == 0) {
+    DebugEnd() ;
+    return ;
+    }
+#endif
 
     GrInvalidateRect(
         x_left,
         y_top,
-        x_left+p_bitmap->sizex,
-        y_top+p_bitmap->sizey) ;
+    x_left+
+#ifdef TARGET_UNIX
+    x_size
+#else
+    p_bitmap->sizex
+#endif
+    ,
+    y_top+
+#ifdef TARGET_UNIX
+    y_size
+#else
+    p_bitmap->sizey
+#endif
+    ) ;
 
     p_screen = G_ActiveScreen+(y_top<<8)+(y_top<<6)+x_left ;
     p_bitmapData = p_bitmap->data ;
@@ -495,7 +615,13 @@ T_void GrDrawShadedAndMaskedBitmap(
 
     /* This is the fastest way to blip an unmasked bitmap on the screen */
     /* Without going into assembly language. */
-    for (y_count=p_bitmap->sizey; y_count>0; y_count--)  {
+    for (y_count=
+#ifdef TARGET_UNIX
+            y_size
+#else
+            p_bitmap->sizey
+#endif
+        ; y_count>0; y_count--)  {
         /* Draw the shaded version of each pixel on the screen. */
         for (x=0; x<x_size; x++)
         {
@@ -507,7 +633,7 @@ T_void GrDrawShadedAndMaskedBitmap(
         p_screen += 320 ;
 
         /* Skip down to the next bitmap line. */
-        p_bitmapData += x_size ;
+        p_bitmapData += p_bitmap->sizex ;
     }
 
     DebugEnd() ;
@@ -541,18 +667,54 @@ T_void GrDrawBitmapMasked(
     T_word16 y_count ;
     T_word16 x_count ;
     T_word16 x_size ;
+#ifdef TARGET_UNIX
+    T_word16 y_size ;
+#endif
 
     DebugRoutine("GrDrawBitmapMasked") ;
+#ifndef TARGET_UNIX
     DebugCheck(x_left < 320) ;
     DebugCheck(y_top < 200) ;
     DebugCheck(x_left+p_bitmap->sizex <= 320) ;
     DebugCheck(y_top+p_bitmap->sizey <= 200) ;
+#endif
+
+#ifdef TARGET_UNIX
+    if (x_left >= 320 || y_top >= 240) {
+    DebugEnd() ;
+    return ;
+    }
+
+    x_size = p_bitmap->sizex ;
+    y_size = p_bitmap->sizey ;
+    if (x_left + x_size > 320)
+    x_size = 320 - x_left ;
+    if (y_top + y_size > 240)
+    y_size = 240 - y_top ;
+
+    if (x_size == 0 || y_size == 0) {
+    DebugEnd() ;
+    return ;
+    }
+#endif
 
     GrInvalidateRect(
         x_left,
         y_top,
-        x_left+p_bitmap->sizex,
-        y_top+p_bitmap->sizey) ;
+    x_left+
+#ifdef TARGET_UNIX
+    x_size
+#else
+    p_bitmap->sizex
+#endif
+    ,
+    y_top+
+#ifdef TARGET_UNIX
+    y_size
+#else
+    p_bitmap->sizey
+#endif
+    ) ;
 
     p_screen = G_ActiveScreen+(y_top<<8)+(y_top<<6)+x_left ;
     p_bitmapData = p_bitmap->data ;
@@ -560,7 +722,13 @@ T_void GrDrawBitmapMasked(
 
     /* This is the fastest way to blip a masked bitmap on the screen */
     /* Without going into assembly language. */
-    for (y_count=p_bitmap->sizey; y_count>0; y_count--)  {
+    for (y_count=
+#ifdef TARGET_UNIX
+            y_size
+#else
+            p_bitmap->sizey
+#endif
+        ; y_count>0; y_count--)  {
         p_bitmapPoint = p_bitmapData ;
         p_screenPoint = p_screen ;
 
@@ -580,7 +748,7 @@ T_void GrDrawBitmapMasked(
         p_screen += 320 ;
 
         /* Skip down to the next bitmap line. */
-        p_bitmapData += x_size ;
+        p_bitmapData += p_bitmap->sizex ;
     }
 
     DebugEnd() ;
@@ -1931,6 +2099,16 @@ T_void GrDrawCompressedBitmap(
             /* Get the count of how many pixels to copy. */
             count = 1+p_entry->end - p_entry->start ;
 
+#ifdef TARGET_UNIX
+            /* On macOS/Unix WindowsUpdate only blits lines 0-199, and
+             * G_lefts/G_rights are only 200 elements.  Skip columns that
+             * start at or past the blit limit, and clamp count so we never
+             * write past it. */
+            if (y_start >= 200) continue;
+            if (y_start + count > 200)
+                count = 200 - y_start;
+#endif
+
             /* Loop over that line. */
             for (i=0; i<count; i++, p_bitmapData++)  {
                 /* Copy the pixel to the screen. */
@@ -2023,6 +2201,16 @@ T_void GrDrawCompressedBitmapAndColor(
 
                 /* Get the count of how many pixels to copy. */
                 count = 1+p_entry->end - p_entry->start ;
+
+#ifdef TARGET_UNIX
+                /* On macOS/Unix WindowsUpdate only blits lines 0-199, and
+                 * G_lefts/G_rights are only 200 elements.  Skip columns that
+                 * start at or past the blit limit, and clamp count so we never
+                 * write past it. */
+                if (y_start >= 200) continue;
+                if (y_start + count > 200)
+                    count = 200 - y_start;
+#endif
 
                 /* Loop over that line. */
                 for (i=0; i<count; i++, p_bitmapData++)  {

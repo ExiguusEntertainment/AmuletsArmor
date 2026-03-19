@@ -47,7 +47,7 @@ typedef struct T_areaSoundStructTag {
                                            /* Only applies to type ONCE. */
     struct T_areaSoundStructTag *group ;  /* Link to group "leader". */
     struct T_areaSoundStructTag *next ;   /* Link to next area sound. */
-    T_word32 data ;               /* Extra data to pass to the callback. */
+    T_uintptr_t data ;            /* Extra data to pass to the callback. */
     T_word32 id ;
     E_Boolean markedForDestroy ;
 } ;
@@ -252,7 +252,7 @@ T_areaSound AreaSoundCreate(
                 T_word16 length,
                 T_areaSound p_groupLeader,
                 T_areaSoundFinishCallback p_callback,
-                T_word32 data,
+                T_uintptr_t data,
                 T_word16 soundNum)
 {
     T_areaSoundStruct *p_sound ;

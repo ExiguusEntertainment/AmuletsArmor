@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void IPXSetPort(int port);
 int IPXConnectToServer(char const *strAddr);
 void IPXSendPacket(char const *p_data, unsigned int size);
 int IPXClientPoll(char *p_data, unsigned int *size);

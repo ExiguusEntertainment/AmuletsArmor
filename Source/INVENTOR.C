@@ -68,6 +68,153 @@ static T_word16 G_inventoryBoxCoordinates[EQUIP_NUMBER_OF_LOCATIONS][4];
 
 static E_Boolean G_init = FALSE;
 
+typedef struct {
+    T_byte8 type;
+    T_byte8 subtype;
+    T_byte8 numstackable;
+    T_byte8 effectTriggerOn[MAX_ITEM_EFFECTS + 1];
+    T_byte8 effectType[MAX_ITEM_EFFECTS + 1];
+    T_word16 effectData[MAX_ITEM_EFFECTS + 1][3];
+    T_byte8 objectDestroyOn;
+    T_word16 useable;
+    T_byte8 unique;
+#ifdef TARGET_UNIX
+} PACK T_equipItemDescriptionLegacy9;
+#else
+} T_equipItemDescriptionLegacy9;
+#endif
+
+static T_void IInventoryDecodeItemDesc(
+                  T_equipItemDescription *p_out,
+                  T_byte8 *p_desc,
+                  T_word32 descSize)
+{
+    DebugRoutine("IInventoryDecodeItemDesc");
+    DebugCheck(p_out != NULL);
+
+    memset(p_out, 0, sizeof(*p_out));
+
+    if ((p_desc == NULL) || (descSize == 0)) {
+        DebugEnd();
+        return;
+    }
+
+    /*
+     * Legacy layout compatibility:
+     * some resources were authored with 9 effect slots instead of 8,
+     * which shifts objectDestroyOn/useable/unique by +8 bytes.
+     */
+    if (descSize == sizeof(T_equipItemDescriptionLegacy9)) {
+        T_equipItemDescriptionLegacy9 *p_legacy =
+            (T_equipItemDescriptionLegacy9 *)p_desc;
+        T_word16 i;
+
+        p_out->type = p_legacy->type;
+        p_out->subtype = p_legacy->subtype;
+        p_out->numstackable = p_legacy->numstackable;
+        for (i = 0; i < MAX_ITEM_EFFECTS; i++) {
+            p_out->effectTriggerOn[i] = p_legacy->effectTriggerOn[i];
+            p_out->effectType[i] = p_legacy->effectType[i];
+            memcpy(p_out->effectData[i], p_legacy->effectData[i],
+                   sizeof(p_out->effectData[i]));
+        }
+        p_out->objectDestroyOn = p_legacy->objectDestroyOn;
+        p_out->useable = p_legacy->useable;
+        p_out->unique = p_legacy->unique;
+        DebugEnd();
+        return;
+    }
+
+#ifdef TARGET_UNIX
+    /*
+     * Borland-packed 8-slot on-disk format (71 bytes).
+     * The original Borland C compiler used 1-byte struct alignment, so
+     * effectData and useable are stored at different offsets than GCC's
+     * padded in-memory layout.  Cast through the packed type so GCC emits
+     * correct unaligned reads.
+     */
+    if (descSize == sizeof(T_equipItemDescriptionBorland)) {
+        T_equipItemDescriptionBorland *p_disk =
+            (T_equipItemDescriptionBorland *)p_desc;
+        T_word16 i;
+        p_out->type         = p_disk->type;
+        p_out->subtype      = p_disk->subtype;
+        p_out->numstackable = p_disk->numstackable;
+        for (i = 0; i < MAX_ITEM_EFFECTS; i++) {
+            p_out->effectTriggerOn[i] = p_disk->effectTriggerOn[i];
+            p_out->effectType[i]      = p_disk->effectType[i];
+            memcpy(p_out->effectData[i], p_disk->effectData[i],
+                   sizeof(p_out->effectData[i]));
+        }
+        p_out->objectDestroyOn = p_disk->objectDestroyOn;
+        p_out->useable         = p_disk->useable;
+        p_out->unique          = p_disk->unique;
+        DebugEnd();
+        return;
+    }
+#endif
+
+    /* Native layout: direct copy. */
+    if (descSize >= sizeof(T_equipItemDescription)) {
+        memcpy(p_out, p_desc, sizeof(T_equipItemDescription));
+        DebugEnd();
+        return;
+    }
+
+    /* Truncated resource: preserve old behavior and copy what is available. */
+    memcpy(p_out, p_desc, descSize);
+    DebugEnd();
+}
+
+static T_void IInventoryRepairLegacySavedItemDesc(T_inventoryItemStruct *p_item)
+{
+    T_byte8 *p_raw;
+    size_t useableOffset;
+    size_t destroyOffset;
+    size_t uniqueOffset;
+    T_word16 legacyUseable;
+    T_byte8 legacyDestroyOn;
+    T_byte8 legacyUnique;
+
+    DebugRoutine("IInventoryRepairLegacySavedItemDesc");
+    DebugCheck(p_item != NULL);
+
+    /* Only repair non-empty records that currently look unusable. */
+    if ((p_item->objecttype == 0) || (p_item->itemdesc.useable != 0)) {
+        DebugEnd();
+        return;
+    }
+
+    p_raw = (T_byte8 *)p_item;
+    useableOffset = (size_t)((T_byte8 *)&p_item->itemdesc.useable - p_raw);
+    destroyOffset = (size_t)((T_byte8 *)&p_item->itemdesc.objectDestroyOn - p_raw);
+    uniqueOffset = (size_t)((T_byte8 *)&p_item->itemdesc.unique - p_raw);
+
+    /*
+     * Legacy CHDATA records with 9 effect slots store these trailing fields
+     * 8 bytes later than the current layout.
+     */
+    if ((useableOffset + 8 + sizeof(T_word16) > sizeof(*p_item)) ||
+        (destroyOffset + 8 >= sizeof(*p_item)) ||
+        (uniqueOffset + 8 >= sizeof(*p_item))) {
+        DebugEnd();
+        return;
+    }
+
+    memcpy(&legacyUseable, p_raw + useableOffset + 8, sizeof(legacyUseable));
+    legacyDestroyOn = *(p_raw + destroyOffset + 8);
+    legacyUnique = *(p_raw + uniqueOffset + 8);
+
+    /* Class mask only uses low 11 bits (USEABLE_BY_ALL = 0x07FF). */
+    if ((legacyUseable != 0) && ((legacyUseable & 0xF800) == 0)) {
+        p_item->itemdesc.useable = legacyUseable;
+        p_item->itemdesc.objectDestroyOn = legacyDestroyOn;
+        p_item->itemdesc.unique = legacyUnique;
+    }
+
+    DebugEnd();
+}
+
 /* internal routines */
 static E_Boolean InventoryDestroyElement (T_doubleLinkListElement killme);
 static T_doubleLinkListElement InventoryIsItemInArea (E_inventoryType where, T_byte8 gx1, T_byte8 gx2, T_byte8 gy1, T_byte8 gy2, T_byte8 page);
@@ -1044,7 +1191,24 @@ T_inventoryItemStruct* InventoryTakeObject (E_inventoryType which, T_3dObject *i
 
             /* get description text */
             desc1=PictureLockData (stmp,&res);
-            p_inv->itemdesc=*((T_equipItemDescription *)desc1);
+            if (desc1 != NULL) {
+                T_word32 descSize = ResourceGetSize(res);
+#ifdef TARGET_UNIX
+                /*
+                 * Some legacy resources can surface a one-past-end data pointer
+                 * on 64-bit builds; if so, recover the true block start.
+                 */
+                if ((descSize > 0) &&
+                    ((((unsigned long)desc1) & (sizeof(T_void *) - 1)) != 0)) {
+                    T_byte8 *p_descAlt = desc1 - descSize;
+                    if ((((unsigned long)p_descAlt) & (sizeof(T_void *) - 1)) == 0)
+                        desc1 = p_descAlt;
+                }
+#endif
+                IInventoryDecodeItemDesc(&p_inv->itemdesc, desc1, descSize);
+            } else {
+                memset(&p_inv->itemdesc, 0, sizeof(T_equipItemDescription));
+            }
 
             if (which==INVENTORY_PLAYER)
             {
@@ -2189,7 +2353,7 @@ T_void InventoryDrawInventoryWindow (E_inventoryType which)
     if (which==INVENTORY_PLAYER)
     {
         sprintf (stmp,"LOAD:%3.1f kg",StatsGetPlayerLoad()/10.0);
-        TxtboxID=FormGetObjID(500);
+        TxtboxID=FormFindObjID(500);
         if (TxtboxID != NULL)
         {
             TxtboxSetData (TxtboxID, stmp);
@@ -2199,11 +2363,11 @@ T_void InventoryDrawInventoryWindow (E_inventoryType which)
     if (which==INVENTORY_PLAYER)
     {
         sprintf (stmp,"PG:%d/%d",G_inventories[which].curpage+1,G_inventories[which].maxpages);
-        TxtboxID=FormGetObjID(501);
+        TxtboxID=FormFindObjID(501);
     } else
     {
 //        sprintf (stmp,"PAGE:%d of %d",G_inventories[which].curpage+1,G_inventories[which].maxpages);
-//        TxtboxID=FormGetObjID(510);
+//        TxtboxID=FormFindObjID(510);
     }
 
     if (TxtboxID!=NULL)
@@ -2329,56 +2493,56 @@ T_void InventoryDrawEquipmentWindow (T_void)
         shield=EffectGetPlayerEffectPower(PLAYER_EFFECT_SHIELD);
     }
 
-    TxtboxID=FormGetObjID (500);
+    TxtboxID=FormFindObjID(500);
     value=StatsGetArmorValue(EQUIP_LOCATION_HEAD);
 //    value=(StatsGetArmorValue(EQUIP_LOCATION_HEAD) > shield ?
 //           StatsGetArmorValue(EQUIP_LOCATION_HEAD) : shield);
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
-    TxtboxID=FormGetObjID (501);
+    TxtboxID=FormFindObjID(501);
     value=StatsGetArmorValue(EQUIP_LOCATION_CHEST);
 //    value=(StatsGetArmorValue(EQUIP_LOCATION_CHEST) > shield ?
 //           StatsGetArmorValue(EQUIP_LOCATION_CHEST) : shield);
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
-    TxtboxID=FormGetObjID (502);
+    TxtboxID=FormFindObjID(502);
     value=StatsGetArmorValue(EQUIP_LOCATION_LEFT_ARM);
 //    value=(StatsGetArmorValue(EQUIP_LOCATION_LEFT_ARM) > shield ?
 //           StatsGetArmorValue(EQUIP_LOCATION_LEFT_ARM) : shield);
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
-    TxtboxID=FormGetObjID (503);
+    TxtboxID=FormFindObjID(503);
     value=StatsGetArmorValue(EQUIP_LOCATION_RIGHT_ARM);
 //    value=(StatsGetArmorValue(EQUIP_LOCATION_RIGHT_ARM) > shield ?
 //           StatsGetArmorValue(EQUIP_LOCATION_RIGHT_ARM) : shield);
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
-    TxtboxID=FormGetObjID (504);
+    TxtboxID=FormFindObjID(504);
     value=StatsGetArmorValue(EQUIP_LOCATION_LEGS);
 //    value=(StatsGetArmorValue(EQUIP_LOCATION_LEGS) > shield ?
 //           StatsGetArmorValue(EQUIP_LOCATION_LEGS) : shield);
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
-    TxtboxID=FormGetObjID (505);
+    TxtboxID=FormFindObjID(505);
     value=StatsGetArmorValue(EQUIP_LOCATION_LEGS);
 //    value=(StatsGetArmorValue(EQUIP_LOCATION_LEGS) > shield ?
 //           StatsGetArmorValue(EQUIP_LOCATION_LEGS) : shield);
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
-    TxtboxID=FormGetObjID (506);
+    TxtboxID=FormFindObjID(506);
     value= shield ;
     sprintf (stmp,"%d%%",value);
     TxtboxSetData (TxtboxID,stmp);
 
     /* calculate total armor value */
 
-    TxtboxID=FormGetObjID (507);
+    TxtboxID=FormFindObjID(507);
     sprintf (stmp,"%d%%",StatsGetPlayerArmorValue());
     TxtboxSetData (TxtboxID,stmp);
 
@@ -3361,6 +3525,8 @@ T_void InventoryReadItemsList(FILE *fp)
         /* read in an item */
         if (!feof(fp)) fread (p_inv,size,1,fp);
 
+        IInventoryRepairLegacySavedItemDesc(p_inv);
+
         /* see if it's a valid entry */
         if ((p_inv->objecttype != 0) && (!feof(fp)))
         {
@@ -3397,6 +3563,8 @@ T_void InventoryReadItemsList(FILE *fp)
 
         /* read in the block */
         fread (p_inv,size,1,fp);
+
+        IInventoryRepairLegacySavedItemDesc(p_inv);
 
         /* see if it's a valid entry */
         if ((p_inv->objecttype != 0) && (!feof(fp)))
@@ -4001,7 +4169,11 @@ T_void InventoryDebugDump (E_inventoryType which)
     T_doubleLinkListElement element;
     DebugRoutine ("InventoryDebugDump");
 
+#ifdef TARGET_UNIX
+    printf ("mouse hand addr=%p\n",(T_void *)G_inventoryLocations[EQUIP_LOCATION_MOUSE_HAND]);
+#else
     printf ("mouse hand addr=%d\n",G_inventoryLocations[EQUIP_LOCATION_MOUSE_HAND]);
+#endif
 
     element=DoubleLinkListGetFirst(G_inventories[which].itemslist);
 

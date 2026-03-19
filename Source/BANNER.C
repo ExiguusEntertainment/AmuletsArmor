@@ -310,28 +310,28 @@ T_void BannerOpenForm(E_bannerFormType formtype)
             break;
 
         case BANNER_FORM_OPTIONS:
-            buttonID = FormGetObjID(301);
+            buttonID = FormFindObjID(301);
             if (buttonID != NULL) {
                 ButtonSetSelectPic(buttonID, "UI/CREATEC/CRC_TOG1");
                 if (G_musicOn)
                     ButtonDownNoAction(buttonID);
             }
-            buttonID = FormGetObjID(302);
+            buttonID = FormFindObjID(302);
             if (buttonID != NULL) {
                 ButtonSetSelectPic(buttonID, "UI/CREATEC/CRC_TOG1");
                 if (G_sfxOn)
                     ButtonDownNoAction(buttonID);
             }
 
-            sliderID = FormGetObjID(600);
+            sliderID = FormFindObjID(600);
             DebugCheck(sliderID != NULL);
             SliderSetValue(sliderID, G_musicVol);
-            sliderID = FormGetObjID(601);
+            sliderID = FormFindObjID(601);
             DebugCheck(sliderID != NULL);
             SliderSetValue(sliderID, G_sfxVol);
-            buttonID = FormGetObjID(301);
+            buttonID = FormFindObjID(301);
 
-            TxtboxID = FormGetObjID(500);
+            TxtboxID = FormFindObjID(500);
 
             /* set up credits list */
             strcpy(credits, "\r^036    Amulets and Armor\r\r");
@@ -454,11 +454,11 @@ T_void BannerOpenForm(E_bannerFormType formtype)
         case BANNER_FORM_AMMO:
             /* set alternate button pictures and callbacks for buttons */
             for (i = 0; i < NUM_AMMO_SLOTS; i++) {
-                buttonID = FormGetObjID(301 + i);
+                buttonID = FormFindObjID(301 + i);
 //            ButtonSetSelectPic (buttonID,"UI/3DUI/AMMSELDN");
                 ButtonSetCallbacks(buttonID, BannerSelectAmmo,
                         ButtonDownNoAction);
-                buttonID = FormGetObjID(308 + i);
+                buttonID = FormFindObjID(308 + i);
                 ButtonSetCallbacks(buttonID, NULL, BannerGetAmmo);
             }
             BannerDisplayAmmoPage();
@@ -640,10 +640,10 @@ T_void BannerFormControl(
                         || objtype == FORM_OBJECT_SLIDER) {
                     if (objID == 301 || objID == 302 || objID == 600
                             || objID == 601) {
-                        MusicVolButton = FormGetObjID(301);
-                        SfxVolButton = FormGetObjID(302);
-                        MusicVolSlider = FormGetObjID(600);
-                        SfxVolSlider = FormGetObjID(601);
+                        MusicVolButton = FormFindObjID(301);
+                        SfxVolButton = FormFindObjID(302);
+                        MusicVolSlider = FormFindObjID(600);
+                        SfxVolSlider = FormFindObjID(601);
 
                         if (ButtonIsPushed(MusicVolButton) == TRUE)
                             G_musicOn = TRUE;
@@ -1330,61 +1330,61 @@ T_void BannerDisplayFinancesPage(T_void)
     /* and fill them out */
 
     if (BannerFormIsOpen(BANNER_FORM_FINANCES)) {
-        TxtboxID = FormGetObjID(500);
+        TxtboxID = FormFindObjID(500);
         sprintf(stmp, "%d", StatsGetPlayerCoins(COIN_TYPE_PLATINUM));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(501);
+        TxtboxID = FormFindObjID(501);
         sprintf(stmp, "%d", StatsGetPlayerCoins(COIN_TYPE_GOLD));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(502);
+        TxtboxID = FormFindObjID(502);
         sprintf(stmp, "%d", StatsGetPlayerCoins(COIN_TYPE_SILVER));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(503);
+        TxtboxID = FormFindObjID(503);
         sprintf(stmp, "%d", StatsGetPlayerCoins(COIN_TYPE_COPPER));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(504);
+        TxtboxID = FormFindObjID(504);
         sprintf(stmp, "%d", StatsGetPlayerSavedCoins(COIN_TYPE_PLATINUM));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(505);
+        TxtboxID = FormFindObjID(505);
         sprintf(stmp, "%d", StatsGetPlayerSavedCoins(COIN_TYPE_GOLD));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(506);
+        TxtboxID = FormFindObjID(506);
         sprintf(stmp, "%d", StatsGetPlayerSavedCoins(COIN_TYPE_SILVER));
         TxtboxSetData(TxtboxID, stmp);
 
-        TxtboxID = FormGetObjID(507);
+        TxtboxID = FormFindObjID(507);
         sprintf(stmp, "%d", StatsGetPlayerSavedCoins(COIN_TYPE_COPPER));
         TxtboxSetData(TxtboxID, stmp);
 
         /* set callbacks for buttons */
-        buttonID = FormGetObjID(301);
+        buttonID = FormFindObjID(301);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_PLATINUM);
-        buttonID = FormGetObjID(302);
+        buttonID = FormFindObjID(302);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_GOLD);
-        buttonID = FormGetObjID(303);
+        buttonID = FormFindObjID(303);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_SILVER);
-        buttonID = FormGetObjID(304);
+        buttonID = FormFindObjID(304);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_COPPER);
-        buttonID = FormGetObjID(305);
+        buttonID = FormFindObjID(305);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_FIVE + COIN_TYPE_PLATINUM);
-        buttonID = FormGetObjID(306);
+        buttonID = FormFindObjID(306);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_FIVE + COIN_TYPE_GOLD);
-        buttonID = FormGetObjID(307);
+        buttonID = FormFindObjID(307);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_FIVE + COIN_TYPE_SILVER);
-        buttonID = FormGetObjID(308);
+        buttonID = FormFindObjID(308);
         ButtonSetCallbacks(buttonID, NULL, BannerGetCoin);
         ButtonSetData(buttonID, COIN_TYPE_FIVE + COIN_TYPE_COPPER);
     }
@@ -1444,16 +1444,16 @@ T_void BannerDisplayAmmoPage(T_void)
                 break;
             }
 
-            TxtboxID=FormGetObjID(500+slotcount);
+            TxtboxID=FormFindObjID(500+slotcount);
             TxtboxSetData (TxtboxID,stmp);
 
             /* set the field data for the number of ammo field */
             sprintf (stmp,"%d",StatsGetPlayerBolts(i));
-            TxtboxID=FormGetObjID(507+slotcount);
+            TxtboxID=FormFindObjID(507+slotcount);
             TxtboxSetData (TxtboxID,stmp);
 
             /* push selected button down, otherwise up */
-            buttonID=FormGetObjID(301+slotcount);
+            buttonID=FormFindObjID(301+slotcount);
             ButtonSetData (buttonID,slotcount);
             ButtonSetSubData (buttonID,i);
 
@@ -1470,7 +1470,7 @@ T_void BannerDisplayAmmoPage(T_void)
             if (ButtonIsEnabled(buttonID)==FALSE)
             ButtonEnable(buttonID);
 
-            buttonID=FormGetObjID(308+slotcount);
+            buttonID=FormFindObjID(308+slotcount);
             ButtonSetData (buttonID,slotcount);
             ButtonSetSubData (buttonID,i);
             if (ButtonIsEnabled(buttonID)==FALSE)
@@ -1486,17 +1486,17 @@ T_void BannerDisplayAmmoPage(T_void)
 
     /* 'erase' the empty slots */
     for (i = slotcount; i < NUM_AMMO_SLOTS; i++) {
-        TxtboxID = FormGetObjID(500 + i);
+        TxtboxID = FormFindObjID(500 + i);
         TxtboxSetData(TxtboxID, "");
 
-        TxtboxID = FormGetObjID(507 + i);
+        TxtboxID = FormFindObjID(507 + i);
         TxtboxSetData(TxtboxID, "");
 
-        buttonID = FormGetObjID(301 + i);
+        buttonID = FormFindObjID(301 + i);
         if (ButtonIsEnabled(buttonID))
             ButtonDisable(buttonID);
 
-        buttonID = FormGetObjID(308 + i);
+        buttonID = FormFindObjID(308 + i);
         if (ButtonIsEnabled(buttonID))
             ButtonDisable(buttonID);
 //        ButtonSetCallbacks (buttonID,NULL,NULL);
@@ -1517,7 +1517,7 @@ T_void BannerDisplayAmmoPage(T_void)
                 G_ammoSelected = 0;
                 G_ammoTypeSelected = BOLT_TYPE_NORMAL;
             }
-            buttonID = FormGetObjID(301 + G_ammoSelected);
+            buttonID = FormFindObjID(301 + G_ammoSelected);
             if (ButtonIsEnabled(buttonID) != TRUE)
                 ButtonEnable(buttonID);
             ButtonDownNoAction(buttonID);

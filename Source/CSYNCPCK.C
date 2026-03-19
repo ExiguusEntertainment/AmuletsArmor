@@ -583,6 +583,10 @@ static T_void IClientSyncDoPlayerAction(
     T_word16 locked ;
 	T_playerIDSelf *p_playerID;
 	char playerLabel[MAX_CHAT_NAME_STRING];
+#ifdef TARGET_UNIX
+    T_damageObjInfo oldDamageInfo ;
+    E_Boolean oldDamageInfoValid ;
+#endif
 
     DebugRoutine("IClientSyncDoPlayerAction") ;
     DebugCheck(p_playerObj != NULL) ;
@@ -620,9 +624,21 @@ static T_void IClientSyncDoPlayerAction(
                 damageInfo.damage = p_actionData[0] /* amount of damage. */ ;
                 damageInfo.type = (T_byte8)p_actionData[1] /* damage type */ ;
                 damageInfo.ownerID = ObjectGetServerId(p_playerObj) ;
+#ifdef TARGET_UNIX
+                oldDamageInfo = G_serverDamageInfoUnix ;
+                oldDamageInfoValid = G_serverDamageInfoValid ;
+                G_serverDamageInfoUnix = damageInfo ;
+                G_serverDamageInfoValid = TRUE ;
+                ServerDamageObjectXYZ(
+                    p_target,
+                    0) ;
+                G_serverDamageInfoUnix = oldDamageInfo ;
+                G_serverDamageInfoValid = oldDamageInfoValid ;
+#else
                 ServerDamageObjectXYZ(
                     p_target,
                     (T_word32)(&damageInfo)) ;
+#endif
             }
             break ;
         case PLAYER_ACTION_MISSILE_ATTACK:

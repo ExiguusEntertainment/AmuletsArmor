@@ -1,8 +1,10 @@
 /****************************************************************************/
 /*    FILE:  DOSDTALK.C                                                     */
 /****************************************************************************/
+#ifndef TARGET_UNIX
 #include "..\INCLUDE\DITALK.H"
 #include "..\DITALKP.H"
+#endif
 #include "MEMORY.H"
 
 /* Callback routines to handle receiving and requests to send. */

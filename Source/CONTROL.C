@@ -936,7 +936,7 @@ T_void ControlDisplayControlPage(T_void)
     DebugRoutine("ControlDisplayControlPage");
 
     /* get window */
-    windowID = FormGetObjID(500);
+    windowID = FormFindObjID(500);
 
     /* clear current text in bulletin showing window */
     TxtboxSetData(windowID, "");

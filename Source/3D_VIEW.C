@@ -1730,8 +1730,8 @@ INDICATOR_LIGHT(148, INDICATOR_GREEN) ;
     G_3dFloorHeight = p_sector->floorHt ;
     G_3dCeilingHeight = p_sector->ceilingHt ;
     G_wall.shadeIndex = (p_sector->light>>2) ;
-    G_wall.textureFloor = *((T_byte8 **)&p_sector->floorTx[1]) ;
-    G_wall.textureCeiling = *((T_byte8 **)&p_sector->ceilingTx[1]) ;
+    G_wall.textureFloor = *TX_PTR_FIELD(p_sector->floorTx) ;
+    G_wall.textureCeiling = *TX_PTR_FIELD(p_sector->ceilingTx) ;
 //PictureCheck(G_wall.textureFloor) ;
 //PictureCheck(G_wall.textureCeiling) ;
 INDICATOR_LIGHT(148, INDICATOR_RED) ;
@@ -2341,7 +2341,7 @@ T_void IAddMainWall(T_void)
     DebugRoutine("IAddMainWall") ;
 
 ITestMinMax(1002) ;
-    G_wall.p_texture = *((T_byte8 **)(&P_sideFront->mainTx[1])) ;
+    G_wall.p_texture = *TX_PTR_FIELD(P_sideFront->mainTx) ;
 //PictureCheck(G_wall.p_texture) ;
     DebugCheck(G_wall.p_texture != NULL) ;
 
@@ -2432,7 +2432,7 @@ ITestMinMax(1003) ;
                 G_relativeTop = G_eyeLevel - G_3dFloorHeight ;
                 G_wall.opaque = 0 ;
             } else {
-                G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
+                G_wall.p_texture = *TX_PTR_FIELD(P_sideFront->lowerTx) ;
                 DebugCheck(G_wall.p_texture != NULL) ;
 //PictureCheck(G_wall.p_texture) ;
                 G_relativeTop = G_eyeLevel -
@@ -2441,7 +2441,7 @@ ITestMinMax(1003) ;
             }
         } else {
 #endif
-            G_wall.p_texture = *((T_byte8 **)(&P_sideFront->lowerTx[1])) ;
+            G_wall.p_texture = *TX_PTR_FIELD(P_sideFront->lowerTx) ;
 //PictureCheck(G_wall.p_texture) ;
             DebugCheck(G_wall.p_texture != NULL) ;
 //            G_relativeTop = G_eyeLevel -
@@ -2543,7 +2543,7 @@ ITestMinMax(1004) ;
                 G_relativeBottom = G_eyeLevel - G_3dCeilingHeight ;
                 G_wall.opaque = 0 ;
             } else {
-                G_wall.p_texture = *((T_byte8 **)(&P_sideFront->upperTx[1])) ;
+                G_wall.p_texture = *TX_PTR_FIELD(P_sideFront->upperTx) ;
 //PictureCheck(G_wall.p_texture) ;
                 DebugCheck(G_wall.p_texture != NULL) ;
                 G_relativeBottom = G_eyeLevel -
@@ -2552,7 +2552,7 @@ ITestMinMax(1004) ;
             }
         } else {
 #endif
-            G_wall.p_texture = *((T_byte8 **)(&P_sideFront->upperTx[1])) ;
+            G_wall.p_texture = *TX_PTR_FIELD(P_sideFront->upperTx) ;
 //PictureCheck(G_wall.p_texture) ;
             DebugCheck(G_wall.p_texture != NULL) ;
 //            G_relativeBottom = G_eyeLevel -
@@ -2983,7 +2983,7 @@ DebugCheck(maxY <= VIEW3D_HEIGHT) ;
 #endif
         /* Time to do the wall now. */
 //        if ((G_wall.opaque) && (minY < maxY))  {
-        if (G_wall.opaque)  {
+        if (G_wall.opaque && G_wall.p_texture != G_textureNone+4)  {
             if ((top < maxY) && (bottom > minY))  {
                 /* Go to the points that make up the floor, not the wall. */
 
@@ -4716,6 +4716,8 @@ T_void IDrawFloorRun(
     T_word16 transparentFlag ;
     T_byte8 *p_texture ;
     T_byte8 mipLevel ;
+    T_sword32 backdropRow ;
+    T_sword32 backdropOffset ;
 
     p_sector = G_3dSectorArray + p_run->sector ;
     p_sectorInfo = G_3dSectorInfoArray + p_run->sector ;
@@ -4724,11 +4726,16 @@ DebugCheck(p_run->sector <= G_Num3dSectors) ;
 
     if (row >= VIEW3D_HALF_HEIGHT)  {
         /* Floor */
-        p_texture = *((T_byte8 **)&p_sector->floorTx[1]) ;
+        p_texture = *TX_PTR_FIELD(p_sector->floorTx) ;
     } else {
         /* Ceiling */
-        p_texture = *((T_byte8 **)&p_sector->ceilingTx[1]) ;
+        p_texture = *TX_PTR_FIELD(p_sector->ceilingTx) ;
     }
+
+    /* Missing textures render as transparent */
+    if (p_texture == NULL || p_texture == G_textureNone+4)
+        return ;
+
     G_CurrentTexturePos = p_texture ;
 
 DebugCheck(p_texture != NULL) ;
@@ -4736,7 +4743,22 @@ DebugCheck(p_texture != NULL) ;
 
     start = p_run->left ;
     end = p_run->right ;
+    if (start < 0)
+        start = 0 ;
+    if (end > VIEW3D_WIDTH)
+        end = VIEW3D_WIDTH ;
+    if (start >= end)
+        return ;
+
     delta = 1+end-start ;
+
+    /* Looking up/down shifts backdrop sampling; keep source row in range. */
+    backdropRow = (T_sword32)row - G_alpha ;
+    if (backdropRow < 0)
+        backdropRow = 0 ;
+    else if (backdropRow >= VIEW3D_HALF_HEIGHT)
+        backdropRow = VIEW3D_HALF_HEIGHT-1 ;
+    backdropOffset = backdropRow * (VIEW3D_WIDTH<<1) ;
 
 DebugCheck(row < 200) ;
 DebugCheck(start < 320) ;
@@ -4874,7 +4896,7 @@ DebugCheck(start < 320) ;
                                 end-start) ;
 */
                             DrawAndShadeRaster(
-                                G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1))+left,
+                                G_backdrop+backdropOffset+left,
                                 p_pixel,
                                 end-start,
                                 MapGetOutsideLighting()) ;
@@ -4889,14 +4911,14 @@ DebugCheck(start < 320) ;
                                 amount) ;
 */
                             DrawAndShadeRaster(
-                                G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1))+left,
+                                G_backdrop+backdropOffset+left,
                                 p_pixel,
                                 amount,
                                 MapGetOutsideLighting()) ;
                         }
                         if (((end-start)-amount) != 0)  {
                             DrawAndShadeRaster(
-                                G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1)),
+                                G_backdrop+backdropOffset,
                                 p_pixel+amount,
                                 (end-start)-amount,
                                 MapGetOutsideLighting()) ;
@@ -4928,7 +4950,7 @@ DebugCheck(start < 320) ;
                         memcpy(p_pixel, G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1))+left, end-start) ;
 */
                         DrawAndShadeRaster(
-                            G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1))+left,
+                            G_backdrop+backdropOffset+left,
                             p_pixel,
                             end-start,
                             MapGetOutsideLighting()) ;
@@ -4943,7 +4965,7 @@ DebugCheck(start < 320) ;
                             amount) ;
 */
                         DrawAndShadeRaster(
-                            G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1))+left,
+                            G_backdrop+backdropOffset+left,
                             p_pixel,
                             amount,
                             MapGetOutsideLighting()) ;
@@ -4956,7 +4978,7 @@ DebugCheck(start < 320) ;
                             (end-start)-amount) ;
 */
                         DrawAndShadeRaster(
-                            G_backdrop+((row-G_alpha)*(VIEW3D_WIDTH<<1)),
+                            G_backdrop+backdropOffset,
                             p_pixel+amount,
                             (end-start)-amount,
                             MapGetOutsideLighting()) ;
@@ -5042,8 +5064,10 @@ static T_void IDrawTextureColumnLater(
 
     DebugCheck((type == 2) || (type==3)) ;
 
+    if (G_numWallSlices[x] >= MAX_WALL_SLICES_PER_COLUMN)
+        return ;
+
     p_slice = G_wallSlices[x]+G_numWallSlices[x]++ ;
-    DebugCheck(G_numWallSlices[x] <= MAX_WALL_SLICES_PER_COLUMN) ;
 
     p_slice->p_shade = p_shade ;
     p_slice->numPixels = numPixels ;
@@ -6362,12 +6386,26 @@ T_word16 View3dGetObjectAtXY(
             /* we are pointing.  Examine the compressed bitmap. */
             p_entry = &((T_pictureRaster *)
                           (p_runInfo->p_picture))[p_objRun->column] ;
+#ifdef TARGET_UNIX
+            /* On Unix/64-bit, p_picture = allocation_start + 4 (PictureLock skips the
+             * width/height header).  p_entry->offset is relative to allocation_start,
+             * so to reach A[offset + imageFromTop - start] we must subtract 4 from the
+             * base (matching the rendering formula in IDrawObjectColumn, line 4041) and
+             * then index directly by imageFromTop rather than imageFromTop-start. */
+            p_texture = &p_runInfo->p_picture[
+                            p_entry->offset-p_entry->start-4] ;
+#else
             p_texture = &p_runInfo->p_picture[
                             p_entry->offset-p_entry->start] ;
+#endif
             if ((imageFromTop >= p_entry->start) &&
                 (imageFromTop <= p_entry->end))  {
                 /* Now check the pixel under the location. */
+#ifdef TARGET_UNIX
+                if (p_texture[imageFromTop] != 0)  {
+#else
                 if (p_texture[imageFromTop-p_entry->start] != 0)  {
+#endif
                     *p_obj = p_runInfo->p_obj ;
                     search = FALSE ;
                 } else {

@@ -33,7 +33,11 @@ T_void KeyMapInitialize(T_iniFile iniFile)
 {
     T_word16 i, j ;
     T_byte8 *buffer ;
+#ifdef TARGET_UNIX
+    unsigned int parsedKey ;
+#else
     T_word16 c ;
+#endif
     T_word16 len;
 
     DebugRoutine("KeyMapInitialize") ;
@@ -47,8 +51,13 @@ T_void KeyMapInitialize(T_iniFile iniFile)
     buffer = INIFileGet(iniFile, "keyboard", "keys1") ;
     if (buffer)  {
         for (j=i=0; i<34; i++)  {
+#ifdef TARGET_UNIX
+            if (sscanf(buffer+j, "%02X", &parsedKey) == 1)
+                G_keyMap[i] = (T_byte8)parsedKey ;
+#else
             sscanf(buffer+j, "%02X", &c) ;
             G_keyMap[i] = (T_byte8)c ;
+#endif
             j+=2 ;
         }
     }
@@ -57,8 +66,13 @@ T_void KeyMapInitialize(T_iniFile iniFile)
         len = strlen(buffer);
         for (j=0; i<KEYMAP_NUM_KEYS_MAPPED; i++)  {
             if (j < len) {
+#ifdef TARGET_UNIX
+                if (sscanf(buffer+j, "%02X", &parsedKey) == 1)
+                    G_keyMap[i] = (T_byte8)parsedKey ;
+#else
                 sscanf(buffer+j, "%02X", &c) ;
                 G_keyMap[i] = (T_byte8)c ;
+#endif
                 j+=2 ;
             }
         }

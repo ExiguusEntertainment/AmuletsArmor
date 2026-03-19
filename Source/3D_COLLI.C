@@ -264,7 +264,7 @@ T_sword32 Mult32By32AndDiv32 (T_sword32 _eax, T_sword32 _ebx,
 }
 #endif
 
-#ifdef TARGET_UNIX
+#if defined(TARGET_UNIX) && !defined(NO_ASSEMBLY)
 
 /** UNIX; Specifically, GCC on Linux on a 486 **/
 
@@ -317,7 +317,7 @@ T_sword32 Mult32By32AndDiv32 (T_sword32 _eax, T_sword32 _ebx,
                eax; \
             } )
 
-#endif /** TARGET_UNIX **/
+#endif /** TARGET_UNIX && !NO_ASSEMBLY **/
 
 /*-------------------------------------------------------------------------*
  * Routine:  IAddSurroundingSector
@@ -951,13 +951,13 @@ static T_sword32 IGetBlock(T_sword16 x, T_sword16 y)
     /* First, find the block map block that this point is located within. */
     column = (x - G_3dBlockMapHeader->xOrigin) >> 7 ;
 
-    if ((column < 0) || (column > G_3dBlockMapHeader->columns))
+    if ((column < 0) || (column >= G_3dBlockMapHeader->columns))
         /* Out of bounds, return a bad one. */
         return -1 ;
 
     row = (y - G_3dBlockMapHeader->yOrigin) >> 7 ;
 
-    if ((row < 0) || (row > G_3dBlockMapHeader->rows))
+    if ((row < 0) || (row >= G_3dBlockMapHeader->rows))
         /* Out of bounds, return a bad one. */
         return -1 ;
 
@@ -2508,8 +2508,12 @@ T_sword16 ICheckLineHitsLine(
         /* It does not straddle the axis--it is outside. */
         return -1 ;
 
+    /* Degenerate case: both endpoints on the axis. */
+    if (ry2 == ry1)
+        return (rx1 >= 0) ? rx1 : ((rx2 >= 0) ? rx2 : -1) ;
+
     /* Where on the x axis does it intersect? */
-    x = rx1 - (((rx2-rx1)*ry1) / (ry2-ry1)) ;  //!!! DIVIDE ZERO ERROR HERE
+    x = rx1 - (((rx2-rx1)*ry1) / (ry2-ry1)) ;
 
     return x ;
 }
@@ -2689,19 +2693,11 @@ T_sword32 Mult32x32AndCompare(
               T_sword32 d)
 {
     /* return (c*d) - (a*b) */
-
-    /* Bring down the accuracy to avoid overflow. */
-    while ((a & 0xFFFF0000) || (c & 0xFFFF0000))  {
-        a >>= 4 ;
-        c >>= 4 ;
-    }
-    /* Bring down the accuracy to avoid overflow. */
-    while ((b & 0xFFFF0000) || (d & 0xFFFF0000))  {
-        b >>= 4 ;
-        d >>= 4 ;
-    }
-
-    return ((c*d)-(a*b)) ;
+    /* Use 64-bit multiply to get exact result without shifting. */
+    long long result = (long long)c * d - (long long)a * b ;
+    if (result > 0) return 1 ;
+    if (result < 0) return -1 ;
+    return 0 ;
 }
 #endif
 
@@ -3626,8 +3622,9 @@ T_byte8 Collide3dPointOnRight(
             T_sword32 pointX,
             T_sword32 pointY)
 {
-    if (((lineX1 - lineX2) * (pointY - lineY2)) >=
-        ((lineY1 - lineY2) * (pointX - lineX2)))
+    /* Use 64-bit multiply to avoid 32×32 overflow. */
+    if ((long long)(lineX1 - lineX2) * (pointY - lineY2) >=
+        (long long)(lineY1 - lineY2) * (pointX - lineX2))
         return 1 ;
     return 0 ;
 }

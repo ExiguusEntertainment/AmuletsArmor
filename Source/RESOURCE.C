@@ -86,6 +86,88 @@ static T_resourceFile IFindOpenResource(T_byte8 *p_filename) ;
 
 static T_void IDiscardEntries(T_resourceEntry *p_entry, T_word16 number) ;
 
+#ifdef TARGET_UNIX
+typedef struct {
+    T_byte8 resID[4]            PACK;
+    T_byte8 p_resourceName[14]  PACK;
+    T_word32 fileOffset         PACK;
+    T_word32 size               PACK;
+    T_word16 lockCount          PACK;
+    T_byte8 resourceType        PACK;
+    T_word32 p_data32           PACK;
+    T_resourceFile resourceFile PACK;
+    T_word32 ownerDir32         PACK;
+} T_resourceEntryDisk32 ;
+
+static T_word16 ILoadResourceIndexUnix(
+                     T_file file,
+                     T_word32 indexOffset,
+                     T_word32 indexSize,
+                     T_word16 numEntries,
+                     T_resourceFile resourceFile,
+                     T_resourceEntry **pp_index)
+{
+    T_resourceEntry *p_index = NULL ;
+    T_resourceEntryDisk32 *p_diskIndex = NULL ;
+    T_word32 entriesInFile ;
+    T_word16 i, entriesToCopy ;
+
+    DebugRoutine("ILoadResourceIndexUnix") ;
+
+    *pp_index = NULL ;
+
+    if (indexSize == 0 || numEntries == 0) {
+        DebugEnd() ;
+        return 0 ;
+    }
+
+    p_diskIndex = MemAlloc(indexSize) ;
+    DebugCheck(p_diskIndex != NULL) ;
+    if (p_diskIndex == NULL) {
+        DebugEnd() ;
+        return 0 ;
+    }
+
+    FileSeek(file, indexOffset) ;
+    FileRead(file, p_diskIndex, indexSize) ;
+
+    entriesInFile = indexSize / sizeof(T_resourceEntryDisk32) ;
+    entriesToCopy = numEntries ;
+    if (entriesInFile < entriesToCopy)
+        entriesToCopy = (T_word16)entriesInFile ;
+
+    p_index = MemAlloc(sizeof(T_resourceEntry) * entriesToCopy) ;
+    DebugCheck(p_index != NULL) ;
+    if (p_index != NULL) {
+        memset(p_index, 0, sizeof(T_resourceEntry) * entriesToCopy) ;
+
+        for (i=0; i<entriesToCopy; i++) {
+            memcpy(p_index[i].resID, p_diskIndex[i].resID, sizeof(p_index[i].resID)) ;
+            memcpy(p_index[i].p_resourceName,
+                   p_diskIndex[i].p_resourceName,
+                   sizeof(p_index[i].p_resourceName)) ;
+            p_index[i].fileOffset = p_diskIndex[i].fileOffset ;
+            p_index[i].size = p_diskIndex[i].size ;
+            p_index[i].lockCount = p_diskIndex[i].lockCount ;
+            p_index[i].resourceType = p_diskIndex[i].resourceType ;
+            p_index[i].p_data = NULL ;
+            p_index[i].resourceFile = resourceFile ;
+            p_index[i].ownerDir = NULL ;
+        }
+
+        *pp_index = p_index ;
+    } else {
+        entriesToCopy = 0 ;
+    }
+
+    MemFree(p_diskIndex) ;
+
+    DebugEnd() ;
+    return entriesToCopy ;
+}
+
+#endif
+
 #ifndef NDEBUG
 static T_void ICheckDirEntries(T_resourceDirInfo *p_dir) ;
 typedef struct T_loadLinkTag {
@@ -162,6 +244,16 @@ T_resourceFile ResourceOpen(T_byte8 *filename)
         /* Check for the correct id */
         DebugCheck(resourceHeader.uniqueID == RESOURCE_FILE_UNIQUE_ID) ;
 
+    #ifdef TARGET_UNIX
+        resourceHeader.numEntries = ILoadResourceIndexUnix(
+                        file,
+                        resourceHeader.indexOffset,
+                        resourceHeader.indexSize,
+                        resourceHeader.numEntries,
+                        resourceFile,
+                        &p_index) ;
+        DebugCheck(p_index != NULL) ;
+    #else
         /* Now allocate enough memory for the index. */
         p_index = MemAlloc(resourceHeader.indexSize) ;
         DebugCheck(p_index != NULL) ;
@@ -176,6 +268,7 @@ T_resourceFile ResourceOpen(T_byte8 *filename)
         /* once for each resource file, there isn't much overhead). */
         for (i=0; i<resourceHeader.numEntries; i++)
             p_index[i].resourceFile = resourceFile ;
+    #endif
 
         /* Record all this information in the resource file list. */
         p_info = &G_resources[resourceFile] ;
@@ -796,7 +889,16 @@ static T_resourceDirInfo *IDirLock(T_resource dir)
                     p_dir->numberEntries = header.numEntries ;
                     p_dir->nextResource = -1 ;
 
-                    /* Allocate space for this directory. */
+                    /* Allocate and read this directory index. */
+#ifdef TARGET_UNIX
+                    p_dir->numberEntries = ILoadResourceIndexUnix(
+                                               file,
+                                               header.indexOffset,
+                                               header.indexSize,
+                                               header.numEntries,
+                                               p_entry->resourceFile,
+                                               &p_dir->p_entries) ;
+#else
                     p_dir->p_entries = MemAlloc(header.indexSize) ;
                     DebugCheck(p_dir->p_entries != NULL) ;
 
@@ -805,6 +907,8 @@ static T_resourceDirInfo *IDirLock(T_resource dir)
 
                     /* Read in the directory. */
                     FileRead(file, p_dir->p_entries, header.indexSize) ;
+#endif
+                    DebugCheck(p_dir->p_entries != NULL) ;
 
                     /* Ok, fix up the directory entries so that */
                     /* when we unlock the items, we have something to */
@@ -1031,6 +1135,7 @@ static T_resource IResourceFind(
         }
         subName[i] = '\0' ;
         p_resourceName += i ;
+
         /* Let's search for it! */
 
         /* We will need to first get a pointer to the entries and get */
@@ -1075,7 +1180,6 @@ static T_resource IResourceFind(
             /* If so, lock that sub-directory into memory */
             /* and get the directory pointer. */
             p_dirInfo = IDirLock(resource) ;
-
             /* Make sure that went well. */
             DebugCheck(p_dirInfo != NULL) ;
             if (p_dirInfo == NULL)

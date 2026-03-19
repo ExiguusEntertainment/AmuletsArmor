@@ -177,11 +177,11 @@ T_void ComwinDisplayCommunicatePage(T_void)
 
    G_comwinIsOpen=TRUE;
 
-   TxtboxID=FormGetObjID(500);
+   TxtboxID=FormFindObjID(500);
    TxtboxSetData(TxtboxID,G_fielddata);
 
    /* attach buttons */
-   buttonID=FormGetObjID(301);
+   buttonID=FormFindObjID(301);
    ButtonSetCallbacks (buttonID,NULL,ComwinSay);
 
    DebugEnd();
@@ -213,7 +213,7 @@ T_void ComwinSay (T_buttonID buttonID)
    playerclass=StatsGetPlayerClassType();
    sampleset=G_characterSampleMaps[playerclass];
 
-   TxtboxID=FormGetObjID(501);
+   TxtboxID=FormFindObjID(501);
    tosay=TxtboxGetData(TxtboxID);
 
    if (strcmp(tosay,"\0")!=0 && strcmp(tosay,"\r\0")!=0)
@@ -224,7 +224,7 @@ T_void ComwinSay (T_buttonID buttonID)
    }
    else
    {
-      TxtboxID2=FormGetObjID(500);
+      TxtboxID2=FormFindObjID(500);
       saynum=TxtboxGetSelectionNumber (TxtboxID2);
       if (sampleset > 0)
       {

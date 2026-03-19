@@ -24,6 +24,10 @@
 #include "VIEW.H"
 #include "VIEWFILE.H"
 
+#ifdef TARGET_UNIX
+#include <stddef.h>
+#endif
+
 /* Internal defination:  Handle means that there is a copied resource, */
 /* but not an actual one. */
 #define INTERNAL_OBJECT_TYPE_COPIED_RESOURCE 0xFFFF0000
@@ -144,6 +148,14 @@ typedef struct {
     T_void *p_pic                             PACK;
 } T_objectPic ;
 
+#ifdef TARGET_UNIX
+typedef struct {
+    T_sword16 number                          PACK ;
+    T_word32 resource32                       PACK ;
+    T_word32 p_pic32                          PACK ;
+} T_objectPicDisk32 ;
+#endif
+
 /*-------------------------------------------------------------------------*
  * Typedef:  T_objectType
  *-------------------------------------------------------------------------*/
@@ -171,6 +183,142 @@ typedef struct {
     T_word16 objMoveAttr              PACK ;
     T_objectStance stances[1]         PACK ;
 } T_objectType ;
+
+#ifdef TARGET_UNIX
+static E_Boolean IObjTypeRangeOk(T_word32 offset, T_word32 sizeNeeded, T_word32 totalSize)
+{
+    if (offset > totalSize)
+        return FALSE ;
+    if (sizeNeeded > (totalSize - offset))
+        return FALSE ;
+    return TRUE ;
+}
+
+static T_objectType *IObjTypeExpandForUnix(T_objectType *p_typeDisk, T_word32 sizeObjType, T_word32 *p_newSize)
+{
+    T_word32 stanceBase ;
+    T_word32 stanceNum, frameNum ;
+    T_word32 totalPics = 0 ;
+    T_word32 extraBytes ;
+    T_word32 newSize ;
+    T_word32 writeOffset ;
+    T_byte8 *p_src ;
+    T_objectType *p_copy ;
+
+    if (p_newSize != NULL)
+        *p_newSize = 0 ;
+
+    if (p_typeDisk == NULL)
+        return NULL ;
+
+    p_src = (T_byte8 *)p_typeDisk ;
+    stanceBase = (T_word32)(offsetof(T_objectType, stances)) ;
+
+    if (IObjTypeRangeOk(0, stanceBase + sizeof(T_objectStance), sizeObjType) == FALSE)
+        return NULL ;
+
+    for (stanceNum = 0 ; stanceNum < p_typeDisk->numStances ; stanceNum++)  {
+        T_word32 stanceOffset = stanceBase + (stanceNum * sizeof(T_objectStance)) ;
+        T_objectStance *p_stance ;
+
+        if (IObjTypeRangeOk(stanceOffset, sizeof(T_objectStance), sizeObjType) == FALSE)
+            break ;
+        p_stance = (T_objectStance *)(p_src + stanceOffset) ;
+
+        if (IObjTypeRangeOk(p_stance->offsetFrameList,
+                            ((T_word32)p_stance->numFrames) * sizeof(T_objectFrame),
+                            sizeObjType) == FALSE)
+            continue ;
+
+        for (frameNum = 0 ; frameNum < p_stance->numFrames ; frameNum++)  {
+            T_objectFrame *p_frame = (T_objectFrame *)(p_src + p_stance->offsetFrameList +
+                                       (frameNum * sizeof(T_objectFrame))) ;
+            if ((p_frame->numAngles == 1) ||
+                (p_frame->numAngles == 4) ||
+                (p_frame->numAngles == 8))
+                totalPics += p_frame->numAngles ;
+            else
+                totalPics += 1 ;
+        }
+    }
+
+    extraBytes = totalPics * (sizeof(T_objectPic) - sizeof(T_objectPicDisk32)) ;
+    if (extraBytes < 4096)
+        extraBytes = 4096 ;
+    newSize = sizeObjType + extraBytes ;
+    p_copy = (T_objectType *)MemAlloc(newSize) ;
+    if (p_copy == NULL)
+        return NULL ;
+
+    memset(p_copy, 0, newSize) ;
+    memcpy(p_copy, p_typeDisk, sizeObjType) ;
+
+    writeOffset = sizeObjType ;
+    for (stanceNum = 0 ; stanceNum < p_copy->numStances ; stanceNum++)  {
+        T_word32 stanceOffset = stanceBase + (stanceNum * sizeof(T_objectStance)) ;
+        T_objectStance *p_stanceDst ;
+        T_objectStance *p_stanceSrc ;
+
+        if (IObjTypeRangeOk(stanceOffset, sizeof(T_objectStance), sizeObjType) == FALSE)
+            break ;
+
+        p_stanceDst = (T_objectStance *)(((T_byte8 *)p_copy) + stanceOffset) ;
+        p_stanceSrc = (T_objectStance *)(p_src + stanceOffset) ;
+
+        if (IObjTypeRangeOk(p_stanceSrc->offsetFrameList,
+                            ((T_word32)p_stanceSrc->numFrames) * sizeof(T_objectFrame),
+                            sizeObjType) == FALSE)
+            continue ;
+
+        for (frameNum = 0 ; frameNum < p_stanceSrc->numFrames ; frameNum++)  {
+            T_objectFrame *p_frameSrc = (T_objectFrame *)(p_src + p_stanceSrc->offsetFrameList +
+                                        (frameNum * sizeof(T_objectFrame))) ;
+            T_objectFrame *p_frameDst = (T_objectFrame *)(((T_byte8 *)p_copy) + p_stanceDst->offsetFrameList +
+                                        (frameNum * sizeof(T_objectFrame))) ;
+            T_word32 angles = p_frameSrc->numAngles ;
+            T_word32 picNum ;
+
+            if ((angles != 1) && (angles != 4) && (angles != 8))
+                angles = 1 ;
+
+            if (writeOffset + (angles * sizeof(T_objectPic)) > newSize)
+                break ;
+            if (writeOffset > 0xFFFF)
+                break ;
+
+            p_frameDst->numAngles = (T_byte8)angles ;
+            p_frameDst->offsetPicList = (T_word16)writeOffset ;
+
+            for (picNum = 0 ; picNum < angles ; picNum++)  {
+                T_objectPic *p_picDst = (T_objectPic *)(((T_byte8 *)p_copy) + writeOffset +
+                                      (picNum * sizeof(T_objectPic))) ;
+                T_objectPicDisk32 *p_picSrc = NULL ;
+
+                if (IObjTypeRangeOk(p_frameSrc->offsetPicList + (picNum * sizeof(T_objectPicDisk32)),
+                                    sizeof(T_objectPicDisk32),
+                                    sizeObjType))
+                    p_picSrc = (T_objectPicDisk32 *)(p_src + p_frameSrc->offsetPicList +
+                              (picNum * sizeof(T_objectPicDisk32))) ;
+
+                if (p_picSrc != NULL)
+                    p_picDst->number = p_picSrc->number ;
+                else
+                    p_picDst->number = -1 ;
+
+                p_picDst->resource = RESOURCE_BAD ;
+                p_picDst->p_pic = NULL ;
+            }
+
+            writeOffset += (angles * sizeof(T_objectPic)) ;
+        }
+    }
+
+    if (p_newSize != NULL)
+        *p_newSize = newSize ;
+
+    return p_copy ;
+}
+#endif
 
 /*-------------------------------------------------------------------------*
  * Typedef:  T_objTypeInstanceStruct
@@ -207,7 +355,7 @@ typedef struct {
 
 
 /* Internal prototypes: */
-static T_void IObjTypeLock(T_objectType *p_type, T_word16 typeNumber) ;
+static T_void IObjTypeLock(T_objectType *p_type, T_word16 typeNumber, T_word32 typeSize) ;
 static T_void IObjTypeUnlock(T_objectType *p_type) ;
 static T_void IObjTypeUpdateFrameChanges (T_objTypeInstanceStruct *p_objType);
 static T_void IObjTypeFreePieces(T_objectType *p_type) ;
@@ -242,6 +390,11 @@ T_objTypeInstance ObjTypeCreate(T_word16 objTypeNum, T_3dObject *p_obj)
     T_byte8 resName[80] ;
     T_objectType *p_type ;
     T_objectFrame *p_frame ;
+#ifdef TARGET_UNIX
+    T_word32 sizeObjType ;
+    T_objectType *p_typeCopy ;
+#endif
+    T_word32 objTypeSizeForLock ;
 
     DebugRoutine("ObjTypeCreate") ;
 
@@ -264,6 +417,27 @@ T_objTypeInstance ObjTypeCreate(T_word16 objTypeNum, T_3dObject *p_obj)
         p_type = p_objType->p_objectType =
            (T_objectType *)PictureLockData(resName, &p_objType->resource) ;
         DebugCheck(p_objType->resource != RESOURCE_BAD) ;
+        objTypeSizeForLock = ResourceGetSize(p_objType->resource) ;
+
+    #ifdef TARGET_UNIX
+        sizeObjType = objTypeSizeForLock ;
+        p_typeCopy = IObjTypeExpandForUnix(p_type, sizeObjType, &objTypeSizeForLock) ;
+        if (p_typeCopy == NULL)  {
+            p_typeCopy = (T_objectType *)MemAlloc(sizeObjType + 4096) ;
+            if (p_typeCopy != NULL)  {
+                memset(((T_byte8 *)p_typeCopy), 0, sizeObjType + 4096) ;
+                memcpy(((T_byte8 *)p_typeCopy), ((T_byte8 *)p_type), sizeObjType) ;
+                objTypeSizeForLock = sizeObjType + 4096 ;
+            }
+        }
+        if (p_typeCopy != NULL)  {
+            PictureUnlockData(p_objType->resource) ;
+            PictureUnfind(p_objType->resource) ;
+            p_objType->resource = (T_resource)INTERNAL_OBJECT_TYPE_COPIED_RESOURCE ;
+            p_objType->p_objectType = p_typeCopy ;
+            p_type = p_typeCopy ;
+        }
+    #endif
 
         /* Does this instance/type need to be a piece-wise object */
         /* with its own objtype? */
@@ -316,7 +490,7 @@ T_objTypeInstance ObjTypeCreate(T_word16 objTypeNum, T_3dObject *p_obj)
 #if 0
             if (!(p_type->attributes & OBJECT_ATTR_PIECE_WISE))
 #endif
-                IObjTypeLock(p_type, objTypeNum) ;
+        IObjTypeLock(p_type, objTypeNum, objTypeSizeForLock) ;
         }
 
         /* Make an object type not active unless the object */
@@ -422,10 +596,10 @@ T_void ObjTypeDestroy(T_objTypeInstance objTypeInst)
         PictureUnfind(p_objType->resource) ;
     } else {
         /* This is a copy in memory.  Just free it from memory. */
-        MemFree(p_objType->p_objectType) ;
 #ifndef NDEBUG
         memset(p_objType->p_objectType, 0xCC, sizeof(T_objectType)) ;
 #endif
+        MemFree(p_objType->p_objectType) ;
     }
 
 #ifndef NDEBUG
@@ -935,7 +1109,7 @@ T_word16 ObjTypesGetResolution(T_void)
  *  @param typeNumber -- Object index type
  *
  *<!-----------------------------------------------------------------------*/
-static T_void IObjTypeLock(T_objectType *p_type, T_word16 typeNumber)
+static T_void IObjTypeLock(T_objectType *p_type, T_word16 typeNumber, T_word32 typeSize)
 {
     T_byte8 resName[80] ;
     T_objectStance *p_stance ;
@@ -954,8 +1128,18 @@ static T_void IObjTypeLock(T_objectType *p_type, T_word16 typeNumber)
 //    T_word16 picLookup ;
     T_word16 frameLookup ;
     E_Boolean flip ;
+#ifdef TARGET_UNIX
+    T_word32 stanceBaseOffset ;
+    T_word32 stanceOffset ;
+#endif
 
     DebugRoutine("IObjTypeLock") ;
+
+#ifdef TARGET_UNIX
+    if (IObjTypeRangeOk(0, (T_word32)(offsetof(T_objectType, stances)), typeSize) == FALSE)
+        return ;
+    stanceBaseOffset = (T_word32)(offsetof(T_objectType, stances)) ;
+#endif
 
     G_frameResolution = G_realFrameResolution ;
     if ((G_somewhatLow == TRUE) && (G_frameResolution == 0))  {
@@ -979,6 +1163,11 @@ fflush(stdout) ;
     for (stanceNum = 0, p_stance = p_type->stances;
          stanceNum < p_type->numStances;
          stanceNum++, p_stance++)  {
+#ifdef TARGET_UNIX
+        stanceOffset = stanceBaseOffset + ((T_word32)stanceNum * sizeof(T_objectStance)) ;
+        if (IObjTypeRangeOk(stanceOffset, sizeof(T_objectStance), typeSize) == FALSE)
+            break ;
+#endif
 /*
 printf("Stance %d of %d\n", stanceNum, p_type->numStances) ;
 printf(" numFrames = %d\n", p_stance->numFrames) ;
@@ -989,6 +1178,13 @@ printf(" offset = %d\n", p_stance->offsetFrameList) ;
 fflush(stdout) ;
 */
         /* Find the appropriate frame list for this stance. */
+    #ifdef TARGET_UNIX
+        if (IObjTypeRangeOk(
+            p_stance->offsetFrameList,
+            ((T_word32)p_stance->numFrames) * sizeof(T_objectFrame),
+            typeSize) == FALSE)
+            continue ;
+    #endif
         p_frameList = p_frame = (T_objectFrame *)
                       (&(((T_byte8 *)p_type)[p_stance->offsetFrameList])) ;
 
@@ -1003,6 +1199,9 @@ fflush(stdout) ;
              if ((G_frameResolution > 0) && (frameNum==7))
                  frameLookup = 7 ;
 
+             if (frameLookup >= p_stance->numFrames)
+                 frameLookup = p_stance->numFrames - 1 ;
+
              p_frameLookup = p_frameList+frameLookup ;
              p_frame = p_frameList + frameNum ;
 
@@ -1012,6 +1211,19 @@ fflush(stdout) ;
                              (&(((T_byte8 *)p_type)[p_frame->offsetPicList])) ;
              p_picListLookup = (T_objectPic *)
                              (&(((T_byte8 *)p_type)[p_frameLookup->offsetPicList])) ;
+
+#ifdef TARGET_UNIX
+             if (IObjTypeRangeOk(
+                     p_frame->offsetPicList,
+                     ((T_word32)p_frame->numAngles) * sizeof(T_objectPic),
+                     typeSize) == FALSE)
+                 continue ;
+             if (IObjTypeRangeOk(
+                     p_frameLookup->offsetPicList,
+                     ((T_word32)p_frameLookup->numAngles) * sizeof(T_objectPic),
+                     typeSize) == FALSE)
+                 continue ;
+#endif
 
              /* Only 1, 4, or 8 angles per frame. */
              DebugCheck((p_frameLookup->numAngles == 1) ||

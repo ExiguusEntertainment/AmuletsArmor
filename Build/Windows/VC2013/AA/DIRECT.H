@@ -8,6 +8,10 @@ extern "C" {
 #include "MOUSEMOD.H"
 #include "GENERAL.H"
 
+#ifndef _cdecl
+#define _cdecl
+#endif
+
 void DirectDrawOn(void) ;
 void DirectDrawOff(void) ;
 void _cdecl WindowsUpdate(char *p_screen, unsigned char * palette) ;

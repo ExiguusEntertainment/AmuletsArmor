@@ -394,7 +394,7 @@ T_void TickerUpdate(T_void)
     G_tickMilli += time - G_lastMillisecondCount ;
     G_lastMillisecondCount = time ;
 
-    G_tickCount = G_tickMilli / 14 ;
+    G_tickCount = (T_word32)((uint64_t)G_tickMilli * 70 / 1000) ;
 }
 
 T_word32 TickerGet(T_void)

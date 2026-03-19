@@ -35,7 +35,7 @@
 #include "UPDATE.H"
 #include "VIEW.H"
 #ifdef WIN32
-#include "Win32\ipx_client.h"
+#include "Win32/ipx_client.h"
 #endif
 
 //#undef TRUE
@@ -335,9 +335,14 @@ extern void SleepMS(T_word32 sleepMS);
 #else
     if (argc == 1) {
         handle = 0;
-    } else if (argc == 2)  {
+    } else if (argc == 2 || argc == 3)  {
 #if WIN_IPX
         // An IP address is given.  Set it to connect there
+#ifdef TARGET_UNIX
+        if (argc == 3) {
+            IPXSetPort(atoi(argv[2]));
+        }
+#endif
         if(SDLNet_Init()==-1) {
             printf("SDLNet_Init: %s\n", SDLNet_GetError());
             exit(2);
@@ -351,7 +356,7 @@ extern void SleepMS(T_word32 sleepMS);
         handle = 0;
 #endif
     } else {
-        puts("USAGE: GAME [<IP Address for network server>]") ;
+        puts("USAGE: GAME [<IP Address for network server> [<port>]]") ;
         DebugEnd() ;
         exit(1) ;
     }

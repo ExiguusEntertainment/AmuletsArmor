@@ -13,8 +13,16 @@ static T_word16 G_mouseY = 0 ;
 
 T_void DirectMouseSet(T_word16 newX, T_word16 newY)
 {
+#ifndef TARGET_UNIX
 newX >>= 1;
 newY >>= 1; // scale for large screen
+#endif
+#ifdef TARGET_UNIX
+    /* In mouselook (relative mode), don't update cursor position from
+     * absolute OS coords — the in-game cursor must stay fixed. */
+    if (MouseIsRelativeMode())
+        return;
+#endif
     if (newX > 319)
         newX = 319  ;
     if (newY > 199)
@@ -32,8 +40,13 @@ void OutsideMouseDriverGet(T_word16 *xPos, T_word16 *yPos)
 
 void OutsideMouseDriverSet(T_word16 xPos, T_word16 yPos)
 {
+#ifdef TARGET_UNIX
+    SDL_WarpMouse(xPos*2, yPos*2);
+    DirectMouseSet(xPos, yPos);
+#else
     SDL_WarpMouse(xPos*2, yPos*2);
     DirectMouseSet(xPos*2, yPos*2);
+#endif
 }
 
 T_void DirectMouseSetButton(T_buttonClick click)

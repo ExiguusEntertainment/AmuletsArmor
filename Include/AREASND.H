@@ -19,7 +19,7 @@ typedef enum {
 } E_areaSoundType ;
 
 typedef void (*T_areaSoundFinishCallback)(T_areaSound sound,
-                                          T_word32 data) ;
+                                          T_uintptr_t data) ;
 
 #define AREA_SOUND_MAX_VOLUME 255
 #define AREA_SOUND_BAD        NULL
@@ -39,7 +39,7 @@ T_areaSound AreaSoundCreate(
                 T_word16 length,
                 T_areaSound p_groupLeader,
                 T_areaSoundFinishCallback p_callback,
-                T_word32 data,
+                T_uintptr_t data,
                 T_word16 soundNum) ;
 
 T_void AreaSoundDestroy(T_areaSound areaSound) ;

@@ -438,11 +438,11 @@ T_void FormLoadFromFile(T_byte8 *filename)
 {
     FILE *fp;
     T_word16 i;
-    T_word16 objtype = 0, objid, x1, y1, x2, y2;
-    T_word16 hotkey, toggletype, fieldtype, fcolor, bcolor, justify;
-    T_word16 sbupID, sbdnID, sbgrID;
-    T_word16 numericonly;
-    T_word32 maxlength;
+    int objtype = 0, objid, x1, y1, x2, y2;
+    int hotkey, toggletype, fieldtype, fcolor, bcolor, justify;
+    int sbupID, sbdnID, sbgrID;
+    int numericonly;
+    unsigned int maxlength;
     T_byte8 picname[32];
     T_byte8 fontname[32];
     T_byte8 tempstr[256];
@@ -470,8 +470,10 @@ T_void FormLoadFromFile(T_byte8 *filename)
         objtype = 0;
         /* get a line from the main file */
         fgets(tempstr, 128, fp);
-        /* strip last (newline) character */
-        if (tempstr[strlen(tempstr) - 1] == '\n')
+        /* strip trailing newline chars for both LF and CRLF files */
+        while (strlen(tempstr) > 0 &&
+               (tempstr[strlen(tempstr) - 1] == '\n' ||
+                tempstr[strlen(tempstr) - 1] == '\r'))
             tempstr[strlen(tempstr) - 1] = '\0';
 
         /* append text to current object if flag is set */
@@ -485,9 +487,6 @@ T_void FormLoadFromFile(T_byte8 *filename)
                 appendtext = FALSE;
                 sprintf(tempstr, "#");
             } else if (tempstr[0] != '$' && tempstr[0] != '#') {
-                /* strip last character if newline */
-                if (tempstr[strlen(tempstr) - 1] == '\n')
-                    tempstr[strlen(tempstr) - 1] = '\0';
                 TxtboxAppendString(p_obj->objID, tempstr);
                 TxtboxAppendKey(p_obj->objID, 13);
                 sprintf(tempstr, "#");
@@ -531,8 +530,9 @@ T_void FormLoadFromFile(T_byte8 *filename)
                 sscanf(tempstr, "%s", fontname);
                 /* get text */
                 fgets(tempstr, 128, fp);
-                /* strip last (newline) character */
-                if (tempstr[strlen(tempstr) - 1] == '\n')
+                while (strlen(tempstr) > 0 &&
+                       (tempstr[strlen(tempstr) - 1] == '\n' ||
+                        tempstr[strlen(tempstr) - 1] == '\r'))
                     tempstr[strlen(tempstr) - 1] = '\0';
                 /* add a text object */
                 FormAddText(x1, y1, tempstr, fontname, (T_byte8)fcolor, (T_byte8)bcolor, objid);
@@ -554,15 +554,16 @@ T_void FormLoadFromFile(T_byte8 *filename)
                 sscanf(tempstr, "%s", fontname);
                 /* get buttontext */
                 fgets(tempstr, 128, fp);
-                /* strip last (newline) character */
-                if (tempstr[strlen(tempstr) - 1] == '\n')
+                while (strlen(tempstr) > 0 &&
+                       (tempstr[strlen(tempstr) - 1] == '\n' ||
+                        tempstr[strlen(tempstr) - 1] == '\r'))
                     tempstr[strlen(tempstr) - 1] = '\0';
                 /* make a text button */
                 FormAddTextButton(x1, y1, tempstr, picname, fontname, (T_byte8)fcolor, 0,
                         (E_Boolean)toggletype, hotkey, objid);
             } else if (objtype == 5) /* add a text box */
             {
-                sscanf(tempstr, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s",
+                sscanf(tempstr, "%d,%d,%d,%d,%d,%d,%u,%d,%d,%d,%d,%d,%d,%d,%s",
                         &objtype, &objid, &x1, &y1, &x2, &y2, &maxlength,
                         &numericonly, &justify, &fieldtype, &hotkey, &sbupID,
                         &sbdnID, &sbgrID, fontname);
@@ -590,13 +591,13 @@ T_void FormLoadFromFile(T_byte8 *filename)
                 DebugCheck(objID != NULL);
                 /* set form scroll bar stuff */
                 if (sbupID != 0) {
-                    SBUbuttonID = FormGetObjID(sbupID);
+                    SBUbuttonID = FormFindObjID(sbupID);
                     ButtonSetData(SBUbuttonID, objid);
                     ButtonSetCallbacks(SBUbuttonID, NULL, TxtboxHandleSBUp);
-                    SBDbuttonID = FormGetObjID(sbdnID);
+                    SBDbuttonID = FormFindObjID(sbdnID);
                     ButtonSetData(SBDbuttonID, objid);
                     ButtonSetCallbacks(SBDbuttonID, NULL, TxtboxHandleSBDn);
-                    SBGgraphicID = FormGetObjID(sbgrID);
+                    SBGgraphicID = FormFindObjID(sbgrID);
                     DebugCheck(SBUbuttonID != NULL);
                     DebugCheck(SBDbuttonID != NULL);
                     DebugCheck(SBGgraphicID != NULL);
@@ -770,19 +771,9 @@ T_formObjectID FormFindObjID(T_word32 numID)
 
 T_formObjectID FormGetObjID(T_word32 numID)
 {
-    T_formObjectID retvalue = NULL;
-
     DebugRoutine("FormGetObjID");
-    retvalue = FormFindObjID(numID);
-#ifndef NDEBUG
-    if (retvalue == NULL ) {
-        printf("bad form obj ID = %d\n", numID);
-        fflush(stdout);
-    }
-#endif
-    DebugCheck(retvalue != NULL);
     DebugEnd();
-    return (retvalue);
+    return FormFindObjID(numID);
 }
 
 T_void FormGenericControl(E_Boolean *exitflag)

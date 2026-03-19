@@ -69,7 +69,7 @@ static T_sliderResponse IHandleDoorClosing(
            T_word32 sliderId,
            T_sword32 value,
            E_Boolean isDone) ;
-static T_void IStartDoorClosing(T_word32 data) ;
+static T_void IStartDoorClosing(T_uintptr_t data) ;
 static T_void IHandleSoundCallback(T_areaSound sound, T_word32 data) ;
 
 
@@ -328,7 +328,7 @@ E_Boolean DoorOpen(T_word16 sector)
                                          20,
                                          NULL,
                                          NULL /* IHandleSoundCallback */,
-                                         (T_word32)p_door,
+                                         (T_uintptr_t)p_door,
                                          DOOR_SOUND_NUMBER) ;
                  }
 
@@ -556,7 +556,7 @@ static T_sliderResponse IHandleDoorOpening(
  *      needs to close the door.
  *
  *<!-----------------------------------------------------------------------*/
-static T_void IStartDoorClosing(T_word32 sector)
+static T_void IStartDoorClosing(T_uintptr_t sector)
 {
     DebugRoutine("IStartDoorClosing") ;
 

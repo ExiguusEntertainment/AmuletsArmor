@@ -953,6 +953,10 @@ T_void ServerDamageAtWithType(
 {
     T_damageObjInfo damageInfo ;
     T_word16 locked ;
+#ifdef TARGET_UNIX
+    T_damageObjInfo oldDamageInfo ;
+    E_Boolean oldDamageInfoValid ;
+#endif
 
     DebugRoutine("ServerDamageAtWithType") ;
 
@@ -994,13 +998,25 @@ T_void ServerDamageAtWithType(
             }
         }
     } else {
+#ifdef TARGET_UNIX
+        oldDamageInfo = G_serverDamageInfoUnix ;
+        oldDamageInfoValid = G_serverDamageInfoValid ;
+        G_serverDamageInfoUnix = damageInfo ;
+        G_serverDamageInfoValid = TRUE ;
+#endif
         ObjectsDoToAllAtXYZRadius(
             x,
             y,
             z,
             radius,
             ServerDamageObjectXYZ,
+#ifdef TARGET_UNIX
+            0);
+    G_serverDamageInfoUnix = oldDamageInfo ;
+    G_serverDamageInfoValid = oldDamageInfoValid ;
+#else
             (T_word32)(&damageInfo));
+#endif
     }
 
     DebugEnd() ;

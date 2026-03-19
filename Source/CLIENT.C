@@ -397,7 +397,8 @@ T_void ClientCreateProjectile (
         if (p_target)  {
             if (ObjectIsPassable(p_target))
                 p_target = NULL ;
-            if (!((ObjectIsCreature(p_target)) || (ObjectIsPlayer(p_target))))
+            if (p_target &&
+                (!((ObjectIsCreature(p_target)) || (ObjectIsPlayer(p_target)))))
                 p_target = NULL ;
         }
         if (p_target)
@@ -448,10 +449,12 @@ static E_Boolean IClientGainExperienceIfHit(
     E_Boolean stopSearch = FALSE ;
     T_word32 x, y;
     T_word16 num ;
+    T_word16 targetId ;
     T_wallListItem wallList[20] ;
 
     DebugRoutine("IClientGainExperienceIfHit") ;
     DebugCheck(p_obj != NULL) ;
+    targetId = ObjectGetServerId(p_obj) ;
 
     /* Does this thing have a script? */
     if (!ObjectIsPassable(p_obj))
@@ -501,7 +504,7 @@ static E_Boolean IClientGainExperienceIfHit(
                                0);
                 }
             }
-        }
+                    }
     DebugEnd() ;
 
     return stopSearch ;
@@ -1534,7 +1537,7 @@ T_void ClientHandleKeyboard(E_keyboardEvent event, T_word16 scankey)
     /* check to see if communicate window is active */
     if (ComwinIsOpen() && ClientIsInView()) {
         /* pass key to comm window */
-        TxtboxID = FormGetObjID(501);
+        TxtboxID = FormFindObjID(501);
         if (TxtboxIsSelected(TxtboxID)) {
             TxtboxKeyControl(event, scankey);
         }

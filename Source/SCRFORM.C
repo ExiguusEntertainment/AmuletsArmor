@@ -208,7 +208,7 @@ T_void ScriptFormCallback(
                     break ;
                 case Txtbox_ACTION_SELECTION_CHANGED:
                     /* Get what is the new selection. */
-                    selection = TxtboxGetSelectionNumber(FormGetObjID(id)) ;
+                    selection = TxtboxGetSelectionNumber(FormFindObjID(id)) ;
 
                     /* Send this event to the script. */
                     IScriptFormEventTwoNumbers(
@@ -325,7 +325,7 @@ T_void ScriptFormTextBoxSetSelection(
     DebugRoutine("ScriptFormTextBoxSetSelection") ;
     DebugCheck(G_formScript != SCRIPT_BAD) ;
 
-    textBoxID = FormGetObjID(id) ;
+    textBoxID = FormFindObjID(id) ;
     TxtboxCursSetRow(textBoxID, selection) ;
 
     DebugEnd() ;

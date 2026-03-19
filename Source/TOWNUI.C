@@ -37,6 +37,11 @@
 #define TOWN_NUM_MESSAGES 15
 #define TOWN_MESSAGE_SIZE 60
 #define MAX_MAPS_PER_ADVENTURE 15
+#ifdef TARGET_UNIX
+#define TOWN_QUEST_FILE_FMT "MAPDESC/QUEST%d.INI"
+#else
+#define TOWN_QUEST_FILE_FMT "MAPDESC\\QUEST%d.INI"
+#endif
 static T_word16 G_numQuestsAvailable = 0;
 static T_word16 G_firstAdventureMap = 0;
 static T_graphicID G_backgroundPic = NULL;
@@ -225,7 +230,7 @@ T_void TownUIStart(T_word32 formNum)
         /* scan drive and count number of quests available */
         if (G_numQuestsAvailable == 0) {
             do {
-                sprintf(stmp, "MAPDESC\\QUEST%d.ini", G_numQuestsAvailable++);
+                sprintf(stmp, TOWN_QUEST_FILE_FMT, G_numQuestsAvailable++);
             } while (FileExist(stmp));
             G_numQuestsAvailable--;
             DebugCheck(G_numQuestsAvailable != 0);
@@ -423,7 +428,7 @@ static T_void TownUIGotoPlace(T_buttonID buttonID)
         if (mapNum == G_firstAdventureMap) {
             /* show dialogue information */
             currentQuest = StatsGetCurrentQuestNumber();
-            sprintf(stmp, "MAPDESC\\QUEST%d.INI", currentQuest);
+            sprintf(stmp, TOWN_QUEST_FILE_FMT, currentQuest);
             idata = INIFileOpen(stmp);
 
             /* read in data and set fields */
@@ -704,7 +709,7 @@ static T_void TownUIUpdateQuestInfo(T_void)
 
     /* get the current quest number */
     currentQuest = StatsGetCurrentQuestNumber();
-    sprintf(stmp, "MAPDESC\\QUEST%d.INI", currentQuest);
+    sprintf(stmp, TOWN_QUEST_FILE_FMT, currentQuest);
     idata = INIFileOpen(stmp);
 
     /* read in data and set fields */
@@ -861,7 +866,7 @@ E_Boolean TownUIFinishedQuest(T_word16 multiplayerStatus, T_byte8 numPlayers, T_
     /* determine success or failure for this quest */
 
     /* open ini file */
-    sprintf(stmp, "MAPDESC\\QUEST%d.INI", currentQuest);
+    sprintf(stmp, TOWN_QUEST_FILE_FMT, currentQuest);
     idata = INIFileOpen(stmp);
 
     /* get quest item */
@@ -1076,7 +1081,7 @@ E_Boolean TownUICompletedMapLevel(T_word16 mapLevel)
     /* determine success or failure for this quest */
 
     /* open ini file */
-    sprintf(stmp, "MAPDESC\\QUEST%d.INI", currentQuest);
+    sprintf(stmp, TOWN_QUEST_FILE_FMT, currentQuest);
     /* If one player, put up a message explaining your end. */
     if (G_isOnePlayer) {
         idata = INIFileOpen(stmp);

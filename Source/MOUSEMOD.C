@@ -18,6 +18,9 @@
 #ifdef WIN32
 #include "direct.h"
 #endif
+#ifdef TARGET_UNIX
+#include <SDL.h>
+#endif
 
 /* Flag that determines if the mouse module has been initialized. */
 static T_byte8 F_MouseIsInitialized = FALSE ;
@@ -1152,8 +1155,19 @@ T_void MouseRelativeModeOn(T_void)
         // Remember where the mouse is located (we'll return there when we exit)
         IMouseGetMousePosition(&G_mousePreRelativeX, &G_mousePreRelativeY);
 
+#ifdef TARGET_UNIX
+        /* On Unix/SDL2 we use SDL_GetRelativeMouseState instead of warp+poll.
+         * Drain any accumulated deltas so the first read returns zero.
+         * Grab the mouse to confine the OS cursor to the window. */
+        {
+            int dummy_dx = 0, dummy_dy = 0;
+            SDL_GetRelativeMouseState(&dummy_dx, &dummy_dy);
+        }
+        SDL_WM_GrabInput(SDL_GRAB_ON);
+#else
         // Center the mouse
         MouseMoveTo(SCREEN_SIZE_X/2, SCREEN_SIZE_Y/2);
+#endif
 
         G_relativeModeFirstIsZero = TRUE;
     }
@@ -1166,6 +1180,9 @@ T_void MouseRelativeModeOff(T_void)
     DebugRoutine("MouseRelativeModeOff");
 
     if (G_relativeMode) {
+#ifdef TARGET_UNIX
+        SDL_WM_GrabInput(SDL_GRAB_OFF);
+#endif
         // Restore the original mouse location
         MouseMoveTo(G_mousePreRelativeX, G_mousePreRelativeY);
 
@@ -1194,10 +1211,31 @@ T_void MouseSetRelativeSensitivity(T_word16 sensitivity)
 
 T_void MouseRelativeRead(T_sword16 *aDeltaX, T_sword16 *aDeltaY)
 {
-    T_word16 x, y;
     DebugRoutine("MouseRelativeRead");
 
     if (G_relativeMode) {
+#ifdef TARGET_UNIX
+        /* SDL_WarpMouse + SDL_GetMouseState is unreliable in SDL2/sdl12-compat:
+         * SDL2 suppresses warp-generated motion events so SDL_GetMouseState never
+         * reflects the warped center, producing huge persistent deltas.
+         * Use SDL_GetRelativeMouseState for true accumulated hardware deltas instead. */
+        if (G_relativeModeFirstIsZero) {
+            int dummy_dx = 0, dummy_dy = 0;
+            SDL_GetRelativeMouseState(&dummy_dx, &dummy_dy); /* drain first-frame accumulation */
+            *aDeltaX = 0;
+            *aDeltaY = 0;
+            G_relativeModeFirstIsZero = FALSE;
+        } else {
+            int sdl_dx = 0, sdl_dy = 0;
+            SDL_GetRelativeMouseState(&sdl_dx, &sdl_dy);
+            /* SDL window is 640x400 (2x game coords); divide by 2 to match scale of
+             * the warp-poll approach so sensitivity feels the same. */
+            *aDeltaX = (T_sword16)(sdl_dx * G_relativeSensitivity / 2);
+            *aDeltaY = (T_sword16)(sdl_dy * G_relativeSensitivity / 2);
+        }
+        /* No re-center warp: SDL_GetRelativeMouseState resets its accumulator each call. */
+#else
+        T_word16 x, y;
         // Read the mouse position and then recenter the mouse
         IMouseGetMousePosition(&x, &y);
 
@@ -1214,6 +1252,7 @@ T_void MouseRelativeRead(T_sword16 *aDeltaX, T_sword16 *aDeltaY)
 
         // Center the mouse
         MouseMoveTo(SCREEN_SIZE_X/2, SCREEN_SIZE_Y/2);
+#endif
     } else {
         // Not in relative mouse mode, just return 0's
         *aDeltaX = *aDeltaY = 0;

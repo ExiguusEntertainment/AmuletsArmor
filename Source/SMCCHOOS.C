@@ -1209,7 +1209,7 @@ T_void SMCChooseDisplayStatsExit(
     p_data = (T_SMCChooseData *)StateMachineGetExtraData(G_smHandle) ;
     DebugCheck(p_data != NULL) ;
 
-    passwordID = FormGetObjID(LOAD_CHARACTER_PASSWORD_TEXT);
+    passwordID = FormFindObjID(LOAD_CHARACTER_PASSWORD_TEXT);
     p_password = TxtboxGetData (passwordID);
 //printf("StatsExit: %p (%-10.10s) %p (%-10.10s)\n", p_data->attemptPassword, p_data->attemptPassword, p_password, p_password) ; fflush(stdout) ;  delay(100) ;
     strcpy(p_data->attemptPassword, p_password) ;
@@ -1441,7 +1441,7 @@ T_void SMCChooseEnableBeginEnter(
         SMCCHOOSE_FLAG_ENABLE_COMPLETE,
         FALSE) ;
 
-//    buttonID = FormGetObjID(LOAD_CHARACTER_BEGIN_BUTTON);
+//    buttonID = FormFindObjID(LOAD_CHARACTER_BEGIN_BUTTON);
 //    ButtonEnable(buttonID);
 
     SMCChooseSetFlag(
