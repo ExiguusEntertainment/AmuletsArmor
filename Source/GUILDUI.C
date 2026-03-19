@@ -275,6 +275,9 @@ static T_void GuildUIBuildMapList (T_void)
     T_byte8 stmp[64];
     T_byte8 stmp2[512];
     T_word16 mapIndex,mapKey;
+#ifdef TARGET_UNIX
+    int mapTmp;
+#endif
     T_byte8 *dataIn;
     T_resource res;
     T_word32 size,tempSize;
@@ -325,14 +328,22 @@ static T_void GuildUIBuildMapList (T_void)
                 if (pass==0)
                 {
                     /* getting map access (journal page needed ) */
+#ifdef TARGET_UNIX
+                    sscanf (stmp2,"%d",&mapTmp); mapKey=(T_word16)mapTmp;
+#else
                     sscanf (stmp2,"%d",&mapKey);
+#endif
                     p_mapStruct->mapKey=mapKey;
 
                 }
                 else if (pass==1)
                 {
                     /* getting map number */
+#ifdef TARGET_UNIX
+                    sscanf (stmp2,"%d",&mapTmp); mapIndex=(T_word16)mapTmp;
+#else
                     sscanf (stmp2,"%d",&mapIndex);
+#endif
                     p_mapStruct->mapIndex=mapIndex;
 
                 }

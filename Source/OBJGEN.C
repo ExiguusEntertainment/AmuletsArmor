@@ -108,6 +108,11 @@ T_void ObjectGeneratorLoad(T_word32 mapNumber)
     T_word16 maxLikeObjects ;
     T_word16 isActive ;
     T_sword16 maxGenerate ;
+#ifdef TARGET_UNIX
+    unsigned int uObjectType, uAngle, uTimeBetween, uRandomTimeBetween,
+                 uMaxObjects, uMaxLikeObjects, uIsActive ;
+    int iX, iY, iMaxGenerate ;
+#endif
 
     DebugRoutine("ObjectGeneratorLoad") ;
     DebugCheck(G_loaded == FALSE) ;
@@ -123,6 +128,20 @@ T_void ObjectGeneratorLoad(T_word32 mapNumber)
         fgets(line, 80, fp) ;
         while (!feof(fp))  {
             if (line[0] == 'G')  {
+#ifdef TARGET_UNIX
+                sscanf(line+1, "%u%d%d%u%u%u%u%u%u%d",
+                    &uObjectType, &iX, &iY, &uAngle,
+                    &uTimeBetween, &uRandomTimeBetween, &uMaxObjects,
+                    &uMaxLikeObjects, &uIsActive, &iMaxGenerate) ;
+                objectType=(T_word16)uObjectType; x=(T_sword16)iX;
+                y=(T_sword16)iY; angle=(T_word16)uAngle;
+                timeBetween=(T_word16)uTimeBetween;
+                randomTimeBetween=(T_word16)uRandomTimeBetween;
+                maxObjects=(T_word16)uMaxObjects;
+                maxLikeObjects=(T_word16)uMaxLikeObjects;
+                isActive=(T_word16)uIsActive;
+                maxGenerate=(T_sword16)iMaxGenerate;
+#else
                 sscanf(line+1, "%u%d%d%u%u%u%u%u%u%d",
                     &objectType,
                     &x,
@@ -134,6 +153,7 @@ T_void ObjectGeneratorLoad(T_word32 mapNumber)
                     &maxLikeObjects,
                     &isActive,
                     &maxGenerate) ;
+#endif
                 IAddGenerator(
                     objectType,
                     x,
