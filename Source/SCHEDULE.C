@@ -19,7 +19,7 @@
 typedef struct {
     T_word32 when ;
     T_scheduleEventHandler handler ;
-    T_word32 data ;
+    T_uintptr_t data ;
     T_void *next ;
 } T_scheduleEvent ;
 
@@ -50,7 +50,7 @@ T_void IScheduleInsertSortEvent(T_scheduleEvent *p_newEvent, T_word32 when) ;
 T_void ScheduleAddEvent(
            T_word32 when,
            T_scheduleEventHandler handler,
-           T_word32 data)
+           T_uintptr_t data)
 {
     T_scheduleEvent *p_event ;
 

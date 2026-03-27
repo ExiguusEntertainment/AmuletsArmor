@@ -107,6 +107,22 @@ typedef struct {
                                              /* states follow. */
 } T_mapAnimStates ;
 
+#ifdef TARGET_UNIX
+typedef struct {
+    T_word16 numWallStates ;
+    T_word16 numSideStates ;
+    T_word16 numSectorStates ;
+    T_word16 numInitStates ;
+
+    T_word32 p_wallStates32 ;
+    T_word32 p_sideStates32 ;
+    T_word32 p_sectorStates32 ;
+    T_word32 p_initStates32 ;
+
+    T_byte8 p_rawData[] ;
+} T_mapAnimStatesDisk32 ;
+#endif
+
 /* Structures that keep the current state of the map. */
 typedef struct {
     T_word32 xScroll ;           /* Amount scrolled in X. */
@@ -138,6 +154,9 @@ typedef struct {
     T_word32 tag ;                   /* Tag to identify this structure. */
     T_mapAnimStates *p_states ;      /* Pointer to all state data. */
     T_resource res ;                 /* Resource handle to this data. */
+#ifdef TARGET_UNIX
+    E_Boolean ownsStatesCopy ;       /* TRUE if p_states is a native copy. */
+#endif
     T_word32 lastTimeUpdated ;       /* Last time this animation has */
                                      /* been updated. */
     T_mapAnimSide **p_sides ;        /* List of pointers of actively */
@@ -201,6 +220,12 @@ T_mapAnimation MapAnimateLoad(T_word32 number)
     T_mapAnimHeaderStruct *p_mapAnimHeader ;
     T_mapAnimStates *p_states ;
     T_byte8 *p_data ;
+#ifdef TARGET_UNIX
+    T_mapAnimStatesDisk32 *p_statesDisk ;
+    T_word32 statesSize ;
+    T_word32 rawSize ;
+    T_mapAnimStates *p_statesCopy ;
+#endif
 
     DebugRoutine("MapAnimateLoad") ;
 
@@ -210,6 +235,9 @@ T_mapAnimation MapAnimateLoad(T_word32 number)
 
     /* Make sure we got the handle. */
     if (p_mapAnimHeader)  {
+    #ifdef TARGET_UNIX
+        p_mapAnimHeader->ownsStatesCopy = FALSE ;
+    #endif
         /* Get the appropriate name. */
 //        sprintf(name, "L%ld.ANI", number) ;
         strcpy(name, "map.ani") ;
@@ -234,6 +262,38 @@ T_mapAnimation MapAnimateLoad(T_word32 number)
             MemFree(p_mapAnimHeader) ;
             p_mapAnimHeader = NULL ;
         } else {
+#ifdef TARGET_UNIX
+            statesSize = ResourceGetSize(p_mapAnimHeader->res) ;
+            if (statesSize < sizeof(T_mapAnimStatesDisk32))  {
+                PictureUnlockAndUnfind(p_mapAnimHeader->res) ;
+                MemFree(p_mapAnimHeader) ;
+                p_mapAnimHeader = NULL ;
+                DebugEnd() ;
+                return MAP_ANIMATION_BAD ;
+            }
+
+            p_statesDisk = (T_mapAnimStatesDisk32 *)p_mapAnimHeader->p_states ;
+            rawSize = statesSize - sizeof(T_mapAnimStatesDisk32) ;
+            p_statesCopy = MemAlloc(sizeof(T_mapAnimStates) + rawSize) ;
+            if (p_statesCopy == NULL)  {
+                PictureUnlockAndUnfind(p_mapAnimHeader->res) ;
+                MemFree(p_mapAnimHeader) ;
+                p_mapAnimHeader = NULL ;
+                DebugEnd() ;
+                return MAP_ANIMATION_BAD ;
+            }
+
+            memset(p_statesCopy, 0, sizeof(T_mapAnimStates) + rawSize) ;
+            p_statesCopy->numWallStates = p_statesDisk->numWallStates ;
+            p_statesCopy->numSideStates = p_statesDisk->numSideStates ;
+            p_statesCopy->numSectorStates = p_statesDisk->numSectorStates ;
+            p_statesCopy->numInitStates = p_statesDisk->numInitStates ;
+            memcpy(p_statesCopy->p_rawData, p_statesDisk->p_rawData, rawSize) ;
+
+            p_mapAnimHeader->p_states = p_statesCopy ;
+            p_mapAnimHeader->ownsStatesCopy = TRUE ;
+#endif
+            p_states = p_mapAnimHeader->p_states ;
             /* Everything is fine, mark the handle tag as good. */
             p_mapAnimHeader->tag = MAP_ANIMATION_TAG ;
 
@@ -330,6 +390,10 @@ T_void MapAnimateUnload(T_mapAnimation mapAnimation)
         /* Make sure we have the correct handle to what we want. */
         DebugCheck(p_mapAnimHeader->tag == MAP_ANIMATION_TAG) ;
         if (p_mapAnimHeader->tag == MAP_ANIMATION_TAG)  {
+#ifdef TARGET_UNIX
+            if (p_mapAnimHeader->ownsStatesCopy == TRUE)
+                MemFree(p_mapAnimHeader->p_states) ;
+#endif
             PictureUnlockAndUnfind(p_mapAnimHeader->res) ;
 
             if (p_mapAnimHeader->animSides != DOUBLE_LINK_LIST_BAD)  {

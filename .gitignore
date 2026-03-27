@@ -1,4 +1,22 @@
 /Docs
 Build/Windows/VC2013/AA/Debug Multi/
 *.suo
-*.user
+Build/Windows/VC2013/**/*.user
+.vscode
+
+# Build outputs
+/out/
+/build_tests/
+/Build/build_tests/
+
+# CMake/Ninja outputs if generated at repo root
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/build.ninja
+/.ninja_deps
+/.ninja_log
+/compile_commands.json
+error.log
+character_dump.json
+spec/

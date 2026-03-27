@@ -43,7 +43,7 @@ T_word16             G_Num3dNodes ;
 T_word16             G_Num3dSectors ;
 T_word16             G_Num3dSSectors ;
 T_word16             G_Num3dVertexes ;
-T_word16             G_BlockmapSize ;
+T_word32             G_BlockmapSize ;
 
 /* Arrays to store the map information. */
 T_3dSegment         *G_3dSegArray = NULL ;
@@ -924,7 +924,7 @@ T_void IPrepareObjects(T_void)
  *
  *<!-----------------------------------------------------------------------*/
 /* Hash pattern used for no textures */
-static T_byte8 G_textureNone[] = {
+T_byte8 G_textureNone[] = {
     2, 0, 2, 0, 31, 226, 226, 31,
     2, 0, 2, 0, 31, 226, 226, 31,
     2, 0, 2, 0, 31, 226, 226, 31,
@@ -1031,35 +1031,29 @@ static T_void ILockPictures(T_void)
 
         if (p_side->upperTx[0] != '-')  {
             strncpy(name, p_side->upperTx, 8) ;
-            *((T_byte8 **)(&p_side->upperTx[1])) =
+            *TX_PTR_FIELD(p_side->upperTx) =
                 PictureLock(name, &G_3dUpperResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dUpperResourceArray[i]), name) ;
         } else {
             G_3dUpperResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->upperTx[1])) = G_textureNone+4 ;
+            *TX_PTR_FIELD(p_side->upperTx) = G_textureNone+4 ;
         }
 
         if (p_side->lowerTx[0] != '-')  {
             strncpy(name, p_side->lowerTx, 8) ;
-            *((T_byte8 **)(&p_side->lowerTx[1])) =
+            *TX_PTR_FIELD(p_side->lowerTx) =
                 PictureLock(name, &G_3dLowerResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dLowerResourceArray[i]), name) ;
         } else {
             G_3dLowerResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->lowerTx[1])) = G_textureNone+4 ;
+            *TX_PTR_FIELD(p_side->lowerTx) = G_textureNone+4 ;
         }
 
         if (p_side->mainTx[0] != '-')  {
             strncpy(name, p_side->mainTx, 8) ;
-            *((T_byte8 **)(&p_side->mainTx[1])) =
+            *TX_PTR_FIELD(p_side->mainTx) =
                 PictureLock(name, &G_3dMainResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dMainResourceArray[i]), name) ;
         } else {
             G_3dMainResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_side->mainTx[1])) = G_textureNone+4 ;
+            *TX_PTR_FIELD(p_side->mainTx) = G_textureNone+4 ;
         }
     }
 
@@ -1069,13 +1063,11 @@ static T_void ILockPictures(T_void)
 
         if (p_sector->floorTx[0] != '-')  {
             strncpy(name, p_sector->floorTx, 8) ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) =
+            *TX_PTR_FIELD(p_sector->floorTx) =
                 PictureLock(name, &G_3dFloorResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dFloorResourceArray[i]), name) ;
         } else {
             G_3dFloorResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->floorTx[1])) = G_textureNone+4 ;
+            *TX_PTR_FIELD(p_sector->floorTx) = G_textureNone+4 ;
         }
         if (p_sector->ceilingTx[0] != '-')  {
             strncpy(name, p_sector->ceilingTx, 8) ;
@@ -1084,13 +1076,11 @@ static T_void ILockPictures(T_void)
                 // Set the sky attribute
                 p_sector->trigger |= 1;
             }
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) =
+            *TX_PTR_FIELD(p_sector->ceilingTx) =
                 PictureLock(name, &G_3dCeilingResourceArray[i]) ;
-//printf("!A 1 %s\n", name) ;
-//printf("!A %ld %s_s\n", ResourceGetSize(G_3dCeilingResourceArray[i]), name) ;
         } else {
             G_3dCeilingResourceArray[i] = RESOURCE_BAD ;
-            *((T_byte8 **)(&p_sector->ceilingTx[1])) = G_textureNone+4 ;
+            *TX_PTR_FIELD(p_sector->ceilingTx) = G_textureNone+4 ;
         }
     }
 #endif
@@ -1167,22 +1157,40 @@ static T_void IUnlockPictures(T_void)
     for (i=0; i<G_Num3dSides; i++)  {
         p_side = &G_3dSideArray[i] ;
 
+#ifdef TARGET_UNIX
+        /* On Unix/64-bit TX_PTR_FIELD writes at byte 0, overwriting the '-'
+         * sentinel.  Use the resource array instead: RESOURCE_BAD = no texture. */
+        if (G_3dUpperResourceArray[i] != RESOURCE_BAD)
+            PictureUnlockAndUnfind(G_3dUpperResourceArray[i]) ;
+        if (G_3dLowerResourceArray[i] != RESOURCE_BAD)
+            PictureUnlockAndUnfind(G_3dLowerResourceArray[i]) ;
+        if (G_3dMainResourceArray[i] != RESOURCE_BAD)
+            PictureUnlockAndUnfind(G_3dMainResourceArray[i]) ;
+#else
         if (p_side->upperTx[0] != '-')
             PictureUnlockAndUnfind(G_3dUpperResourceArray[i]) ;
         if (p_side->lowerTx[0] != '-')
             PictureUnlockAndUnfind(G_3dLowerResourceArray[i]) ;
         if (p_side->mainTx[0] != '-')
             PictureUnlockAndUnfind(G_3dMainResourceArray[i]) ;
+#endif
     }
 
     /* Look for all the textures on the sectors. */
     for (i=0; i<G_Num3dSectors; i++)  {
         p_sector = &G_3dSectorArray[i] ;
 
+#ifdef TARGET_UNIX
+        if (G_3dFloorResourceArray[i] != RESOURCE_BAD)
+            PictureUnlockAndUnfind(G_3dFloorResourceArray[i]) ;
+        if (G_3dCeilingResourceArray[i] != RESOURCE_BAD)
+            PictureUnlockAndUnfind(G_3dCeilingResourceArray[i]) ;
+#else
         if (p_sector->floorTx[0] != '-')
             PictureUnlockAndUnfind(G_3dFloorResourceArray[i]) ;
         if (p_sector->ceilingTx[0] != '-')
             PictureUnlockAndUnfind(G_3dCeilingResourceArray[i]) ;
+#endif
     }
 #endif
 
@@ -2401,7 +2409,7 @@ typedef struct {
     T_word16 num3dSectors ;
     T_word16 num3dSSectors ;
     T_word16 num3dVertexes ;
-    T_word16 blockmapSize ;
+    T_word32 blockmapSize ;
     T_3dSectorInfo *p_sectorInfoArray ;
 } T_mapGroupStruct ;
 
@@ -2460,7 +2468,11 @@ T_void View3dSetMapGroup(T_mapGroup p_mapGroup)
     G_3dUpperResourceArray = p_map->p_upperResourceArray ;
     G_3dLowerResourceArray = p_map->p_lowerResourceArray ;
     G_3dMainResourceArray = p_map->p_mainResourceArray ;
+#ifdef TARGET_UNIX
+    G_3dFloorResourceArray = p_map->p_floorResourceArray ;
+#else
     G_3dLowerResourceArray = p_map->p_floorResourceArray ;
+#endif
     G_3dCeilingResourceArray = p_map->p_ceilingResourceArray ;
     G_Num3dObjects = p_map->num3dObjects ;
     G_Num3dSegs = p_map->num3dSegs ;
@@ -2502,7 +2514,11 @@ T_void View3dGetMapGroup(T_mapGroup p_mapGroup)
     p_map->p_upperResourceArray = G_3dUpperResourceArray ;
     p_map->p_lowerResourceArray = G_3dLowerResourceArray ;
     p_map->p_mainResourceArray = G_3dMainResourceArray ;
+#ifdef TARGET_UNIX
+    p_map->p_floorResourceArray = G_3dFloorResourceArray ;
+#else
     p_map->p_floorResourceArray = G_3dLowerResourceArray ;
+#endif
     p_map->p_ceilingResourceArray = G_3dCeilingResourceArray ;
     p_map->num3dObjects = G_Num3dObjects ;
     p_map->num3dSegs = G_Num3dSegs ;

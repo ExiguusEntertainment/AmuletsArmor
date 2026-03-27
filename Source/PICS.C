@@ -14,8 +14,74 @@
  *<!-----------------------------------------------------------------------*/
 #include "PICS.H"
 
+#ifdef TARGET_UNIX
+#include <string.h>
+
+static T_byte8 G_lastMissingPictureName[14] = "" ;
+
+static E_Boolean IPictureNameIsPrintable(T_byte8 *name)
+{
+    T_word16 i ;
+
+    if ((name == NULL) || (name[0] == '\0'))
+        return FALSE ;
+
+    for (i=0; i<13; i++) {
+        if (name[i] == '\0')
+            return TRUE ;
+        if ((name[i] < ' ') || (name[i] > '~'))
+            return FALSE ;
+    }
+
+    return TRUE ;
+}
+
+static T_void IPictureReportMissing(T_byte8 *name)
+{
+    if (IPictureNameIsPrintable(name) == FALSE)
+        return ;
+
+    if (strcmp((char *)G_lastMissingPictureName, (char *)name) != 0) {
+        printf("Cannot find picture named '%s'\n", name) ;
+        strncpy((char *)G_lastMissingPictureName, (char *)name, 13) ;
+        G_lastMissingPictureName[13] = '\0' ;
+    }
+}
+#endif
+
 static T_resourceFile G_pictureResFile ;
 static E_Boolean G_picturesActive = FALSE ;
+
+#ifdef TARGET_UNIX
+/*
+ * Keep exact lookup semantics first, then try basename-only as a
+ * temporary unix compatibility path for resource names embedded with
+ * directory components in FRM files.
+ */
+static T_resource IPictureFindCompat(T_byte8 *name)
+{
+    T_resource found ;
+    T_byte8 *p_base ;
+
+    found = ResourceFind(G_pictureResFile, name) ;
+    if (found != RESOURCE_BAD)
+        return found ;
+
+    p_base = (T_byte8 *)strrchr((char *)name, '/') ;
+    if (p_base != NULL && p_base[1] != '\0')  {
+        p_base++ ;
+        found = ResourceFind(G_pictureResFile, p_base) ;
+        if (found != RESOURCE_BAD)
+            return found ;
+    }
+
+    /* Legacy map tokens may reference MARBGRAY, which is absent in PICS.RES. */
+    if (strcmp((char *)name, "MARBGRAY") == 0)
+        found = ResourceFind(G_pictureResFile, "MARBLE3") ;
+
+    return found ;
+}
+#endif
 
 /*-------------------------------------------------------------------------*
  * Routine:  PicturesInitialize
@@ -100,11 +166,19 @@ T_byte8 *PictureLock(T_byte8 *name, T_resource *res)
 
     /* Look up the picture in the index. */
 //printf("> %s\n", name) ;
+#ifdef TARGET_UNIX
+    found = IPictureFindCompat(name) ;
+#else
     found = ResourceFind(G_pictureResFile, name) ;
+#endif
 //printf("Locking pic %s (%p) for %s\n", name, found, DebugGetCallerName()) ;
     if (found == RESOURCE_BAD)  {
 #ifndef NDEBUG
+    #ifdef TARGET_UNIX
+        IPictureReportMissing(name) ;
+    #else
         printf("Cannot find picture named '%s'\n", name) ;
+    #endif
 #endif
         found = ResourceFind(G_pictureResFile, "DRK42") ;
     }
@@ -151,10 +225,18 @@ T_byte8 *PictureLockData(T_byte8 *name, T_resource *res)
     DebugCheck(G_picturesActive == TRUE) ;
 
     /* Look up the picture in the index. */
+#ifdef TARGET_UNIX
+    found = IPictureFindCompat(name) ;
+#else
     found = ResourceFind(G_pictureResFile, name) ;
+#endif
 #ifndef NDEBUG
     if (found == RESOURCE_BAD)  {
+#ifdef TARGET_UNIX
+        IPictureReportMissing(name) ;
+#else
         printf("Cannot find picture named '%s'\n", name) ;
+#endif
         found = ResourceFind(G_pictureResFile, "DRK42") ;
     }
 #endif
@@ -217,7 +299,11 @@ E_Boolean PictureExist(T_byte8 *name)
     DebugCheck(G_picturesActive == TRUE) ;
 
     /* Look up the picture in the index. */
+#ifdef TARGET_UNIX
+    res = IPictureFindCompat(name) ;
+#else
     res = ResourceFind(G_pictureResFile, name) ;
+#endif
 
     /* Check to see if it is a good resource. */
     picExist = (res == RESOURCE_BAD)?FALSE:TRUE ;
@@ -284,7 +370,11 @@ T_resource PictureFind(T_byte8 *name)
     DebugCheck(name != NULL) ;
 
     /* Look up the picture in the index. */
+#ifdef TARGET_UNIX
+    res = IPictureFindCompat(name) ;
+#else
     res = ResourceFind(G_pictureResFile, name) ;
+#endif
 
     DebugEnd() ;
 
@@ -351,7 +441,7 @@ T_void PictureUnlockAndUnfind(T_resource res)
  *<!-----------------------------------------------------------------------*/
 T_byte8 *PictureLockQuick(T_resource res)
 {
-    T_byte8 *p_where ;
+    T_byte8 *p_where = NULL ;
 
     DebugRoutine("PictureLockQuick") ;
     DebugCheck(res != RESOURCE_BAD) ;
@@ -389,11 +479,16 @@ T_bitmap *PictureToBitmap(T_byte8 *pic)
     DebugRoutine("PictureToBitmap") ;
     DebugCheck(pic != NULL) ;
 
-    p_bitmap = (T_bitmap *)pic ;
+    /*
+     * pic points at pixel data (after sizex/sizey). Always step back
+     * by exactly the 4-byte header, not sizeof(T_bitmap), which differs
+     * between Watcom and GCC/Clang builds.
+     */
+    p_bitmap = (T_bitmap *)(pic - (2*sizeof(T_word16))) ;
 
     DebugEnd() ;
 
-    return(&p_bitmap[-1]) ;
+    return p_bitmap ;
 }
 
 /*-------------------------------------------------------------------------*

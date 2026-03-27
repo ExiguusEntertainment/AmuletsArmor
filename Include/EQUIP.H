@@ -208,7 +208,11 @@ typedef struct
     /* unique flag */
     T_byte8 unique;
 
+#ifdef TARGET_UNIX
+} PACK T_equipItemDescriptionBorland;
+#else
 } T_equipItemDescriptionBorland;
+#endif
 
 
 

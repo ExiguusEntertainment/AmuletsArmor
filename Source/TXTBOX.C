@@ -1829,6 +1829,7 @@ T_void TxtboxDrawCallBack(T_graphicID graphicID, T_word16 index)
     T_byte8 tempstr[10];
     E_Boolean cursordrawn=FALSE;
     T_byte8 linespassed=0;
+    T_graphicStruct *p_graphic;
 
     DebugRoutine ("TxtboxDrawCallBack");
     DebugCheck (graphicID != NULL);
@@ -1836,6 +1837,13 @@ T_void TxtboxDrawCallBack(T_graphicID graphicID, T_word16 index)
     TxtboxID=G_TxtboxArray[index];
     DebugCheck (TxtboxID != NULL);
     p_Txtbox=(T_TxtboxStruct *)TxtboxID;
+    p_graphic=(T_graphicStruct *)graphicID;
+
+    /* Keep textbox draw bounds synchronized with the owning graphic. */
+    p_Txtbox->lx1 = p_graphic->locx;
+    p_Txtbox->ly1 = p_graphic->locy;
+    p_Txtbox->lx2 = p_graphic->locx + p_graphic->width;
+    p_Txtbox->ly2 = p_graphic->locy + p_graphic->height;
 
     /* highlight if selected */
     if (p_Txtbox->isselected==TRUE)
@@ -2226,7 +2234,7 @@ T_void TxtboxHandleSBDn (T_buttonID buttonID)
     DebugCheck (buttonID != NULL);
 
     p_button=(T_buttonStruct *)buttonID;
-    TxtboxID=FormGetObjID(p_button->data);
+    TxtboxID=FormFindObjID(p_button->data);
     DebugCheck (TxtboxID != NULL);
     TxtboxCursDn (TxtboxID);
     DebugEnd();
@@ -2242,7 +2250,7 @@ T_void TxtboxHandleSBUp (T_buttonID buttonID)
     DebugCheck (buttonID != NULL);
 
     p_button=(T_buttonStruct *)buttonID;
-    TxtboxID=FormGetObjID(p_button->data);
+    TxtboxID=FormFindObjID(p_button->data);
     DebugCheck (TxtboxID != NULL);
     TxtboxCursUp (TxtboxID);
     DebugEnd();

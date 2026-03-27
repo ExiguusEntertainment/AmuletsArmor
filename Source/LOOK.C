@@ -89,13 +89,13 @@ T_void LookUpdateCreatureInfo (T_3dObject *p_obj)
                     if (iteration==0)
                     {
                         /* store stmp in name field */
-                        TxtboxID=FormGetObjID(500);
+                        TxtboxID=FormFindObjID(500);
                         TxtboxSetData(TxtboxID,stmp);
                     }
                     else if (iteration==1)
                     {
                         /* store stmp in description field */
-                        TxtboxID=FormGetObjID(501);
+                        TxtboxID=FormFindObjID(501);
                         TxtboxSetData(TxtboxID,stmp);
                         /* exit, we are done */
                         break;
@@ -107,10 +107,10 @@ T_void LookUpdateCreatureInfo (T_3dObject *p_obj)
         }
         else
         {
-            TxtboxID=FormGetObjID(500);
+            TxtboxID=FormFindObjID(500);
             TxtboxSetData(TxtboxID,"Unknown Creature");
 
-            TxtboxID=FormGetObjID(501);
+            TxtboxID=FormFindObjID(501);
             TxtboxSetData(TxtboxID,"No other information available.");
         }
     }
@@ -129,7 +129,7 @@ T_void LookRequestPlayerInfo  (T_3dObject *p_obj)
     DebugCheck (BannerFormIsOpen(BANNER_FORM_LOOK));
 
     /* get name/title field pointer */
-    TxtboxID=FormGetObjID(500);
+    TxtboxID=FormFindObjID(500);
     TxtboxSetData (TxtboxID,"Retrieving info..");
 
     DebugEnd();
@@ -143,10 +143,10 @@ T_void LookUpdatePlayerInfo (T_lookDataStruct *p_lookData)
     /* in case banner was abruptly closed */
     if (BannerFormIsOpen(BANNER_FORM_LOOK))
     {
-        TxtboxID=FormGetObjID(500);
+        TxtboxID=FormFindObjID(500);
         TxtboxSetData(TxtboxID,p_lookData->name);
 
-        TxtboxID=FormGetObjID(501);
+        TxtboxID=FormFindObjID(501);
         TxtboxSetData(TxtboxID,p_lookData->description);
 
         /* draw player picture here */

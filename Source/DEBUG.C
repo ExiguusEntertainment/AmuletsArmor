@@ -13,7 +13,7 @@
  *<!-----------------------------------------------------------------------*/
 #include "DEBUG.H"
 #include "MEMORY.H"
-#if defined(_DEBUG) && defined(WIN32)
+#if defined(_DEBUG) && defined(WIN32) && defined(_MSC_VER)
 #include <crtdbg.h>
 #endif
 #ifndef NDEBUG
@@ -101,7 +101,7 @@ T_void DebugAddRoutine(
 #if HEAP_CHECK_ON_ENTER_TOO
     if (G_heapCheck == TRUE) {
         MemCheck(998) ;
-#if defined(_DEBUG) && defined(WIN32)
+#if defined(_DEBUG) && defined(WIN32) && defined(_MSC_VER)
         _ASSERTE( _CrtCheckMemory( ) );
 #endif
     }
@@ -204,7 +204,7 @@ T_void DebugRemoveRoutine(T_void)
             lessOften = HEAP_CHECK_LESS_OFTEN;
 #endif
         MemCheck(999) ;
-#if defined(_DEBUG) && defined(WIN32)
+#if defined(_DEBUG) && defined(WIN32) && defined(_MSC_VER)
         _ASSERTE( _CrtCheckMemory( ) );
 #endif
 #if HEAP_CHECK_LESS_OFTEN

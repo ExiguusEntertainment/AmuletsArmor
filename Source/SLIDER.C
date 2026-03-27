@@ -49,7 +49,7 @@ typedef struct {
 } T_sliderHandleStruct ;
 
 /* Internal prototypes: */
-static T_void ISliderCallback(T_word32 data) ;
+static T_void ISliderCallback(T_uintptr_t data) ;
 
 static T_void ISliderDestroy(T_slider *p_slider) ;
 
@@ -324,7 +324,7 @@ E_Boolean SliderExist(T_word32 sliderId)
  *  @param data -- Casted pointer to the slider struct.
  *
  *<!-----------------------------------------------------------------------*/
-static T_void ISliderCallback(T_word32 data)
+static T_void ISliderCallback(T_uintptr_t data)
 {
     T_slider *p_slider ;
     E_Boolean f_done ;

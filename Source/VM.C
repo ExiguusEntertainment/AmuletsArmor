@@ -41,7 +41,11 @@ typedef struct {
     T_word16 refCount ;
     F_vmFlags vmFlags ;
     T_byte8 lockCount ;
+#ifdef TARGET_UNIX
+    T_uintptr_t memoryOrNext ;  /* Pointer-or-index; needs full width on 64-bit */
+#else
     T_word32 memoryOrNext ;
+#endif
     T_word32 fileOffset ;
     T_word32 size ;
 } T_vmEntry ;
@@ -460,7 +464,11 @@ void *VMLock(
         /* Record where the block now is in memory. */
         p_entry->vmFlags |= VM_FLAG_IN_MEMORY ;
 printf("Locked in at %p\n", p_block) ;
+#ifdef TARGET_UNIX
+        p_entry->memoryOrNext = (T_uintptr_t)p_block ;
+#else
         p_entry->memoryOrNext = (T_word32)p_block ;
+#endif
     } else {
         /* Block is already in memory, just use this pointer. */
         p_block = (T_vmDataBlock *)p_entry->memoryOrNext ;

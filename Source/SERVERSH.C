@@ -26,6 +26,11 @@
 /* Module:  Server Shared Routines (between client server and game server) */
 extern T_sword32 G_sourceX, G_sourceY, G_sourceZ ;
 
+#ifdef TARGET_UNIX
+T_damageObjInfo G_serverDamageInfoUnix ;
+E_Boolean G_serverDamageInfoValid = FALSE ;
+#endif
+
 /*-------------------------------------------------------------------------*
  * Routine:  ServerDamageObjectXYZ
  *-------------------------------------------------------------------------*/
@@ -47,12 +52,28 @@ E_Boolean ServerDamageObjectXYZ(
 
     DebugRoutine("ServerDamageObjectXYZ") ;
 
+#ifdef TARGET_UNIX
+    if ((data == 0) && (G_serverDamageInfoValid == TRUE))
+        p_damageInfo = &G_serverDamageInfoUnix ;
+    else
+        p_damageInfo = NULL ;
+#else
     p_damageInfo = (T_damageObjInfo *)data ;
+#endif
+
+    if (p_damageInfo == NULL)  {
+        DebugEnd() ;
+        return FALSE ;
+    }
 
     /* Don't hurt owner of damage (if a creature). */
     if ((!(ObjectIsCreature(p_obj))) || (p_damageInfo->ownerID != ObjectGetServerId(p_obj)))  {
         /* If it is a creature, damage it. */
+    #ifdef TARGET_UNIX
+        if (ObjectIsCreature(p_obj) || (!ObjectIsPassable(p_obj)))  {
+    #else
         if (!ObjectIsPassable(p_obj))  {
+    #endif
             /* TESTING */
             if (!(p_damageInfo->type & EFFECT_DAMAGE_SPECIAL))  {
     //            printf("(%d) ServerDamageObjectXYZ %d for %d by %s\n", SyncTimeGet(), ObjectGetServerId(p_obj), p_damageInfo->damage, DebugGetCallerName()) ;

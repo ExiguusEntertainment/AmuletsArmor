@@ -14,6 +14,11 @@ extern T_sword32 G_sourceX ;
 extern T_sword32 G_sourceY ;
 extern T_sword32 G_sourceZ ;
 
+#ifdef TARGET_UNIX
+extern T_damageObjInfo G_serverDamageInfoUnix ;
+extern E_Boolean G_serverDamageInfoValid ;
+#endif
+
 E_Boolean ServerDamageObjectXYZ(
               T_3dObject *p_obj,
               T_word32 data) ;

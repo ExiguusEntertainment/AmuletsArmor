@@ -91,6 +91,8 @@ T_iniFile INIFileOpen(T_byte8 *p_filename)
 
     DebugRoutine("INIFileOpen") ;
 
+    category[0] = '\0' ;
+
     /* Open the .ini file */
     fp = fopen(p_filename, "r") ;
 //    DebugCheck(fp != NULL) ;
@@ -107,6 +109,27 @@ T_iniFile INIFileOpen(T_byte8 *p_filename)
         if (fp != NULL)  {
             while (!feof(fp))  {
                 buffer[0] = '\0' ;
+#ifdef TARGET_UNIX
+                if (fgets(buffer, sizeof(buffer), fp) == NULL)
+                    break ;
+
+                {
+                    T_word16 lineLen ;
+
+                    lineLen = strlen(buffer) ;
+                    if (lineLen == 0)
+                        continue ;
+
+                    if (buffer[lineLen-1] == '\n' || buffer[lineLen-1] == '\r') {
+                        buffer[--lineLen] = '\0' ;
+                        if (lineLen > 0 && buffer[lineLen-1] == '\r')
+                            buffer[lineLen-1] = '\0' ;
+                    }
+
+                    if (buffer[0] == '\0')
+                        continue ;
+                }
+#else
 				fgets(buffer, 160, fp);
 
 #if (_MSC_VER == 1800)
@@ -115,6 +138,7 @@ T_iniFile INIFileOpen(T_byte8 *p_filename)
 #endif
 
                 buffer[strlen(buffer)-1] = '\0' ;
+#endif
 
                 if (isalnum(buffer[0]))  {
                     /* Break it up into two parts, */

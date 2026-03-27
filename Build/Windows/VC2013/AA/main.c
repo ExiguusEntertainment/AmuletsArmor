@@ -1,8 +1,14 @@
 #include "direct.h"
 #include <time.h>
+#ifdef TARGET_UNIX
+#include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
+#else
 #include <Windows.h>
+#endif
 #include "DITALK.H"
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(_MSC_VER)
    #include <crtdbg.h>
 #endif
 #include <SDL.h>
@@ -14,23 +20,39 @@ static int G_done = FALSE;
 static SDL_Surface* screen;
 static SDL_Surface* surface;
 static SDL_Surface* largesurface;
+#ifdef TARGET_UNIX
+static unsigned char *G_linearFrameBuffer = NULL;
+#endif
 static SDL_Rect srcrect = {
         0, 0,
         320, 240
     };
 static SDL_Rect largesrcrect = {
         0, 0,
-        640, 480
+        640, 400
     };
 static SDL_Rect destrect = {
         0, 0,
-        640, 480
+        640, 400
     };
 extern T_void KeyboardUpdate(E_Boolean updateBuffers);
 
+#ifdef TARGET_UNIX
+static void HandleUnixSignal(int sig)
+{
+    (void)sig;
+    G_done = TRUE;
+    exit(0);
+}
+#endif
+
 void SleepMS(T_word32 aMS)
 {
+#ifdef TARGET_UNIX
+    usleep(aMS * 1000);
+#else
     Sleep(aMS);
+#endif
 }
 
 void WindowsUpdateMouse(void)
@@ -39,7 +61,17 @@ void WindowsUpdateMouse(void)
     int x, y;
     Uint8 state;
 
+    SDL_PumpEvents();
     state = SDL_GetMouseState(&x, &y);
+#ifdef TARGET_UNIX
+    /* Game UI runs in 320x200 logical coordinates. */
+    x >>= 1;
+    y >>= 1;
+    if (x < 0) x = 0;
+    if (x > 319) x = 319;
+    if (y < 0) y = 0;
+    if (y > 199) y = 199;
+#endif
     DirectMouseSet(x, y);
     if (state & SDL_BUTTON_LMASK)
         flags |= MOUSE_BUTTON_LEFT;
@@ -60,11 +92,10 @@ void WindowsUpdateEvents(void)
         switch (event.type) {
             case SDL_QUIT:
                 G_done = TRUE;
+                exit(0);
                 break;
             case SDL_KEYDOWN:
-                if ( event.key.keysym.sym == SDLK_ESCAPE )  {
-                    G_done = TRUE; 
-                } else if ((event.key.keysym.sym == SDLK_LALT) || (event.key.keysym.sym == SDLK_RALT)) {
+                if ((event.key.keysym.sym == SDLK_LALT) || (event.key.keysym.sym == SDLK_RALT)) {
                     // Left or right alt pressed?
                     altPressed = TRUE;
                 } else if ((event.key.keysym.sym == SDLK_RETURN) && (altPressed)) {
@@ -158,8 +189,12 @@ void WindowsUpdate(char *p_screen, unsigned char *palette)
 {
     SDL_Color colors[256];
     int i;
+#ifdef TARGET_UNIX
+    unsigned char *src = (unsigned char *)p_screen;
+#else
     unsigned char *src = (char *)surface->pixels;
-    unsigned char *dst = (char *)largesurface->pixels;
+#endif
+    unsigned char *dst = (unsigned char *)largesurface->pixels;
     unsigned char *line;
     static int lastFPS = 0;
     static int fps = 0;
@@ -189,7 +224,27 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
     //SDL_SetColors(surface, colors, 0, 256);
     SDL_SetColors(largesurface, colors, 0, 256);
 
-    // Blit the current surface from 320x200 to 640x480
+    // Blit the current surface from 320x200 to 640x400
+#ifdef TARGET_UNIX
+    {
+        int x;
+        int pitch = largesurface->pitch;
+        for (y=0; y<200; y++) {
+            unsigned char *srcLine = src + (y * 320);
+            unsigned char *dstLine0 = dst + ((y * 2) * pitch);
+            unsigned char *dstLine1 = dst + (((y * 2) + 1) * pitch);
+
+            for (x=0; x<320; x++) {
+                unsigned char c = srcLine[x];
+                int dx = x * 2;
+                dstLine0[dx] = c;
+                dstLine0[dx + 1] = c;
+                dstLine1[dx] = c;
+                dstLine1[dx + 1] = c;
+            }
+        }
+    }
+#else
     line = src;
     for (y=0, frac=0; y<200; y++, line+=320) {
 //        for (x=0; x<320; x++) {
@@ -208,6 +263,7 @@ Sleep((1000/CAP_SPEED_TO_FPS) - (tick-lastTick));
 //        }
 //        Copy2x_320times(dst, src);
     }
+#endif
 
     if (SDL_BlitSurface(largesurface, &largesrcrect, screen, &destrect)) {
         printf("Failed blit: %s\n", SDL_GetError());
@@ -243,8 +299,12 @@ int SDL_main(int argc, char *argv[])
     SDL_Color white = { 255, 255, 255, 0 };
     //SDL_Surface* icon;
 
-    HINSTANCE hLib = LoadLibrary( "BlackBox.dll" );
-    printf("BlackBox hLib = %08X\n", hLib);
+#ifndef TARGET_UNIX
+    {
+        HINSTANCE hLib = LoadLibrary("BlackBox.dll");
+        printf("BlackBox hLib = %08X\n", hLib);
+    }
+#endif
     if( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) < 0)
     {
           printf ("Could not initialize SDL: %s\n",SDL_GetError());
@@ -259,7 +319,7 @@ int SDL_main(int argc, char *argv[])
     screen = SDL_SetVideoMode(640, 400, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
 #endif
     SDL_WM_SetCaption("Amulets & Armor", "Amulets & Armor");
-    SDL_ShowCursor( SDL_DISABLE ); 
+    SDL_ShowCursor(SDL_DISABLE);
 
     if(screen == NULL)
     {
@@ -279,8 +339,21 @@ int SDL_main(int argc, char *argv[])
     }
     SDL_SetColors(surface, &black, 0, 1);
     SDL_SetColors(surface, &white, 255, 1);
+#ifdef TARGET_UNIX
+    G_linearFrameBuffer = (unsigned char *)malloc(320 * 240);
+    if (G_linearFrameBuffer == NULL) {
+        printf("Could not allocate linear framebuffer\n");
+        return 1;
+    }
+    GRAPHICS_ACTUAL_SCREEN = (void *)G_linearFrameBuffer;
+    pixels = (char *)G_linearFrameBuffer;
+
+    signal(SIGINT, HandleUnixSignal);
+    signal(SIGTERM, HandleUnixSignal);
+#else
     pixels = (char *)surface->pixels;
     GRAPHICS_ACTUAL_SCREEN = (void *)pixels;
+#endif
     for (y=0; y<240; y++) {
         for (x=0; x<320; x++, pixels++) {
             if ((x == 0) || (x == 319) || (y == 0) || (y == 239))
@@ -292,9 +365,11 @@ int SDL_main(int argc, char *argv[])
 
     {
 #ifndef NDEBUG
+#if defined(_MSC_VER)
     int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
         tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
     _CrtSetDbgFlag( tmpFlag );
+#endif
 #endif
 
         game_main(argc, argv);

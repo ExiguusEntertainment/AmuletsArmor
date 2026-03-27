@@ -2,6 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * Offline data compiler utility.
+ *
+ * This program reads a text definition file named layers.dat, parses:
+ * - START/STANCE blocks describing per-stance, per-angle animation layers
+ * - TABLE entries mapping part/subpart pairs to 4-char filename prefixes
+ *
+ * It packs that data into fixed binary arrays and writes them to STANCES.DAT
+ * for fast runtime loading by the game.
+ */
+
 #define MAX_STANCES 64
 #define MAX_ANGLES 8
 #define MAX_LAYERS 7

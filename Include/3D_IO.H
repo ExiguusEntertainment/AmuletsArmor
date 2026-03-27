@@ -24,7 +24,7 @@ extern T_word16             G_Num3dNodes;
 extern T_word16             G_Num3dSectors;
 extern T_word16             G_Num3dSSectors;
 extern T_word16             G_Num3dVertexes;
-extern T_word16             G_BlockmapSize;
+extern T_word32             G_BlockmapSize;
 extern T_word16             G_Num3dObjects ;
 
 extern T_word16             G_objCollisionNumX ;
@@ -47,6 +47,7 @@ extern T_3dObject          *G_Last3dObject ;
 extern T_sword16            G_3dRootBSPNode ;
 extern T_byte8             *G_3dReject ;
 extern T_doubleLinkList    *G_3dObjCollisionLists ;
+extern T_byte8              G_textureNone[] ;
 
 /* Player's location. */
 extern T_sword16            G_3dPlayerX ;

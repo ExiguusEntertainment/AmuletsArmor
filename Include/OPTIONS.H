@@ -53,6 +53,9 @@
 // Option to record all creature movement to ensure syncronized actions
 //#define COMPILE_OPTION_CREATE_CRELOGIC_DATA_FILE
 
+// Option to record detailed player attack diagnostics for hit/miss tracing
+//#define COMPILE_OPTION_CREATE_ATTACK_TRACE_FILE
+
 // Option to turn on indicator lights that show different
 // areas of program execution
 // Indicators go from left to right as follows:
@@ -184,7 +187,9 @@
 	#define __far
 	#define __near
 	#define COMPILE_OPTION_DIRECT_TALK_IS_DOS32
-	#define WIN_IPX		 1 // off
+	#ifndef WIN_IPX
+		#define WIN_IPX		 1 // off
+	#endif
 #else
 	#define COMPILE_OPTION_DIRECT_TALK_IS_DOS32
 #endif

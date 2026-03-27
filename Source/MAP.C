@@ -40,6 +40,7 @@
 #include "SYNCTIME.H"
 #include "TICKER.H"
 #include "UPDATE.H"
+#include "EFX.H"
 
 static E_Boolean G_mapLoaded = FALSE ;
 static T_byte8 G_outsideLighting = 255 ;
@@ -150,6 +151,11 @@ T_void MapLoad(T_word32 mapNumber)
     T_byte8 backgroundFullName[30] ;
     extern E_Boolean G_serverActive ;
     T_word32 dummyvar ;
+#ifdef TARGET_UNIX
+    T_word32 infoFileSize ;
+    T_word32 bytesToCopy ;
+    T_byte8 infoFileText[256] ;
+#endif
 
     DebugRoutine("MapLoad") ;
 
@@ -192,7 +198,28 @@ MemFree(p_memTest) ;
     strcpy(backgroundName, "CLOUDS2.PIC") ;
     if (p_infoFile)  {
         G_mapSpecial = MAP_SPECIAL_NONE ;
-        sscanf(p_infoFile, "%s%s%d", G_songName, backgroundName, &G_mapSpecial) ;
+#ifdef TARGET_UNIX
+        infoFileSize = ResourceGetSize(r_infoFile) ;
+        if (infoFileSize > (sizeof(infoFileText) - 1))
+            bytesToCopy = (sizeof(infoFileText) - 1) ;
+        else
+            bytesToCopy = infoFileSize ;
+
+        memcpy(infoFileText, p_infoFile, bytesToCopy) ;
+        infoFileText[bytesToCopy] = '\0' ;
+
+        sscanf((char *)infoFileText,
+               "%19s%19s%d",
+               (char *)G_songName,
+               (char *)backgroundName,
+               &G_mapSpecial) ;
+#else
+        sscanf((char *)p_infoFile,
+               "%19s%19s%d",
+               (char *)G_songName,
+               (char *)backgroundName,
+               &G_mapSpecial) ;
+#endif
         DebugCheck(G_mapSpecial < MAP_SPECIAL_UNKNOWN) ;
 //        sprintf(G_songName, "L%ld.HMI", mapNumber) ;
         /** Change the tune. **/
@@ -294,7 +321,28 @@ MemFree(p_memTest) ;
     sprintf(infoFileName, "L%ld.I", mapNumber) ;
     p_infoFile = PictureLockData(infoFileName, &r_infoFile) ;
     if (p_infoFile)  {
-        sscanf(p_infoFile, "%s%s%d", G_songName, backgroundName, &dummyvar) ;
+#ifdef TARGET_UNIX
+        infoFileSize = ResourceGetSize(r_infoFile) ;
+        if (infoFileSize > (sizeof(infoFileText) - 1))
+            bytesToCopy = (sizeof(infoFileText) - 1) ;
+        else
+            bytesToCopy = infoFileSize ;
+
+        memcpy(infoFileText, p_infoFile, bytesToCopy) ;
+        infoFileText[bytesToCopy] = '\0' ;
+
+        sscanf((char *)infoFileText,
+               "%19s%19s%d",
+               (char *)G_songName,
+               (char *)backgroundName,
+               (int *)&dummyvar) ;
+#else
+        sscanf((char *)p_infoFile,
+               "%19s%19s%d",
+               (char *)G_songName,
+               (char *)backgroundName,
+               (int *)&dummyvar) ;
+#endif
         SoundSetBackgroundMusic(G_songName) ;
 
         PictureUnlockAndUnfind(r_infoFile) ;
@@ -366,6 +414,13 @@ T_void MapUnload(T_void)
 
         ActivitiesUnload() ;
 
+#ifdef TARGET_UNIX
+        /* Fix: EfxFinish must run before ObjectsUnload. Blood splat (and other
+           effect) fake objects are freed by ObjectsUnload; if EfxDestroy runs
+           afterward it calls ObjectMarkForDestroy on already-freed memory.
+           EfxFinish is idempotent so the UpdateMapEnd() call below is safe. */
+        EfxFinish() ;
+#endif
         ObjectsUnload() ;
 
         MapSetBackdrop(NULL) ;
@@ -1430,21 +1485,28 @@ T_void MapOutputTimeOfDay(T_void)
 T_void MapSetMainTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
+    T_byte8 textureName[9] ;
 
     DebugRoutine("MapSetMainTextureForSide") ;
     DebugCheck(sideNum < G_Num3dSides) ;
 
     p_side = &G_3dSideArray[sideNum] ;
+    strncpy(textureName, p_textureName, 8) ;
+    textureName[8] = '\0' ;
 
-    if (p_side->mainTx[0] != '-')  {
+    if ((p_side->mainTx[0] != '-') &&
+        (G_3dMainResourceArray[sideNum] != RESOURCE_BAD))  {
         PictureUnlockAndUnfind(G_3dMainResourceArray[sideNum]) ;
     }
 
-    p_side->mainTx[0] = p_textureName[0] ;
+    p_side->mainTx[0] = textureName[0] ;
 
-    if (p_textureName[0] != '-')
-        *((T_byte8 **)(&p_side->mainTx[1])) =
-                PictureLock(p_textureName, &G_3dMainResourceArray[sideNum]) ;
+    if ((textureName[0] != '\0') && (textureName[0] != '-'))
+        *TX_PTR_FIELD(p_side->mainTx) =
+            PictureLock(textureName, &G_3dMainResourceArray[sideNum]) ;
+    else {
+        G_3dMainResourceArray[sideNum] = RESOURCE_BAD ;
+    }
     DebugEnd() ;
 }
 
@@ -1463,21 +1525,28 @@ T_void MapSetMainTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 T_void MapSetLowerTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
+    T_byte8 textureName[9] ;
 
     DebugRoutine("MapSetLowerTextureForSide") ;
     DebugCheck(sideNum < G_Num3dSides) ;
 
     p_side = &G_3dSideArray[sideNum] ;
+    strncpy(textureName, p_textureName, 8) ;
+    textureName[8] = '\0' ;
 
-    if (p_side->lowerTx[0] != '-')  {
+    if ((p_side->lowerTx[0] != '-') &&
+        (G_3dLowerResourceArray[sideNum] != RESOURCE_BAD))  {
         PictureUnlockAndUnfind(G_3dLowerResourceArray[sideNum]) ;
     }
 
-    p_side->lowerTx[0] = p_textureName[0] ;
+    p_side->lowerTx[0] = textureName[0] ;
 
-    if (p_textureName[0] != '-')
-        *((T_byte8 **)(&p_side->lowerTx[1])) =
-                PictureLock(p_textureName, &G_3dLowerResourceArray[sideNum]) ;
+    if ((textureName[0] != '\0') && (textureName[0] != '-'))
+        *TX_PTR_FIELD(p_side->lowerTx) =
+            PictureLock(textureName, &G_3dLowerResourceArray[sideNum]) ;
+    else {
+        G_3dLowerResourceArray[sideNum] = RESOURCE_BAD ;
+    }
 
     DebugEnd() ;
 }
@@ -1496,21 +1565,28 @@ T_void MapSetLowerTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 T_void MapSetUpperTextureForSide(T_word16 sideNum, T_byte8 *p_textureName)
 {
     T_3dSide *p_side ;
+    T_byte8 textureName[9] ;
 
     DebugRoutine("MapSetUpperTextureForSide") ;
     DebugCheck(sideNum < G_Num3dSides) ;
 
     p_side = &G_3dSideArray[sideNum] ;
+    strncpy(textureName, p_textureName, 8) ;
+    textureName[8] = '\0' ;
 
-    if (p_side->upperTx[0] != '-')  {
+    if ((p_side->upperTx[0] != '-') &&
+        (G_3dUpperResourceArray[sideNum] != RESOURCE_BAD))  {
         PictureUnlockAndUnfind(G_3dUpperResourceArray[sideNum]) ;
     }
 
-    p_side->upperTx[0] = p_textureName[0] ;
+    p_side->upperTx[0] = textureName[0] ;
 
-    if (p_textureName[0] != '-')
-        *((T_byte8 **)(&p_side->upperTx[1])) =
-                PictureLock(p_textureName, &G_3dUpperResourceArray[sideNum]) ;
+    if ((textureName[0] != '\0') && (textureName[0] != '-'))
+        *TX_PTR_FIELD(p_side->upperTx) =
+            PictureLock(textureName, &G_3dUpperResourceArray[sideNum]) ;
+    else {
+        G_3dUpperResourceArray[sideNum] = RESOURCE_BAD ;
+    }
 
     DebugEnd() ;
 }
@@ -1537,6 +1613,19 @@ T_void MapSetWallTexture(T_word16 sideNum, T_byte8 *p_textureName)
 
     p_side = &G_3dSideArray[sideNum] ;
 
+#ifdef TARGET_UNIX
+    /* On Unix/64-bit, TX_PTR_FIELD writes at byte offset 0, overwriting
+     * txField[0] with pointer bytes for every slot (including empty ones).
+     * The '-' sentinel is no longer reliable after ILockPictures.
+     * Use the resource array: RESOURCE_BAD means no texture in that slot. */
+    if (G_3dMainResourceArray[sideNum] != RESOURCE_BAD)  {
+        MapSetMainTextureForSide(sideNum, p_textureName) ;
+    } else if (G_3dLowerResourceArray[sideNum] != RESOURCE_BAD)  {
+        MapSetLowerTextureForSide(sideNum, p_textureName) ;
+    } else if (G_3dUpperResourceArray[sideNum] != RESOURCE_BAD)  {
+        MapSetUpperTextureForSide(sideNum, p_textureName) ;
+    }
+#else
     /* Try in this order:  main, lower, & upper */
     if (p_side->mainTx[0] != '-')  {
         MapSetMainTextureForSide(sideNum, p_textureName) ;
@@ -1545,6 +1634,7 @@ T_void MapSetWallTexture(T_word16 sideNum, T_byte8 *p_textureName)
     } else if (p_side->upperTx[0] != '-')  {
         MapSetUpperTextureForSide(sideNum, p_textureName) ;
     }
+#endif
 
     DebugEnd() ;
 }
@@ -1565,16 +1655,23 @@ T_void MapSetFloorTextureForSector(
            T_byte8 *p_textureName)
 {
     T_3dSector *p_sector ;
+    T_byte8 textureName[9] ;
 
     DebugRoutine("MapSetFloorTextureForSector") ;
     DebugCheck(sectorNum < G_Num3dSectors) ;
 
     p_sector = &G_3dSectorArray[sectorNum] ;
+    strncpy(textureName, p_textureName, 8) ;
+    textureName[8] = '\0' ;
 
-    PictureUnlockAndUnfind(G_3dFloorResourceArray[sectorNum]) ;
+    if (G_3dFloorResourceArray[sectorNum] != RESOURCE_BAD)
+        PictureUnlockAndUnfind(G_3dFloorResourceArray[sectorNum]) ;
 
-    *((T_byte8 **)(&p_sector->floorTx[1])) =
-        PictureLock(p_textureName, &G_3dFloorResourceArray[sectorNum]) ;
+    if ((textureName[0] != '\0') && (textureName[0] != '-'))
+        *TX_PTR_FIELD(p_sector->floorTx) =
+            PictureLock(textureName, &G_3dFloorResourceArray[sectorNum]) ;
+    else
+        *TX_PTR_FIELD(p_sector->floorTx) = NULL ;
 
     DebugEnd() ;
 }
@@ -1595,16 +1692,23 @@ T_void MapSetCeilingTextureForSector(
            T_byte8 *p_textureName)
 {
     T_3dSector *p_sector ;
+    T_byte8 textureName[9] ;
 
     DebugRoutine("MapSetCeilingTextureForSector") ;
     DebugCheck(sectorNum < G_Num3dSectors) ;
 
     p_sector = &G_3dSectorArray[sectorNum] ;
+    strncpy(textureName, p_textureName, 8) ;
+    textureName[8] = '\0' ;
 
-    PictureUnlockAndUnfind(G_3dCeilingResourceArray[sectorNum]) ;
+    if (G_3dCeilingResourceArray[sectorNum] != RESOURCE_BAD)
+        PictureUnlockAndUnfind(G_3dCeilingResourceArray[sectorNum]) ;
 
-    *((T_byte8 **)(&p_sector->ceilingTx[1])) =
-        PictureLock(p_textureName, &G_3dCeilingResourceArray[sectorNum]) ;
+    if ((textureName[0] != '\0') && (textureName[0] != '-'))
+        *TX_PTR_FIELD(p_sector->ceilingTx) =
+            PictureLock(textureName, &G_3dCeilingResourceArray[sectorNum]) ;
+    else
+        *TX_PTR_FIELD(p_sector->ceilingTx) = NULL ;
 
     DebugEnd() ;
 }
@@ -1670,7 +1774,7 @@ T_byte8 *MapGetUpperTextureName(T_word16 sideNum)
     if (p_side->upperTx[0] == '-')  {
         p_name = G_noName ;
     } else {
-        p_pic = *((T_byte8 **)(p_side->upperTx + 1)) ;
+        p_pic = *TX_PTR_FIELD(p_side->upperTx) ;
         p_name = PictureGetName(p_pic) ;
     }
 
@@ -1704,7 +1808,7 @@ T_byte8 *MapGetLowerTextureName(T_word16 sideNum)
     if (p_side->lowerTx[0] == '-')  {
         p_name = G_noName ;
     } else {
-        p_pic = *((T_byte8 **)(p_side->lowerTx + 1)) ;
+        p_pic = *TX_PTR_FIELD(p_side->lowerTx) ;
         p_name = PictureGetName(p_pic) ;
     }
 
@@ -1738,7 +1842,7 @@ T_byte8 *MapGetMainTextureName(T_word16 sideNum)
     if (p_side->mainTx[0] == '-')  {
         p_name = G_noName ;
     } else {
-        p_pic = *((T_byte8 **)(p_side->mainTx + 1)) ;
+        p_pic = *TX_PTR_FIELD(p_side->mainTx) ;
         p_name = PictureGetName(p_pic) ;
     }
 
@@ -1769,7 +1873,7 @@ T_byte8 *MapGetFloorTextureName(T_word16 sectorNum)
     DebugCheck(sectorNum < G_Num3dSectors) ;
 
     p_sector = G_3dSectorArray + sectorNum ;
-    p_pic = *((T_byte8 **)(p_sector->floorTx + 1)) ;
+    p_pic = *TX_PTR_FIELD(p_sector->floorTx) ;
     p_name = PictureGetName(p_pic) ;
 
     DebugEnd() ;
@@ -1799,7 +1903,7 @@ T_byte8 *MapGetCeilingTextureName(T_word16 sectorNum)
     DebugCheck(sectorNum < G_Num3dSectors) ;
 
     p_sector = G_3dSectorArray + sectorNum ;
-    p_pic = *((T_byte8 **)(p_sector->ceilingTx + 1)) ;
+    p_pic = *TX_PTR_FIELD(p_sector->ceilingTx) ;
     p_name = PictureGetName(p_pic) ;
 
     DebugEnd() ;

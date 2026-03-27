@@ -71,7 +71,7 @@ T_void MainUIControl (E_formObjectType objtype,
         objstatus==BUTTON_ACTION_RELEASED)
     {
         /* get the selection number of the character to be loaded */
-        selected=(T_byte8)TxtboxGetSelectionNumber(FormGetObjID(MAINUI_CHARACTER_LIST));
+        selected=(T_byte8)TxtboxGetSelectionNumber(FormFindObjID(MAINUI_CHARACTER_LIST));
 //        DebugCheck (selected < MAX_CHARACTERS_PER_SERVER);
         if (selected >= MAX_CHARACTERS_PER_SERVER) selected=0;
 
@@ -97,7 +97,7 @@ T_void MainUIControl (E_formObjectType objtype,
 
         /* get the selection number of the character to be loaded */
         selected=(T_byte8)TxtboxGetSelectionNumber(
-                     FormGetObjID(MAINUI_CHARACTER_LIST));
+                     FormFindObjID(MAINUI_CHARACTER_LIST));
 //        DebugCheck (selected < MAX_CHARACTERS_PER_SERVER);
         if (selected >= MAX_CHARACTERS_PER_SERVER) selected=0;
 
@@ -124,7 +124,7 @@ T_void MainUIControl (E_formObjectType objtype,
              objstatus==BUTTON_ACTION_RELEASED)
     {
         selected=(T_byte8)TxtboxGetSelectionNumber(
-                     FormGetObjID(MAINUI_CHARACTER_LIST));
+                     FormFindObjID(MAINUI_CHARACTER_LIST));
 //        DebugCheck (selected < MAX_CHARACTERS_PER_SERVER);
         if (selected >= MAX_CHARACTERS_PER_SERVER) selected=0;
 
@@ -141,7 +141,7 @@ T_void MainUIControl (E_formObjectType objtype,
         }
 #if 0
         /* delete selected character */
-        selected=TxtboxGetSelectionNumber(FormGetObjID(MAINUI_CHARACTER_LIST));
+        selected=TxtboxGetSelectionNumber(FormFindObjID(MAINUI_CHARACTER_LIST));
         if (selected >= MAX_CHARACTERS_PER_SERVER) selected=0;
 
         /* LES:  Make the selected item the active one. */
@@ -201,8 +201,8 @@ T_void MainUIControl (E_formObjectType objtype,
              objstatus == Txtbox_ACTION_SELECTION_CHANGED)
     {
         /* load new bulletin */
-        TxtboxID=FormGetObjID (MAINUI_BULLETIN_LIST);
-        showwindowID=FormGetObjID (MAINUI_BULLETIN_TEXT);
+        TxtboxID=FormFindObjID(MAINUI_BULLETIN_LIST);
+        showwindowID=FormFindObjID(MAINUI_BULLETIN_TEXT);
         DebugCheck (TxtboxID != NULL);
         DebugCheck (showwindowID != NULL);
         G_bulletinSelected=TxtboxGetSelectionNumber(TxtboxID);
@@ -213,7 +213,7 @@ T_void MainUIControl (E_formObjectType objtype,
              objstatus == Txtbox_ACTION_SELECTION_CHANGED)
     {
         /* character selected changed */
-        TxtboxID=FormGetObjID (MAINUI_CHARACTER_LIST);
+        TxtboxID=FormFindObjID(MAINUI_CHARACTER_LIST);
         DebugCheck (TxtboxID != NULL);
 
         selected=(T_byte8)TxtboxGetSelectionNumber(TxtboxID);
@@ -333,19 +333,19 @@ T_void MainUIInit (T_void)
     /* set up windows */
 
     /* show initial (greeting) bulletin page */
-/*    TxtboxID=FormGetObjID (MAINUI_BULLETIN_TEXT);
+/*    TxtboxID=FormFindObjID(MAINUI_BULLETIN_TEXT);
     if (TxtboxID != NULL)
     {
         MainUIShowBulletin (TxtboxID, 0);
     }
 */
     /* bulletin listing */
-/*    TxtboxID=FormGetObjID (MAINUI_BULLETIN_LIST);
+/*    TxtboxID=FormFindObjID(MAINUI_BULLETIN_LIST);
     if (TxtboxID != NULL)
     {
         MainUISetUpBulletins(TxtboxID);
         TxtboxCursSetRow (TxtboxID,G_bulletinSelected);
-        showwindowID=FormGetObjID (MAINUI_BULLETIN_TEXT);
+        showwindowID=FormFindObjID(MAINUI_BULLETIN_TEXT);
         MainUIShowBulletin (showwindowID,G_bulletinSelected);
     }
 */
@@ -354,7 +354,7 @@ T_void MainUIInit (T_void)
     GraphicUpdateAllGraphics();
 
     /* character selected changed */
-    TxtboxID=FormGetObjID (MAINUI_CHARACTER_LIST);
+    TxtboxID=FormFindObjID(MAINUI_CHARACTER_LIST);
     DebugCheck (TxtboxID != NULL);
     TxtboxCursSetRow (TxtboxID,G_characterSelected);
 
@@ -388,7 +388,7 @@ static T_void MainUIUpdateCharacterListing (T_void)
     DebugRoutine ("MainUIUpdateCharacterListing");
 
 
-    TxtboxID=FormGetObjID (MAINUI_CHARACTER_LIST);
+    TxtboxID=FormFindObjID(MAINUI_CHARACTER_LIST);
 
     if (TxtboxID != NULL)
     {
@@ -431,7 +431,15 @@ T_void MainUIUpdate(T_void)
 
     /* go into generic control loop update */
     FormGenericControlUpdate();
+#ifdef TARGET_UNIX
+    /*
+     * On the Unix SDL wrapper path, UI pixels can be overwritten between
+     * updates; force refresh so static button graphics remain visible.
+     */
+    GraphicUpdateAllGraphicsForced();
+#else
     GraphicUpdateAllGraphics();
+#endif
 
     DebugEnd();
 }

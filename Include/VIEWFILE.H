@@ -106,6 +106,12 @@ typedef struct {
     T_sectorType type ;
 } T_3dSectorInfo ;
 
+#ifdef TARGET_UNIX
+#define TX_PTR_FIELD(txField) ((T_byte8 **)(&(txField)[0]))
+#else
+#define TX_PTR_FIELD(txField) ((T_byte8 **)(&(txField)[1]))
+#endif
+
 /** Defines for light animation types. **/
 #define SECTOR_LIGHT_ANIM_NONE      0
 #define SECTOR_LIGHT_ANIM_OSCILLATE 1

@@ -5,15 +5,32 @@
 #pragma pack(1)
 #endif
 
+#ifdef TARGET_UNIX
+#include <SDL2/SDL_net.h>
+#else
 #include "SDL_net.h"
+#endif
 extern "C" {
+#ifdef TARGET_UNIX
+/* Skip TICKER.H on macOS: its include chain (GENERAL.H → OPTIONS.H → SDL1)
+ * conflicts with SDL2 headers already included above.  Forward-declare only
+ * the two symbols ipx_client.cpp uses from that chain. */
+typedef unsigned int T_word32;
+extern T_word32 TickerGet(void);
+#define TICKS_PER_SECOND 70
+#else
 #include "TICKER.H"
+#endif
 
 extern void PacketPrint(void *aData, unsigned int aSize);
 
 #define IPXBUFFERSIZE 1424
 
+#ifdef TARGET_UNIX
+#define GCC_ATTRIBUTE(x) __attribute__((x))
+#else
 #define GCC_ATTRIBUTE(x) /* attribute not supported */
+#endif
 #define GCC_UNLIKELY(x) (x)
 #define GCC_LIKELY(x) (x)
 
@@ -32,8 +49,13 @@ typedef unsigned short		Bit16u;
 typedef   signed short		Bit16s;
 typedef  unsigned long		Bit32u;
 typedef    signed long		Bit32s;
+#ifdef TARGET_UNIX
+typedef unsigned long long	Bit64u;
+typedef   signed long long	Bit64s;
+#else
 typedef unsigned __int64	Bit64u;
 typedef   signed __int64	Bit64s;
+#endif
 typedef unsigned int		Bitu;
 typedef signed int			Bits;
 
@@ -91,6 +113,10 @@ struct packetBuffer {
 
 static IPaddress ipxServConnIp;			// IPAddress for client connection to server
 static Bit16u udpPort = 213;
+
+void IPXSetPort(int port) {
+    udpPort = (Bit16u)port;
+}
 static UDPsocket ipxClientSocket;
 static int UDPChannel;						// Channel used by UDP connection
 static Bit8u recvBuffer[IPXBUFFERSIZE];	// Incoming packet buffer

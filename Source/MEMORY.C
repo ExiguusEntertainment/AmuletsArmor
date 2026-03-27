@@ -648,8 +648,10 @@ T_void MemDumpDiscarded(T_void)
     T_memBlockHeader *p_header ;
 //extern T_word32 G_packetsAlloc ;
 //extern T_word32 G_packetsFree ;
+#if defined(_MSC_VER)
 struct _heapinfo h_info ;
 int heap_status ;
+#endif
     T_word32 totalUsed = 0 ;
     T_word32 totalFree = 0 ;
 
@@ -705,6 +707,7 @@ MemCheck(991) ;
 //    fprintf(fp, "%d packets free\n", G_packetsFree) ;
 
 fprintf(fp, "\n\nHeap walk:\n\n") ;
+#if defined(_MSC_VER)
 h_info._pentry = NULL ;
 for(;;)  {
   heap_status = _heapwalk(&h_info) ;
@@ -721,6 +724,9 @@ for(;;)  {
 fprintf(fp, "  heap status: %d\n", heap_status) ;
 fprintf(fp, "  Total used: %ld bytes\n", totalUsed) ;
 fprintf(fp, "  Total free: %ld bytes\n", totalFree) ;
+#else
+fprintf(fp, "  heap walk not supported on this compiler\n") ;
+#endif
 
     fflush(fp) ;
     fclose(fp) ;

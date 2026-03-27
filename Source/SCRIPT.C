@@ -106,6 +106,23 @@ typedef struct {
     T_word16 position ;
 } T_continueData ;
 
+#ifdef TARGET_UNIX
+typedef struct {
+    T_word16 highestEvent ;
+    T_word16 highestPlace ;
+    T_word32 sizeCode ;
+    T_word32 reserved[6] ;
+    T_word32 number ;
+    T_word32 tag ;
+    T_word32 p_next32 ;
+    T_word32 p_prev32 ;
+    T_word32 lockCount ;
+    T_word32 p_code32 ;
+    T_word32 p_events32 ;
+    T_word32 p_places32 ;
+} T_scriptHeaderDisk32 ;
+#endif
+
 typedef T_word16 (*T_scriptCommand)(
                           T_scriptHeader *script,
                           T_word16 position) ;
@@ -270,7 +287,7 @@ static T_word16 ICommandSlideCeilingNice(
                     T_word16 position) ;
 static T_word16 ICommandJournalEntry(T_scriptHeader *script, T_word16 position) ;
 
-static T_void IContinueExecution(T_word32 data) ;
+static T_void IContinueExecution(T_uintptr_t data) ;
 
 static T_sliderResponse IHandleSlidingCeiling(
            T_word32 sliderId,
@@ -759,6 +776,12 @@ static T_scriptHeader *IScriptLoad(T_word32 number)
     T_byte8 *p_loaded ;
     T_scriptHeader *p_script ;
     T_byte8 *p_data ;
+#ifdef TARGET_UNIX
+    T_scriptHeaderDisk32 *p_disk ;
+    T_word32 payloadOffset ;
+    T_word32 payloadSize ;
+    T_word32 minimumPayload ;
+#endif
 
     DebugRoutine("IScriptLoad") ;
 
@@ -767,7 +790,45 @@ static T_scriptHeader *IScriptLoad(T_word32 number)
 
     /* Load the script. */
     p_loaded = (T_byte8 *)FileLoad(filename, &size) ;
+
+#ifdef TARGET_UNIX
+    p_script = NULL ;
+    if (p_loaded != NULL)  {
+        if (size < sizeof(T_scriptHeaderDisk32))  {
+            MemFree(p_loaded) ;
+            p_loaded = NULL ;
+        } else {
+            p_disk = (T_scriptHeaderDisk32 *)p_loaded ;
+            payloadOffset = sizeof(T_scriptHeaderDisk32) ;
+            payloadSize = size - payloadOffset ;
+            minimumPayload = p_disk->sizeCode +
+                (((T_word32)p_disk->highestEvent + (T_word32)p_disk->highestPlace) * sizeof(T_word16)) ;
+
+            if (minimumPayload > payloadSize)  {
+                MemFree(p_loaded) ;
+                p_loaded = NULL ;
+            } else {
+                p_script = (T_scriptHeader *)MemAlloc(sizeof(T_scriptHeader) + payloadSize) ;
+                if (p_script != NULL)  {
+                    memset(p_script, 0, sizeof(T_scriptHeader)) ;
+                    p_script->highestEvent = p_disk->highestEvent ;
+                    p_script->highestPlace = p_disk->highestPlace ;
+                    p_script->sizeCode = p_disk->sizeCode ;
+                    memcpy(p_script->reserved, p_disk->reserved, sizeof(p_script->reserved)) ;
+                    p_script->number = p_disk->number ;
+
+                    p_data = (T_byte8 *)(p_script + 1) ;
+                    memcpy(p_data, p_loaded + payloadOffset, payloadSize) ;
+                }
+
+                MemFree(p_loaded) ;
+                p_loaded = NULL ;
+            }
+        }
+    }
+#else
     p_script = (T_scriptHeader *)p_loaded ;
+#endif
 
     /* Bomb if we didn't load it. */
     DebugCheck(p_script != NULL) ;
@@ -1292,15 +1353,15 @@ static T_scriptDataItem IScriptGetAny(
             switch(value)  {
                 case 1:
                     var.type = G_parameter1Type ;
-                    var.ns.number = (T_word32)G_parameter1Data ;
+                    var.ns.number = (T_word32)(T_uintptr_t)G_parameter1Data ;
                     break ;
                 case 2:
                     var.type = G_parameter2Type ;
-                    var.ns.number = (T_word32)G_parameter2Data ;
+                    var.ns.number = (T_word32)(T_uintptr_t)G_parameter2Data ;
                     break ;
                 case 3:
                     var.type = G_parameter3Type ;
-                    var.ns.number = (T_word32)G_parameter3Data ;
+                    var.ns.number = (T_word32)(T_uintptr_t)G_parameter3Data ;
                     break ;
                 default:
                     DebugCheck(FALSE) ;
@@ -2294,7 +2355,7 @@ static T_word16 ICommandDelay(T_scriptHeader *script, T_word16 position)
         ScheduleAddEvent(
             SyncTimeGet() + delayTime.ns.number,
             IContinueExecution,
-            (T_word32)p_continueData) ;
+            (T_uintptr_t)p_continueData) ;
     }
 
     DebugEnd() ;
@@ -2315,7 +2376,7 @@ static T_word16 ICommandDelay(T_scriptHeader *script, T_word16 position)
  *  @return New position
  *
  *<!-----------------------------------------------------------------------*/
-static T_void IContinueExecution(T_word32 data)
+static T_void IContinueExecution(T_uintptr_t data)
 {
     T_continueData *p_continueData ;
 

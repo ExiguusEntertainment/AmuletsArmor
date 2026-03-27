@@ -99,6 +99,10 @@ typedef struct
     /* sound effect to play on successful casting of spell */
     T_word16 sound;
 
+#ifdef TARGET_UNIX
+} PACK T_spellStruct;
+#else
 } T_spellStruct;
+#endif
 
 #endif // _SPELTYPE_H_

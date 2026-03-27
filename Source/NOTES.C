@@ -31,13 +31,13 @@ T_void NotesOpenNotesPage (T_void)
     T_TxtboxID TxtboxID;
     DebugRoutine ("NotesOpenNotesPage");
 
-    buttonID=FormGetObjID(301);
+    buttonID=FormFindObjID(301);
     DebugCheck (buttonID != NULL);
     ButtonSetCallbacks (buttonID,NULL,BannerOpenFormByButton);
     ButtonSetData (buttonID, BANNER_FORM_JOURNAL);
 
     /* set field data */
-    TxtboxID=FormGetObjID(500);
+    TxtboxID=FormFindObjID(500);
     DebugCheck (TxtboxID != NULL);
     TxtboxSetData (TxtboxID,StatsGetPlayerNotes());
 
@@ -59,7 +59,7 @@ T_void NotesCloseNotesPage (T_void)
     /* disable keyboard buffering */
     KeyboardBufferOff();
 
-    TxtboxID=FormGetObjID(500);
+    TxtboxID=FormFindObjID(500);
     /* save Txtbox data */
     StatsSetPlayerNotes (TxtboxGetData(TxtboxID));
 
@@ -73,28 +73,28 @@ T_void NotesOpenJournalPage (T_void)
     DebugRoutine ("NotesOpenJournalPage");
 
     /* set 'to notes' button functionality */
-    buttonID=FormGetObjID(301);
+    buttonID=FormFindObjID(301);
     DebugCheck (buttonID != NULL);
     ButtonSetCallbacks (buttonID,NULL,BannerOpenFormByButton);
     ButtonSetData (buttonID,BANNER_FORM_NOTES);
 
     /* set rewind button functionality */
-    buttonID=FormGetObjID(302);
+    buttonID=FormFindObjID(302);
     DebugCheck (buttonID != NULL);
     ButtonSetCallbacks (buttonID,NULL,NotesChangeJournalPage);
     ButtonSetData (buttonID,-5);
     /* set back note button functionality */
-    buttonID=FormGetObjID(303);
+    buttonID=FormFindObjID(303);
     DebugCheck (buttonID != NULL);
     ButtonSetCallbacks (buttonID,NULL,NotesChangeJournalPage);
     ButtonSetData (buttonID,-1);
     /* set fwd note button functionality */
-    buttonID=FormGetObjID(304);
+    buttonID=FormFindObjID(304);
     DebugCheck (buttonID != NULL);
     ButtonSetCallbacks (buttonID,NULL,NotesChangeJournalPage);
     ButtonSetData (buttonID,1);
     /* set ffwd button functionality */
-    buttonID=FormGetObjID(305);
+    buttonID=FormFindObjID(305);
     DebugCheck (buttonID != NULL);
     ButtonSetCallbacks (buttonID,NULL,NotesChangeJournalPage);
     ButtonSetData (buttonID,5);
@@ -143,7 +143,7 @@ T_void NotesUpdateJournalPage (T_void)
 */
 
     /* draw G_currentJournalPage page of notes */
-    TxtboxID = FormGetObjID(500);
+    TxtboxID = FormFindObjID(500);
     notePage=StatsGetPlayerNotePageID(G_currentJournalPage);
     if (notePage != MAX_NOTES)
     {
